@@ -94,7 +94,7 @@
 				<tr>
 					<td><input type="text" name="project_no"></td>
 					<td><input type="text" name="project_name" class="erag"
-						onkeypress="add()"></td>
+						onkeypress="add(event)"></td>
 					<td><select name="project_status">
 							<option value="1">완료</option>
 							<option value="0">미완료</option>
@@ -112,7 +112,7 @@
 				<table>
 					<tr>
 						<td>.. 이름 :</td>
-						<td><input type="text" name="project_name"></td>
+						<td><input type="text" name="project_name" id="project_name"></td>
 					</tr>
 					<tr>
 						<td>.. 기간 :</td>
@@ -148,26 +148,28 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-	function add(){
-		var leng = document.getElementsByName("project_name").length - 1;
-        var name = document.getElementsByName("project_name")[leng - 1].value;
-        document.getElementById("project_name").value = name;
-        document.getElementsByName("project_name")[leng - 1].removeAttribute("onkeypress");
+	function add(e){
+		if(e.keyCode == 13){
+			var leng = document.getElementsByName("project_name").length - 1;
+        	var name = document.getElementsByName("project_name")[leng - 1].value;
+        	document.getElementById("project_name").value = name;
+        	document.getElementsByName("project_name")[leng - 1].removeAttribute("onkeypress");
 		
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-		var pc = document.getElementById("procode");
+			var tr = document.createElement("tr");
+			var td = document.createElement("td");
+			var pc = document.getElementById("procode");
 		
-		pc.appendChild(tr);
-		td = document.createElement("td");
-		td.innerHTML = "<input type='text' name='project_no'>";
-		tr.appendChild(td);
-		td = document.createElement("td");
-		td.innerHTML = '<input type="text" name="project_name" onkeypress="add()">';
-		tr.appendChild(td);
-		td = document.createElement("td");
-		td.innerHTML = '<select name="project_status"><option value="1">완료</option><option value="2">미완료</option><option value="3" selected>진행중</option></select>';
-		tr.appendChild(td);
+			pc.appendChild(tr);
+			td = document.createElement("td");
+			td.innerHTML = "<input type='text' name='project_no'>";
+			tr.appendChild(td);
+			td = document.createElement("td");
+			td.innerHTML = '<input type="text" name="project_name" onkeypress="add(event)">';
+			tr.appendChild(td);
+			td = document.createElement("td");
+			td.innerHTML = '<select name="project_status"><option value="1">완료</option><option value="2">미완료</option><option value="3" selected>진행중</option></select>';
+			tr.appendChild(td);
+		}
 	}
 	
 	function sub(f){
