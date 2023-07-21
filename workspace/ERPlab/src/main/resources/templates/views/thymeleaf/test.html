@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,5 +11,9 @@
             alt="홈화면이미지"
             style="width: 100vw; height: 100vh"
         />
+        <div th:with="test='변수입니다'">
+			<p th:text="testing...">th:test 실험중</p>
+			<p>일반 p태그</p>
+		</div>
     </body>
 </html>
