@@ -25,4 +25,9 @@ public class HomeController {
 	public String sidebar() {
 		return "sidebar";
 	}
+	
+	@GetMapping("/footer")
+	public String footer() {
+		return "thymeleaf/footer";
+	}
 }
