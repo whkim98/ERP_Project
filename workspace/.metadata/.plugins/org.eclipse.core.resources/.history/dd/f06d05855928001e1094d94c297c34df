@@ -1,0 +1,103 @@
+package com.lab.erp.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/")
+public class HomeController {
+	public HomeController() {
+		System.out.println("### LOG : " + getClass().getName() + "() 생성");
+	}
+	
+	@RequestMapping("/home")
+	public String home() {
+		return "thymeleaf/home";
+	}
+	
+	@GetMapping("/test")
+	public String test() {
+		return "thymeleaf/test";
+	}
+	
+	@GetMapping("/testjsp")
+	public String index() {
+		return "index";
+	}
+	
+	@GetMapping("/test/sidebar")
+	public String sidebar() {
+		return "sidebar";
+	}
+	
+	@GetMapping("/test/ruddud")
+	public String ruddud() {
+		return "ruddud";
+	}
+	
+	@GetMapping("/test/wjsfir")
+	public String wjsfir() {
+		return "wjsfir";
+	}
+	
+	@GetMapping("test/ghlrP")
+	public String ghlrP() {
+		return "ghlrP";
+	}
+	
+	@GetMapping(value="test/woan", method = RequestMethod.GET)
+	public String woan() {
+		return "woan";
+	}
+	
+	@GetMapping(value="test/dlstk", method = RequestMethod.GET)
+	public String dlstk() {
+		return "dlstk";
+	}
+	
+	@GetMapping(value="test/chdan", method = RequestMethod.GET)
+	public String chdan() {
+		return "chdan";
+	}
+	
+	@GetMapping(value="test/godhl", method = RequestMethod.GET)
+	public String godhl() {
+		return "godhl";
+	}
+	
+	@GetMapping(value="test/rnrso", method = RequestMethod.GET)
+	public String rnrso() {
+		return "rnrso";
+	}
+	
+	@GetMapping(value="test/aowkd", method = RequestMethod.GET)
+	public String aowkd() {
+		return "aowkd";
+	}
+	
+	@GetMapping(value="test/duddjq", method = RequestMethod.GET)
+	public String duddjq() {
+		return "duddjq";
+	}
+	
+	@GetMapping(value="test/todtks", method = RequestMethod.GET)
+	public String todtks() {
+		return "todtks";
+	}
+	
+	@GetMapping(value="test/rnao", method = RequestMethod.GET)
+	public String rnao() {
+		return "rnao";
+	}
+	
+	@GetMapping(value="test/vnawlf", method = RequestMethod.GET)
+	public String vnawlf() {
+		return "vnawlf";
+	}
+	
+	@GetMapping(value="test/anffb", method = RequestMethod.GET)
+	public String anffb() {
+		return "anffb";
+	}
+}

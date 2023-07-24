@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ERPlab/src/main/webapp/WEB-INF/views/sidebar.jsp&apos; to &apos;index.jsp&apos;" description="Rename resource &apos;sidebar.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/webapp/WEB-INF/views/sidebar.jsp" name="index.jsp" stamp="1690007301466" updateReferences="true"/>
+</session>
