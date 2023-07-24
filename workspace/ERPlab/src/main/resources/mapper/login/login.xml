@@ -6,7 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- admin 계정 로그인 검사 -->
 	<select id="checkAdmin" parameterType="map" resultType="int">
-		select admin_no from erp_admin where admin_id = #{admin_id} and admin_pw = #{admin_pw}
+		select team_no from erp_admin where admin_id = #{admin_id} and admin_pw = #{admin_pw}
+		group by team_no
 	</select>
 	
 	<!-- admin 계정 ID 찾기 -->
