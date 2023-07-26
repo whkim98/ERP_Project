@@ -7,15 +7,12 @@
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
-<<<<<<< HEAD
  
 @font-face {
 	font-family: 'NotoSans';
 	src: url('../fonts/NotoSansKR-Medium.otf') format('truetype');
 }
 
-=======
->>>>>>> 1de0200e861394bcdda39aaa186f30682f2abea1
 
 html {
   line-height: 1.15; /* 1 */

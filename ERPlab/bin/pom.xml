@@ -8,17 +8,10 @@
       <version>3.1.1</version>
       <relativePath/> <!-- lookup parent from repository -->
    </parent>
-<<<<<<< HEAD
    <groupId>com.ERPprogram</groupId>
    <artifactId>erp</artifactId>
    <version>0.0.1-SNAPSHOT</version>
    <name>ERPlab</name>
-=======
-   <groupId>com.test</groupId>
-   <artifactId>erp</artifactId>
-   <version>0.0.1-SNAPSHOT</version>
-   <name>TEST2</name>
->>>>>>> 1de0200e861394bcdda39aaa186f30682f2abea1
    <description>Enterprise Resource Planning program</description>
    <properties>
       <java.version>17</java.version>
@@ -107,15 +100,12 @@
          <groupId>com.fasterxml.jackson.core</groupId>
          <artifactId>jackson-databind</artifactId>
       </dependency>
-<<<<<<< HEAD
       
       <dependency>
 		 <groupId>org.apache.tomcat.embed</groupId>
 		 <artifactId>tomcat-embed-jasper</artifactId>
 		 <scope>provided</scope>
 	  </dependency>
-=======
->>>>>>> 1de0200e861394bcdda39aaa186f30682f2abea1
    </dependencies>
 
    <build>

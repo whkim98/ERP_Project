@@ -8,12 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.erp.common.ViewPath;
-<<<<<<< HEAD
 import com.lab.erp.service.login.LoginService;
-=======
-import com.lab.erp.service.all.LoginService;
-import com.lab.erp.vo.all.Erp_AdminVO;
->>>>>>> 1de0200e861394bcdda39aaa186f30682f2abea1
 
 import jakarta.servlet.http.HttpServletRequest;
 
