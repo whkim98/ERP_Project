@@ -1,0 +1,16 @@
+package com.lab.erp.dao.b.b2;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class Erp_MoneyDAO {
+private SqlSession sqlSession;
+	
+	@Autowired
+	public Erp_MoneyDAO(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+
+	
+	
+}

@@ -1,0 +1,12 @@
+package com.lab.erp.vo.c.c1;
+
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Erp_ImportpayVO {
+
+	
+}
