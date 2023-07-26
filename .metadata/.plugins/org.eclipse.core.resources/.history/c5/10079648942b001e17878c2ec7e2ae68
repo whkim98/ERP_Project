@@ -1,0 +1,16 @@
+package com.lab.erp.dao.c.c1;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class Erp_ImportorderDAO {
+private SqlSession sqlSession;
+	
+	@Autowired
+	public Erp_ImportorderDAO(SqlSession sqlSession) {
+		this.sqlSession = sqlSession;
+	}
+
+	
+	
+}
