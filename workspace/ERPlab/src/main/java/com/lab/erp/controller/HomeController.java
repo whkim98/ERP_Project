@@ -31,74 +31,74 @@ public class HomeController {
 		return "thymeleaf/footer";
 	}
 	
-	@GetMapping("/test/ruddud")
-	public String ruddud() {
-		return "ruddud";
+	@GetMapping("/test/managementplanning")
+	public String managementplanning() {
+		return "index/managementplanning";
 	}
 	
-	@GetMapping("/test/wjsfir")
-	public String wjsfir() {
-		return "wjsfir";
+	@GetMapping("/test/strategicplanning")
+	public String strategicplanning() {
+		return "index/strategicplanning";
 	}
 	
-	@GetMapping("test/ghlrP")
-	public String ghlrP() {
-		return "ghlrP";
+	@GetMapping("test/account")
+	public String account() {
+		return "index/account";
 	}
 	
-	@GetMapping("/test/woan")
-	public String woan() {
-		return "woan";
+	@GetMapping("/test/finance")
+	public String finance() {
+		return "index/finance";
 	}
 	
-	@GetMapping("/test/dlstk")
-	public String dlstk() {
-		return "dlstk";
+	@GetMapping("/test/greeting")
+	public String greeting() {
+		return "index/greeting";
 	}
 	
-	@GetMapping("/test/chdan")
-	public String chdan() {
-		return "chdan";
+	@GetMapping("/test/gunradish")
+	public String gunradish() {
+		return "index/gunradish";
 	}
 	
-	@GetMapping("/test/godhl")
-	public String godhl() {
-		return "godhl";
+	@GetMapping("/test/internationalsales")
+	public String internationalsales() {
+		return "index/internationalsales";
 	}
 	
-	@GetMapping("/test/rnrso")
-	public String rnrso() {
-		return "rnrso";
+	@GetMapping("/test/domesticsales")
+	public String domesticsales() {
+		return "index/domesticsales";
 	}
 	
-	@GetMapping("/test/aowkd")
-	public String aowkd() {
-		return "aowkd";
+	@GetMapping("/test/storesales")
+	public String storesales() {
+		return "index/storesales";
 	}
 	
-	@GetMapping("/test/duddjq")
-	public String duddjq() {
-		return "duddjq";
+	@GetMapping("/test/businessmanagement")
+	public String businessmanagement() {
+		return "index/businessmanagement";
 	}
 	
-	@GetMapping("/test/todtks")
-	public String todtks() {
-		return "todtks";
+	@GetMapping("/test/production")
+	public String production() {
+		return "index/production";
 	}
 	
-	@GetMapping("/test/rnao")
-	public String rnao() {
-		return "rnao";
+	@GetMapping("/test/purchase")
+	public String purchase() {
+		return "index/purchase";
 	}
 	
-	@GetMapping("/test/vnawlf")
-	public String vnawlf() {
-		return "vnawlf";
+	@GetMapping("/test/quality")
+	public String quality() {
+		return "index/quality";
 	}
 	
-	@GetMapping("/test/anffb")
-	public String anffb() {
-		return "anffb";
+	@GetMapping("/test/distribution")
+	public String distribution() {
+		return "index/distribution";
 	}
 
 }
