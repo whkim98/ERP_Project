@@ -1,3 +1,0 @@
-INDEX VERSION 1.134
-C:\¡ÚDeveloper\Project\ERP Project\Program\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\876909716.index
-\ERPlab\src\main\java
