@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <!-- SWIPER -->
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/swiper/swiper-bundle.min.css"
+        />
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <link rel="stylesheet" href="\sadf.css" />
+    </head>
+    <body>
+        <div class="body">m</div>
+        <div th:fragment="footer" class="footer info">
+            <div class="footer_box">
+                <div class="footer_info">
+                    <div class="main in_footer">
+                        <div class="sns_text title">고객만족센터</div>
+                        <div class="sns_text_tel">TEL : 02-369-1588</div>
+                    </div>
+
+                    <div class="info in_footer">
+                        <div class="addr">
+                            서울특별시 강남구 테헤란로 146 현익빌딩 3,4층
+                        </div>
+                        <div class="business_num">
+                            사업자번호 : 815-88-00171
+                        </div>
+                        <div class="ceo">대표자 : 정해승</div>
+                        <div class="writer">참고자 : 오케이 ERP</div>
+                        <div class="fax">Fax : 02-1588-1588</div>
+                        <div class="copyright">
+                            copyright ⓒ 2023 KOREA INFORMATION TECHNOLOGY
+                            ACADEMY. ALL RIGHTS RESERVED
+                        </div>
+                    </div>
+                </div>
+
+                <div class="developer">
+                    <div
+                        class="swiper-container swiper-container-initialized swiper-container-horizontal"
+                    >
+                        <div class="swiper-wrapper">
+                            <div
+                                class="swiper-slide swiper-slide-active"
+                                style="width: 150px"
+                            >
+                                <div class="profile_img">
+                                    <img src="" alt="" />
+                                </div>
+                                <div class="profile_text">-</div>
+                                <div class="introduce_box">-</div>
+                            </div>
+                            <div
+                                class="swiper-slide swiper-slide-next"
+                                style="width: 150px"
+                            >
+                                <div class="profile_img">
+                                    <img src="" alt="" />
+                                </div>
+                                <div class="profile_text">-</div>
+                                <div class="introduce_box">-</div>
+                            </div>
+                            <div class="swiper-slide" style="width: 150px">
+                                <div class="profile_img">
+                                    <img src="" alt="" />
+                                </div>
+                                <div class="profile_text">-</div>
+                                <div class="introduce_box">-</div>
+                            </div>
+                            <div class="swiper-slide" style="width: 150px">
+                                <div class="profile_img">
+                                    <img src="" alt="" />
+                                </div>
+                                <div class="profile_text">-</div>
+                                <div class="introduce_box">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sns in_footer">
+                    <div class="title">Follow Us</div>
+                    <div class="sns_box">
+                        <a href="#"
+                            ><img
+                                src="/img/sns_instagram.png"
+                                alt="Instagram Icon"
+                        /></a>
+                        <a href="#"
+                            ><img
+                                src="/img/sns_facebook.png"
+                                alt="Facebook Icon"
+                        /></a>
+                        <a href="#"
+                            ><img src="/img/sns_youtube.png" alt="Youtube Icon"
+                        /></a>
+                        <a href="#"
+                            ><img src="/img/sns_blog.png" alt="Blog Icon"
+                        /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var swiper = new Swiper(".swiper-container", {
+                pagination: {
+                    el: ".swiper-pagination",
+                    dynamicBullets: true,
+                },
+            });
+        </script>
+    </body>
+</html>

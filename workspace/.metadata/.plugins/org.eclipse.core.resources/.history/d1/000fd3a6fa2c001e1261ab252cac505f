@@ -1,0 +1,87 @@
+body {
+    overflow-x: hidden;
+}
+.footer {
+    width: 100vw;
+    height: 200px;
+    padding: 0px 50px;
+    border: none;
+    margin-top: 100px;
+}
+.footer > .footer_box {
+    height: 100%;
+    width: 100vw;
+    display: flex;
+}
+.footer > .footer_box > .footer_info {
+    width: 40%;
+}
+.footer > .footer_box > .footer_info > .main {
+    margin-bottom: 25px;
+}
+.footer > .footer_box > .footer_info > .main > .sns_text {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+.footer > .footer_box > .footer_info > .main > .sns_text_tel {
+    font-size: 1.1rem;
+}
+.footer > .footer_box > .footer_info > .in_footer {
+    font-size: 0.9rem;
+}
+
+.footer > .footer_box > .developer {
+    width: 40%;
+    height: 100%;
+}
+.footer > .footer_box > .developer .swiper-slide {
+    display: flex;
+}
+.footer > .footer_box > .developer .profile_img {
+    height: 200px;
+    width: 100px;
+    margin-right: 5%;
+}
+.footer > .footer_box > .developer .profile_img img {
+    width: 100%;
+    height: auto;
+}
+.footer > .footer_box > .developer .profile_info {
+    width: 400px;
+}
+.footer > .footer_box > .developer .profile_info > .profile_text {
+    font-size: 1.1rem;
+}
+.footer
+    > .footer_box
+    > .developer
+    .profile_info
+    > .profile_text
+    .profile_subject {
+    font-weight: bold;
+}
+.footer > .footer_box > .developer .profile_info .introduce_box {
+    width: 400px;
+    height: 200px;
+    overflow: hidden;
+    margin-top: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.footer > .footer_box > .sns {
+    width: 15%;
+}
+.footer > .footer_box > .sns > .title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 15%;
+}
+.footer > .footer_box > .sns > .sns_box {
+    display: flex;
+    justify-content: space-between;
+}
+.footer > .footer_box > .sns > .sns_box img {
+    width: 40px;
+    height: 40px;
+}
