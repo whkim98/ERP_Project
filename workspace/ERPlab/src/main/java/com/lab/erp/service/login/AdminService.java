@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.login.Erp_AdminDAO;
 import com.lab.erp.vo.login.Erp_AdminVO;
+import com.lab.erp.vo.login.Erp_TeamVO;
 
 @Service
 public class AdminService {
@@ -53,5 +54,9 @@ private Erp_AdminDAO dao;
 	
 	public List<Map<String, Object>> teamAdmin(String team_name){
 		return dao.teamAdmin(team_name);
+	}
+	
+	public List<Erp_TeamVO> teamList(){
+		return dao.teamList();
 	}
 }

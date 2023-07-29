@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.lab.erp.vo.login.Erp_AdminVO;
+import com.lab.erp.vo.login.Erp_TeamVO;
 
 @Component
 public class Erp_AdminDAO {
@@ -62,5 +63,9 @@ private SqlSession sqlSession;
 	
 	public List<Map<String, Object>> teamAdmin(String team_name){
 		return sqlSession.selectList("admin.teamAdmin", team_name);
+	}
+	
+	public List<Erp_TeamVO> teamList(){
+		return sqlSession.selectList("admin.teamList");
 	}
 }

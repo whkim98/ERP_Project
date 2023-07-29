@@ -20,4 +20,7 @@ public class Erp_Employee1VO {
 	private String employee1_pw;
 	private int employee1_disability;
 	private int employee1_merit;
+	
+//	======================================
+	private String employee2_position;
 }
