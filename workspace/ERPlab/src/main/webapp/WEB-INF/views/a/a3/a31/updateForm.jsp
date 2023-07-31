@@ -5,52 +5,59 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div align="center">
-	<form action="${pageContext.request.contextPath }/a/a3/a31/updateProject" method="POST" name="project">
-		<h3>${map.PROJECT_NAME } 프로젝트</h3>
+	<form action="${pageContext.request.contextPath }/a/a3/a31/update" method="POST" name="project">
+	<input type="hidden" name="comcode_code" value="${comcode_code}">
+	<input type="hidden" name="project_no" value="${map.project_no}">
+	<input type="hidden" name="projectkind_no" value="${map.projectkind_no}">
+		<h3>${map.project_name } 프로젝트</h3>
 		<table>
 			<tr>
 				<td>프로젝트명 :</td>
-				<td><input type="text" name="project_name" value="${map.PROJECT_NAME }"></td>
+				<td><input type="text" name="project_name" value="${map.project_name }"></td>
 			</tr>
 			<tr>
 				<td>프로젝트 기간 :</td>
-				<td><input type="text" name="project_start" value="${map.PROJECT_START }"> ~ 
-				<input type="text" name="project_end" value="${map.PROJECT_END }"></td>
+				<td><input type="text" name="project_start" value="${map.project_start}"> ~ 
+				<input type="text" name="project_end" value="${map.project_end }"></td>
 			</tr>
 			<tr>
 				<td>원청 회사 :</td>
-				<td><input type="text" name="project_contractor" value="${map.PROJECT_CONTRACTOR }"></td>
+				<td><input type="text" name="project_contractor" value="${map.project_contractor }"></td>
 			</tr>
 			<tr>
 				<td>프로젝트 예산 :</td>
-				<td><input type="text" name="project_budget" value="${map.PROJECT_BUDGET }"></td>
+				<td><input type="text" name="project_budget" value="${map.project_budget }"></td>
 			</tr>
 			<tr>
 				<td>프로젝트 종류 :</td>
-				<td><input type="text" name="projectkind_name" id="projectkind_name" value="${map.PROJECTKIND_NAME }" onclick="kind()" readonly="readonly"></td>
+				<td><input type="text" name="projectkind_name" id="projectkind_name" value="${map.projectkind_name }" onclick="kind()" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td>내용 :</td>
-				<td><input type="text" name="project_content" value="${map.PROJECT_CONTENT }"></td>
+				<td><input type="text" name="project_content" value="${map.project_content }"></td>
 			</tr>
 			<tr>
 				<td>프로젝트 담당자 :</td>
-				<td><input type="text" name="employee1_name" id="employee1_name" value="${map.EMPLOYEE1_NAME }" onclick="searchemp()" readonly="readonly">
+				<td><input type="text" name="employee1_name" id="employee1_name" value="${map.employee1_name }" onclick="searchemp()">
+				<input type="hidden" name="employee1_no" id="employee1_no" value="${map.employee1_no }">
+				<input type="button" onclick="searchemp()" value="조회"></td>
 			</tr>
 			<tr>
 				<td>전화번호 :</td>
-				<td><input type="text" name="employee1_phone" id="employee1_phone" value="${map.EMPLOYEE1_PHONE }" readonly="readonly"></td>
+				<td><input type="text" name="employee1_phone" id="employee1_phone" value="${map.employee1_phone }" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td>직급 :</td>
-				<td><input type="text" name="employee2_position" id="employee2_position" value="${map.EMPLOYEE2_POSITION }" readonly="readonly"></td>
+				<td><input type="text" name="employee2_position" id="employee2_position" value="${map.employee2_position }" readonly="readonly"></td>
 			</tr>
 			<tr>
 				<td>프로젝트 담당팀 :</td>
-				<td><input type="text" name="team_name" id="team_name" value="${map.TEAM_NAME }" onclick="team()" readonly="readonly"></td>
+				<td><input type="text" name="team_name" id="team_name" value="${map.team_name }" onclick="team()" readonly="readonly">
+				<input type="hidden" name="team_no" id="team_no" value="${map.team_no }"></td>
 			</tr>
 			<tr>
 				<td>상태 :</td>
@@ -63,7 +70,6 @@
 				</td>
 			</tr>
 		</table>
-		<input type="hidden" name="employee1_no" id="employee1_no">
 		<input type="button" value="수정" onclick="sub(this.form)">
 	</form>
 </div>
@@ -100,7 +106,13 @@ function sub(f){
 }
 
 function searchemp(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	var empname = document.getElementById("employee1_name").value;
+	if(empname == ""){
+		alert("조회할 담당자 이름을 입력해주세요.");
+		document.getElementById("employee1_name").focus();
+		return;
+	}
+	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp?employee1_name="+empname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function kind(){
 	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/kind", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");

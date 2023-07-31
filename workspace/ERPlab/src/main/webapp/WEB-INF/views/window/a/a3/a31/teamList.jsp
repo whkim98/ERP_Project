@@ -11,11 +11,13 @@
 <div>
 	<table>
 		<tr>
-			<td>프로젝트 종류</td>
+			<td>코드</td>
+			<td>팀명</td>
 		</tr>
 		<c:forEach var="vo" items="${list }">
 				<tr>
-					<td><a style="cursor:pointer" onclick="setParentText('${vo.kind_name }')">${vo.kind_name}</a></td>
+					<td><a style="cursor:pointer" onclick="setParentText(${vo.team_no }, '${vo.team_name }')">${vo.team_code}</a></td>
+					<td><a style="cursor:pointer" onclick="setParentText(${vo.team_no }, '${vo.team_name }')">${vo.team_name}</a></td>
 				</tr>
 		</c:forEach>
 	</table>
@@ -23,7 +25,8 @@
 
 <script type="text/javascript">
 	function setParentText(name){
-    	opener.document.getElementById("kind_name").value = name;
+    	opener.document.getElementById("team_no").value = no;
+    	opener.document.getElementById("team_name").value = name;
     	window.close();
     }
 </script>

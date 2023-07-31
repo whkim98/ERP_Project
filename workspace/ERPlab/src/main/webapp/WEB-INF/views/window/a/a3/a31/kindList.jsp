@@ -11,21 +11,20 @@
 <div>
 	<table>
 		<tr>
-			<td>코드</td>
-			<td>팀명</td>
+			<td>프로젝트 종류</td>
 		</tr>
 		<c:forEach var="vo" items="${list }">
 				<tr>
-					<td><a style="cursor:pointer" onclick="setParentText('${vo.team_name }')">${vo.team_code}</a></td>
-					<td><a style="cursor:pointer" onclick="setParentText('${vo.team_name }')">${vo.team_name}</a></td>
+					<td><a style="cursor:pointer" onclick="setParentText(${vo.projectkind_no }, '${vo.projectkind_name }')">${vo.projectkind_name}</a></td>
 				</tr>
 		</c:forEach>
 	</table>
 </div>
 
 <script type="text/javascript">
-	function setParentText(name){
-    	opener.document.getElementById("team_name").value = name;
+	function setParentText(no, name){
+    	opener.document.getElementById("projectkind_no").value = no;
+    	opener.document.getElementById("projectkind_name").value = name;
     	window.close();
     }
 </script>

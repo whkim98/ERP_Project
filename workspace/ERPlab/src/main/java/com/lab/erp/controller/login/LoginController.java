@@ -30,8 +30,10 @@ public class LoginController {
 		try {
 			Map<String, Object> map = new HashMap<>();
 			
+			System.out.println(comcode_code);
 			int comcode_no = ls.comNo(comcode_code);
 			
+			System.out.println(comcode_no);
 			map.put("admin_id", admin_id);
 			map.put("admin_pw", admin_pw);
 			map.put("comcode_no", comcode_no);
@@ -42,52 +44,52 @@ public class LoginController {
 			String url = null;
 			
 			switch(su) {
-			case 1: request.getSession().setAttribute("admin", su); msg = "관리자로 로그인 하셨습니다"; 
+			case 1: request.getSession().setAttribute("login", su); msg = "관리자로 로그인 하셨습니다"; 
 			url = "/index"; break;
-			case 2: request.getSession().setAttribute("planningtop", su); msg = "기획본부장으로 로그인 하셨습니다";
+			case 2: request.getSession().setAttribute("login", su); msg = "기획본부장으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 3: request.getSession().setAttribute("managementplanning", su); msg = "경영기획팀으로 로그인 하셨습니다";
+			case 3: request.getSession().setAttribute("login", su); msg = "경영기획팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 4: request.getSession().setAttribute("strategicplanning", su); msg = "전략기획팀으로 로그인 하셨습니다";
+			case 4: request.getSession().setAttribute("login", su); msg = "전략기획팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 5: request.getSession().setAttribute("managementtop", su); msg = "관리본부장으로 로그인 하셨습니다";
+			case 5: request.getSession().setAttribute("login", su); msg = "관리본부장으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 6: request.getSession().setAttribute("account", su); msg = "회계팀으로 로그인 하셨습니다";
+			case 6: request.getSession().setAttribute("login", su); msg = "회계팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 7: request.getSession().setAttribute("finance", su); msg = "재무팀으로 로그인 하셨습니다";
+			case 7: request.getSession().setAttribute("login", su); msg = "재무팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 8: request.getSession().setAttribute("greeting", su); msg = "인사팀으로 로그인 하셨습니다";
+			case 8: request.getSession().setAttribute("login", su); msg = "인사팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 9: request.getSession().setAttribute("gunradish", su); msg = "총무팀으로 로그인 하셨습니다";
+			case 9: request.getSession().setAttribute("login", su); msg = "총무팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 10: request.getSession().setAttribute("salestop", su); msg = "영업본부장으로 로그인 하셨습니다";
+			case 10: request.getSession().setAttribute("login", su); msg = "영업본부장으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 11: request.getSession().setAttribute("internationalsales", su); msg = "해외영업팀으로 로그인 하셨습니다";
+			case 11: request.getSession().setAttribute("login", su); msg = "해외영업팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 12: request.getSession().setAttribute("domesticsales", su); msg = "국내영업팀으로 로그인 하셨습니다";
+			case 12: request.getSession().setAttribute("login", su); msg = "국내영업팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 13: request.getSession().setAttribute("storesales", su); msg = "매장영업팀으로 로그인 하셨습니다";
+			case 13: request.getSession().setAttribute("login", su); msg = "매장영업팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 14: request.getSession().setAttribute("businessmanagement", su); msg = "영업관리팀으로 로그인 하셨습니다";
+			case 14: request.getSession().setAttribute("login", su); msg = "영업관리팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 15: request.getSession().setAttribute("supporttop", su); msg = "지원본부장으로 로그인 하셨습니다";
+			case 15: request.getSession().setAttribute("login", su); msg = "지원본부장으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 16: request.getSession().setAttribute("production", su); msg = "생산팀으로 로그인 하셨습니다";
+			case 16: request.getSession().setAttribute("login", su); msg = "생산팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 17: request.getSession().setAttribute("purchase", su); msg = "구매팀으로 로그인 하셨습니다";
+			case 17: request.getSession().setAttribute("login", su); msg = "구매팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			case 18: request.getSession().setAttribute("quality", su); msg = "품질관리팀으로 로그인 하셨습니다";
+			case 18: request.getSession().setAttribute("login", su); msg = "품질관리팀으로 로그인 하셨습니다";
 			url = "/index"; break;	
-			case 19: request.getSession().setAttribute("distribution", su); msg = "물류팀으로 로그인 하셨습니다";
+			case 19: request.getSession().setAttribute("login", su); msg = "물류팀으로 로그인 하셨습니다";
 			url = "/index"; break;
-			default: msg = "신설 팀입니다"; url = "/index"; break;
+			default: msg = "신설 팀입니다"; request.getSession().setAttribute("login", su); 
+			url = "/index"; break;
 			}
-			
+			System.out.println(request.getSession().getAttribute("login"));
 			request.getSession().setAttribute("comcode_code", comcode_code);
 			request.setAttribute("msg", msg);
 			request.setAttribute("url", url);
 			return "result/loginresult";
-			
 			
 		}catch(Exception e) {
 			String msg = null;

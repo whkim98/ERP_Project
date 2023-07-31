@@ -32,23 +32,23 @@
 					<td>진행팀</td>
 				</tr>
 			<c:forEach var="map" items="${list }">
-				<tr onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/content'">
-					<td>${map.PROJECT_NO }</td>
-					<td>${map.PROJECTKIND_NAME }</td>
-					<td>${map.PROJECT_NAME }</td>
-					<c:if test="${map.PROJECT_STATUS } == 0">
+				<tr onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/contentP?project_no=${map.project_no }'">
+					<td>${map.project_no }</td>
+					<td>${map.projectkind_name }</td>
+					<td>${map.project_name }</td>
+					<c:if test="${map.project_status == 0}">
 						<td>미완료</td>
 					</c:if>
-					<c:if test="${map.PROJECT_STATUS } == 1">
+					<c:if test="${map.project_status == 1}">
 						<td>완료</td>
 					</c:if>
-					<c:if test="${map.PROJECT_STATUS } == 2">
+					<c:if test="${map.project_status == 2}">
 						<td>진행중</td>
 					</c:if>
-					<td>${map.EMPLOYEE1_NAME }</td>
-					<td>${map.TEAM_NAME }</td>
-					<c:if test="${admin != null }">
-						<td><input type="button" value="삭제" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/delete?project_no=${map.PROJECT_NO }'"></td>
+					<td>${map.employee1_name }</td>
+					<td>${map.team_name }</td>
+					<c:if test="${ login == 1 }">
+						<td><input type="button" value="삭제" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/delete?project_no=${map.project_no }&comcode_code=${comcode_code }'"></td>
 					</c:if>
 				</tr>
 			</c:forEach>
@@ -56,7 +56,7 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<form action="${pageContext.request.contextPath }/a/a3/a31/list" method="get" onsubmit="return check(this)" >
+	<form action="${pageContext.request.contextPath }/a/a3/a31/" method="get" onsubmit="return check(this)" >
 			<span style="float: left;">
 				<select name="type">
 					<option value="project_name" ${param.type == 'project_name' ? 'selected' : '' }>이름</option>
@@ -65,6 +65,7 @@
 					<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>담당자</option>
 					<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당팀</option>
 				</select>
+				<input type="hidden" name="comcode_code" value="${comcode_code}">
 				<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off">
 				<input type="submit" value="조회">
 			</span>
@@ -75,7 +76,7 @@
 	
 	<div align="center">
 		<c:if test="${paging.prev }">
-			<a href="${pageContext.request.contextPath }/a/a3/a31/list?page=${paging.begin - 1}&type=${param.type}&word=${param.word}">[이전]</a>
+			<a href="${pageContext.request.contextPath }/a/a3/a31/?page=${paging.begin - 1}&type=${param.type}&word=${param.word}&comcode_code=${comcode_code }">[이전]</a>
 		</c:if>
 		<c:forEach var="i" begin="${paging.begin }" end="${paging.end }" step="1">
 			<c:choose>
@@ -83,12 +84,12 @@
 					<strong>[${i}]</strong>
 				</c:when>
 				<c:otherwise>
-					<a href="${pageContext.request.contextPath }/a/a3/a31/list?page=${i}&type=${param.type}&word=${param.word}">[${i }]</a>
+					<a href="${pageContext.request.contextPath }/a/a3/a31/?page=${i}&type=${param.type}&word=${param.word}&comcode_code=${comcode_code }">[${i }]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${paging.next }">
-			<a href="${pageContext.request.contextPath }/a/a3/a31/list?page=${paging.end + 1}&type=${param.type}&word=${param.word}">[다음]</a>
+			<a href="${pageContext.request.contextPath }/a/a3/a31/?page=${paging.end + 1}&type=${param.type}&word=${param.word}&comcode_code=${comcode_code }">[다음]</a>
 		</c:if>
 	</div>
 	

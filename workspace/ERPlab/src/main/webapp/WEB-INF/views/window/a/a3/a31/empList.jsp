@@ -15,11 +15,14 @@
 			<td>이름</td>
 			<td>직급</td>
 		</tr>
+		<c:if test="${list == null }">
+			<td colspan="3">정보가 존재하지 않습니다.</td>
+		</c:if>
 		<c:forEach var="vo" items="${list }">
 				<tr>
-					<td><a style="cursor:pointer" onclick="setParentText('${vo.employee1_name}', '${vo.employee1_no }', '${vo.employee2_position }', '${vo.employee1_phone }')">${vo.employee1_code}</a></td>
-					<td><a style="cursor:pointer" onclick="setParentText('${vo.employee1_name}', '${vo.employee1_no }', '${vo.employee2_position }', '${vo.employee1_phone }')">${vo.employee1_name }</a></td>
-					<td><a style="cursor:pointer" onclick="setParentText('${vo.employee1_name}', '${vo.employee1_no }', '${vo.employee2_position }', '${vo.employee1_phone }')">${vo.employee2_position }</a></td>
+					<td><a style="cursor:pointer" onclick="setParentText('${vo.employee1_name}', ${vo.employee1_no }, '${vo.employee2_position }', '${vo.employee1_phone }')">${vo.employee1_code}</a></td>
+					<td><a style="cursor:pointer" onclick="setParentText('${vo.employee1_name}', ${vo.employee1_no }, '${vo.employee2_position }', '${vo.employee1_phone }')">${vo.employee1_name }</a></td>
+					<td><a style="cursor:pointer" onclick="setParentText('${vo.employee1_name}', ${vo.employee1_no }, '${vo.employee2_position }', '${vo.employee1_phone }')">${vo.employee2_position }</a></td>
 				</tr>
 		</c:forEach>
 	</table>
