@@ -11,6 +11,7 @@ public class Erp_BusinesstypeVO {
 	private int businesstype_no;
 	private int businesstype_code;
 	private String businesstype_name;
+	private String businesstype_biotore;
 	private String businesstype_ctgr;
 	private String businesstype_subctgr;
 	private String businesstype_description;
