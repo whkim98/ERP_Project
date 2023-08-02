@@ -65,4 +65,8 @@ public class Erp_EmployeeDAO {
 	public List<Map<String, Object>> EmpList(){
 		return sqlSession.selectList("admin.EmpList");
 	}
+
+	public List<Erp_Employee1VO> selectEmployee(){
+		return sqlSession.selectList("b5.selectEmployee");
+	}
 }
