@@ -59,7 +59,7 @@
 		</table>
 		<input type="button" value="수정" onclick="location.href='${pageContext.request.contextPath }/a/a3/a31/updateFormP?project_no=${map.project_no }'">
 		<input type="button" value="삭제" onclick="location.href='${pageContext.request.contextPath }/a/a3/a31/delete?project_no=${map.project_no }&comcode_code=${comcode_code }'">
-		<input type="button" value="계약 관리" onclick="location.href='${pageContext.request.contextPath }/a/a3/a32/?project_no=${map.project_no }'">
+		<input type="button" value="계약 관리" onclick="location.href='${pageContext.request.contextPath }/a/a3/a32/?project_no=${map.project_no }&comcode_code=${comcode_code }'">
 </div>
 
 </body>

@@ -3,26 +3,59 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="a3">
-	<!-- 외래키 no값 추출 -->
-	<select id="pkNo" parameterType="String" resultType="int">
-		select projectkind_no from erp_projectkind where projectkind_name = #{projectkind_name}
+	<!-- 전체 목록 조회 -->
+	<select id="kindList" resultType="com.lab.erp.vo.a.a3.Erp_ProjectkindVO" parameterType="map">
+		select * from erp_projectkind
 	</select>
 	
+	<select id="getCk" resultType="com.lab.erp.vo.a.a3.Erp_ContractkindVO" parameterType="map">
+		select * from erp_contractkind
+	</select>
+	
+	<select id="prList" resultType="com.lab.erp.vo.a.a3.Erp_ProjectVO" parameterType="map">
+		select * from erp_project where comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="clList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select * from erp_client where comcode_no = #{comcode_no}
+	</select>
+	
+	
+	<!-- 이름 중복 데이터 존재 가능성 있는 것들 -->
 	<select id="empList" parameterType="map" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
 		select e1.employee1_no, e1.employee1_code, e1.employee1_name, e1.employee1_phone, e2.employee2_position 
 		from erp_employee1 e1, erp_employee2 e2, erp_comcode c 
 		where 
-		e1.employee1_name = #{employee1_name} and e1.employee1_no = e2.employee1_no and c.comcode_code = #{comcode_code} and c.comcode_no = e2.comcode_no
+		e1.employee1_name like '%${employee1_name}%' and e1.employee1_no = e2.employee1_no and c.comcode_code = #{comcode_code} and c.comcode_no = e2.comcode_no
 		order by e1.employee1_no asc
 	</select>
 	
-	<select id="kindList" resultType="com.lab.erp.vo.a.a3.Erp_ProjectkindVO">
-		select * from erp_projectkind
+	<select id="getProject" resultType="com.lab.erp.vo.a.a3.Erp_ProjectVO" parameterType="map">
+		select * from erp_project where project_name like '%${project_name}%' and comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="getCl" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select * from erp_client where client_name like '%${client_name}%' and comcode_no = #{comcode_no}
+	</select>
+	
+	
+	<!-- 이름 자동완성 ajax-->
+	<select id="kindName" resultType="com.lab.erp.vo.a.a3.Erp_ProjectkindVO" parameterType="String">
+		select * from erp_projectkind where projectkind_name like '%${projectkind_name}%'
+	</select>
+	
+	<select id="ckName" resultType="com.lab.erp.vo.a.a3.Erp_ContractkindVO">
+		select * from erp_contractkind where contractkind_name like '%${contractkind_name}%'
+	</select>
+	
+	
+	<!-- 외래키 no값 추출 -->
+	<select id="pkNo" parameterType="String" resultType="int">
+		select projectkind_no from erp_projectkind where projectkind_name like '%${projectkind_name}%'
 	</select>
 	
 	
 	<!-- 프로젝트 관리 -->
-	<!-- PROJECT CRUD -->
 	<insert id="createProject" parameterType="com.lab.erp.vo.a.a3.Erp_ProjectVO">
 		insert into erp_project(project_name,project_budget,project_start,project_end,projectkind_no,project_contractor,employee1_no,project_status,project_content,team_no,comcode_no) 
 		values(#{project_name},#{project_budget},#{project_start},#{project_end},#{projectkind_no},#{project_contractor},#{employee1_no},#{project_status},#{project_content},#{team_no},#{comcode_no})
@@ -61,8 +94,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and p.comcode_no = c.comcode_no and e.employee1_no = e2.employee1_no 
 		and p.project_no = #{project_no}
 	</select>
-	
-	
 	
 	<!-- PROJECT 검색 -->
 	<select id="searchList" parameterType="map" resultType="map">
@@ -223,11 +254,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from erp_contractkind where contractkind_name = #{contractkind_name}
 	</select>
 	
-	<select id="getClientNo" resultType="com.lab.erp.vo.c.Erp_ClientVO" parameterType="String">
-		select * from erp_client where client_name = #{client_name}
-	</select>
-	
-	<select id="getClient" resultType="map" parameterType="int">
+	<select id="selectClient" resultType="map" parameterType="int">
 		select c.*, ct.country_name, b.businesstype_name, b.businesstype_subctgr 
 		from erp_client c, erp_country ct, erp_businesstype b 
 		where client_no = #{client_no} 
@@ -236,17 +263,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and c.businesstype_no = b.businesstype_no
 	</select>
 	
-	<select id="clList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientVO">
-		select * from erp_client where client_name = #{client_name} and comcode_no = #{comcode_no}
-	</select>
-	
-	<select id="getProject" resultType="com.lab.erp.vo.a.a3.Erp_ProjectVO" parameterType="map">
-		select * from erp_project where project_name like '%${project_name}%' and comcode_no = #{comcode_no}
-	</select>
-	
-	<select id="getCk" resultType="com.lab.erp.vo.a.a3.Erp_ContractkindVO">
-		select * from erp_contractkind
-	</select>
 	
 	<!-- 실적 / 평가 -->
 	<insert id="createEstimate" parameterType="com.lab.erp.vo.a.a3.Erp_EstimateVO">

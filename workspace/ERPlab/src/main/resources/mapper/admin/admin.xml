@@ -5,8 +5,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="admin">
 
 	<!-- 팀 no 선택 후 insert 할 때 -->
-	<select id="teamList" resultType="com.lab.erp.vo.login.Erp_TeamVO">
+	<select id="teamList" resultType="com.lab.erp.vo.login.Erp_TeamVO" parameterType="map">
 		select * from erp_team
+	</select>
+	
+	<select id="teamName" resultType="int" parameterType="String">
+		select * from erp_team where team_name like '%${team_name}%'
 	</select>
 	
 	<!-- 팀 name으로 no 추출 -->

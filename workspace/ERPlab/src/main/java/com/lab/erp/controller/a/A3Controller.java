@@ -74,9 +74,19 @@ public class A3Controller {
 	}
 	
 	@RequestMapping("/a31/inputProject")
-	public String inputProject(Model model) {
+	public String inputProject(Model model, String type, String word) {
 		List<Erp_TeamVO> tlist = as.teamList();
-		List<Erp_ProjectkindVO> pklist = a3.kindList();
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Erp_ProjectkindVO> pklist = a3.kindList(map);
 		
 		model.addAttribute("tlist", tlist);
 		model.addAttribute("pklist", pklist);
@@ -111,19 +121,28 @@ public class A3Controller {
 	}
 	
 	@RequestMapping("/a31/updateFormP")
-	public String updateForm(Model model, Erp_ProjectVO vo) {
+	public String updateForm(Model model, Erp_ProjectVO vo, String type, String word) {
 		int prNo = vo.getProject_no();
 		
 		Map<String, Object> map = a3.selectProject(prNo);
 		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map1 = new HashMap<>();
+		map1.put("type", type);
+		map1.put("word", word);
+		
 		List<Erp_TeamVO> tlist = as.teamList();
-		List<Erp_ProjectkindVO> pklist = a3.kindList();
+		List<Erp_ProjectkindVO> pklist = a3.kindList(map1);
 		
 		model.addAttribute("tlist", tlist);
 		model.addAttribute("pklist", pklist);
 		model.addAttribute("map", map);
 
-		return ViewPath.A3 + "/a31/updateFormP";
+		return ViewPath.A3 + "/a31/updateForm";
 	}
 	
 	@RequestMapping("/a31/update")
@@ -210,22 +229,68 @@ public class A3Controller {
 		return ViewPath.WINDOW + "/a/a3/a31/empList";
 	}
 	
-	@RequestMapping("/a31/kind")
-	public String kind(Model model) {
-		List<Erp_ProjectkindVO> list = a3.kindList();
+	@RequestMapping("/a31/searchpk")
+	public String searchpk(Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Erp_ProjectkindVO> list = a3.kindList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.WINDOW + "/a/a3/a31/kindList";
+		return ViewPath.WINDOW + "kindList";
+	}
+	@RequestMapping("/a31/searcht")
+	public String searcht(Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Erp_TeamVO> list = a3.teamList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "teamList";
+	}
+	
+	@RequestMapping("/a31/kind")
+	@ResponseBody
+	public Erp_ProjectkindVO kind(Model model, String projectkind_name) {
+		
+		Erp_ProjectkindVO vo = a3.kindName(projectkind_name);
+		
+		model.addAttribute("vo", vo);
+		
+		return vo;
 	}
 	
 	@RequestMapping("/a31/team")
-	public String team(Model model) {
-		List<Erp_TeamVO> list = as.teamList();
+	@ResponseBody
+	public Erp_TeamVO team(Model model, String team_name) {
+		Erp_TeamVO vo = a3.teamName(team_name);
 		
-		model.addAttribute("list", list);
+		model.addAttribute("vo", vo);
 		
-		return ViewPath.WINDOW + "/a/a3/a31/teamList";
+		return vo;
 	}
 	
 //	계약 관리

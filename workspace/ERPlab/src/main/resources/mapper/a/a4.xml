@@ -3,5 +3,169 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="a4">
-
+	
+	<!-- 자금조달 - 투자 -->
+	<insert id="createInvestment" parameterType="com.lab.erp.vo.a.a4.Erp_InvestmentVO">
+		insert into erp_investment(ctgr_no,investment_code,client_no,investment_content,investment_note,investment_price,team_no,investment_start,investment_end,investment_withdrawal,account_no,imkind_no,investment_status,comcode_no) 
+		values(#{ctgr_no},#{investment_code},#{client_no},#{investment_content},#{investment_note},#{investment_price},#{team_no},#{investment_start},#{investment_end},#{investment_withdrawal},#{account_no},#{imkind_no},#{investment_status},#{comcode_no})
+	</insert>
+	
+	<update id="updateInvestment" parameterType="com.lab.erp.vo.a.a4.Erp_InvestmentVO">
+		update erp_investment set 
+		investment_code = #{investment_code},
+		client_no = #{client_no},
+		investment_content = #{investment_content},
+		investment_note = #{investment_note},
+		investment_price = #{investment_price},
+		team_no = #{team_no},
+		investment_start = #{investment_start},
+		investment_end = #{investment_end},
+		investment_withdrawal = #{investment_withdrawal},
+		account_no = #{account_no},
+		imkind_no = #{imkind_no},
+		investment_status = #{investment_status},
+		comcode_no = #{comcode_no} 
+		where investment_no = #{investment_no}
+	</update>
+	
+	<delete id="deleteInvestment" parameterType="int">
+		delete from erp_investment where investment_no = #{investment_no}
+	</delete>
+	
+	<select id="investmentList" parameterType="map" resultType="map">
+		select i.*, im.imkind_name, cl.client_name, t.team_name, c.closing_debtor, c.closing_creditor, to_date(c.closing_date, 'YYYY-MM-DD') 
+		from erp_investment i, erp_imkind im, erp_client cl, erp_team t, erp_closing c 
+		where i.client_no = cl.client_no 
+		and i.imkind_no = im.imkind_no 
+		and i.team_no = t.team_no 
+		and i.ctgr_no = c.ctgr_no 
+		and i.comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="selectInvestment" parameterType="int" resultType="map">
+		select i.*, im.imkind_name, cl.client_name, cl.client_manager, cl.client_contact, 
+		t.team_name, a.account_bank, a.account_num 
+		from erp_investment i, erp_imkind im, erp_client cl, erp_team t, erp_account a 
+		where i.client_no = cl.client_no 
+		and i.imkind_no = im.imkind_no 
+		and i.team_no = t.team_no 
+		and i.account_no = a.account_no 
+		and i.investment_no = #{investment_no}
+	</select>	<!-- 차변대변 관련 항목은 따로 map으로 뽑아서 넘기기 -->
+	
+	<!-- 차입 -->
+	<insert id="createLoan" parameterType="com.lab.erp.vo.a.a4.Erp_LoanVO">
+		insert into erp_loan(ctgr_no,loan_code,client_no,team_no,loan_amount,loan_content,loan_note,loan_start,loan_end,account_no,debotor_no,creditor_no,comcode_no) 
+		values(#{ctgr_no},#{loan_code},#{client_no},#{team_no},#{loan_amount},#{loan_content},#{loan_note},#{loan_start},#{loan_end},#{account_no},#{debotor_no},#{creditor_no},#{comcode_no})
+	</insert>
+	
+	<update id="updateLoan" parameterType="com.lab.erp.vo.a.a4.Erp_LoanVO">
+		update erp_loan set 
+		ctgr_no = #{ctgr_no},
+		loan_code = #{loan_code},
+		client_no = #{client_no},
+		team_no = #{team_no},
+		loan_amount = #{loan_amount},
+		loan_content = #{loan_content},
+		loan_note = #{loan_note},
+		loan_start = #{loan_start},
+		loan_end = #{loan_end},
+		account_no = #{account_no},
+		debotor_no = #{debotor_no},
+		creditor_no = #{creditor_no} 
+		where loan_no = #{loan_no}
+	</update>
+	
+	<delete id="deleteLoan" parameterType="int">
+		delete from erp_loan where loan_no = #{loan_no}
+	</delete>
+	
+	<select id="loanList" parameterType="map" resultType="map">
+		select l.*, cl.client_name, t.team_name, c.closing_debtor, c.closing_creditor, to_date(c.closing_date, 'YYYY-MM-DD') 
+		from erp_loan l, erp_client cl, erp_team t, erp_closing c 
+		where l.client_no = cl.client_no 
+		and l.team_no = t.team_no 
+		and l.ctgr_no = c.ctgr_no 
+		and l.comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="selectLoan" parameterType="int" resultType="map">
+		select l.*, cl.client_name, cl.client_manager, cl.client_contact, 
+		t.team_name, a.account_bank, a.account_num 
+		from erp_loan l, erp_client cl, erp_team t, erp_account a 
+		where l.client_no = cl.client_no 
+		and l.team_no = t.team_no 
+		and l.account_no = a.account_no 
+		and l.loan_no = #{loan_no}
+	</select>
+	
+	<!-- 상환 -->
+	<insert id="inputRepay" parameterType="com.lab.erp.vo.a.a4.Erp_RepayVO">
+		insert into erp_repay(ctgr_no, repay_code, repay_pay, repay_date) 
+		values(#{ctgr_no}, #{repay_code}, #{repay_pay}, #{repay_date})
+	</insert>
+	
+	<update id="updateRepay" parameterType="com.lab.erp.vo.a.a4.Erp_RepayVO">
+		update erp_repay set 
+		ctgr_no = #{ctgr_no}, 
+		repay_code = #{repay_code}, 
+		repay_pay = #{repay_pay}, 
+		repay_date = #{repay_date} 
+		where repay_no = #{repay_no}
+	</update>
+	
+	<delete id="deleteRepay" parameterType="int">
+		delete from erp_repay where repay_no = #{repay_no}
+	</delete>
+	
+	<select id="repayList" parameterType="String" resultType="com.lab.erp.vo.a.a4.Erp_RepayVO">
+		select * from erp_repay where repay_code = #{repay_code}
+	</select>
+	
+	<select id="repayCode" parameterType="String" resultType="com.lab.erp.vo.a.a4.Erp_RepayVO">
+		select repay_code, sum(repay_pay) repay_pay repay from erp_repay where repay_code = #{repay_code} 
+		group by repay_code
+	</select>
+	
+	<!-- 임대 -->
+	<insert id="createLease" parameterType="com.lab.erp.vo.a.a4.Erp_LeaseVO">
+		insert into erp_lease(ctgr_no,lease_code,client_no,team_no,account_no,leasetype_no,lease_content,lease_note,lease_price,debotor_no,creditor_no,lease_start,lease_end,comcode_no) 
+		values(#{ctgr_no},#{lease_code},#{client_no},#{team_no},#{account_no},#{leasetype_no},#{lease_content},#{lease_note},#{lease_price},#{debotor_no},#{creditor_no},#{lease_start},#{lease_end},#{comcode_no})
+	</insert>
+	
+	<update id="updateLease" parameterType="com.lab.erp.vo.a.a4.Erp_LeaseVO">
+		update erp_lease set ctgr_no = #{ctgr_no},
+		lease_code = #{lease_code},
+		client_no = #{client_no},
+		team_no = #{team_no},
+		account_no = #{account_no},
+		leasetype_no = #{leasetype_no},
+		lease_content = #{lease_content},
+		lease_note = #{lease_note},
+		lease_price = #{lease_price},
+		debotor_no = #{debotor_no},
+		creditor_no = #{creditor_no},
+		lease_start = #{lease_start},
+		lease_end = #{lease_end},
+		comcode_no = #{comcode_no} 
+		where lease_no = #{lease_no}
+	</update>
+	
+	<delete id="deleteLease" parameterType="int">
+		delete from erp_lease where lease_no = #{lease_no}
+	</delete>
+	
+	<select id="">
+		select l.*, c.client_name, t.team_name, lt.leasetype_name, cl.closing_debtor, cl.closing_creditor, to_date(cl.closing_date, 'YYYY-MM-DD') 
+		from erp_lease l, erp_client c, erp_team t, erp_leasetype lt, erp_closing cl, erp_debtor d, erp_creditor cr 
+		where l.client_no = c.client_no 
+		and l.team_no = t.team_no 
+		and l.leasetype_no = lt.leasetype_no 
+		and l.debtor_no = d.debtor_no 
+		and l.creditor_no = cr.creditor_no 
+		and l.ctgr_no = d.ctgr_no 
+		and l.ctgr_no = cr.ctgr_no 
+		and l.ctgr_no = cl.ctgr_no 
+		and l.comcode_no = #{comcode_no}
+	</select>
 </mapper>

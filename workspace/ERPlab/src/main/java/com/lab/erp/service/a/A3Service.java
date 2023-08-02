@@ -17,6 +17,7 @@ import com.lab.erp.vo.a.a3.Erp_ProjectVO;
 import com.lab.erp.vo.a.a3.Erp_ProjectkindVO;
 import com.lab.erp.vo.c.Erp_ClientVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
+import com.lab.erp.vo.login.Erp_TeamVO;
 
 @Service
 public class A3Service {
@@ -66,8 +67,16 @@ public class A3Service {
 		return pdao.empList(map);
 	}
 	
-	public List<Erp_ProjectkindVO> kindList() {
-		return pdao.kindList();
+	public List<Erp_ProjectkindVO> kindList(Map<String, Object> map) {
+		return pdao.kindList(map);
+	}
+	
+	public Erp_ProjectkindVO kindName(String projectkind_name) {
+		return pdao.kindName(projectkind_name);
+	}
+	
+	public List<Erp_ProjectVO> prList(Map<String, Object> map){
+		return pdao.prList(map);
 	}
 	
 	public int deleteContractpr(int project_no) {
@@ -175,5 +184,14 @@ public class A3Service {
 	
 	public int getTotalet(Map<String, Object> map) {
 		return edao.getTotalet(map);
+	}
+	
+//	js
+	public List<Erp_TeamVO> teamList(Map<String, Object> map){
+		return tdao.teamList(map);
+	}
+	
+	public Erp_TeamVO teamName(String team_name){
+		return tdao.teamName(team_name);
 	}
 }

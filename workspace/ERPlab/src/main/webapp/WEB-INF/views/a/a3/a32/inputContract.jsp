@@ -143,13 +143,11 @@
 					</tr>
 					<tr>
 						<td>계약 종류 :</td>
-						<td><input type="text" name="contractkind_name" id="contractkind_name">
-						<input type="button" onclick="searchck()" value="조회"></td>
+						<td><input type="text" name="contractkind_name" id="contractkind_name" onkeypress="searchck(event)"></td>
 					</tr>
 					<tr>
 						<td>거래처명 :</td>
-						<td><input type="text" name="client_name" id="client_name">
-						<input type="button" onclick="searchcl()" value="조회"></td>
+						<td><input type="text" name="client_name" id="client_name" onkeypress="searchcl(event)"></td>
 					</tr>
 					<tr>
 						<td>사업자등록번호 :</td>
@@ -165,8 +163,7 @@
 					</tr>
 					<tr>
 						<td>프로젝트명 :</td>
-						<td><input type="text" name="project_name" id="project_name">
-						<input type="button" onclick="searchpr()" value="조회"></td>
+						<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event)"></td>
 					</tr>
 					<tr>
 						<td>프로젝트 예산 :</td>
@@ -242,26 +239,32 @@
 		}
 	}
 	
-	function searchcl(){
-		var clname = document.getElementById("client_name").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("client_name").focus();
-			return;
+	function searchcl(e){
+		if(e.keyCode == 13){
+			var clname = document.getElementById("client_name").value;
+			if(clname == ""){
+				alert("조회할 거래처명을 입력해주세요.");
+				document.getElementById("client_name").focus();
+				return;
+			}
+			let openWin = window.open("${pageContext.request.contextPath}/a/a3/a32/searchcl?client_name="+clname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 		}
-		let openWin = window.open("${pageContext.request.contextPath}/a/a3/a32/searchcl?client_name="+clname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 	}
-	function searchpr(){
-		var prname = document.getElementById("project_name").value;
-		if(prname == ""){
-			alert("조회할 프로젝트명을 입력해주세요.");
-			document.getElementById("project_name").focus();
-			return;
+	function searchpr(e){
+		if(e.keyCode == 13){
+			var prname = document.getElementById("project_name").value;
+			if(prname == ""){
+				alert("조회할 프로젝트명을 입력해주세요.");
+				document.getElementById("project_name").focus();
+				return;
+			}
+			let openWin = window.open("${pageContext.request.contextPath}/a/a3/a32/searchpr?project_name="+prname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 		}
-		let openWin = window.open("${pageContext.request.contextPath}/a/a3/a32/searchpr?project_name="+prname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 	}
-	function searchck(){
-		let openWin = window.open("${pageContext.request.contextPath}/a/a3/a32/searchck", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	function searchck(e){
+		if(e.keyCode == 13){
+			let openWin = window.open("${pageContext.request.contextPath}/a/a3/a32/searchck", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+		}
 	}
 </script>
 <%@ include file="/WEB-INF/views/layout/footer.jsp"%>

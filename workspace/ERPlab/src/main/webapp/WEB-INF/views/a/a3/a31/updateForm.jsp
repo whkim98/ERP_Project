@@ -11,8 +11,8 @@
 <div align="center">
 	<form action="${pageContext.request.contextPath }/a/a3/a31/update" method="POST" name="project">
 	<input type="hidden" name="comcode_code" value="${comcode_code}">
-	<input type="hidden" name="project_no" value="${map.project_no}">
-	<input type="hidden" name="projectkind_no" value="${map.projectkind_no}">
+	<input type="hidden" name="project_no" id="project_no" value="${map.project_no}">
+	<input type="hidden" name="projectkind_no" id="projectkind_no" value="${map.projectkind_no}">
 		<h3>${map.project_name } 프로젝트</h3>
 		<table>
 			<tr>
@@ -34,7 +34,8 @@
 			</tr>
 			<tr>
 				<td>프로젝트 종류 :</td>
-				<td><input type="text" name="projectkind_name" id="projectkind_name" value="${map.projectkind_name }" onclick="kind()" readonly="readonly"></td>
+				<td><input type="text" name="projectkind_name" id="projectkind_name" value="${map.projectkind_name }" onkeypress="kind(event)" readonly="readonly">
+				<input type="button" onclick="searchpk()" value="조회"></td></td>
 			</tr>
 			<tr>
 				<td>내용 :</td>
@@ -42,9 +43,8 @@
 			</tr>
 			<tr>
 				<td>프로젝트 담당자 :</td>
-				<td><input type="text" name="employee1_name" id="employee1_name" value="${map.employee1_name }" onclick="searchemp()">
-				<input type="hidden" name="employee1_no" id="employee1_no" value="${map.employee1_no }">
-				<input type="button" onclick="searchemp()" value="조회"></td>
+				<td><input type="text" name="employee1_name" id="employee1_name" value="${map.employee1_name }" onkeypress="searchemp(event)">
+				<input type="hidden" name="employee1_no" id="employee1_no" value="${map.employee1_no }"></td>
 			</tr>
 			<tr>
 				<td>전화번호 :</td>
@@ -56,7 +56,8 @@
 			</tr>
 			<tr>
 				<td>프로젝트 담당팀 :</td>
-				<td><input type="text" name="team_name" id="team_name" value="${map.team_name }" onclick="team()" readonly="readonly">
+				<td><input type="text" name="team_name" id="team_name" value="${map.team_name }" onkeypress="team(event)" readonly="readonly">
+				<input type="button" onclick="searcht()" value="조회">
 				<input type="hidden" name="team_no" id="team_no" value="${map.team_no }"></td>
 			</tr>
 			<tr>
@@ -105,20 +106,67 @@ function sub(f){
 	}
 }
 
-function searchemp(){
-	var empname = document.getElementById("employee1_name").value;
-	if(empname == ""){
-		alert("조회할 담당자 이름을 입력해주세요.");
-		document.getElementById("employee1_name").focus();
-		return;
+//전체목록조회
+function searchpk(){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchpk", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+}
+function searcht(){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+}
+
+// 입력 시 그에 맞는 리스트 오픈
+function searchemp(e){
+	if(e.keyCode == 13){
+		var empname = document.getElementById("employee1_name").value;
+		if(empname == ""){
+			alert("조회할 담당자 이름을 입력해주세요.");
+			document.getElementById("employee1_name").focus();
+			return;
+		}
+		let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp?employee1_name="+empname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 	}
-	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp?employee1_name="+empname+"&comcode_code="+'${comcode_code}', "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function kind(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/kind", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+
+// 자동완성
+function kind(e, name){
+	if(e.keyCode == 13){
+		if(name == ""){
+			alert("종류를 입력해주세요.");
+			document.getElementById("projectkind_name").focus();
+			return;
+		}
+		var url = "${pageContext.request.contextPath}/a/a3/a31/kind";
+		var param = "porjectkind_name=" + encodeURIComponent(name);
+		
+		sendRequest(url, param, projectkind, "POST");
+	}
 }
-function team(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/team", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function projectkind(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.response;
+		document.getElementById("projectkind_name").value = data.projectkind_name;
+		document.getElementById("projectkind_no").value = data.projectkind_no;
+	}
+}
+
+function team(e, name){
+	if(e.keyCode == 13){
+		if(name == ""){
+			alert("팀명을 입력해주세요.");
+			document.getElementById("team_name").focus();
+			return;
+		}
+		var url = "${pageContext.request.contextPath}/a/a3/a31/team";
+		var param = "team_name=" + encodeURIComponent(name);
+		
+		sendRequest(url, param, teamname, "POST");
+	}
+}
+function teamname(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.response;
+		document.getElementById("team_name").value = data.team_name;
+		document.getElementById("team_no").value = data.team_no;
 }
 </script>
 </body>

@@ -77,9 +77,22 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("a3.empList", map);
 	}
 	
-	public List<Erp_ProjectkindVO> kindList() {
-		return sqlSession.selectList("a3.kindList");
+	public List<Erp_ProjectkindVO> kindList(Map<String, Object> map) {
+		return sqlSession.selectList("a3.kindList", map);
 	}
+	
+	public Erp_ProjectkindVO kindName(String projectkind_name) {
+		return sqlSession.selectOne("a3.kindName", projectkind_name);
+	}
+	
+	public List<Erp_ProjectVO> prList(Map<String, Object> map){
+		return sqlSession.selectList("a3.prList", map);
+	}
+	
+	public List<Erp_ProjectVO> getProject(Map<String, Object> map){
+		return sqlSession.selectList("a3.getProject", map);
+	}
+	
 	
 	public int deleteContract(int project_no) {
 		return sqlSession.delete("a3.deleteContract", project_no);

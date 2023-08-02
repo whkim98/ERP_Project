@@ -1,6 +1,7 @@
 package com.lab.erp.dao.login;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,11 @@ public class Erp_TeamDAO {
 		this.sqlSession = sqlSession;
 	}
 	
-	public List<Erp_TeamVO> teamList(){
-		return sqlSession.selectList("admin.teamList");
+	public List<Erp_TeamVO> teamList(Map<String, Object> map){
+		return sqlSession.selectList("admin.teamList", map);
+	}
+	public Erp_TeamVO teamName(String team_name){
+		return sqlSession.selectOne("admin.teamName", team_name);
 	}
 	
 	public int teamNo(String team_name) {
