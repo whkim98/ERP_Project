@@ -3,5 +3,5 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b5">
-
+<select id="selectEmployee" resultType="com.lab.erp.vo.login.Erp_Employee1VO">select * from erp_employee1</select>
 </mapper>
