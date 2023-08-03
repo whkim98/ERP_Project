@@ -3,31 +3,5 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b6">
-<select id="selectMonth" parameterType="map" resultType="int">
-SELECT MONTH(salary_date) AS month FROM erp_salary WHERE employee2_no = 1 and MONTH(salary_date)=MONTH(#{salary_date}) GROUP BY MONTH(salary_date);
-</select>
-<select id="selectYear" parameterType="map" resultType="int">
-SELECT YEAR(salary_date) AS year FROM erp_salary WHERE employee2_no = #{employee2_no} and YEAR(salary_date)=YEAR(#{salary_date}) GROUP BY YEAR(salary_date);
-</select>
-<select id="selectSalary" parameterType="int" resultType="int">
-select employee2_salary from erp_employee2 where employee2_no = #{employee2_no}
-</select>
-<select id="privacy" parameterType="String" resultType="com.lab.erp.vo.b.b6.Erp_SalaryVO">
-select s.* from erp_salary s, erp_employee1 e1, erp_employee2 e2 where e2.employee1_no = e1.employee1_no and e1.employee1_code = #{employee1_code};
-</select>
-<select id="selectEmployee" parameterType="String" resultType="int">
-select e2.employee2_no from erp_employee2 e2, erp_employee1 e1 where e1.employee1_code = #{employee1_code}
-</select>
-<insert id="insertSalary" parameterType="com.lab.erp.vo.b.b6.Erp_SalaryVO">
-insert into erp_salary(salary_code, employee2_no, salarytype_no, salary_date, salary_start, salary_end, salary_cash) values(#{salary_code}, #{employee2_no}, #{salarytype_no}, #{salary_date}, #{salary_start}, #{salary_end}, #{salary_cash})
-</insert>
-<select id="salaryType" parameterType="String" resultType="int">
-select salarytype_no from erp_salarytype where salarytype_name = #{salarytype_name}
-</select>
-<select id="magnification" parameterType="int" resultType="double">
-select salarytype_magnification from erp_salarytype where salarytype_no = #{salarytype_no}
-</select>
-<select id="resignList" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
-SELECT * FROM erp_employee1 e1 LEFT JOIN erp_employee2 e2 ON e1.employee1_no = e2.employee1_no LEFT JOIN erp_resign er ON e2.employee2_no = er.employee2_no;
-</select>
+
 </mapper>
