@@ -28,6 +28,23 @@ select salarytype_no from erp_salarytype where salarytype_name = #{salarytype_na
 select salarytype_magnification from erp_salarytype where salarytype_no = #{salarytype_no}
 </select>
 <select id="resignList" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
-SELECT * FROM erp_employee1 e1 LEFT JOIN erp_employee2 e2 ON e1.employee1_no = e2.employee1_no LEFT JOIN erp_resign er ON e2.employee2_no = er.employee2_no;
+SELECT * FROM erp_employee1 e1 
+LEFT JOIN erp_employee2 e2 
+ON e1.employee1_no = e2.employee1_no 
+LEFT JOIN erp_resign er 
+ON e2.employee2_no = er.employee2_no;
 </select>
+
+<select id="employeeList" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
+	select * from erp_employee1 e1 left join erp_employee2 e2 on e1.employee1_no = e2.employee1_no
+</select>
+
+<insert id="resignInsert" parameterType="com.lab.erp.vo.b.b6.Erp_ResignVO">
+	insert into erp_resign(resign_code, employee2_no, resign_date, resign_cost) values(#{resign_code}, #{employee2_no}, #{resign_date}, #{resign_cost})
+</insert>
+
+<select id="selectExp" parameterType="int" resultType="int">
+	select employee2_exp from erp_employee2 where employee2_no = #{employee2_no}
+</select>
+
 </mapper>
