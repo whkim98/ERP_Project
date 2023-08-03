@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="a3">
+	<!-- 전체 목록 조회 -->
+	<select id="kindList" resultType="com.lab.erp.vo.a.a3.Erp_ProjectkindVO" parameterType="map">
+		select * from erp_projectkind 
+		<if test="type != null">
+			<if test="type == 'projectkind_no'">
+				where projectkind_no = #{word}
+			</if>
+			<if test="type == 'projectkind_name'">
+				where projectkind_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="getCk" resultType="com.lab.erp.vo.a.a3.Erp_ContractkindVO" parameterType="map">
+		select * from erp_contractkind 
+		<if test="type != null">
+			<if test="type == 'contractkind_no'">
+				where contractkind_no = #{word}
+			</if>
+			<if test="type == 'contractkind_name'">
+				where contractkind_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="prList" resultType="com.lab.erp.vo.a.a3.Erp_ProjectVO" parameterType="map">
+		select p.* from erp_project p, erp_team t where p.comcode_no = #{comcode_no} and p.team_no = t.team_no 
+		<if test="type != null">
+			<if test="type == 'project_no'">
+				and project_no = #{word}
+			</if>
+			<if test="type == 'project_name'">
+				and project_name like '%${word}%'
+			</if>
+			<if test="type == 'project_status'">
+				and project_status = #{word}
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="clList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select c.* from erp_client c, erp_businesstype b where comcode_no = #{comcode_no} and c.businesstype_no = b.businesstype_no 
+		<if test="type != null">
+			<if test="type == 'client_no'">
+				and c.client_no = #{word}
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'client_manager'">
+				and c.client_manager like '%${word}%'
+			</if>
+			<if test="type == 'businesstype_name'">
+				and b.businesstype_name = '%${word}%'
+			</if>
+			<if test="type == 'businesstype_subctgr'">
+				and b.businesstype_subctgr = '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	
+	<!-- 이름 중복 데이터 존재 가능성 있는 것들 -->
+	<select id="empList" parameterType="map" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
+		select e1.employee1_no, e1.employee1_code, e1.employee1_name, e1.employee1_phone, e2.employee2_position 
+		from erp_employee1 e1, erp_employee2 e2, erp_comcode c 
+		where 
+		e1.employee1_name like '%${employee1_name}%' and e1.employee1_no = e2.employee1_no and c.comcode_code = #{comcode_code} and c.comcode_no = e2.comcode_no
+		order by e1.employee1_no asc
+	</select>
+	
+	
+	
+	<!-- 이름 자동완성 ajax-->
+	<select id="kindName" resultType="com.lab.erp.vo.a.a3.Erp_ProjectkindVO" parameterType="String">
+		select * from erp_projectkind where projectkind_name like '%${projectkind_name}%'
+	</select>
+	
+	<select id="ckName" resultType="com.lab.erp.vo.a.a3.Erp_ContractkindVO" parameterType="String">
+		select * from erp_contractkind where contractkind_name like '%${contractkind_name}%'
+	</select>
+	
+	<select id="getProject" resultType="com.lab.erp.vo.a.a3.Erp_ProjectVO" parameterType="map">
+		select * from erp_project where project_name like '%${project_name}%' and comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="getCl" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select * from erp_client where client_name like '%${client_name}%' and comcode_no = #{comcode_no}
+	</select>
+	
+	
+	<!-- 외래키 no값 추출 -->
+	<select id="pkNo" parameterType="String" resultType="int">
+		select projectkind_no from erp_projectkind where projectkind_name like '%${projectkind_name}%'
+	</select>
+	
+	
+	<!-- 프로젝트 관리 -->
+	<insert id="createProject" parameterType="com.lab.erp.vo.a.a3.Erp_ProjectVO">
+		insert into erp_project(project_name,project_budget,project_start,project_end,projectkind_no,project_contractor,employee1_no,project_status,project_content,team_no,comcode_no) 
+		values(#{project_name},#{project_budget},#{project_start},#{project_end},#{projectkind_no},#{project_contractor},#{employee1_no},#{project_status},#{project_content},#{team_no},#{comcode_no})
+	</insert>
+	
+	<update id="updateProject" parameterType="com.lab.erp.vo.a.a3.Erp_ProjectVO">
+		update erp_project set 
+		project_name = #{project_name},
+		project_budget = #{project_budget},
+		project_start = #{project_start},
+		project_end = #{project_end},
+		projectkind_no = #{projectkind_no},
+		project_contractor = #{project_contractor},
+		employee1_no = #{employee1_no},
+		project_status = #{project_status},
+		project_content = #{project_content},
+		team_no = #{team_no},
+		comcode_no = #{comcode_no} 
+		where project_no = #{project_no}
+	</update>
+	
+	<delete id="deleteProject" parameterType="int">
+		delete from erp_project where project_no = #{project_no}
+	</delete>
+	
+	<select id="projectList" resultType="map" parameterType="int">
+		select p.*, t.team_name, e.employee1_name from erp_project p, erp_team t, erp_employee1 e where 
+		p.comcode_no = #{comcode_no} and p.team_no = t.team_no and p.employee1_no = e.employee1_no 
+		order by p.project_no asc
+	</select>
+	
+	<select id="selectProject" parameterType="int" resultType="map">
+		select p.*, e.employee1_no, e.employee1_name, e.employee1_phone, e2.employee2_position, t.team_name, pk.projectkind_name, c.comcode_name from 
+		erp_project p, erp_employee1 e, erp_team t, erp_projectkind pk, erp_comcode c, erp_employee2 e2 where 
+		p.employee1_no = e.employee1_no and p.team_no = t.team_no and p.projectkind_no = pk.projectkind_no 
+		and p.comcode_no = c.comcode_no and e.employee1_no = e2.employee1_no 
+		and p.project_no = #{project_no}
+	</select>
+	
+	<!-- PROJECT 검색 -->
+	<select id="searchList" parameterType="map" resultType="map">
+		select * from 
+			(select @rownum := @rownum + 1 rn,t.* from
+				(select p.*, pk.projectkind_name, t.team_name, e.employee1_name 
+				from erp_project p, erp_team t, erp_employee1 e, erp_projectkind pk where 
+				<if test="type != null">
+					<if test="type == 'employee1_name'">
+						e.employee1_name like '%${word}%' and
+					</if>
+					<if test="type == 'team_name'">
+						t.team_name like '%${word}%' and 
+					</if>
+					<if test="type == 'project_name'">
+						p.project_name like '%${word}%' and 
+					</if>
+					<if test="type == 'projectkind_name'">
+						pk.projectkind_name like '%${word}%' and 
+					</if>
+					<if test="type == 'project_content'">
+						p.project_content like '%${word}%' and 
+					</if>
+				</if>
+				p.team_no = t.team_no and p.employee1_no = e.employee1_no and p.comcode_no = #{comcode_no} 
+				and p.projectkind_no = pk.projectkind_no 
+				order by p.project_no asc) t, (select @rownum := 0) rt) r
+		<![CDATA[
+		where r.rn >= #{first} and r.rn <= #{last}
+		]]>
+	</select>
+	
+	<select id="getTotal" resultType="int" parameterType="map">
+		select count(*) from erp_project p, erp_team t, erp_employee1 e where 
+		<if test="type != null">
+			<if test="type == 'employee1_name'">
+				p.employee1_no = #{word} and 
+			</if>
+			<if test="type == 'team_name'">
+				p.team_no = #{word} and 
+			</if>
+			<if test="type == 'project_name'">
+				p.project_name like '%${word}%' and 
+			</if>
+			<if test="type == 'projectkind_name'">
+				p.projectkind_no = #{word} and 
+			</if>
+			<if test="type == 'project_content'">
+				p.project_content like '%${word}%' and 
+			</if>
+		</if>
+		p.team_no = t.team_no and p.employee1_no = e.employee1_no and p.comcode_no = #{comcode_no}
+	</select>
+	
+	<!-- 팀 검색
+	<select id="teamProjectList" parameterType="int" resultType="map">
+		select p.*, t.team_name, e.employee1_name from erp_project p, erp_team t, erp_employee1 e where 
+		p.team_no = #{team_no} and p.team_no = t.team_no and p.employee1_no = e.employee1_no 
+		order by p.project_no asc
+	</select>
+	
+	종류 검색
+	<select id="projectKindList" parameterType="int" resultType="map">
+		select p.*, t.team_name, e.employee1_name from erp_project p, erp_team t, erp_employee1 e where 
+		p.projectkind_no = #{projectkind_no} and p.team_no = t.team_no and p.employee1_no = e.employee1_no 
+		order by p.project_no asc
+	</select>
+	
+	프로젝트명 검색
+	<select id="projectNameList" parameterType="String" resultType="map">
+		select p.*, t.team_name, e.employee1_name from erp_project p, erp_team t, erp_employee1 e where 
+		p.project_name like '%${project_name}%' and p.team_no = t.team_no and p.employee1_no = e.employee1_no 
+		order by p.project_no asc 
+	</select>
+	
+	내용 검색
+	<select id="projectContentList" parameterType="String" resultType="map">
+		select p.*, t.team_name, e.employee1_name from erp_project p, erp_team t, erp_employee1 e where 
+		p.project_content like '%${project_content}%' and p.team_no = t.team_no and p.employee1_no = e.employee1_no 
+		order by p.project_no asc 
+	</select> -->
+	
+	<delete id="deleteContract" parameterType="int">
+		delete erp_contract where project_no = #{project_no}
+	</delete>
+	
+	<select id="prContract" parameterType="int" resultType="com.lab.erp.vo.a.a3.Erp_ContractVO">
+		select * from erp_contract where project_no = #{project_no}
+	</select>
+	
+	
+	<!-- 계약관리 -->
+	<insert id="createContract" parameterType="com.lab.erp.vo.a.a3.Erp_ContractVO">
+		insert into erp_contract(contract_name,contractkind_no,contract_start,contract_end,client_no,contract_content,project_no) 
+		values(#{contract_name},#{contractkind_no},#{contract_start},#{contract_end},#{client_no},#{contract_content},#{project_no})
+	</insert>
+	
+	<update id="updateContract" parameterType="com.lab.erp.vo.a.a3.Erp_ContractVO">
+		update erp_contract set 
+		contract_name = #{contract_name},
+		contractkind_no = #{contractkind_no},
+		contract_start = #{contract_start},
+		contract_end = #{contract_end},
+		client_no = #{client_no},
+		contract_content = #{contract_content},
+		project_no = #{project_no} 
+		where contract_no = #{contract_no}
+	</update>
+	
+	<delete id="deleteContractC" parameterType="int">
+		delete from erp_contract where contract_no = #{contract_no}
+	</delete>
+	
+	<select id="prContractList" resultType="map" parameterType="map">
+		select c.*, ck.contractkind_name, cl.client_name, p.project_name, p.project_start, p.project_end 
+		from erp_contract c, erp_contractkind ck, erp_client cl, erp_project p 
+		where c.contractkind_no = ck.contractkind_no 
+		and c.client_no = cl.client_no 
+		and c.project_no = p.project_no 
+		and p.comcode_no = #{comcode_no} 
+		<if test="project_no != '0'">
+			and c.project_no = #{project_no} 
+		</if>
+		<if test="type != null">
+			<if test="type == 'contract_name'">
+				and c.contract_name like '%${word}%' 
+			</if>
+			<if test="type == 'contractkind_name'">
+				and ck.contractkind_name like '%${word}%' 
+			</if>
+			<if test="type == 'project_name'">
+				and p.project_name like '%${word}%' 
+			</if>
+			<if test="type == 'contract_content'">
+				and c.contract_content like '%${word}%' 
+			</if>
+			<if test="type == 'client_name'">
+				and cl.client_name like '%${word}%' 
+			</if>
+		</if>
+		order by c.contract_no asc
+	</select>
+	
+	<select id="selectContract" resultType="map" parameterType="int">
+		select c.*, ck.contractkind_name, cl.client_name, cl.client_manager, cl.client_contact, cl.client_no, p.project_name, p.project_start, p.project_end, p.project_budget, p.project_content 
+		from erp_contract c, erp_contractkind ck, erp_client cl, erp_project p 
+		where c.contractkind_no = ck.contractkind_no 
+		and c.client_no = cl.client_no 
+		and c.project_no = p.project_no 
+		and c.contract_no = #{contract_no}
+	</select>
+	
+	<select id="getProjectNo" resultType="com.lab.erp.vo.a.a3.Erp_ProjectVO" parameterType="String">
+		select * from erp_project where project_name = #{project_name}
+	</select>
+	
+	<select id="getCkNo" resultType="com.lab.erp.vo.a.a3.Erp_ContractkindVO" parameterType="String">
+		select * from erp_contractkind where contractkind_name = #{contractkind_name}
+	</select>
+	
+	<select id="selectClient" resultType="map" parameterType="int">
+		select c.*, ct.country_name, b.businesstype_name, b.businesstype_subctgr 
+		from erp_client c, erp_country ct, erp_businesstype b 
+		where client_no = #{client_no} 
+		and comcode_no not in (1) 
+		and c.country_no = ct.country_no 
+		and c.businesstype_no = b.businesstype_no
+	</select>
+	
+	
+	<!-- 실적 / 평가 -->
+	<insert id="createEstimate" parameterType="com.lab.erp.vo.a.a3.Erp_EstimateVO">
+		insert into erp_estimate(project_no,estimate_score,estimate_content,estimate_result,estimate_fact) 
+		values(#{project_no},#{estimate_score},#{estimate_content},#{estimate_result},#{estimate_fact})
+	</insert>
+	
+	<update id="updateEstimate" parameterType="com.lab.erp.vo.a.a3.Erp_EstimateVO">
+		update erp_estimate set 
+		project_no = #{project_no},
+		estimate_score = #{estimate_score},
+		estimate_content = #{estimate_content},
+		estimate_result = #{estimate_result},
+		estimate_fact = #{estimate_fact} 
+		where estimate_no = #{estimate_no}
+	</update>
+	
+	<delete id="deleteEstimate" parameterType="int">
+		delete from erp_estimate where estimate_no = #{estimate_no}
+	</delete>
+	
+	<select id="estimateList" parameterType="map" resultType="map">
+		select e.*, p.project_name, t.team_name from erp_estimate e, erp_project p, erp_team t 
+		where e.project_no = p.project_no and p.team_no = t.team_no 
+		and p.comcode_no = #{comcode_no} 
+		<if test="project_no != '0'">
+			and e.project_no = #{project_no} 
+		</if>
+		<if test="type != null">
+			<if test="type == 'project_name'">
+				and p.project_name like '%${word}%' 
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'estimate_fact'">
+				and e.estimate_fact like '%${word}%' 
+			</if>
+			<if test="type == 'estimate_content'">
+				and e.estimate_content like '%${word}%' 
+			</if>
+		</if>
+		order by e.estimate_no asc
+	</select>
+	
+	<select id="selectEstimate" parameterType="map" resultType="map">
+		select e.*, p.project_name, p.project_start, p.project_end, p.project_status, p.project_content, 
+		e1.employee1_name, e1.employee1_phone, t.team_name 
+		from erp_estimate e, erp_project p, erp_employee1 e1, erp_team t 
+		where e.project_no = p.project_no and p.employee1_no = e1.employee1_no 
+		and p.team_no = t.team_no and e.estimate_no = #{estimate_no}
+	</select>
+	
+	<select id="getTotalet" parameterType="map" resultType="int">
+		select count(*) from erp_estimate e, erp_project p, erp_team t 
+		where e.project_no = p.project_no and p.team_no = t.team_no 
+		and p.comcode_no = #{comcode_no} 
+		<if test="project_no != '0'">
+			and e.project_no = #{project_no} 
+		</if>
+		<if test="type != null">
+			
+		</if>
+		order by e.estimate_no asc
+	</select>
+	
+</mapper>
