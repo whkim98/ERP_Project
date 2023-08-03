@@ -23,7 +23,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/index">ERPlab</a></h1>
+						<h1><a href="/testjsp">ERPlab</a></h1>
 						<nav class="links">
 						<!-- 인트라넷 애들은 로그인을 따로 할 수 있도록 나중에 수정 -->
 							<ul>

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.b.b6.Erp_ResignDAO;
 import com.lab.erp.dao.b.b6.Erp_SalaryDAO;
-import com.lab.erp.vo.b.b6.Erp_ResignVO;
 import com.lab.erp.vo.b.b6.Erp_SalaryVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 
@@ -59,18 +58,6 @@ public class B6Service {
 	//퇴직
 	public List<Erp_Employee1VO> resignList(){
 		return rdao.resignList();
-	}
-	
-	public int resignInsert(Erp_ResignVO vo) {
-		return rdao.resignInsert(vo);
-	}
-	
-	public List<Erp_Employee1VO> employeeList(){
-		return rdao.employeeList();
-	}
-	
-	public int selectExp(int employee2_no) {
-		return rdao.selectExp(employee2_no);
 	}
 	
 }

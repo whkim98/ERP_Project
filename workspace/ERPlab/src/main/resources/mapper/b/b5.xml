@@ -3,32 +3,5 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b5">
-
-<select id="selectEmployee" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
-	select * from erp_employee1 e1 left join erp_employee2 e2 on e1.employee1_no = e2.employee1_no
-</select>
-
-<insert id="insertEmployee1" parameterType="com.lab.erp.vo.login.Erp_Employee1VO">
-	insert into erp_employee1(employee1_code, employee1_name, employee1_addr1, employee1_addr2, employee1_postal, employee1_residentno, employee1_phone, employee1_email, employee1_id, employee1_pw, employee1_disability, employee1_merit) values(#{employee1_code}, #{employee1_name}, #{employee1_addr1}, #{employee1_addr2}, #{employee1_postal}, #{employee1_residentno}, #{employee1_phone}, #{employee1_email}, #{employee1_id}, #{employee1_pw}, #{employee1_disability}, #{employee1_merit})
-</insert>
-
-<!-- <insert id="insertEmployee2" parameterType="com.lab.erp.vo.login.Erp_Employee1VO">
-	<if test="employee2_holiday != null">
-		insert into erp_employee2(employee1_no, team_no, employee2_extension, employee2_position, employee2_exp, employee2_salary, employee2_holiday, employee2_four, employee2_worktype) values(#{employee1_no}, #{team_no}, #{employee2_extension}, #{employee2_position}, #{employee2_exp}, #{employee2_salary}, #{employee2_holiday}, #{employee2_four}, #{employee2_worktype})
-	</if>
-	<if test="employee2_holiday == null">
-		insert into erp_employee2(employee1_no, team_no, employee2_extension, employee2_position, employee2_exp, employee2_salary, employee2_four, employee2_worktype) values(#{employee1_no}, #{team_no}, #{employee2_extension}, #{employee2_position}, #{employee2_exp}, #{employee2_salary}, #{employee2_four}, #{employee2_worktype})
-	</if>
-</insert> -->
-
-<insert id="insertEmployee2" parameterType="com.lab.erp.vo.login.Erp_Employee2VO">
-    insert into erp_employee2 (employee1_no, team_no, employee2_extension, employee2_position, employee2_salary, employee2_holiday, employee2_four, employee2_worktype)
-    values (#{employee1_no}, #{team_no}, #{employee2_extension}, #{employee2_position}, #{employee2_salary}, COALESCE(#{employee2_holiday}, 15), #{employee2_four}, #{employee2_worktype})
-</insert>
-
-<select id="selectEmployeeno" parameterType="String" resultType="int">
-	select employee1_no from erp_employee1 where employee1_code = #{employee1_code}
-</select>
-
-
+<select id="selectEmployee" resultType="com.lab.erp.vo.login.Erp_Employee1VO">select * from erp_employee1</select>
 </mapper>

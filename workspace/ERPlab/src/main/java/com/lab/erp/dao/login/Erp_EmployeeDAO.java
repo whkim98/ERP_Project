@@ -69,16 +69,4 @@ public class Erp_EmployeeDAO {
 	public List<Erp_Employee1VO> selectEmployee(){
 		return sqlSession.selectList("b5.selectEmployee");
 	}
-	
-	public int insertEmployee1(Erp_Employee1VO vo) {
-		return sqlSession.insert("b5.insertEmployee1", vo);
-	}
-	
-	public int insertEmployee2(Erp_Employee2VO vo) {
-		return sqlSession.insert("b5.insertEmployee2", vo);
-	}
-	
-	public int selectEmployeeno(String employee1_code) {
-		return sqlSession.selectOne("b5.selectEmployeeno", employee1_code);
-	}
 }

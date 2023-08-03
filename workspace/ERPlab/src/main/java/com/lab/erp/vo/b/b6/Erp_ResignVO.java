@@ -12,6 +12,7 @@ public class Erp_ResignVO {
 	private int ctgr_no;
 	private String resign_code;
 	private int employee2_no;
+	private int attendance_no;
 	private String resign_date;
 	private int resign_cost;
 	private int comcode_no;
