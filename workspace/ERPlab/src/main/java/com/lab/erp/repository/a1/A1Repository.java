@@ -10,9 +10,7 @@ public interface A1Repository {
 	int save(Erp_CompanyVO erp_CompanyVO);
 	
 	int update(Erp_CompanyVO erp_CompanyVO);
-	
-	int findById(int company_no);
-	
+		
 	int delete(Erp_CompanyVO erp_CompanyVO);
 	
 	int countAll();

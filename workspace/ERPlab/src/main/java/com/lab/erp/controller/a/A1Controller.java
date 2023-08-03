@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.erp.service.a.A1Service;
@@ -27,7 +26,7 @@ public class A1Controller {
 		System.out.println("### LOG: "+ getClass().getName() + "() 생성");
 	}
 	
-	@GetMapping("/a_company")
+	@GetMapping("/company")
 	public String a_company(Model model) {
 		List<Erp_CompanyVO> list_res = a1Service.list();
 		model.addAttribute("list", list_res);

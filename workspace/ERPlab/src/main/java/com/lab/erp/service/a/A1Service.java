@@ -15,7 +15,7 @@ public class A1Service {
 	
 	public A1Service(SqlSession sqlSession) {
 		System.out.println("### LOG : " + getClass().getName()+"() 생성");
-		a1Repository = sqlSession.getMapper(a1Repository.getClass());
+		a1Repository = sqlSession.getMapper(A1Repository.class);
 	}
 	
 	// 전체 회사 정보 출력
