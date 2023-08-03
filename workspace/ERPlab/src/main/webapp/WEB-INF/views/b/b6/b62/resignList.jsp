@@ -4,28 +4,37 @@
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
 <div align="center">
-	<form action="${pageContext.request.contextPath }/greeting/salary/insertForm" method="post">
-	<table>
-		<tr>
-			<th>정산코드</th>
-			<th>추가근무일자</th>
-			<th>시작시간</th>
-			<th>종료시간</th>
-			<th>추가수당</th>
-		</tr>
+	<form action="${pageContext.request.contextPath }/greeting/resign/insertForm" method="post">
+		<table>
+			<tr>
+				<th>이름</th>
+				<th>사원코드</th>
+				<th>주소</th>
+				<th>주민등록번호</th>
+				<th>전화번호</th>
+				<th>이메일</th>
+				<th>아이디</th>
+				<th>비밀번호</th>
+				<th>직급</th>
+				<th>연차</th>
+				<th>연봉</th>
+			</tr>
 			<c:forEach var="vo" items="${list }">
-		<tr>
-				<td>${vo.salary_code }</td>
-				<td>${vo.salary_date }</td>
-				<td>${vo.salary_start }</td>
-				<td>${vo.salary_end }</td>
-				<td>${vo.salary_cash }</td>
-		</tr>
+			<tr>
+				<td>${vo.employee1_name }</td>
+				<td>${vo.employee1_code }</td>
+				<td>${vo.employee1_addr1} ${vo.employee1_addr2 } ${vo.employee1_postal}</td>
+				<td>${vo.employee1_residentno }</td>
+				<td>${vo.employee1_phone }</td>
+				<td>${vo.employee1_email }</td>
+				<td>${vo.employee1_id }</td>
+				<td>${vo.employee1_pw }</td>
+				<td>${vo.employee2_position }</td>
+				<td>${vo.employee2_exp }</td>
+				<td>${vo.employee2_salary }</td>
+				<td><input type="button" value="퇴직등록" onclick="location.href='${pageContext.request.contextPath }/greeting/resign/insertForm?employee2_no=${vo.employee2_no }'">
+			</tr>
 			</c:forEach>
-		<tr>
-			<td colspan="5"><input type="submit" value="추가 등록"></td>
-		</tr>
-			
-	</table>
+		</table>
 	</form>
 </div>
