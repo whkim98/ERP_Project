@@ -69,10 +69,10 @@
 				<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off">
 				<input type="submit" value="조회">
 			</span>
-		</form>	
-		<div align="center">
-			<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject'">
-		</div>
+	</form>	
+	<div align="center">
+		<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject'">
+	</div>
 	
 	<div align="center">
 		<c:if test="${paging.prev }">

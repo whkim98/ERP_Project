@@ -12,7 +12,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				where team_name like '%${word}%'
 			</if>
 			<if test="type == 'team_no'">
-				where team_code = #{word} 
+				where team_no = #{word} 
+			</if>
+			<if test="type == 'team_code'">
+				where team_code like '%${word}%' 
 			</if>
 		</if>
 	</select>

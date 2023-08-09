@@ -9,6 +9,7 @@ import lombok.*;
 public class Erp_MoneyVO {
 	
 	private int money_no;
+	private String money_code;
 	private String money_date;
 	private int debtor_no;
 	private String money_debtor;

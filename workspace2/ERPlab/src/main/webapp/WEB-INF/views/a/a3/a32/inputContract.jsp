@@ -256,7 +256,7 @@
 				document.getElementById("client_name").focus();
 				return;
 			}
-			var url = "${pageContext.request.contextPath}/a/a3/a32/searchcl?&comcode_code="+code;
+			var url = "${pageContext.request.contextPath}/a/a3/a32/searchcl";
 			var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 			
 			sendRequest(url, param, clName, "POST");

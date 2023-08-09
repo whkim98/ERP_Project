@@ -18,7 +18,7 @@ public class Erp_LeaseVO {
 	private String lease_content; 
 	private String lease_note; 
 	private int lease_price;
-	private int debotor_no;
+	private int debtor_no;
 	private int creditor_no;
 	private String lease_start; 
 	private String lease_end; 

@@ -19,7 +19,7 @@ public class Erp_LoanVO {
 	private String loan_start;
 	private String loan_end;
 	private int account_no;
-	private int debotor_no;
+	private int debtor_no;
 	private int creditor_no;
 	private int comcode_no;
 

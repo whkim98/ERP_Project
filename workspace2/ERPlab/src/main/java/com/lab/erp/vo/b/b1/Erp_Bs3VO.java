@@ -14,5 +14,9 @@ public class Erp_Bs3VO {
 	private int bs3_amount;
 	private String bs3_class;
 	private int comcode_no;
+	
+//	====================================
+	private int debtor_no;
+	private int creditor_no;
 
 }
