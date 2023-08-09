@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ERP lab 행사</title>
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+        <link rel="stylesheet" href="/css/c/c_event.css" />
+    </head>
+    <body>
+        <div class="event_container">
+            <h2 class="event_title">행사관리</h2>
+            <div class="event_body">
+                <div class="event_regist">
+                    <table class="event_list">
+                        <tr class="event_top">
+                            <th class="sec1">행사명</th>
+                            <th class="sec2">행사시작일</th>
+                            <th class="sec3">행사종료일</th>
+                            <th class="sec5">상품명</th>
+                            <th class="sec10">담당자</th>
+                        </tr>
+                        <tr class="event_items" th:each="item : ${list}">
+                            <td><a href="">[[${item.event_name}]]</a></td>
+                            <td><a href="">[[${item.event_start}]]</a></td>
+                            <td><a href="">[[${item.event_end}]]</a></td>
+                            <td><a href="">[[${goods_name}]]</a></td>
+                            <td><a href="">[[${item.event_manager}]]</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="regits_form">
+                    <form action="#">
+                        <div class="sec">
+                            <label for="event_name">행사명</label>
+                            <input
+                                type="text"
+                                name="event_name"
+                                id="event_name"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_start">행사시작일</label>
+                            <input
+                                type="text"
+                                name="event_start"
+                                id="event_start"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_end">행사종료일</label>
+                            <input
+                                type="text"
+                                name="event_end"
+                                id="event_end"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_period">행사기간</label>
+                            <input
+                                type="text"
+                                name="event_period"
+                                id="event_period"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="goods_no">상품등록</label>
+                            <div class="goods_regist">
+                                <input
+                                    type="text"
+                                    name="goods_no"
+                                    id="goods_no"
+                                />
+                                <button>상품조회</button>
+                            </div>
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_price">단가</label>
+                            <input
+                                type="number"
+                                name="event_price"
+                                id="event_price"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_qty">행사수량</label>
+                            <input
+                                type="number"
+                                name="event_qty"
+                                id="event_qty"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_tax">세액</label>
+                            <input
+                                type="number"
+                                name="event_tax"
+                                id="event_tax"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_total">합계</label>
+                            <input
+                                type="number"
+                                name="event_total"
+                                id="event_total"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_manager">담당자</label>
+                            <input
+                                type="text"
+                                name="event_manager"
+                                id="event_manager"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="event_remark">비고</label>
+                            <textarea
+                                name="event_remark"
+                                id="event_remark"
+                                cols="30"
+                                rows="10"
+                            ></textarea>
+                        </div>
+
+                        <div class="sec">
+                            <button type="reset">RESET</button>
+                            <button type="submit">SAVE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+        <script src="/src/main/resources/static/js/a/a_company.js"></script>
+    </body>
+</html>
