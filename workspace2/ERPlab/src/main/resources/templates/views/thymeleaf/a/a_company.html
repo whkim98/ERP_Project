@@ -4,10 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ERP lab 회사정보</title>
-        <link
-            rel="stylesheet"
-            href="/webdeisgn/css/main.css"
-        />
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
         <link rel="stylesheet" href="/css/a/a_company.css" />
     </head>
     <body>
@@ -79,14 +76,20 @@
                             />
                         </div>
 
-                        <div class="sec">
+            			<div class="sec">
                             <label for="company_businesstype">사업형태</label>
-                            <input
-                                type="text"
-                                name="company_businesstype"
-                                id="company_businesstype"
-                            />
+                            <div class="businesstype_comp">
+                                <input
+                                    type="text"
+                                    name="company_businesstype"
+                                    id="company_businesstype"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    readonly
+                                />
+                                <button id="businesstype_search">조회</button>
+                            </div>
                         </div>
+
 
                         <div class="sec">
                             <label for="company_addr1">도로명주소</label>
@@ -178,5 +181,60 @@
                 </div>
             </div>
         </div>
+        
+          <div id="wrapper">
+            <div id="main">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="businesstype_title">
+                                <span>업종코드목록조회</span>
+                                <button class="close_businesstype">X</button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="items">
+                            <td>
+                                <article class="post">
+                                    <header>
+                                        <div class="title">
+                                            <h2>세세분류명</h2>
+                                            <p>
+                                                대분류 > 중분류 > 세분류 >
+                                                세세분류
+                                            </p>
+                                        </div>
+                                    </header>
+                                    <p class="content">
+                                        업종코드 : NULL<br />
+                                        적용 범위 및 기준 : <br />
+                                        NULL
+                                        <br />
+                                    </p>
+                                    <footer>
+                                        <ul class="actions">
+                                            <li>
+                                                <button class="button large comp_type_select_btn">
+													SELECT
+												</button>
+                                            </li>
+                                        </ul>
+                                    </footer>
+                                </article>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+      	<script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+        <script src="/src/main/resources/static/js/a/a_company.js"></script>
+        
     </body>
 </html>

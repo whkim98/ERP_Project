@@ -12,13 +12,14 @@
 }
 
 .comp_container > .comp_body > .comp_regist {
-    width: 40%;
+    width: 45%;
     height: 100%;
     display: flex;
+    overflow: scroll;
 }
 
 .comp_container > .comp_body > .regits_form {
-    width: 55%;
+    width: 50%;
     height: 100%;
 }
 
@@ -38,4 +39,47 @@ select:focus {
 
 .comp_container > .comp_body > .regits_form button {
     border-color: #000b9e;
+}
+
+.businesstype_title {
+    font-size: 2rem;
+    color: #000b9e;
+    display: flex;
+    justify-content: space-between;
+}
+.businesstype_comp {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+#company_businesstype {
+    width: 80%;
+}
+
+#wrapper {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #fff;
+    display: none;
+}
+
+.businesstype_title > .close_businesstype {
+    width: 40px;
+    height: 40px;
+    border: none;
+    padding: 0px;
+    align-items: center;
+    letter-spacing: 0;
+    line-height: 0;
+}
+
+.post .content {
+    font-size: 1.1rem;
+}
+
+.items {
+    border-bottom: 1px solid #ff9633;
 }
