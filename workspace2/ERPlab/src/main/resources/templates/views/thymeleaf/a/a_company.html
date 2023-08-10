@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="comp_container">
-            <h2 class="comp_title">회사등록</h2>
+            <h2 class="comp_title"><a th:href="@{/a/a_company}">회사등록</a></h2>
             <div class="comp_body">
                 <div class="comp_regist">
                     <table class="comp_list">
@@ -18,15 +18,16 @@
                             <th class="sec2">회사명</th>
                             <th class="sec3">구분</th>
                         </tr>
-                        <tr class="comp_items" th:each="item : ${list}">
-                            <td>[[${item.company_no}]]</td>
-                            <td>[[${item.company_name}]]</td>
-                            <td>[[${item.comptype_no}]]</td>
+                        <tr class="comp_items" th:each="comp_item : ${comp_list}">
+                            <td>[[${comp_item.company_no}]]</td>
+                            <td>[[${comp_item.company_name}]]</td>
+                            <td>[[${comp_item.comptype_no}]]</td>
+                        
                         </tr>
                     </table>
                 </div>
                 <div class="regits_form">
-                    <form action="#">
+                    <form th:action="@{/a/a_company}" method="post" id="comp_frm">
                         <div class="sec">
                             <label for="comptype_no">사업 형태 구분</label>
                             <select name="comptype_no" id="comptype_no">
@@ -86,10 +87,11 @@
                                     placeholder=" 우측 조회버튼으로 확인해주세요."
                                     readonly
                                 />
-                                <button id="businesstype_search">조회</button>
+                                <button type="button" id="businesstype_search">조회</button>
                             </div>
                         </div>
 
+						<input type="hidden" name="businesstype_no" id="businesstype_no">
 
                         <div class="sec">
                             <label for="company_addr1">도로명주소</label>
@@ -126,6 +128,7 @@
                                 type="text"
                                 name="company_opendate"
                                 id="company_opendate"
+                                th:value = "${company_opendate}"
                             />
                         </div>
 
@@ -196,26 +199,27 @@
                     <tbody>
                         <tr class="items">
                             <td>
-                                <article class="post">
+                                <article class="post" th:each="bst_item : ${bst_list}">
                                     <header>
                                         <div class="title">
-                                            <h2>세세분류명</h2>
+                                            <h2>[[${bst_item.businesstype_subctgr}]]</h2>
                                             <p>
-                                                대분류 > 중분류 > 세분류 >
-                                                세세분류
+                                                [[${bst_item.businesstype_name}]] > [[${bst_item.businesstype_biotore}]] > [[${bst_item.businesstype_ctgr}]] >
+                                                [[${bst_item.businesstype_subctgr}]]
                                             </p>
+                                            <p class="hidden">[[${bst_item.businesstype_no}]]</p>
                                         </div>
                                     </header>
                                     <p class="content">
-                                        업종코드 : NULL<br />
+                                        업종코드 : [[${bst_item.businesstype_code}]]<br />
                                         적용 범위 및 기준 : <br />
-                                        NULL
+                                        [[${bst_item.businesstype_description}]]
                                         <br />
                                     </p>
                                     <footer>
                                         <ul class="actions">
                                             <li>
-                                                <button class="button large comp_type_select_btn">
+                                                <button class="button large comp_type_select_btn" th:id="${bst_item.businesstype_code}">
 													SELECT
 												</button>
                                             </li>
@@ -229,12 +233,12 @@
             </div>
         </div>
         
-      	<script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/browser.min.js"></script>
-        <script src="assets/js/breakpoints.min.js"></script>
-        <script src="assets/js/util.js"></script>
-        <script src="assets/js/main.js"></script>
-        <script src="/src/main/resources/static/js/a/a_company.js"></script>
+      	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/a/a_company.js"></script>
         
     </body>
 </html>

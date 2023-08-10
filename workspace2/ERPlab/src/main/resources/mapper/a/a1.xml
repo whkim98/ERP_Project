@@ -4,12 +4,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.a1.A1Repository">
 	<select id="findAll" resultType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
-	 	SELECT * FROM erp_company
+	 	SELECT * FROM erp_company ORDER BY company_no DESC;
 	</select>
 	
 	<insert id="save" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO" keyProperty="company_no" useGeneratedKeys="true" keyColumn="company_no">
-		INSERT INTO erp_company (comptype_no, company_code, company_name, company_registeredno, company_corporatedno, company_representative, businesstype_no, company_status, company_kind, company_addr1, company_addr2, company_postal, company_opendate, company_use, company_foreign, company_directno, company_fax, company_email, comcode_no) 
-		VALUES (#{comptype_no}, #{company_code}, #{company_name}, #{company_registeredno}, #{company_corporatedno}, #{company_representative}, #{businesstype_no}, #{company_status}, #{company_kind}, #{company_addr1}, #{company_addr2}, #{company_postal}, #{company_opendate}, #{company_use}, #{company_foreign}, #{company_directno}, #{company_fax}, #{company_email}, #{comcode_no})
+		INSERT INTO erp_company (comptype_no, company_name, company_registeredno, company_corporatedno, company_representative, company_businesstype, businesstype_no, company_addr1, company_addr2, company_postal, company_opendate, company_use, company_foreign, company_directno, company_fax, company_email, comcode_no) 
+		VALUES (#{comptype_no}, #{company_name}, #{company_registeredno}, #{company_corporatedno}, #{company_representative},#{company_businesstype}, #{businesstype_no}, #{company_addr1}, #{company_addr2}, #{company_postal}, #{company_opendate}, #{company_use}, #{company_foreign}, #{company_directno}, #{company_fax}, #{company_email}, #{comcode_no})
 	</insert>
 	
 	<update id="update" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
@@ -25,6 +25,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT COUNT(*) FROM erp_company 
 	</select>
 	
-	
+	<select id="findBstAll" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
+	 	SELECT * FROM erp_businesstype
+	</select>
+
 	
 </mapper>
