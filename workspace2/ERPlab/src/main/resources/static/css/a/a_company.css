@@ -64,6 +64,7 @@ select:focus {
     top: 0;
     background-color: #fff;
     display: none;
+    overflow-y: scroll;
 }
 
 .businesstype_title > .close_businesstype {
@@ -82,4 +83,19 @@ select:focus {
 
 .items {
     border-bottom: 1px solid #ff9633;
+}
+
+.selected_comp_items{
+	background-color: rgba(255, 150, 51, 0.5) !important;
+	color : #000b9e;
+	border-left : 1px solid #000b9e !important;
+	border-right : 1px solid #000b9e !important; 
+	font-weight : bold;
+}
+
+.hidden {
+	visibility: hidden;
+	position: fixed;
+	top : -9999px;
+	left: -9999px;
 }
