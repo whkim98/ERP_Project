@@ -39,20 +39,58 @@ for(let i = 0 ; i < businesstype_select_btn.length ; i++) {
 let comp_items = document.getElementsByClassName("comp_items");
 for(let i = 0 ; i < comp_items.length; i++){
 	comp_items[i].addEventListener('click', (e) => {
-		//reset(comp_items, comp_items.length, "comp_items");
-		//e.target.parentElement.className = "comp_items selected_comp_items";
+		//클릭된 회사 색변경
+		reset(comp_items, comp_items.length, "comp_items");
+		e.target.parentElement.className = "comp_items selected_comp_items";
 		
-		location.href="/a/a_company?id="+e.target.parentElement.children[0].innerHTML;
+		//클릭시 하단부 버튼 RESET/SAVE -> DELETE/UPDATE로 변경
+		buttonController(true);
 	});	
 }
 
 // 회사 리스트 클릭시 기타 회사는 표시 제거
-/*
 let reset = (taglist, length, className)=>{
 	for(let i = 0 ; i < length; i++){
 		taglist[i].className = className;
 	}
 }
- */
 
+// 클릭시 하단부 RESET/SAVE <-> DELETE/UPDATE 변경 함수 
+let buttonController = (status) => {
+	if (status == true) {
+		document.getElementById("old_btn_sec").style.display="block";
+		document.getElementById("new_btn_sec").style.display="none";
+	}
+	else {
+		document.getElementById("old_btn_sec").style.display="none";
+		document.getElementById("new_btn_sec").style.display="block";
+	}
+}
+ 
+// input, label, 리스트 제외한 다른 영역 클릭시 DELETE/UPDATE -> RESET/SAVE 로 변경
+let comp_container = document.getElementsByClassName("comp_container");
+comp_container[0].addEventListener('click', (e) => {
+	let listarea = document.getElementsByClassName("comp_regist");
+	let labelarea = document.getElementsByTagName("label");
+	let inputarea = document.getElementsByTagName("input");
+	let selectarea = document.getElementsByTagName("select");
+		
+	if(e.target.contains(listarea[0])){
+	
+		//여기는 입력란 타입(input 타입별, selectbox, checkbox 등등)마다 for문 요구
+		let flag = true;
+		for(let i = 0 ; i < labelarea.length; i++)
+			if(!e.target.contains(labelarea[i])){ flag=false; break; }
+		for(let i = 0 ; i < inputarea.length; i++)
+			if(!e.target.contains(inputarea[i])){ flag=false; break; }
+		for(let i = 0; i < selectarea.length; i++)
+			if(!e.target.contains(selectarea[i])){ flag=false; break; }
+		 
+		if(flag) {
+			buttonController(false);
+			reset(comp_items, comp_items.length, "comp_items");
+		}
+	}
+	
+});
 

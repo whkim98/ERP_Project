@@ -1,9 +1,10 @@
 .comp_container {
     padding: 2%;
+    font-size : 10pt;
 }
 
 .comp_container > .comp_title {
-    border-bottom: thick double #ff9633;
+	text-align: center;
 }
 
 .comp_container > .comp_body {
@@ -15,7 +16,15 @@
     width: 45%;
     height: 100%;
     display: flex;
-    overflow: scroll;
+    overflow: hidden;
+}
+
+.comp_container > .comp_body > .vertical_line {
+	height: 100vh;
+	width: 0.075vw;
+	border-width: 0;
+	color: #000;
+	background-color: rgba(160, 160, 160, 0.4);
 }
 
 .comp_container > .comp_body > .regits_form {
@@ -28,8 +37,29 @@
     margin: 2%;
 }
 
+.comp_container > .comp_body > .regits_form .sec > #company_opendate{
+	-moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    background: rgba(160, 160, 160, 0.075);
+    border: none;
+    border: solid 1px rgba(160, 160, 160, 0.3);
+    border-radius: 0;
+    color: inherit;
+    display: block;
+    outline: 0;
+    padding: 0 1em;
+    text-decoration: none;
+    width: 100%;
+}
+
 .comp_container > .comp_body > .regits_form .sec > label {
     width: 40%;
+}
+
+.comp_container > .comp_body > .regits_form .sec > select {
+	padding-right : 2rem;
 }
 
 .comp_container > .comp_body > .regits_form .sec > input:focus,
@@ -39,6 +69,23 @@ select:focus {
 
 .comp_container > .comp_body > .regits_form button {
     border-color: #000b9e;
+    height : 100%;
+    width: 15%;
+}
+
+.comp_container > .comp_body > .regits_form .sec > .businesstype_comp {
+	 width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comp_container > .comp_body > .regits_form .sec > .businesstype_comp > #businesstype_search {
+	line-height : 0;
+}
+
+.comp_container > .comp_body > .regits_form .sec > .businesstype_comp > #businesstype_search > img{
+	width: 25px;
+	height: 25px;
 }
 
 .businesstype_title {
@@ -47,11 +94,7 @@ select:focus {
     display: flex;
     justify-content: space-between;
 }
-.businesstype_comp {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
+
 #company_businesstype {
     width: 80%;
 }
@@ -81,16 +124,11 @@ select:focus {
     font-size: 1.1rem;
 }
 
-.items {
-    border-bottom: 1px solid #ff9633;
-}
-
 .selected_comp_items{
-	background-color: rgba(255, 150, 51, 0.5) !important;
+	background-color: #FDECC5 !important;
 	color : #000b9e;
 	border-left : 1px solid #000b9e !important;
 	border-right : 1px solid #000b9e !important; 
-	font-weight : bold;
 }
 
 .hidden {
@@ -98,4 +136,34 @@ select:focus {
 	position: fixed;
 	top : -9999px;
 	left: -9999px;
+}
+
+.warning_box {
+	display:flex;
+	justify-content: end;
+}
+
+.yellow_box {
+	width: 25px;
+	height : 15px;
+	background-color: yellow;
+	line-height : 10pt;
+	margin-top : 2.5pt;
+}
+
+.red {
+	font-size: 10pt;
+	color: red;
+}
+
+.bigger {
+	font-size : 13pt;
+}
+
+#old_btn_sec {
+	display:none;
+}
+
+.required {
+	background-color : lightyellow !important;
 }

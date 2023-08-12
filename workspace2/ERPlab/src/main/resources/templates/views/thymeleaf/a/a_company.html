@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>ERP lab 회사정보</title>
+        <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
         <link rel="stylesheet" href="/css/a/a_company.css" />
     </head>
@@ -26,11 +27,19 @@
                         </tr>
                     </table>
                 </div>
+                
+        		<hr class="vertical_line">
+
                 <div class="regits_form">
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
                     <form th:action="@{/a/a_company}" method="post" id="comp_frm">
                         <div class="sec">
                             <label for="comptype_no">사업 형태 구분</label>
-                            <select name="comptype_no" id="comptype_no">
+                            <select name="comptype_no" id="comptype_no" class="required">
                                 <option value="1">회사</option>
                                 <option value="2">사업장</option>
                                 <option value="3">지점</option>
@@ -43,6 +52,7 @@
                                 type="text"
                                 name="company_name"
                                 id="company_name"
+                                class="required"
                             />
                         </div>
 
@@ -54,6 +64,7 @@
                                 type="text"
                                 name="company_registeredno"
                                 id="company_registeredno"
+                                class="required"
                             />
                         </div>
 
@@ -65,6 +76,7 @@
                                 type="text"
                                 name="company_corporatedno"
                                 id="company_corporatedno"
+                                class="required"
                             />
                         </div>
 
@@ -85,9 +97,12 @@
                                     name="company_businesstype"
                                     id="company_businesstype"
                                     placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
                                     readonly
                                 />
-                                <button type="button" id="businesstype_search">조회</button>
+                                <button type="button" id="businesstype_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
                             </div>
                         </div>
 
@@ -125,7 +140,7 @@
                                 >개업날짜(연/월/일)</label
                             >
                             <input
-                                type="text"
+                                type="date"
                                 name="company_opendate"
                                 id="company_opendate"
                                 th:value = "${company_opendate}"
@@ -176,10 +191,14 @@
                             />
                         </div>
 
-                        <div class="sec">
+                        <div class="sec" id="new_btn_sec">
                             <button type="reset">RESET</button>
                             <button type="submit">SAVE</button>
                         </div>
+                        <div class="sec" id="old_btn_sec">
+							<button type="button">DELETE</button>
+							<button type="button">UPDAET</button>
+						</div>
                     </form>
                 </div>
             </div>
