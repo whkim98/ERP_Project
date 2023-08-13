@@ -23,7 +23,6 @@ let businesstype_close_func = () => {
 
 // 업종코드목록조회 선택버튼
 let businesstype_select_btn = document.getElementsByClassName("comp_type_select_btn");
-
 for(let i = 0 ; i < businesstype_select_btn.length ; i++) {
 	// 업종코드목록조회 선택버튼 기능추가
 	businesstype_select_btn[i].addEventListener('click', (e) => {
@@ -39,12 +38,16 @@ for(let i = 0 ; i < businesstype_select_btn.length ; i++) {
 let comp_items = document.getElementsByClassName("comp_items");
 for(let i = 0 ; i < comp_items.length; i++){
 	comp_items[i].addEventListener('click', (e) => {
+		console.log("클릭된 태그 : " + e.target.tagName);
+		
 		//클릭된 회사 색변경
 		reset(comp_items, comp_items.length, "comp_items");
 		e.target.parentElement.className = "comp_items selected_comp_items";
 		
 		//클릭시 하단부 버튼 RESET/SAVE -> DELETE/UPDATE로 변경
 		buttonController(true);
+		
+		//클릭시 좌측에 회사 정보 띄우기
 	});	
 }
 
@@ -91,6 +94,42 @@ comp_container[0].addEventListener('click', (e) => {
 			reset(comp_items, comp_items.length, "comp_items");
 		}
 	}
-	
 });
 
+// 페이지 로딩시 error 문구 여부를 통해 focus 맞추기
+window.onload = () => {
+	let errormsg = document.getElementById("errormsg").innerHTML;
+	errormsg = errormsg == "businesstype_no" ? "company_businesstype" : errormsg;
+	if (errormsg != null) {
+		document.getElementById(errormsg).focus();
+	}  
+}
+
+// 기타 입력창이 빈값일 경우 confirm 창 출력하는 함수
+let empty_input_confirm = () => {
+	let inputboxes = document.getElementsByTagName("input");
+	let selectboxes = document.getElementsByTagName("select");
+	let flag = false;
+	for(let i = 0 ; i < inputboxes.length ; i++){
+		if (inputboxes[i].value == "" || inputboxes[i].value == null) flag = true; 
+		break;
+	}
+	if(!flag){
+		for(let i = 0 ; i < selectboxes.length; i++){
+			if(selectboxes[i].selectedIndex == -1) flag= true; 
+			break;
+		}
+	}
+	if(flag) {
+		let confirm_res = window.confirm("입력되지 않은 사항이 있습니다. 전송하시겠습니까?");
+		if(confirm_res) return true;
+		else return false;
+	}
+}
+
+// SAVE 버튼 클릭 기능
+let comp_save_btn = document.getElementById("comp_save_btn");
+comp_save_btn.addEventListener('click', () => {
+	let res = empty_input_confirm();
+	if (res) document.getElementById("comp_frm").submit();
+});

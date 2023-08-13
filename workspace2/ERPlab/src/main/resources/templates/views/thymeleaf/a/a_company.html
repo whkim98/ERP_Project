@@ -37,12 +37,14 @@
 						<span class="red">는 필수 입력란입니다.</span>
 					</div>
                     <form th:action="@{/a/a_company}" method="post" id="comp_frm">
+						<input type="hidden" name="company_no" id="company_no" th:value="${erp_CompanyVO?.company_no}"/>
+						
                         <div class="sec">
                             <label for="comptype_no">사업 형태 구분</label>
                             <select name="comptype_no" id="comptype_no" class="required">
-                                <option value="1">회사</option>
-                                <option value="2">사업장</option>
-                                <option value="3">지점</option>
+                                <option value="1" th:selected="${erp_CompanyVO?.comptype_no} == 1">회사</option>
+                                <option value="2" th:selected="${erp_CompanyVO?.comptype_no} == 2">사업장</option>
+                                <option value="3" th:selected="${erp_CompanyVO?.comptype_no} == 3">지점</option>
                             </select>
                         </div>
 
@@ -53,6 +55,7 @@
                                 name="company_name"
                                 id="company_name"
                                 class="required"
+                                th:value="${erp_CompanyVO?.company_name}"
                             />
                         </div>
 
@@ -65,6 +68,7 @@
                                 name="company_registeredno"
                                 id="company_registeredno"
                                 class="required"
+                                th:value="${erp_CompanyVO?.company_registeredno}"
                             />
                         </div>
 
@@ -77,6 +81,7 @@
                                 name="company_corporatedno"
                                 id="company_corporatedno"
                                 class="required"
+                                th:value="${erp_CompanyVO?.company_corporatedno}"
                             />
                         </div>
 
@@ -86,6 +91,7 @@
                                 type="text"
                                 name="company_representative"
                                 id="company_representative"
+                                th:value="${erp_CompanyVO?.company_representative}"
                             />
                         </div>
 
@@ -98,6 +104,7 @@
                                     id="company_businesstype"
                                     placeholder=" 우측 조회버튼으로 확인해주세요."
                                     class="required"
+                                    th:value="${erp_CompanyVO?.company_businesstype}"
                                     readonly
                                 />
                                 <button type="button" id="businesstype_search">                        
@@ -106,7 +113,7 @@
                             </div>
                         </div>
 
-						<input type="hidden" name="businesstype_no" id="businesstype_no">
+						<input type="hidden" name="businesstype_no" id="businesstype_no" th:value="${erp_CompanyVO?.businesstype_no}">
 
                         <div class="sec">
                             <label for="company_addr1">도로명주소</label>
@@ -114,6 +121,7 @@
                                 type="text"
                                 name="company_addr1"
                                 id="company_addr1"
+                                th:value="${erp_CompanyVO?.company_addr1}"
                             />
                         </div>
 
@@ -123,6 +131,7 @@
                                 type="text"
                                 name="company_addr2"
                                 id="company_addr2"
+                                th:value="${erp_CompanyVO?.company_addr2}"
                             />
                         </div>
 
@@ -132,6 +141,7 @@
                                 type="text"
                                 name="company_postal"
                                 id="company_postal"
+                                th:value="${erp_CompanyVO?.company_postal}"
                             />
                         </div>
 
@@ -143,7 +153,7 @@
                                 type="date"
                                 name="company_opendate"
                                 id="company_opendate"
-                                th:value = "${company_opendate}"
+                                th:value = "${erp_CompanyVO?.company_opendate}"
                             />
                         </div>
 
@@ -153,14 +163,15 @@
                                 type="text"
                                 name="company_use"
                                 id="company_use"
+                                th:value="${erp_CompanyVO?.company_use}"
                             />
                         </div>
 
                         <div class="sec">
                             <label for="company_foreign">외국인유무</label>
                             <select name="company_foreign" id="company_foreign">
-                                <option value="0">없음(X)</option>
-                                <option value="1">있음(O)</option>
+                                <option value="0" th:selected="${erp_CompanyVO?.company_foreign} == 0">없음(X)</option>
+                                <option value="1" th:selected="${erp_CompanyVO?.company_foreign} == 1">있음(O)</option>
                             </select>
                         </div>
 
@@ -170,6 +181,7 @@
                                 type="text"
                                 name="company_directno"
                                 id="company_directno"
+                                th:value="${erp_CompanyVO?.company_directno}"
                             />
                         </div>
 
@@ -179,6 +191,7 @@
                                 type="text"
                                 name="company_fax"
                                 id="company_fax"
+                                th:value="${erp_CompanyVO?.company_fax}"
                             />
                         </div>
 
@@ -188,17 +201,20 @@
                                 type="text"
                                 name="company_email"
                                 id="company_email"
+                                th:value="${erp_CompanyVO?.company_email}"
                             />
                         </div>
 
                         <div class="sec" id="new_btn_sec">
                             <button type="reset">RESET</button>
-                            <button type="submit">SAVE</button>
+                            <button type="button" id="comp_save_btn">SAVE</button>
                         </div>
                         <div class="sec" id="old_btn_sec">
 							<button type="button">DELETE</button>
 							<button type="button">UPDAET</button>
 						</div>
+						
+						<div id="errormsg" class="hidden" th:text="${error}"></div>
                     </form>
                 </div>
             </div>
