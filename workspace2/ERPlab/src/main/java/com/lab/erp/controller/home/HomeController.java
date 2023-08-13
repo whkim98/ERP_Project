@@ -1,5 +1,7 @@
 package com.lab.erp.controller.home;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.all.Erp_ComcodeVO;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class HomeController {
@@ -115,6 +119,13 @@ public class HomeController {
 	@GetMapping("/test/distribution")
 	public String distribution() {
 		return "index/distribution";
+	}
+	
+	@GetMapping("/error")
+	public void error(HttpServletResponse response) throws Exception {
+		PrintWriter out = response.getWriter();
+		out.println("<script>alert('알 수 없는 에러가 발생했습니다. 이전 페이지로 이동합니다.'); history.go(-1);</script>");
+		out.flush();
 	}
 
 }
