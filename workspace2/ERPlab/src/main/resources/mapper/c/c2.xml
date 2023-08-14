@@ -3,5 +3,130 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="c2">
+	<select id="btList" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
+		select * from erp_businesstype 
+	</select>
+	<select id="btName" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
+		select businesstype_name from erp_businesstype 
+		<if test="btype != null">
+			<if test="btype == 'businesstype_name'">
+				where businesstype_name like '%${bnword}%' 
+			</if>
+		</if>
+		group by businesstype_name
+	</select>
+	<select id="btSubctgr" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
+		select businesstype_no, businesstype_ctgr, businesstype_subctgr, businesstype_description 
+		from erp_businesstype 
+		<if test="btype != null">
+			<if test="btype == 'businesstype_subctgr'">
+				where businesstype_subctgr like '%${bword}%'
+			</if>
+			<if test="btype == 'businesstype_ctgr'">
+				where businesstype_ctgr like '%${bword}%'
+			</if>
+		</if>
+	</select>
+	<select id="countryList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_CountryVO">
+		select * from erp_country 
+		<if test="ctype != null">
+			<if test="ctype == 'country_name'">
+				where country_name like '%${cword}%'
+			</if>
+			<if test="ctype == 'country_code'">
+				where country_code like '%${cword}%'
+			</if>
+		</if>
+	</select>
+	<select id="csList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientsortVO">
+		select * from erp_clientsort 
+		<if test="cstype != null">
+			<if test="cstype == 'clientsort_name'">
+				where clientsort_name like '%${csword}%'
+			</if>
+		</if>
+	</select>
+	<select id="autoSort" parameterType="String" resultType="com.lab.erp.vo.c.Erp_ClientsortVO">
+		select * from erp_clientsort where clientsort_name like '%${clientsort_name}%'
+	</select>
+	<select id="autoCountry" parameterType="String" resultType="com.lab.erp.vo.c.Erp_CountryVO">
+		select * from erp_country where country_name like '%${country_name}%'
+	</select>
 
+	<insert id="createClient" parameterType="com.lab.erp.vo.c.Erp_ClientVO">
+		insert into erp_client(country_no,client_name,clientsort_no,client_registeredno,client_corporatedno,client_representative,client_businesstype,businesstype_no,client_addr1,client_addr2,client_postal,client_directno,client_fax,client_email,client_manager,client_contact,comcode_no) 
+		values(#{country_no},#{client_name},#{clientsort_no},#{client_registeredno},#{client_corporatedno},#{client_representative,jdbcType=VARCHAR},#{client_businesstype,jdbcType=VARCHAR},#{businesstype_no},#{client_addr1,jdbcType=VARCHAR},#{client_addr2,jdbcType=VARCHAR},#{client_postal,jdbcType=VARCHAR},#{client_directno,jdbcType=VARCHAR},#{client_fax,jdbcType=VARCHAR},#{client_email,jdbcType=VARCHAR},#{client_manager},#{client_contact,jdbcType=VARCHAR},#{comcode_no})
+	</insert>
+	
+	<update id="updateClient" parameterType="com.lab.erp.vo.c.Erp_ClientVO">
+		update erp_client set 
+		country_no = #{country_no},
+		client_name = #{client_name},
+		clientsort_no = #{clientsort_no},
+		client_registeredno = #{client_registeredno},
+		client_corporatedno = #{client_corporatedno},
+		client_representative = #{client_representative,jdbcType=VARCHAR},
+		client_businesstype = #{client_businesstype,jdbcType=VARCHAR},
+		businesstype_no = #{businesstype_no},
+		client_addr1 = #{client_addr1,jdbcType=VARCHAR},
+		client_addr2 = #{client_addr2,jdbcType=VARCHAR},
+		client_postal = #{client_postal,jdbcType=VARCHAR},
+		client_directno = #{client_directno,jdbcType=VARCHAR},
+		client_fax = #{client_fax,jdbcType=VARCHAR},
+		client_email = #{client_email,jdbcType=VARCHAR},
+		client_manager = #{client_manager,jdbcType=VARCHAR},
+		client_contact = #{client_contact,jdbcType=VARCHAR},
+		comcode_no = #{comcode_no} 
+		where client_no = #{client_no}
+	</update>
+	
+	<delete id="deleteClient" parameterType="int">
+		delete from erp_client where client_no = #{client_no}
+	</delete>
+	
+	<select id="clientList" parameterType="map" resultType="map">
+		select c.*, ct.country_name, ct.country_code, cl.clientsort_name, b.businesstype_name, b.businesstype_subctgr 
+		from erp_client c, erp_country ct, erp_clientsort cl, erp_businesstype b 
+		where c.comcode_no = #{comcode_no} 
+		and c.clientsort_no = cl.clientsort_no 
+		and c.country_no = ct.country_no 
+		and c.businesstype_no = b.businesstype_no 
+		<if test="type != null">
+			<if test="type == 'country_name'">
+				ct.country_name like '%${word}%'
+			</if>
+			<if test="type == 'clientsort_name'">
+				cl.clientsort_name like '%${word}%'
+			</if>
+			<if test="type == 'businesstype_name'">
+				b.businesstype_name like '%${word}%'
+			</if>
+			<if test="type == 'businesstype_subctgr'">
+				b.businesstype_subctgr like '%${word}%'
+			</if>
+			<if test="type == 'client_businesstype'">
+				c.client_businesstype like '%${word}%'
+			</if>
+			<if test="type == 'client_name'">
+				c.client_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectClient" parameterType="int" resultType="map">
+		select c.*, ct.country_name, ct.country_code, cl.clientsort_name, b.businesstype_name, b.businesstype_subctgr  
+		from erp_client c, erp_country ct, erp_clientsort cl, erp_businesstype b 
+		where c.client_no = #{client_no} 
+		and c.clientsort_no = cl.clientsort_no 
+		and c.country_no = ct.country_no 
+		and c.businesstype_no = b.businesstype_no 
+	</select>
+	
+	<select id="clientGoods" parameterType="int" resultType="map">
+		select g.goods_name, g.goods_code 
+		from erp_goods g, erp_client c, erp_goodsconnect gc 
+		where gc.goods_no = g.goods_no 
+		and gc.client_no = c.client_no 
+		and c.client_no = #{client_no}
+	</select>
 </mapper>

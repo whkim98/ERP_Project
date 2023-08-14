@@ -38,4 +38,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("a4.selectInvestment", map);
 	}
 	
+	public int getImCode(String investment_code) {
+		return sqlSession.selectOne("a4.getImCode", investment_code);
+	}
+	
 }

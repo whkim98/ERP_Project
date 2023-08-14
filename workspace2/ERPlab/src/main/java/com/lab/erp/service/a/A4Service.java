@@ -158,6 +158,9 @@ public class A4Service {
 	public Map<String, Object> selectInvestment(Map<String, Object> map){
 		return idao.selectInvestment(map);
 	}
+	public int getImCode(String investment_code) {
+		return idao.getImCode(investment_code);
+	}
 	
 	
 //	repay

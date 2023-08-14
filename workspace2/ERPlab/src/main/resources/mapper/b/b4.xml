@@ -3,5 +3,83 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b4">
-
+	<select id="deadlineList" resultType="map" parameterType="map">
+		select ct.ctgr_ctgr, c.ctgr_no, sum(c.closing_debtor) closing_debtor, sum(c.closing_creditor) closing_creditor, ct.ctgr_name 
+			from erp_closing c, erp_ctgr ct 
+			where c.ctgr_no = ct.ctgr_no 
+			and c.comcode_no = #{comcode_no} 
+			<if test="type != null">
+				<if test="type == 'ctgr_name'">
+					and ct.ctgr_name like '%${word}%' 
+				</if>
+				<if test="type == 'ctgr_ctgr'">
+					and ct.ctgr_ctgr like '%${word}%' 
+				</if>
+			</if>
+			group by ct.ctgr_ctgr, c.ctgr_no, ct.ctgr_name 
+			order by ct.ctgr_name asc
+	</select>
+	
+	<select id="totalAmount" resultType="com.lab.erp.vo.b.b1.Erp_ClosingVO" parameterType="map">
+		select c.ctgr_no, sum(c.closing_debtor) closing_debtor, sum(c.closing_creditor) closing_creditor 
+			from erp_closing c, erp_ctgr ct 
+			where c.ctgr_no = ct.ctgr_no 
+			and c.comcode_no = #{comcode_no} 
+			<if test="type != null">
+				<if test="type == 'ctgr_name'">
+					and ct.ctgr_name like '%${word}%' 
+				</if>
+				<if test="type == 'ctgr_ctgr'">
+					and ct.ctgr_ctgr like '%${word}%' 
+				</if>
+			</if>
+			group by c.ctgr_no 
+			order by ct.ctgr_name asc
+	</select>
+	
+	<select id="selectCtgr" parameterType="map" resultType="map">
+	select ct.ctgr_ctgr, c.closing_content, c.closing_note, c.ctgr_no, c.closing_debtor, c.closing_creditor, ct.ctgr_name, date_format(c.closing_date, '%m월 %d일') closing_date 
+			from erp_closing c, erp_ctgr ct 
+			where c.ctgr_no = ct.ctgr_no 
+			and c.ctgr_no = #{ctgr_no} 
+			and c.comcode_no = #{comcode_no} 
+			<if test="type != null">
+				<if test="type == 'closing_content'">
+					and c.closing_content like '%${word}%'
+				</if>
+				<if test="type == 'closing_note'">
+					and c.closing_note like '%${word}%'
+				</if>
+				<if test="type == 'closing_month'">
+					and date_format(c.closing_date, '%m월') like '%${word}%'
+				</if>
+				<if test="type == 'closing_day'">
+					and date_format(c.closing_date, '%d일') like '%${word}%'
+				</if>
+			</if>
+			order by date_format(c.closing_date, '%m월 %d일') asc
+	</select>
+	
+	<select id="ctgrAmount" resultType="com.lab.erp.vo.b.b1.Erp_ClosingVO" parameterType="map">
+		select c.ctgr_no, sum(c.closing_debtor) closing_debtor, sum(c.closing_creditor) closing_creditor
+			from erp_closing c, erp_ctgr ct 
+			where c.ctgr_no = ct.ctgr_no 
+			and c.ctgr_no = #{ctgr_no} 
+			and c.comcode_no = #{comcode_no} 
+			<if test="type != null">
+				<if test="type == 'closing_content'">
+					and c.closing_content like '%${word}%'
+				</if>
+				<if test="type == 'closing_note'">
+					and c.closing_note like '%${word}%'
+				</if>
+				<if test="type == 'closing_month'">
+					and date_format(c.closing_date, '%m월') like '%${word}%'
+				</if>
+				<if test="type == 'closing_day'">
+					and date_format(c.closing_date, '%d일') like '%${word}%'
+				</if>
+			</if>
+			group by c.ctgr_no 
+	</select>
 </mapper>

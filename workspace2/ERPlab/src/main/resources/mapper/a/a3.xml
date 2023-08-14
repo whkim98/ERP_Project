@@ -145,9 +145,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- PROJECT 검색 -->
 	<select id="searchList" parameterType="map" resultType="map">
-		select * from 
-			(select @rownum := @rownum + 1 rn,t.* from
-				(select p.*, pk.projectkind_name, t.team_name, e.employee1_name 
+		select p.*, pk.projectkind_name, t.team_name, e.employee1_name 
 				from erp_project p, erp_team t, erp_employee1 e, erp_projectkind pk where 
 				<if test="type != null">
 					<if test="type == 'employee1_name'">
@@ -168,10 +166,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</if>
 				p.team_no = t.team_no and p.employee1_no = e.employee1_no and p.comcode_no = #{comcode_no} 
 				and p.projectkind_no = pk.projectkind_no 
-				order by p.project_no asc) t, (select @rownum := 0) rt) r
-		<![CDATA[
-		where r.rn >= #{first} and r.rn <= #{last}
-		]]>
+				order by p.project_no asc
 	</select>
 	
 	<select id="getTotal" resultType="int" parameterType="map">

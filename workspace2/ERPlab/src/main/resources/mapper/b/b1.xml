@@ -47,7 +47,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateClosing" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
 		update erp_closing set 
 		closing_code = #{closing_code},
-		closing_date = #{closing_date},
 		debtor_no = #{debtor_no},
 		closing_debtor = #{closing_debtor},
 		creditor_no = #{creditor_no},

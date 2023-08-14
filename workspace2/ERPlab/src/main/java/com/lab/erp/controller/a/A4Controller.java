@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -120,6 +121,7 @@ public class A4Controller {
 	}
 	
 	@RequestMapping("/a41/createLoan")
+	@Transactional
 	public String createLoan(Erp_InvestmentVO vo, Model model, String bs3_no1, String bs3_no2, String comcode_code) {
 		int b1 = 0;
 		int b2 = 0;
@@ -167,7 +169,7 @@ public class A4Controller {
 				int delete = a4.deleteInvestment(vo.getInvestment_no());
 				if(delete != 0) {
 					String msg = "등록 실패";
-					String url = "/a/a4/a41?comcode_code="+comcode_code;
+					String url = "redirect:/a/a4/a41?comcode_code="+comcode_code;
 					model.addAttribute("msg", msg);
 					model.addAttribute("url", url);
 					return ViewPath.RESULT + "loginresult";
@@ -258,10 +260,11 @@ public class A4Controller {
 		model.addAttribute("bs3_no1", bs3_no1);
 		model.addAttribute("bs3_no2", bs3_no2);
 		
-		return ViewPath.A4 + "/a41/updateForm";
+		return ViewPath.A4 + "/a41/inputLoan";
 	}
 	
 	@RequestMapping("/a41/update")
+	@Transactional
 	public String updateInvestment(Erp_InvestmentVO vo, Model model, String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, String comcode_code) {
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		Map<String, Object> map = new HashMap<>();
@@ -296,8 +299,6 @@ public class A4Controller {
 			b22 = Integer.parseInt(bs3_no22);
 		}
 		
-		System.out.println(b11+" : " + b21 + " : " + b12 + " : " + b22);
-		
 		int comcode_no = ls.comNo(comcode_code);
 		
 		map.put("bs3_no1", b11);
@@ -307,7 +308,6 @@ public class A4Controller {
 		Map<String, Object> cmap = a4.getBsNo(b21);
 		
 		map.put("bs3_amount", (-(int)imap.get("investment_price")));
-		System.out.println("수정 전 금액 : " + imap.get("investment_price"));
 		map.put("bs3_no", dmap.get("bs3_no"));
 		map.put("bs2_no", dmap.get("bsno2"));
 		map.put("bs1_no", dmap.get("bs1_no"));
@@ -315,7 +315,6 @@ public class A4Controller {
 		int s = a4.updateBs3Amount(map);
 		int ss = a4.updateBs2Amount(map);
 		int sss = a4.updateBs1Amount(map);
-		System.out.println("1. " + s + " 2. " + ss + " 3. " + sss);
 		
 		map.put("bs3_amount", (-(int)imap.get("investment_price")));
 		map.put("bs3_no", cmap.get("bs3_no"));
@@ -337,12 +336,10 @@ public class A4Controller {
 		cmap = a4.getBsNo(b22);
 		
 		map.put("bs3_amount", vo.getInvestment_price());
-		System.out.println("수정 후 금액 : " + vo.getInvestment_price());
 		
 		s = a4.updateBs3Amount(map);
 		ss = a4.updateBs2Amount(map);
 		sss = a4.updateBs1Amount(map);
-		System.out.println("11. " + s + " 22. " + ss + " 33. " + sss);
 		
 		map.put("bs3_amount", vo.getInvestment_price());
 		map.put("bs3_no", dmap.get("bs3_no"));
@@ -367,10 +364,9 @@ public class A4Controller {
 			
 			int cupdate = a4.updateClosing(cvo);
 			if(cupdate != 0) {
-				msg = "일마감까지 수정 성공";
-				url = "/a/a4/a41/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
+				return "redirect:/a/a4/a41/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
 			}else {
-				msg = "일마감 수정 실패";
+				msg = "수정 실패";
 				url = "/a/a4/a41/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
 			}
 		}else {
@@ -385,6 +381,7 @@ public class A4Controller {
 	}
 	
 	@RequestMapping("/a41/delete")
+	@Transactional
 	public String deleteInvestment(int investment_no, String bs3_no1, String bs3_no2, Model model, String comcode_code) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("investment_no", investment_no);
@@ -562,7 +559,7 @@ public class A4Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}else {
-			int ctgr = 8;
+			int ctgr = 9;
 			
 			Erp_ClosingVO cvo = new Erp_ClosingVO();
 			cvo.setClosing_code(vo.getInvestment_code());
@@ -578,7 +575,7 @@ public class A4Controller {
 				int delete = a4.deleteInvestment(vo.getInvestment_no());
 				if(delete != 0) {
 					String msg = "등록 실패";
-					String url = "/a/a4/a42?comcode_code="+comcode_code;
+					String url = "redirect:/a/a4/a42?comcode_code="+comcode_code;
 					model.addAttribute("msg", msg);
 					model.addAttribute("url", url);
 					return ViewPath.RESULT + "loginresult";
@@ -971,6 +968,18 @@ public class A4Controller {
 			return vo;
 		}catch(Exception e) {
 			return null;
+		}
+	}
+	
+	@RequestMapping(value="/imcode", produces = "application/text;charset=utf8")
+	@ResponseBody
+	public String imcode(String investment_code){
+		try {
+			int imcode = a4.getImCode(investment_code);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
 		}
 	}
 	

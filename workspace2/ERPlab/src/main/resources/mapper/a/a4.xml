@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="investmentList" parameterType="map" resultType="map">
-		select i.*, im.imkind_name, cl.client_name, t.team_name, t.team_code, c.closing_debtor, c.closing_creditor, str_to_date(c.closing_date, 'YYYY-MM-DD') closing_date, 
+		select i.*, im.imkind_name, cl.client_name, t.team_name, t.team_code, c.closing_debtor, c.closing_creditor, date_format(c.closing_date, '%m월 %d일') closing_date, 
 		d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
 		from erp_investment i, erp_imkind im, erp_client cl, erp_team t, erp_closing c, erp_debtor d, erp_creditor cr 
 		where i.client_no = cl.client_no 
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and t.team_name like '%${word}%' 
 			</if>
 			<if test="type == 'closing_date'">
-				and str_to_date(c.closing_date, 'YYYY-MM-DD') like '%${word}%' 
+				and date_format(c.closing_date, '%m월 %d일') like '%${word}%' 
 			</if>
 			<if test="type == 'investment_code'">
 				and i.investment_code like '%${word}%' 
@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectInvestment" parameterType="map" resultType="map">
-		select i.*, im.imkind_name, t.team_name, t.team_code, c.closing_no, c.closing_creditor, str_to_date(c.closing_date, 'YYYY-MM-DD') closing_date, 
+		select i.*, im.imkind_name, t.team_name, t.team_code, c.closing_no, c.closing_creditor, date_format(c.closing_date, '%m월 %d일') closing_date, 
 		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no1}) bs3_ctgr1, 
 		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no2}) bs3_ctgr2 
 		from erp_investment i, erp_imkind im, erp_team t, erp_closing c 

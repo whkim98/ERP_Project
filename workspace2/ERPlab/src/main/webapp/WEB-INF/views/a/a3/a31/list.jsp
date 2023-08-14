@@ -74,25 +74,6 @@
 		<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject'">
 	</div>
 	
-	<div align="center">
-		<c:if test="${paging.prev }">
-			<a href="${pageContext.request.contextPath }/a/a3/a31/?page=${paging.begin - 1}&type=${param.type}&word=${param.word}&comcode_code=${comcode_code }">[이전]</a>
-		</c:if>
-		<c:forEach var="i" begin="${paging.begin }" end="${paging.end }" step="1">
-			<c:choose>
-				<c:when test="${i == paging.page }">
-					<strong>[${i}]</strong>
-				</c:when>
-				<c:otherwise>
-					<a href="${pageContext.request.contextPath }/a/a3/a31/?page=${i}&type=${param.type}&word=${param.word}&comcode_code=${comcode_code }">[${i }]</a>
-				</c:otherwise>
-			</c:choose>
-		</c:forEach>
-		<c:if test="${paging.next }">
-			<a href="${pageContext.request.contextPath }/a/a3/a31/?page=${paging.end + 1}&type=${param.type}&word=${param.word}&comcode_code=${comcode_code }">[다음]</a>
-		</c:if>
-	</div>
-	
 </div>
 
 <%@include file="/WEB-INF/views/layout/footer.jsp" %>

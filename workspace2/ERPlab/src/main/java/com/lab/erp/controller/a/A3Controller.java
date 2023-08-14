@@ -41,12 +41,9 @@ public class A3Controller {
 	}
 	
 	@RequestMapping("/a31/")
-	public String projectList(Model model, String comcode_code, Integer page, String type, String word) {
+	public String projectList(Model model, String comcode_code, String type, String word) {
 		System.out.println(comcode_code);
 		int comcode_no = ls.comNo(comcode_code);
-		if(page == null) {
-			page = 1;
-		}
 		
 		if(type == null || word == null) {
 			type = null;
@@ -59,17 +56,9 @@ public class A3Controller {
 		map.put("word",word);
 		map.put("comcode_no", comcode_no);
 		
-		int boardCount = a3.getTotal(map);
-		
-		Paging paging = new Paging(page, boardCount);
-	
-		map.put("first", paging.getFirst());
-		map.put("last", paging.getLast());
-		
 		List<Map<String, Object>> list = a3.searchList(map);
 		
 		model.addAttribute("list", list);
-		model.addAttribute("paging", paging);
 		
 		return ViewPath.A3 + "/a31/list";
 	}
@@ -559,14 +548,10 @@ public class A3Controller {
 	
 //	실적 / 평가
 	@RequestMapping("/a33/")
-	public String estimateList(Model model, Erp_EstimateVO vo, Integer page, String type, String word, String comcode_code) {
+	public String estimateList(Model model, Erp_EstimateVO vo, String type, String word, String comcode_code) {
 		Map<String, Object> map = new HashMap<>();
 		
 		int comcode_no = ls.comNo(comcode_code);
-		
-		if(page == null) {
-			page = 1;
-		}
 		
 		if(type == null || word == null) {
 			type = null;
@@ -578,19 +563,11 @@ public class A3Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("project_no", vo.getProject_no());
 		
-		int boardCount = a3.getTotalet(map);
-		
-		Paging paging = new Paging(page, boardCount);
-	
-		map.put("first", paging.getFirst());
-		map.put("last", paging.getLast());
-		
 		List<Map<String, Object>> list = a3.estimateList(map);
 		if(list.isEmpty()) {
 			list = null;
 		}
 		
-		model.addAttribute("paging", paging);
 		model.addAttribute("list", list);
 		
 		return ViewPath.A3 + "/a33/list";

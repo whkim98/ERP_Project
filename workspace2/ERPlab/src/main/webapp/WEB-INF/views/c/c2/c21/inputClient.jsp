@@ -46,76 +46,86 @@
 	height: 100vh;
 	width: 0.1vw;
 	border-width: 0;
-	color: #000;
-	background-color: #000;
+	color: rgba(160, 160, 160, 0.3);
+	background-color: rgba(160, 160, 160, 0.3);
+	
+}
+
+input#search {
+background:url(/image/search-glass.png);
+background-repeat: no-repeat;
+width:20px;
+height:20px;
+border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
 //전체목록조회
-function searchim(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searchim", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function searchbn(){
+	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/searchbn", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function searcht(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function searchbs(){
+	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/searchbs", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function acList(code, team){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/acList?comcode_code="+code+"&team_code="+team, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function searchcs(){
+	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/searchcs", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function clList(code){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function searchct(){
+	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/searchct", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 
 //자동완성
-function imkind(e, name){
+function clientsort(e, name){
 	if(e.keyCode == 13){
 		if(name == ""){
 			alert("종류를 입력해주세요.");
-			document.getElementById("imkind_name").focus();
+			document.getElementById("clientsort_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/a/a4/imkind";
-		var param = "imkind_name=" + encodeURIComponent(name);
+		var url = "${pageContext.request.contextPath}/c/c2/c21/clientsort";
+		var param = "clientsort_name=" + encodeURIComponent(name);
 		
-		sendRequest(url, param, investmentkind, "POST");
+		sendRequest(url, param, clientsortname, "POST");
 	}
 }
-function investmentkind(){
+function clientsortname(){
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.response;
+		
 		if(data != ""){
 			var data2 = JSON.parse(data);
-			document.getElementById("imkind_name").value = data2.imkind_name;
-			document.getElementById("imkind_no").value = data2.imkind_no;
+			document.getElementById("clientsort_name").value = data2.clientsort_name;
+			document.getElementById("clientsort_no").value = data2.clientsort_no;
 		}else {
-			document.getElementById("imkind_name").value = '';
+			document.getElementById("clientsort_name").value = '';
 			alert("조회된 종류가 없습니다. 조회 버튼을 클릭하여 목록에서 종류를 선택해주세요.");
 		}
 	}
 }
 
-function team(e, name){
+function country(e, name){
 	if(e.keyCode == 13){
 		if(name == ""){
-			alert("팀명을 입력해주세요.");
-			document.getElementById("team_name").focus();
+			alert("국가를 입력해주세요.");
+			document.getElementById("country_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/a/a4/team";
-		var param = "team_name=" + encodeURIComponent(name);
+		var url = "${pageContext.request.contextPath}/c/c2/c21/country";
+		var param = "country_name=" + encodeURIComponent(name);
 		
-		sendRequest(url, param, teamname, "POST");
+		sendRequest(url, param, countryname, "POST");
 	}
 }
-function teamname(){
+function countryname(){
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.response;
 		if(data != ""){
 			var data2 = JSON.parse(data);
-			document.getElementById("team_name").value = data2.team_name;
-			document.getElementById("team_no").value = data2.team_no;
+			document.getElementById("country_name").value = data2.country_name;
+			document.getElementById("country_no").value = data2.country_no;
 		}else {
-			document.getElementById("team_name").value = '';
-			alert("중복된 팀 이름입니다. 조회 버튼을 클릭하여 목록에서 팀을 선택해주세요.");
+			document.getElementById("country_name").value = '';
+			alert("중복된 국가 이름입니다. 조회 버튼을 클릭하여 목록에서 국가를 선택해주세요.");
 		}
 	}
 }
@@ -133,16 +143,14 @@ function check(f) {
 <body class="notosanskr">
 	<div>
 		<div align="center">
-			<h2>자금 유용</h2>
+			<h2>자금 조달</h2>
 		</div>
 		<div align="center" class="divform1">
-			
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-					
+			<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
 		</div>
 		<hr>
 		<div class="divform2">
-			<form action="${pageContext.request.contextPath }/a/a4/a42" method="get" onsubmit="return check(this)" >
+			<form action="${pageContext.request.contextPath }/c/c2/c21" method="get" onsubmit="return check(this)" >
 			<table>
 				<tr>
 					<td>
@@ -157,8 +165,8 @@ function check(f) {
 					</td>
 					<td>
 						<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off">
-						<input type="submit" value="조회">
-						<input type="button" value="전체목록" onclick="location.href='${pageContext.request.contextPath }/a/a4/a42?type=null&comcode_code=${comcode_code }'">
+						<input type="submit" value="" id="search">
+						<input type="button" value="전체목록" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?type=null&comcode_code=${comcode_code }'">
 						<input type="hidden" name="comcode_code" value="${comcode_code}">
 					</td>
 				</tr>
@@ -172,7 +180,7 @@ function check(f) {
 				</tr>
 			<c:if test="${list != null }">
 				<c:forEach var="map" items="${list }">
-				<tr onclick="location.href='${pageContext.request.contextPath }/a/a4/a42/updateForm?investment_no=${map.investment_no }&bs3_no1=${map.bs3_no1 }&bs3_no2=${map.bs3_no2 }&comcode_code=${comcode_code }'">
+				<tr onclick="location.href='${pageContext.request.contextPath }/a/a4/a41/updateForm?investment_no=${map.investment_no }&bs3_no1=${map.bs3_no1 }&bs3_no2=${map.bs3_no2 }&comcode_code=${comcode_code }'">
 					<td>${map.investment_code }</td>
 					<td>${map.investment_price }</td>
 					<td>${map.investment_note }</td>
@@ -193,16 +201,16 @@ function check(f) {
 		</div>
 		
 		<div id="add" class="divform3">
-			<form action="${pageContext.request.contextPath }/a/a4/a42/createLease" method="POST">
+			<form action="${pageContext.request.contextPath }/a/a4/a41/createLoan" method="POST">
 			<input type="hidden" name="comcode_code" value="${comcode_code }">
 			<input type="hidden" name="imkind_no" id="imkind_no" value="13">
-			<input type="hidden" name="ctgr_no" id="ctgr_no" value="9">
+			<input type="hidden" name="ctgr_no" id="ctgr_no" value="8">
 			<input type="hidden" name="client_no" id="client_no" value="17">
 			<input type="hidden" name="team_no" id="team_no" value="1">
 			<input type="hidden" name="bs3_no1" id="bs3_no1">
 			<input type="hidden" name="bs3_no2" id="bs3_no2">
 			<input type="hidden" name="account_no" id="account_no" value="1">
-			<input type="hidden" name="investment_status" id="investment_status" value="2">
+			<input type="hidden" name="investment_status" id="investment_status" value="1">
 				<h3>차입 등록 사항</h3>
 				<table>
 					<tr>
@@ -326,102 +334,103 @@ function check(f) {
 		}
 	
 	
-		function sub(f){
-			var pat = /^[0-9]{0,8}$/;
-			if(f.investment_code.value == ""){
-				alert("코드를 입력해주세요.");
-				f.investment_code.focus();
-				return;
-			}else if(f.debtor_no.value == 0){
-				alert("차변 계정과목을 선택해주세요.");
-				f.debtor_no.focus();
-				return;
-			}else if(f.creditor_no.value == 0){
-				alert("대변 계정과목을 선택해주세요.");
-				f.creditor_no.focus();
-				return;
-			}else if(f.creditor_no.value == f.debtor_no.value){
-				alert("계정과목이 같습니다. 다시 선택해주세요.");
-				f.debtor_no.focus();
-				return;
-			}else if(f.investment_price.value == ""){
-				var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.investment_price.value = 0;
-					f.submit();
-				}else{
-					f.investment_price.focus();
-					return;
-				}
-			}else if(!pat.test(f.investment_price.value)){
-				alert("100,000,000미만, 숫자만 입력 가능합니다.");
+	function sub(f){
+		var pat = /^[0-9]{0,8}$/;
+		if(f.investment_code.value == ""){
+			alert("코드를 입력해주세요.");
+			f.investment_code.focus();
+			return;
+		}else if(f.debtor_no.value == 0){
+			alert("차변 계정과목을 선택해주세요.");
+			f.debtor_no.focus();
+			return;
+		}else if(f.creditor_no.value == 0){
+			alert("대변 계정과목을 선택해주세요.");
+			f.creditor_no.focus();
+			return;
+		}else if(f.creditor_no.value == f.debtor_no.value){
+			alert("계정과목이 같습니다. 다시 선택해주세요.");
+			f.debtor_no.focus();
+			return;
+		}else if(f.investment_price.value == ""){
+			var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.investment_price.value = 0;
+				f.submit();
+			}else{
 				f.investment_price.focus();
 				return;
-			}else if(f.investment_start.value == "" || f.investment_end.value == ""){
-				var ch = confirm("기간이 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.investment_end.focus();
-					return;
-				}
-			}else if(f.client_name.value == ""){
-				var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.client_name.focus();
-					return;
-				}
-			}else if(f.imkind_name.value){
-				var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.imkind_name.focus();
-					return;
-				}
-			}else if(f.investment_content.value == ""){
-				var ch = confirm("적요가 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.investment_content.focus();
-					return;
-				}
-			}else if(f.account_bank.value == ""){
-				var ch = confirm("계좌가 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.account_bank.focus();
-					return;
-				}
-			}else if(f.team_name.value == ""){
-				var ch = confirm("담당팀이 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.team_name.focus();
-					return;
-				}
-			}else if(f.investment_note.value == ""){
-				var ch = confirm("비고가 입력되지 않았습니다. 등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					f.investment_note.focus();
-					return;
-				}
+			}
+		}else if(!pat.test(f.investment_price.value)){
+			alert("100,000,000미만, 숫자만 입력 가능합니다.");
+			f.investment_price.focus();
+			return;
+		}else if(f.investment_start.value == "" || f.investment_end.value == ""){
+			var ch = confirm("기간이 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
 			}else {
-				var ch = confirm("등록하시겠습니까?");
-				if(ch){
-					f.submit();
-				}else {
-					return;
-				}
+				f.investment_end.focus();
+				return;
+			}
+		}else if(f.client_name.value == ""){
+			var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				f.client_name.focus();
+				return;
+			}
+		}else if(f.imkind_name.value){
+			var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				f.imkind_name.focus();
+				return;
+			}
+		}else if(f.investment_content.value == ""){
+			var ch = confirm("적요가 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				f.investment_content.focus();
+				return;
+			}
+		}else if(f.account_bank.value == ""){
+			var ch = confirm("계좌가 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				f.account_bank.focus();
+				return;
+			}
+		}else if(f.team_name.value == ""){
+			var ch = confirm("담당팀이 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				f.team_name.focus();
+				return;
+			}
+		}else if(f.investment_note.value == ""){
+			var ch = confirm("비고가 입력되지 않았습니다. 등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				f.investment_note.focus();
+				return;
+			}
+		}else {
+			var ch = confirm("등록하시겠습니까?");
+			if(ch){
+				f.submit();
+			}else {
+				return;
 			}
 		}
+	}
+	
 	
 	function searchcl(e, code){
 		if(e.keyCode == 13){
@@ -473,16 +482,16 @@ function check(f) {
 	
 	function ins(){
 		let puts = document.querySelectorAll(".put");
-		var tr = document.createElement("tr");
-		var td = document.createElement("td");
-		var pc = document.getElementById("procode");
+		var tr = document.createElement("tr");	// tr 만듦
+		var td = document.createElement("td");	// td 만듦
+		var pc = document.getElementById("procode");	// procode라는 테이블 불러옴
 		
-		pc.appendChild(tr);
-		tr.setAttribute("ondblclick", "put("+(puts.length)+")");
+		pc.appendChild(tr);		// procode 테이블에 tr 추가
+		tr.setAttribute("ondblclick", "put("+(puts.length)+")");	// tr에 속성, 속성값
 		tr.setAttribute("class", "put");
-		td = document.createElement("td");
+		td = document.createElement("td");	
 		td.innerHTML = '<input type="text" name="investment_code" class="erag">';
-		tr.appendChild(td);
+		tr.appendChild(td);	// 만든 tr에 td 추가
 		td = document.createElement("td");
 		td.innerHTML = '<input type="text" name="investment_price" class="erag">';
 		tr.appendChild(td);
