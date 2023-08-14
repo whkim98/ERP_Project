@@ -38,6 +38,7 @@ for(let i = 0 ; i < businesstype_select_btn.length ; i++) {
 let comp_items = document.getElementsByClassName("comp_items");
 for(let i = 0 ; i < comp_items.length; i++){
 	comp_items[i].addEventListener('click', (e) => {
+<<<<<<< Updated upstream
 		console.log("클릭된 태그 : " + e.target.tagName);
 		
 		//클릭된 회사 색변경
@@ -48,15 +49,29 @@ for(let i = 0 ; i < comp_items.length; i++){
 		buttonController(true);
 		
 		//클릭시 좌측에 회사 정보 띄우기
+=======
+		reset(comp_items, comp_items.length, "comp_items");
+		e.target.parentElement.className = "comp_items selected_comp_items";
+		
+		//location.href="/a/a_company?id="+e.target.parentElement.children[0].innerHTML;
+>>>>>>> Stashed changes
 	});	
 }
 
 // 회사 리스트 클릭시 기타 회사는 표시 제거
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 let reset = (taglist, length, className)=>{
 	for(let i = 0 ; i < length; i++){
 		taglist[i].className = className;
 	}
 }
+<<<<<<< Updated upstream
+=======
+ 
+>>>>>>> Stashed changes
 
 // 클릭시 하단부 RESET/SAVE <-> DELETE/UPDATE 변경 함수 
 let buttonController = (status) => {

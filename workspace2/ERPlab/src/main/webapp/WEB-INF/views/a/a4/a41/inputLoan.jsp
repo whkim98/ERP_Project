@@ -7,6 +7,7 @@
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="/css/a/a_company.css" />
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -207,15 +208,6 @@ function teamname(){
 		}
 	}
 }
-
-function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으면 실행
-	if(f.word.value == ""){
-		alert("검색어를 입력하십시오!");
-		return false;
-	}
-	
-	return true;
-}
 </script>
 
 	<div class="notosanskr">
@@ -224,7 +216,6 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 		</div>
 		<div class="divform2">
 			<div>
-				<form action="${pageContext.request.contextPath }/a/a4/a41" method="get" onsubmit="return check(this)" >
 				<table>
 					<tr>
 						<td>
@@ -240,23 +231,20 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 						</td>
 						<td>
 							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value)">
-							<input type="submit" value="" id="search">
 							<input type="button" value="전체목록" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?type=null&comcode_code=${comcode_code }'">
-							<input type="hidden" name="comcode_code" value="${comcode_code}">
 						</td>
 					</tr>
 				</table>
-				</form>
 			</div>
 			
 			<div style="overflow: scroll;">
 				<table id="procode">
+				<c:if test="${list != null }">
 					<tr>
 						<td>코드</td>
 						<td>금액</td>
 						<td>적요</td>
 					</tr>
-				<c:if test="${list != null }">
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.investment_no}, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
 						<td class="code">${map.investment_code }
@@ -272,11 +260,9 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 					</tr>
 					</c:forEach>
 				</c:if>
-					<tr ondblclick="put(0)" class="put">
-						<td><input type="text" name="investment_code" class="erag"></td>
-						<td><input type="text" name="investment_price" class="erag"></td>
-						<td><input type="text" name="investment_note" class="erag" onkeypress="add(event,0,'${comcode_code}')"></td>
-					</tr>
+				<c:if test="${list == null }">
+					<tr><td>목록이 비어있습니다</td></tr>
+				</c:if>
 				</table>
 			</div>
 			<div align="right">
@@ -313,12 +299,15 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 						<input type="hidden" name="bs3_no12" id="bs3_no12">
 						<input type="hidden" name="bs3_no22" id="bs3_no22">
 						<input type="hidden" name="investment_status" id="investment_status" value="1">
-						<div style="float:left;"><h3>임대 등록 사항</h3></div>
-						<div style="float:left; font-size: 5pt;"></div>	
+						<div class="warning_box">
+							<span class="red bigger">* </span>
+							<div class="yellow_box"></div>
+							<span class="red">는 필수 입력란입니다.</span>
+						</div>
 							
 						<div>
 							<label>코드 </label>
-							<input type="text" name="investment_code" id="investment_code" value="${inmap.investment_code }" readonly="readonly" maxlength="30">
+							<input type="text" name="investment_code" id="investment_code" value="${inmap.investment_code }" readonly="readonly" maxlength="30" class="required">
 						</div>
 						
 						<div>
@@ -371,7 +360,7 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 						
 						<div>
 							<label>차변 </label>
-							<select name="debtor_no" id="debtor_no" onchange="check12()">
+							<select name="debtor_no" id="debtor_no" onchange="check12()" class="required">
 								<c:forEach var="vo1" items="${dlist }">
 								<c:choose>
 								<c:when test="${vo1.bs3_ctgr == inmap.bs3_ctgr1 }">
@@ -387,7 +376,7 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 						
 						<div>
 							<label>대변</label> 
-							<select name="creditor_no" id="creditor_no" onchange="check22()">
+							<select name="creditor_no" id="creditor_no" onchange="check22()" class="required">
 								<c:forEach var="vo2" items="${clist }">
 								<c:choose>
 								<c:when test="${vo2.bs3_ctgr == inmap.bs3_ctgr2 }">
@@ -432,7 +421,7 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 							<h3>차입 등록 사항</h3>
 						<div>
 							<label>코드 </label>
-							<input type="text" name="investment_code" id="investment_code" onblur="imcode(this.value)" maxlength="30">
+							<input type="text" name="investment_code" id="investment_code" onblur="imcode(this.value)" maxlength="30" class="required">
 							<h6 id="imcodecheck" style="color:red;"></h6>
 						</div>
 						
@@ -486,7 +475,7 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 						
 						<div>
 							<label>차변 </label>
-							<select name="debtor_no" id="debtor_no" onchange="check1()">
+							<select name="debtor_no" id="debtor_no" onchange="check1()" class="required">
 								<c:forEach var="vo1" items="${dlist }">
 									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }" selected>${vo1.bs3_ctgr }</option>
 								</c:forEach>
@@ -495,7 +484,7 @@ function check(f) {		// 리스트에서 조회할 때 검색어가 비어있으�
 						
 						<div>
 							<label>대변</label> 
-							<select name="creditor_no" id="creditor_no" onchange="check2()">
+							<select name="creditor_no" id="creditor_no" onchange="check2()" class="required">
 								<c:forEach var="vo2" items="${clist }">
 									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }" selected>${vo2.bs3_ctgr }</option>
 								</c:forEach>
@@ -544,6 +533,7 @@ function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
 		if(data != ""){		// 데이터가 정상적으로 넘어왔는 지 판단
 			if(data == "사용 가능한 코드입니다."){		// 데이터값 판단
 				document.getElementById("imcodecheck").innerText = data;	// imcodecheck라는 id의 text에 넘어온 data 저장
+				document.getElementById("imcodecheck").style.color = "blue";
 				document.getElementById("register").disabled = false;		// register 라는 id의 태그 활성화 > 버튼 활성화
 			}else {
 				document.getElementById("imcodecheck").innerText = data;
@@ -553,23 +543,6 @@ function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
 		}
 	}
 }
-
-/* function put(i){
-	let v = document.getElementsByName("investment_code")[i].value;
-	let arr = document.getElementsByName("investment_code");
-	
-	var leng = document.getElementsByName("investment_code").length - 1;
-	for( var r=0; r<leng; r++ ){
-		var name = document.getElementsByName("investment_code")[r].value;
-		var price = document.getElementsByName("investment_price")[r].value;
-		var note = document.getElementsByName("investment_note")[r].value;
-		if(v == name){
-			document.getElementById("investment_code").value = name;
-			document.getElementById("investment_price").value = price;
-			document.getElementById("investment_note").value = note;
-		}
-	}
-} */
 
 
 //	bs3_no 세팅
@@ -620,15 +593,12 @@ function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
 function sub(f){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
 	if(f.investment_code.value == ""){
-		alert("코드를 입력해주세요.");
 		f.investment_code.focus();
 		return;
 	}else if(f.debtor_no.value == 0){
-		alert("차변 계정과목을 선택해주세요.");
 		f.debtor_no.focus();
 		return;
 	}else if(f.creditor_no.value == 0){
-		alert("대변 계정과목을 선택해주세요.");
 		f.creditor_no.focus();
 		return;
 	}else if(f.creditor_no.value == f.debtor_no.value){
@@ -664,7 +634,7 @@ function sub(f){
 			f.client_name.focus();
 			return;
 		}
-	}else if(f.imkind_name.value){
+	}else if(f.imkind_name.value == ""){
 		var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
 		if(ch){
 			f.submit();
@@ -747,79 +717,6 @@ function clName(){
 		}
 	}
 }
-
-/* function add(e,i,code){
-	if(e.keyCode == 13){
-		var url = "${pageContext.request.contextPath}/a/a4/a41";
-		var param = "comcode_code="+encodeURIComponent(code);
-		sendRequest(url,param,addmap,"POST");
-	}
-}
-let o = {};
-let a = [];
-function investment_code(n){
-	localStorage.setItem("investment_code", name);
-	
-}
-function addmap(){
-	var leng = document.getElementsByName("investment_code").length - 1;
-       var name[i] = document.getElementsByName("investment_code")[i].value;
-       var price[i] = document.getElementsByName("investment_price")[i].value;
-       if(price == ""){
-       	price = 0;
-       }
-       var note[i] = document.getElementsByName("investment_note")[i].value;
-       localStorage.setItem("investment_code", name);
-       localStorage.setItem("investment_price", price);
-       localStorage.setItem("investment_note", note);
-       localStorage.setItem("investment_start", document.getElementById("investment_start"));
-       localStorage.setItem("investment_end", document.getElementById("investment_end"));
-       localStorage.setItem("client_name", document.getElementById("client_name"));
-       localStorage.setItem("client_registeredno", document.getElementById("client_registeredno"));
-       localStorage.setItem("client_manager", document.getElementById("client_manager");
-       localStorage.setItem("imkind_name", document.getElementById("imkind_name"));
-       localStorage.setItem("investment_content", document.getElementById("investment_content"));
-       localStorage.setItem("account_bank", document.getElementById("account_bank"));
-       localStorage.setItem("account_num", document.getElementById("account_num"));
-       localStorage.setItem("debtor_no", document.getElementById("debtor_no"));
-       localStorage.setItem("creditor_no", document.getElementById("creditor_no"));
-       localStorage.setItem("team_name", document.getElementById("team_name"));
-       localStorage.setItem("investment_note", document.getElementById("investment_note"));
-       
-       document.getElementById("investment_code").value = name;
-       document.getElementById("investment_price").value = price;
-       document.getElementById("investment_note").value = note;
-} */
-
-/* function ins(){
-	let puts = document.querySelectorAll(".put");
-	var tr = document.createElement("tr");	// tr 만듦
-	var td = document.createElement("td");	// td 만듦
-	var pc = document.getElementById("procode");	// procode라는 테이블 불러옴
-	
-	pc.appendChild(tr);		// procode 테이블에 tr 추가
-	tr.setAttribute("ondblclick", "put("+(puts.length)+")");	// tr에 속성, 속성값
-	tr.setAttribute("class", "put");
-	td = document.createElement("td");	
-	td.innerHTML = '<input type="text" name="investment_code" class="erag">';
-	tr.appendChild(td);	// 만든 tr에 td 추가
-	td = document.createElement("td");
-	td.innerHTML = '<input type="text" name="investment_price" class="erag">';
-	tr.appendChild(td);
-	td = document.createElement("td");
-	var inp = document.createElement("input");
-	inp.setAttribute("type","text");
-	inp.setAttribute("name","investment_note");
-	inp.setAttribute("class","erag");
-	inp.setAttribute("onkeypress","add(event,"+(puts.length)+")");
-	td.append(inp);
-	tr.appendChild(td);
-}
-
-function del(){
-	let tab = document.getElementById("procode");
-	tab.deleteRow(-1);
-} */
 
 
 // 리스트에서 글 선택 시 넘어가는 form
