@@ -3,6 +3,13 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="c2">
+
+<!-- 상품리스트 -->
+	<select id="goodsList" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		select * from erp_goods
+	</select>
+
+<!-- 업태 -->
 	<select id="btList" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
 		select * from erp_businesstype 
 	</select>
@@ -15,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		group by businesstype_name
 	</select>
+<!-- 업종 -->
 	<select id="btSubctgr" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
 		select businesstype_no, businesstype_ctgr, businesstype_subctgr, businesstype_description 
 		from erp_businesstype 
@@ -27,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</select>
+<!-- 국가 -->
 	<select id="countryList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_CountryVO">
 		select * from erp_country 
 		<if test="ctype != null">
@@ -38,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</select>
+<!-- 종류 -->
 	<select id="csList" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientsortVO">
 		select * from erp_clientsort 
 		<if test="cstype != null">
@@ -46,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</select>
+<!-- 자동완성 -->
 	<select id="autoSort" parameterType="String" resultType="com.lab.erp.vo.c.Erp_ClientsortVO">
 		select * from erp_clientsort where clientsort_name like '%${clientsort_name}%'
 	</select>
@@ -53,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from erp_country where country_name like '%${country_name}%'
 	</select>
 
+<!-- 거래처 -->
 	<insert id="createClient" parameterType="com.lab.erp.vo.c.Erp_ClientVO">
 		insert into erp_client(country_no,client_name,clientsort_no,client_registeredno,client_corporatedno,client_representative,client_businesstype,businesstype_no,client_addr1,client_addr2,client_postal,client_directno,client_fax,client_email,client_manager,client_contact,comcode_no) 
 		values(#{country_no},#{client_name},#{clientsort_no},#{client_registeredno},#{client_corporatedno},#{client_representative,jdbcType=VARCHAR},#{client_businesstype,jdbcType=VARCHAR},#{businesstype_no},#{client_addr1,jdbcType=VARCHAR},#{client_addr2,jdbcType=VARCHAR},#{client_postal,jdbcType=VARCHAR},#{client_directno,jdbcType=VARCHAR},#{client_fax,jdbcType=VARCHAR},#{client_email,jdbcType=VARCHAR},#{client_manager},#{client_contact,jdbcType=VARCHAR},#{comcode_no})
@@ -92,23 +104,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and c.country_no = ct.country_no 
 		and c.businesstype_no = b.businesstype_no 
 		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					ct.country_name like '%${word}%' or cl.clientsort_name like '%${word}%' 
+					or b.businesstype_name like '%${word}%' or b.businesstype_subctgr like '%${word}%' 
+					or c.client_businesstype like '%${word}%' or c.client_name like '%${word}%' 
+					)
+			</if>
 			<if test="type == 'country_name'">
-				ct.country_name like '%${word}%'
+				and ct.country_name like '%${word}%'
 			</if>
 			<if test="type == 'clientsort_name'">
-				cl.clientsort_name like '%${word}%'
+				and cl.clientsort_name like '%${word}%'
 			</if>
 			<if test="type == 'businesstype_name'">
-				b.businesstype_name like '%${word}%'
+				and b.businesstype_name like '%${word}%'
 			</if>
 			<if test="type == 'businesstype_subctgr'">
-				b.businesstype_subctgr like '%${word}%'
+				and b.businesstype_subctgr like '%${word}%'
 			</if>
 			<if test="type == 'client_businesstype'">
-				c.client_businesstype like '%${word}%'
+				and c.client_businesstype like '%${word}%'
 			</if>
 			<if test="type == 'client_name'">
-				c.client_name like '%${word}%'
+				and c.client_name like '%${word}%'
 			</if>
 		</if>
 	</select>
@@ -122,11 +141,369 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and c.businesstype_no = b.businesstype_no 
 	</select>
 	
+	<select id="getClNo" parameterType="String" resultType="int">
+		select client_no from erp_client where client_registeredno = #{client_registeredno}
+	</select>
+	
+	<insert id="inputGC" parameterType="com.lab.erp.vo.c.Erp_GoodsconnectVO">
+		insert into erp_goodsconnect(goods_no,client_no) 
+		values(#{goods_no}, #{client_no})
+	</insert>
+	<update id="updateGC" parameterType="com.lab.erp.vo.c.Erp_GoodsconnectVO">
+		update erp_goodsconnect set 
+		goods_no = #{goods_no},
+		client_no = #{client_no} 
+		where goodsconnect_no = #{goodsconnect_no}
+	</update>
+	<delete id="deleteGCClient" parameterType="int">
+		delete from erp_goodsconnect where client_no = #{client_no}
+	</delete>
+	<delete id="deleteGCNo" parameterType="int">
+		delete from erp_goodsconnect where goodsconnect_no = #{goodsconnect_no}
+	</delete>
+	
 	<select id="clientGoods" parameterType="int" resultType="map">
-		select g.goods_name, g.goods_code 
+		select g.*, gc.goodsconnect_no  
 		from erp_goods g, erp_client c, erp_goodsconnect gc 
 		where gc.goods_no = g.goods_no 
 		and gc.client_no = c.client_no 
 		and c.client_no = #{client_no}
+	</select>
+	
+<!-- 채권 -->
+	<insert id="createReceivable" parameterType="com.lab.erp.vo.c.Erp_ReceivableVO">
+		insert into erp_receivable(ctgr_no,receivable_code,receivable_cino,receivable_price,receivable_tax,receivable_total,receivable_expiry,receivable_collected,receivable_collect,comcode_no,client_no) 
+		values(36,#{receivable_code},#{receivable_cino},#{receivable_price},#{receivable_tax},#{receivable_total},#{receivable_expiry},#{receivable_collected},#{receivable_collect},#{comcode_no},#{client_no})
+	</insert>
+	
+	<update id="updateReceivable" parameterType="com.lab.erp.vo.c.Erp_ReceivableVO">
+		update erp_receivable set 
+		receivable_price = #{receivable_price},
+		receivable_tax = #{receivable_tax},
+		receivable_total = #{receivable_total},
+		receivable_expiry = #{receivable_expiry},
+		receivable_collected = #{receivable_collected},
+		receivable_collect = #{receivable_collect},
+		client_no = #{client_no} 
+		where receivable_no = #{receivable_no}
+	</update>
+	
+	<delete id="deleteReceivable" parameterType="int">
+		delete from erp_receivable where receivable_no = #{receivable_no}
+	</delete>
+	
+	<select id="receivableList" parameterType="map" resultType="map">
+		select r.*, c.client_name from erp_receivable r, erp_client c where comcode_no = #{comcode_no}
+		<if test="type != null">
+			<if test="type == ''">
+				<if test="type == 'all'">
+					and (
+						r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
+						or c.client_name like '%${word}%' or r.receivable_expiry like '%${word}%'
+						)
+				</if>
+				<if test="type == 'receivable_cino'">
+					and r.receivable_cino like '%${word}%'
+				</if>
+				<if test="type == 'receivable_collected'">
+					and r.receivable_collected = #{word}
+				</if>
+				<if test="type == 'client_name'">
+					and c.client_name like '%${word}%'
+				</if>
+				<if test="type == 'receivable_expiry'">
+					and r.receivable_expiry like '%${word}%'
+				</if>
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectReceivable" parameterType="int" resultType="map">
+		select * from erp_receivable where receivable_no = #{receivable_no}
+	</select>
+<!-- 수금 -->
+	<insert id="inputBills" parameterType="com.lab.erp.vo.c.Erp_BondbillsVO">
+		insert into erp_bondbills(receivable_no,bondbills_date,bondbills_price,bondbills_tax,bondbills_total) 
+		values(#{receivable_no},#{bondbills_date},#{bondbills_price},#{bondbills_tax},#{bondbills_total})
+	</insert>
+	
+	<update id="updateBills" parameterType="com.lab.erp.vo.c.Erp_BondbillsVO">
+		update erp_bondbills set 
+		bondbills_date = #{bondbills_date},
+		bondbills_price = #{bondbills_price},
+		bondbills_tax = #{bondbills_tax},
+		bondbills_total = #{bondbills_total}
+		where bondbills_no = #{bondbills_no}
+	</update>
+	
+	<delete id="deleteBills" parameterType="int">
+		delete from erp_bondbills where bondbills_no = #{bondbills_no}
+	</delete>
+	
+	<select id="bondbillsList" parameterType="map" resultType="map">
+		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.* 
+		from erp_bondbills b, erp_receivable r, erp_client c 
+		where r.comcode_no = #{comcode_no} 
+		and r.receivable_no = b.receivable_no 
+		and r.client_no = c.client_no
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
+					or c.client_name like '%${word}%' or r.receivable_expiry like '%${word}%' 
+					or b.bondbills_date like '%${word}%'
+					)
+			</if>
+			<if test="type == 'receivable_cino'">
+				and r.receivable_cino like '%${word}%'
+			</if>
+			<if test="type == 'receivable_collected'">
+				and r.receivable_collected = #{word}
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'receivable_expiry'">
+				and r.receivable_expiry like '%${word}%'
+			</if>
+			<if test="type == 'bondbills_date'">
+				and b.bondbills_date like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="receiveBondbills" parameterType="map" resultType="map">
+		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.* 
+		from erp_bondbills b, erp_receivable r, erp_client c 
+		where b.receivable_no = #{receivable_no} 
+		and r.receivable_no = b.receivable_no 
+		and r.client_no = c.client_no
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
+					or c.client_name like '%${word}%' or r.receivable_expiry like '%${word}%' 
+					or b.bondbills_date like '%${word}%'
+					)
+			</if>
+			<if test="type == 'receivable_cino'">
+				and r.receivable_cino like '%${word}%'
+			</if>
+			<if test="type == 'receivable_collected'">
+				and r.receivable_collected = #{word}
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'receivable_expiry'">
+				and r.receivable_expiry like '%${word}%'
+			</if>
+			<if test="type == 'bondbills_date'">
+				and b.bondbills_date like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectBondbills" parameterType="int" resultType="map">
+		select r.receivable_cino, b.* 
+		from erp_bondbills b, erp_receivable r 
+		where b.bondbills_no = #{bondbills_no} 
+		and r.receivable_no = b.receivable_no 
+	</select>
+	
+	<select id="getBillsTotal" parameterType="int" resultType="com.lab.erp.vo.c.Erp_BondbillsVO">
+		select bondbills_total from erp_bondbills 
+		where receivable_no = #{receivable_no} 
+		group by receivable_no
+	</select>
+	
+<!-- 반품 -->
+	<insert id="inputReturn" parameterType="com.lab.erp.vo.c.c2.Erp_ReturnVO">
+		insert into erp_return(ctgr_no,return_code,goods_no,return_comment,return_date,return_qty,client_no,return_tax,return_price,return_total,comcode_no) 
+		values(37,#{return_code},#{goods_no},#{return_comment},#{return_date},#{return_qty},#{client_no},#{return_tax},#{return_price},#{return_total},#{comcode_no})
+	</insert>
+	
+	<update id="updateReturn" parameterType="com.lab.erp.vo.c.c2.Erp_ReturnVO">
+		update erp_return set 
+		goods_no = #{goods_no},
+		return_comment = #{return_comment},
+		return_date = #{return_date},
+		return_qty = #{return_qty},
+		client_no = #{client_no},
+		return_tax = #{return_tax},
+		return_price = #{return_price},
+		return_total = #{return_total} 
+		where return_no = #{return_no}
+	</update>
+	
+	<delete id="deleteReturn" parameterType="int">
+		delete from erp_return where return_no = #{return_no}
+	</delete>
+	
+	<select id="getReturn" parameterType="int" resultType="com.lab.erp.vo.c.c2.Erp_ReturnVO">
+		select c.client_name, r.* from erp_return r, erp_client c 
+		where return_no = #{return_no} 
+		and r.client_no = c.client_no 
+	</select>
+	
+	<select id="returnList" parameterType="map" resultType="map">
+		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, gt.goodsst_spec, r.* 
+		from erp_return r, erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_goodslot gl, erp_client c 
+		where r.goods_no = g.goods_no 
+		and g.goods_no = gl.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c.client_no 
+		and r.comcode_no = #{comcode_no}
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					g.goods_name like '%${word}%' or g.goods_barcode like '%${word}%' 
+					or gs.goodssort_name like '%${word}%' or gk.goodskind_name like '%${word}%' 
+					or c.client_name like '%${word}%' or gt.goodsst_spec like '%${word}%' 
+					or gl.goodslot_production like '%${word}%'
+					)
+			</if>
+			<if test="type == 'goods_name'">
+				and g.goods_name like '%${word}%'
+			</if>
+			<if test="type == 'goods_barcode'">
+				and g.goods_barcode like '%${word}%'
+			</if>
+			<if test="type == 'goodssort_name'">
+				and gs.goodssort_name like '%${word}%'
+			</if>
+			<if test="type == 'goodskind_name'">
+				and gk.goodskind_name like '%${word}%'
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${word}%'
+			</if>
+			<if test="type == 'goodslot_production'">
+				and gl.goodslot_production like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectReturn" parameterType="int" resultType="map">
+		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, gt.goodsst_spec, r.* 
+		from erp_return r, erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c 
+		where r.goods_no = g.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c.client_no 
+		and r.return_no = #{return_no}
+	</select>
+	
+<!-- 국내영업매출 -->
+	<insert id="inputLocalSales" parameterType="com.lab.erp.vo.c.c2.Erp_LocalsalesVO">
+		insert into erp_localsales(ctgr_no,localsales_cino,team_no,client_no,localsales_date,goods_no,localsales_qty,localsales_price,localsales_tax,localsales_total,settletype_no,comcode_no) 
+		values(39,#{localsales_cino},#{team_no},#{client_no},#{localsales_date},#{goods_no},#{localsales_qty},#{localsales_price},#{localsales_tax},#{localsales_total},#{settletype_no},#{comcode_no})
+	</insert>
+	
+	<update id="updateLocalSales" parameterType="com.lab.erp.vo.c.c2.Erp_LocalsalesVO">
+		update erp_localsales set 
+		team_no = #{team_no},
+		client_no = #{client_no},
+		localsales_date = #{localsales_date},
+		goods_no = #{goods_no},
+		localsales_qty = #{localsales_qty},
+		localsales_price = #{localsales_price},
+		localsales_tax = #{localsales_tax},
+		localsales_total = #{localsales_total},
+		settletype_no = #{settletype_no} 
+		where localsales_no = #{localsales_no}
+	</update>
+	
+	<delete id="deleteLocalSales" parameterType="int">
+		delete from erp_localsales where localsales_no = #{localsales_no}
+	</delete>
+	
+	<select id="localSalesList" parameterType="map" resultType="map">
+		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type, g.goods_no, g.goods_name, g.goods_barcode 
+		from erp_localsales l, erp_goods g, erp_client c, erp_team t, erp_settletype s 
+		where l.team_no = t.team_no 
+		and l.goods_no = g.goods_no 
+		and l.client_no = c.client_no 
+		and l.settletype_no = s.settletype 
+		and l.comcode_no = #{comcode_no}
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					c.client_name like '%${word}%' or g.goods_name like '%${word}%' 
+					or l.localsales_cino like '%${word}%' or t.team_name like '%${word}%' 
+					or s.settletype_condition like '%${word}%' or s.settletype_type like '%${word}%' 
+					or l.localsales_date like '%${word}%' 
+					)
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'goods_name'">
+				and g.goods_name like '%${word}%'
+			</if>
+			<if test="type == 'localsales_cino'">
+				and l.localsales_cino like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'settletype_condition'">
+				and s.settletype_condition like '%${word}%'
+			</if>
+			<if test="type == 'settletype_type'">
+				and s.settletype_type like '%${word}%'
+			</if>
+			<if test="type == 'localsales_date'">
+				and l.localsales_date like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectLocalSales" parameterType="int" resultType="map">
+		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type 
+		from erp_localsales l, erp_client c, erp_team t, erp_settletype s 
+		where l.team_no = t.team_no 
+		and l.client_no = c.client_no 
+		and l.settletype_no = s.settletype 
+		and l.localsales_no = #{localsales_no}
+	</select>
+	
+	<select id="getSalesGoods" parameterType="String" resultType="map">
+		select g.*, s.salesgoods_no, s.salesgoods_qty from erp_goods g, erp_salesgoods s 
+		where s.salesgoods_code = #{salesgoods_code} 
+		and g.goods_no = s.goods_no 
+	</select>
+	
+	<insert id="inputSalesGoods" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
+		insert into erp_salesgoods(salesgoods_code, goods_no, salesgoods_qty,salesgoods_price,salesgoods_tax,salesgoods_total) 
+		values(#{salesgoods_code}, #{goods_no}, #{salesgoods_qty},#{salesgoods_price},#{salesgoods_tax},#{salesgoods_total})
+	</insert>
+	
+	<update id="updateSGNo" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
+		update erp_salesgoods set 
+		salesgoods_code = #{salesgoods_code}, 
+		goods_no = #{goods_no}, 
+		salesgoods_qty = #{salesgoods_qty}, 
+		salesgoods_price = #{salesgoods_price}, 
+		salesgoods_tax = #{salesgoods_tax}, 
+		salesgoods_total = #{salesgoods_total} 
+		where salesgoods_no = #{salesgoods_no}
+	</update>
+	
+	<delete id="deleteSGNo" parameterType="int">
+		delete from erp_salesgoods where salesgoods_no = #{salesgoods_no}
+	</delete>
+	<delete id="deleteSGCode" parameterType="String">
+		delete from erp_salesgoods where salesgoods_code = #{salesgoods_code}
+	</delete>
+	
+	<select id="getSGNo" parameterType="String" resultType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
+		select * from erp_salesgoods where salesgoods_code = #{salesgoods_code} 
 	</select>
 </mapper>

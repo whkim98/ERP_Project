@@ -1,8 +1,13 @@
 package com.lab.erp.dao.c;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.lab.erp.vo.c.Erp_ReceivableVO;
 
 @Component
 public class Erp_ReceivableDAO {
@@ -13,6 +18,24 @@ private SqlSession sqlSession;
 		this.sqlSession = sqlSession;
 	}
 
+	public int createReceivable(Erp_ReceivableVO vo) {
+		return sqlSession.insert("c2.createReceivable", vo);
+	}
 	
+	public int updateReceivable(Erp_ReceivableVO vo) {
+		return sqlSession.update("c2.updateReceivable", vo);
+	}
+	
+	public int deleteReceivable(int receivable_no) {
+		return sqlSession.delete("c2.deleteReceivable", receivable_no);
+	}
+	
+	public List<Map<String, Object>> receivableList(Map<String, Object> map){
+		return sqlSession.selectList("c2.receivableList", map);
+	}
+	
+	public Map<String, Object> selectReceivable(int receivable_no){
+		return sqlSession.selectOne("c2.selectReceivable", receivable_no);
+	}
 	
 }

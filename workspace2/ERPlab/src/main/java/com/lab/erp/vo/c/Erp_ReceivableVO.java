@@ -19,5 +19,6 @@ public class Erp_ReceivableVO {
 	private int receivable_collected;
 	private String receivable_collect;
 	private int comcode_no;
+	private int client_no;
 
 }

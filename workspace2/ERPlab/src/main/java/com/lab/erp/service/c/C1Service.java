@@ -43,13 +43,13 @@ public class C1Service {
 		return cdao.internationList();
 	}
 	
-	public int insertClient(Erp_ClientVO vo) {
-		return cdao.insertClient(vo);
-	}
-	
-	public List<Erp_ReceivableVO> selectReceivable(){
-		return rdao.selectReceivable();
-	}
+//	public int insertClient(Erp_ClientVO vo) {
+//		return cdao.insertClient(vo);
+//	}
+//	
+//	public List<Erp_ReceivableVO> selectReceivable(){
+//		return rdao.selectReceivable();
+//	}
 	
 	public int updateClient(Map<String, Object> map) {
 		return cdao.updateClient(map);

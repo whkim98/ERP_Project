@@ -20,5 +20,12 @@ private SqlSession sqlSession;
 	public List<Erp_GoodsVO> selectGoods(){
 		return sqlSession.selectList("c1.selectGoods");
 	}
+	public List<Erp_GoodsVO> getSalesGoods(int goods_no) {
+		return sqlSession.selectList("c2.getSalesGoods", goods_no);
+	}
+	
+	public List<Erp_GoodsVO> goodsList(){
+		return sqlSession.selectList("c2.goodsList");
+	}
 	
 }

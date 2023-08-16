@@ -71,6 +71,30 @@ public class A4Controller {
 		return ViewPath.A4 + "/a41/inputLoan";
 	}
 	
+	@RequestMapping("/a41/loanAjax")
+	@ResponseBody
+	public List<Map<String, Object>> loanAjax(String type, String word, String comcode_code){
+		Map<String, Object> map = new HashMap<>();
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int ctgr = 8;
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("ctgr_no", ctgr);
+		map.put("word", word);
+		map.put("type", type);
+		
+		List<Map<String, Object>> list = a4.investmentList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
 	@RequestMapping("/a41/createLoan")
 	@Transactional
 	public String createLoan(Erp_InvestmentVO vo, Model model, String bs3_no1, String bs3_no2, String comcode_code) {
@@ -434,7 +458,32 @@ public class A4Controller {
 		return ViewPath.A4 + "/a42/inputLease";
 	}
 	
+	@RequestMapping("/a42/leaseAjax")
+	@ResponseBody
+	public List<Map<String, Object>> leaseAjax(String type, String word, String comcode_code){
+		Map<String, Object> map = new HashMap<>();
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int ctgr = 9;
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("ctgr_no", ctgr);
+		map.put("word", word);
+		map.put("type", type);
+		
+		List<Map<String, Object>> list = a4.investmentList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
 	@RequestMapping("/a42/createLease")
+	@Transactional
 	public String createLease(Erp_InvestmentVO vo, Model model, String bs3_no1, String bs3_no2, String comcode_code) {
 		int b1 = 0;
 		int b2 = 0;
@@ -580,6 +629,7 @@ public class A4Controller {
 	}
 	
 	@RequestMapping("/a42/update")
+	@Transactional
 	public String updateLease(Erp_InvestmentVO vo, Model model, String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, String comcode_code) {
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		Map<String, Object> map = new HashMap<>();
@@ -699,6 +749,7 @@ public class A4Controller {
 	}
 	
 	@RequestMapping("/a42/delete")
+	@Transactional
 	public String deleteLease(int investment_no, String bs3_no1, String bs3_no2, Model model, String comcode_code) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("investment_no", investment_no);

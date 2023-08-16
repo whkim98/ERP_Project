@@ -58,7 +58,7 @@ public class C1Controller {
 		vo.setClient_manager(client_manager);
 		vo.setClient_contact(client_contact);
 		
-		int su = c1.insertClient(vo);
+//		int su = c1.insertClient(vo);
 		
 		return "redirect:/internationalsales/list";
 	}
@@ -82,8 +82,8 @@ public class C1Controller {
 	
 	@RequestMapping("/internationalsales/bond")
 	public String bond(Model model) {
-		List<Erp_ReceivableVO> list = c1.selectReceivable();
-		model.addAttribute("list", list);
+//		List<Erp_ReceivableVO> list = c1.selectReceivable();
+//		model.addAttribute("list", list);
 		return "/c/c1/c11/bondlist";
 	}
 	

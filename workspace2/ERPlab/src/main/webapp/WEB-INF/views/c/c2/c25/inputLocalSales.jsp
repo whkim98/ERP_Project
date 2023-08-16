@@ -58,112 +58,153 @@ border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
-
-function surf(v, code){
-	var type = document.getElementsByName("type")[0].value;
-	if(v == ''){
-		v = null;
+function surf(v){
+	let sel = document.getElementsByName("type")[0].value;		// 검색할 option들 
+	let val = v.toLowerCase();	// 검색어로 들어온 value를 대소문자 구분 없이 소문자로 판단
+	let tr = document.getElementsByClassName("filter");		// class를 filert로 지정해놓은 것 > tr을 지정해 놓았음
+	if(sel == 'investment_code'){		// select option의 value 판단
+		for (let i = 0; i < tr.length; i++) {	// tr의 length만큼 for문 실행
+			let code = tr[i].getElementsByClassName("code");	// tr안의 class가 code라는 것을 for문 실행만큼 계속 가져옴
+	        if (code[0].innerHTML.toLowerCase().indexOf(val) != -1) {	// code안의 html에 매개변수로 가져온 v가 포함되어있는 지 판단 
+	          tr[i].style.display = ""		// 포함하면 그대로 출력
+	        } else {
+	          tr[i].style.display = "none"	// 포함하지 않으면 숨김
+	        }
+	    }
+	}else if(sel == 'imkind_name'){
+		for (let i = 0; i < tr.length; i++) {
+			let imkind = tr[i].getElementsByClassName("imkind_name");
+	        if (imkind[0].value.toLowerCase().indexOf(val) != -1) {	// imkind안의 value에 매개변수로 가져온 v가 포함되어있는 지 판단 
+	          tr[i].style.display = ""
+	        } else {
+	          tr[i].style.display = "none"
+	        }
+	    }
+	}else if(sel == 'investment_content'){
+		for (let i = 0; i < tr.length; i++) {
+			let cont = tr[i].getElementsByClassName("cont");
+	        if (cont[0].innerHTML.toLowerCase().indexOf(val) != -1) {
+	          tr[i].style.display = "";
+	        } else {
+	          tr[i].style.display = "none";
+	        }
+	    }
+	}else if(sel == 'client_name'){
+		for (let i = 0; i < tr.length; i++) {
+			let cname = tr[i].getElementsByClassName("client_name");
+	        if (cname[0].value.toLowerCase().indexOf(val) != -1) {
+	          tr[i].style.display = "";
+	        } else {
+	          tr[i].style.display = "none";
+	        }
+	    }
+	}else if(sel == 'closing_date'){
+		for (let i = 0; i < tr.length; i++) {
+			let date = tr[i].getElementsByClassName("closing_date");
+	        if (date[0].value.toLowerCase().indexOf(val) != -1) {
+	          tr[i].style.display = "";
+	        } else {
+	          tr[i].style.display = "none";
+	        }
+	    }
+	}else if(sel == 'team_name'){
+		for (let i = 0; i < tr.length; i++) {
+			let tname = tr[i].getElementsByClassName("team_name");
+	        if (tname[0].value.toLowerCase().indexOf(val) != -1) {
+	          tr[i].style.display = "";
+	        } else {
+	          tr[i].style.display = "none";
+	        }
+	    }
+	}else if(sel == 'all'){
+		for (let i = 0; i < tr.length; i++) {
+			let w = tr[i].getElementsByClassName("investment_withdrawal");
+			let n = tr[i].getElementsByClassName("investment_note");
+			let p = tr[i].getElementsByClassName("investment_price");
+			let tname = tr[i].getElementsByClassName("team_name");
+			let date = tr[i].getElementsByClassName("closing_date");
+			let cname = tr[i].getElementsByClassName("client_name");
+			let cont = tr[i].getElementsByClassName("cont");
+			let imkind = tr[i].getElementsByClassName("imkind_name");
+			let code = tr[i].getElementsByClassName("code");
+	        if (tname[0].value.toLowerCase().indexOf(val) != -1 || code[0].innerHTML.toLowerCase().indexOf(val) != -1 || 
+	        	imkind[0].value.toLowerCase().indexOf(val) != -1 || cont[0].innerHTML.toLowerCase().indexOf(val) != -1 || 
+	        	cname[0].value.toLowerCase().indexOf(val) != -1 || date[0].value.toLowerCase().indexOf(val) != -1 || 
+	        	tname[0].value.toLowerCase().indexOf(val) != -1 || w[0].value.toLowerCase().indexOf(val) != -1 || 
+	        	n[0].value.toLowerCase().indexOf(val) != -1 || p[0].value.toLowerCase().indexOf(val) != -1) {
+	          tr[i].style.display = "";
+	        } else {
+	          tr[i].style.display = "none";
+	        }
+	    }
 	}
-	var url = "${pageContext.request.contextPath}/a/a4/a41/loanAjax";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type;
-	
-	sendRequest(url,param,getlist,"POST");
 }
-function getlist(){
-	if(xhr.readyState==4 && xhr.status==200) {	
-		var data = xhr.response;
-		let procode = document.getElementById("procode");
-		let newTr = document.createElement("tr");
-		let newTd = document.createElement("td");
-		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>적요</td></tr>';
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			data2.forEach(function(map){
-				newTr = document.createElement("tr");
-				procode.appendChild(newTr);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.client_name;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.client_registeredno;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.client_businesstype;
-				newTr.appendChild(newTd);
-			});
-		}else {
-			procode.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
-		}
-	}
-}
-
 
 //전체목록조회 > 새창으로
-function ctlist(){
-	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/ctlist", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function searchim(){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searchim", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function cslist(){
-	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/cslist", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function searcht(){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function btname(){
-	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/btname", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+function acList(code, team){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/acList?comcode_code="+code+"&team_code="+team, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function btsubctgr(){
-	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c21/btsubctgr", "_blank", "scrollbars=yes, top=150, left=300, width=700, height=700");
+function clList(code){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 
 //자동완성 > AJAX
-function country(e, name){
+function imkind(e, name){
 	if(e.keyCode == 13){
-		if(name == ""){		
-			alert("국가를 입력해주세요.");
-			document.getElementById("country_name").focus();
-			return;	
+		if(name == ""){		// 매개변수값이 비어있는 지 판단
+			alert("종류를 입력해주세요.");
+			document.getElementById("imkind_name").focus();
+			return;	// 비어있으면 imkind_name에 포커싱되고 메소드 종료
 		}
-		var url = "${pageContext.request.contextPath}/c/c2/c21/country";		
-		var param = "country_name=" + encodeURIComponent(name);		
+		var url = "${pageContext.request.contextPath}/a/a4/imkind";		// url 경로 지정 > controller 매핑
+		var param = "imkind_name=" + encodeURIComponent(name);		// controller에 넘길 데이터 인코드해서 세팅
 		
-		sendRequest(url, param, countryname, "POST");	
+		sendRequest(url, param, investmentkind, "POST");	// httpRequest.js에 있는 sendRequest함수 실행 > (경로,넘길데이터,콜벡함수,방식);
 	}
 }
-function countryname(){	
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;	
-		if(data != ""){			
-			var data2 = JSON.parse(data);		
-			document.getElementById("country_name").value = data2.country_name;	
-			document.getElementById("country_no").value = data2.country_no;
+function investmentkind(){	// 콜벡함수
+	if(xhr.readyState==4 && xhr.status==200) {		// 신호가 정상인 지 판단
+		var data = xhr.response;	// 넘어온 데이터 세팅
+		if(data != ""){			// 넘어온 데이터가 null인지 판단
+			var data2 = JSON.parse(data);		// 넘어온 데이터 json으로 변형
+			document.getElementById("imkind_name").value = data2.imkind_name;	// 넘어온 데이터 input태그에 세팅
+			document.getElementById("imkind_no").value = data2.imkind_no;
 		}else {
-			document.getElementById("country_name").value = '';
-			alert("조회된 국가가 없습니다. 조회 버튼을 클릭하여 목록에서 국가를 선택해주세요.");
+			document.getElementById("imkind_name").value = '';		// 데이터가 비어있으면 실행
+			alert("조회된 종류가 없습니다. 조회 버튼을 클릭하여 목록에서 종류를 선택해주세요.");
 		}
 	}
 }
 
-function clientsort(e, name){
+function team(e, name){
 	if(e.keyCode == 13){
 		if(name == ""){
-			alert("종류를 입력해주세요.");
-			document.getElementById("clientsort_name").focus();
+			alert("팀명을 입력해주세요.");
+			document.getElementById("team_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/c/c2/c21/clientsort";
-		var param = "clientsort_name=" + encodeURIComponent(name);
+		var url = "${pageContext.request.contextPath}/a/a4/team";
+		var param = "team_name=" + encodeURIComponent(name);
 		
-		sendRequest(url, param, clientsortname, "POST");
+		sendRequest(url, param, teamname, "POST");
 	}
 }
-function clientsortname(){
+function teamname(){
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.response;
 		if(data != ""){
 			var data2 = JSON.parse(data);
-			document.getElementById("clientsort_name").value = data2.clientsort_name;
-			document.getElementById("clientsort_no").value = data2.clientsort_no;
+			document.getElementById("team_name").value = data2.team_name;
+			document.getElementById("team_no").value = data2.team_no;
 		}else {
-			document.getElementById("clientsort_name").value = '';
-			alert("중복된 종류입니다. 조회 버튼을 클릭하여 목록에서 종류를 선택해주세요.");
+			document.getElementById("team_name").value = '';
+			alert("중복된 팀 이름입니다. 조회 버튼을 클릭하여 목록에서 팀을 선택해주세요.");
 		}
 	}
 }
@@ -179,18 +220,18 @@ function clientsortname(){
 					<tr>
 						<td>
 							<select name="type">
-								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
+								<option value="all">전체</option>
+								<option value="investment_code" ${param.type == 'investment_code' ? 'selected' : '' }>코드</option>
+								<option value="imkind_name" ${param.type == 'imkind_name' ? 'selected' : '' }>종류</option>
+								<option value="investment_content" ${param.type == 'investment_content' ? 'selected' : '' }>적요</option>
 								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>거래처</option>
-								<option value="clientsort_name" ${param.type == 'clientsort_name' ? 'selected' : '' }>종류</option>
-								<option value="client_businesstype" ${param.type == 'client_businesstype' ? 'selected' : '' }>구분</option>
-								<option value="businesstype_name" ${param.type == 'businesstype_name' ? 'selected' : '' }>업태</option>
-								<option value="businesstype_subctgr" ${param.type == 'businesstype_subctgr' ? 'selected' : '' }>업종</option>
-								<option value="country_name" ${param.type == 'country_name' ? 'selected' : '' }>국가</option>
+								<option value="closing_date" ${param.type == 'closing_date' ? 'selected' : '' }>작성날짜</option>
+								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당팀</option>
 							</select>
 						</td>
 						<td>
-							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
-							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value)">
+							<input type="button" value="전체목록" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?type=null&comcode_code=${comcode_code }'">
 						</td>
 					</tr>
 				</table>
@@ -200,15 +241,22 @@ function clientsortname(){
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
-						<td>거래처</td>
-						<td>사업자등록번호</td>
-						<td>구분</td>
+						<td>코드</td>
+						<td>금액</td>
+						<td>적요</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
-					<tr onclick="selectForm(${map.client_no})" class="filter" id="filter">
-						<td class="code">${map.client_name }</td>
-						<td class="price">${map.client_registeredno }</td>
-						<td class="cont">${map.client_businesstype }</td>
+					<tr onclick="selectForm(${map.investment_no}, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
+						<td class="code">${map.investment_code }
+						<input type="hidden" class="imkind_name" value="${map.imkind_name }">
+						<input type="hidden" class="client_name" value="${map.client_name }">
+						<input type="hidden" class="closing_date" value="${map.closing_date }">
+						<input type="hidden" class="investment_note" value="${map.investment_note }">
+						<input type="hidden" class="investment_price" value="${map.investment_price }">
+						<input type="hidden" class="investment_withdrawal" value="${map.investment_withdrawal }">
+						<input type="hidden" class="team_name" value="${map.team_name }"></td>
+						<td class="price">${map.investment_price }</td>
+						<td class="cont">${map.investment_content }</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -222,8 +270,10 @@ function clientsortname(){
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
-			<form action="${pageContext.request.contextPath }/c/c2/c21/updateForm" id="content" method="post">
-				<input type="hidden" name="client_no">
+			<form action="${pageContext.request.contextPath }/a/a4/a41/updateForm" id="content" method="post">
+				<input type="hidden" name="investment_no">
+				<input type="hidden" name="bs3_no1">
+				<input type="hidden" name="bs3_no2">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 			</form>
 		
@@ -236,12 +286,19 @@ function clientsortname(){
 		<div id="add" class="divform3">
 			<c:choose>
 				<c:when test="${inmap != null }">
-					<form action="${pageContext.request.contextPath }/c/c2/c21/update" method="POST" id="update">
+					<form action="${pageContext.request.contextPath }/a/a4/a41/update" method="POST" id="update">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="country_no" value="${inmap.country_no }">
-						<input type="hidden" name="clientsort_no" id="clientsort_no" value="${inmap.clientsort_no }">
+						<input type="hidden" name="investment_no" value="${inmap.investment_no }">
+						<input type="hidden" name="imkind_no" id="imkind_no" value="${inmap.imkind_no }">
+						<input type="hidden" name="ctgr_no" id="ctgr_no" value="8">
 						<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
-						<input type="hidden" name="businesstype_no" id="businesstype_no" value="${inmap.businesstype_no }">
+						<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
+						<input type="hidden" name="account_no" id="account_no" value="${inmap.account_no }">
+						<input type="hidden" name="bs3_no11" id="bs3_no11" value="${bs3_no1 }">
+						<input type="hidden" name="bs3_no21" id="bs3_no21" value="${bs3_no2 }">
+						<input type="hidden" name="bs3_no12" id="bs3_no12">
+						<input type="hidden" name="bs3_no22" id="bs3_no22">
+						<input type="hidden" name="investment_status" id="investment_status" value="1">
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -249,101 +306,118 @@ function clientsortname(){
 						</div>
 							
 						<div>
-							<label>거래처명 </label>
-							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }" maxlength="30" class="required">
+							<label>코드 </label>
+							<input type="text" name="investment_code" id="investment_code" value="${inmap.investment_code }" readonly="readonly" maxlength="30" class="required">
 						</div>
 						
 						<div>
-							<label>국가 </label>
-							<input type="text" name="country_name" id="country_name" value="${inmap.country_name }" onkeypress="country(event, this.value)">
-							<input type="button" onclick="ctlist()" value="조회">
+							<label>기간 </label>
+							<input type="date" name="investment_start" id="investment_start" value="${inmap.investment_start }"> ~ <input type="date" name="investment_end" id="investment_end" value="${inmap.investment_end }">
 						</div>
 						
 						<div>
-							<label>종류 </label>
-							<input type="text" name="clientsort_name" id="clientsort_name" value="${inmap.clientsort_name }" onkeypress="clientsort(event, this.value)">
-							<input type="button" onclick="cslist()" value="조회">
-						</div>
-						
-						<div>
-							<label>사업자 등록번호 </label>
-							<input type="text" name="client_registeredno" id="client_registeredno" value="${inmap.client_registeredno }" maxlength="30" class="required">
-						</div>
-						
-						<div>
-							<label>법인 등록번호</label>
-							<input type="text" name="client_corporatedno" id="client_corporatedno" value="${inmap.client_corporatedno }" maxlength="30">
-						</div>
-						
-						<div>
-							<label>대표자 </label>
-							<input type="text" name="client_representative" id="client_representative" value="${inmap.client_representative }">
+							<label>금액 </label>
+							<input type="text" name="investment_price" id="investment_price" value="${inmap.investment_price }">
 						</div>				
 						
 						<div>
-							<label>사업형태 </label>
-							<input type="text" name="client_businesstype" id="client_businesstype" value="${inmap.client_businesstype }">
+							<label>거래처 </label>
+							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" value="${cvo.client_name }">
+							<input type="button" onclick="clList('${comcode_code}')" value="조회">
 						</div>	
 							
 						<div>
-							<label>업태 </label>
-							<input type="text" name="businesstype_name" id="businesstype_name" readonly="readonly" value="${inmap.businesstype_name }" onclick="btname()">
-							<label>업종 </label>
-							<input type="text" name="businesstype_subctgr" id="businesstype_subctgr" readonly="readonly" value="${inmap.businesstype_subctgr }" onclick="btsubctgr()">
+							<label>사업자등록번호 </label>
+							<input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly" value="${cvo.client_registeredno }">
 						</div>	
 						
 						<div>
-							<label>사업장 </label>
-							<input type="text" name="client_addr1" id="client_addr1" value="${inmap.client_addr1 }">
+							<label>담당자 </label>
+							<input type="text" name="client_manager" id="client_manager" readonly="readonly" value="${cvo.client_manager }">
 						</div>
 						
 						<div>
-							<label>상세 주소</label>
-							<input type="text" name="client_addr2" id="client_addr2" value="${inmap.client_addr2 }">
+							<label>투자 종류</label>
+							<input type="text" name="imkind_name" id="imkind_name" value="${inmap.imkind_name }" onkeypress="imkind(event, this.value)">
 							<input type="button" onclick="searchim()" value="조회">
 						</div>
 						
 						<div>
-							<label>우편 번호 </label>
-							<input type="text" name="client_postal" id="client_postal" value="${inmap.client_postal }">
+							<label>적요 </label>
+							<input type="text" name="investment_content" id="investment_content" value="${inmap.investment_content }" maxlength="500">
 						</div>
 						
 						<div>
-							<label>담당자 </label>
-							<input type="text" name="client_manager" id="client_manager" value="${inmap.client_manager }">
-						</div>
-						<div>
-							<label>담당자번호 </label>
-							<input type="text" name="client_contact" id="client_contact" value="${inmap.client_contact }">
+							<label>은행 </label>
+							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}', '${inmap.team_code }')" value="${avo.account_bank }" readonly="readonly">
+							<input type="button" onclick="acList('${comcode_code}', '${inmap.team_code }')" value="조회">
 						</div>
 						
 						<div>
-							<label>대표 번호 </label>
-							<input type="text" name="client_directno" id="client_directno" value="${inmap.client_directno }">
+							<label>계좌번호 </label>
+							<td><input type="text" name="account_num" id="account_num" value="${avo.account_num }" readonly="readonly">
 						</div>
 						
 						<div>
-							<label>fax </label>
-							<input type="text" name="client_fax" id="client_fax" value="${inmap.client_fax }">
+							<label>차변 </label>
+							<select name="debtor_no" id="debtor_no" onchange="check12()" class="required">
+								<c:forEach var="vo1" items="${dlist }">
+								<c:choose>
+								<c:when test="${vo1.bs3_ctgr == inmap.bs3_ctgr1 }">
+									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }" selected>${vo1.bs3_ctgr }</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }">${vo1.bs3_ctgr }</option>
+								</c:otherwise>
+								</c:choose>
+								</c:forEach>
+							</select>
+						</div>	
+						
+						<div>
+							<label>대변</label> 
+							<select name="creditor_no" id="creditor_no" onchange="check22()" class="required">
+								<c:forEach var="vo2" items="${clist }">
+								<c:choose>
+								<c:when test="${vo2.bs3_ctgr == inmap.bs3_ctgr2 }">
+									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }" selected>${vo2.bs3_ctgr }</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }">${vo2.bs3_ctgr }</option>
+								</c:otherwise>
+								</c:choose>
+								</c:forEach>
+							</select>
+						</div>
+						
+						<div>
+							<label>담당팀 </label>
+							<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }">
+							<input type="button" onclick="searcht()" value="조회">
 						</div>		
 						
 						<div>
-							<label>이메일 </label>
-							<input type="text" name="client_email" id="client_email" value="${inmap.client_email }">
+							<label>비고 </label>
+							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500">
 						</div>	
 						
 						<div align="right">
 							<input type="button" value="update" onclick="sub(this.form)">
-							<input type="button" value="delete" onclick="deletei(${inmap.client_no }, '${comcode_code }')">
+							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
 						</div>
 					</form>
 				</c:when>
 				<c:otherwise>
 					<form action="${pageContext.request.contextPath }/a/a4/a41/createLoan" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="country_no" value="26">
-						<input type="hidden" name="clientsort_no" id="clientsort_no" value="3">
-						<input type="hidden" name="businesstype_no" id="businesstype_no" value="1">
+						<input type="hidden" name="imkind_no" id="imkind_no" value="13">
+						<input type="hidden" name="ctgr_no" id="ctgr_no" value="8">
+						<input type="hidden" name="client_no" id="client_no" value="17">
+						<input type="hidden" name="team_no" id="team_no" value="1">
+						<input type="hidden" name="bs3_no1" id="bs3_no1">
+						<input type="hidden" name="bs3_no2" id="bs3_no2">
+						<input type="hidden" name="account_no" id="account_no" value="1">
+						<input type="hidden" name="investment_status" id="investment_status" value="1">
 							<h3>차입 등록 사항</h3>
 						<div>
 							<label>코드 </label>
@@ -646,8 +720,10 @@ function clName(){
 
 
 // 리스트에서 글 선택 시 넘어가는 form
-function selectForm(no){
-	document.getElementsByName("client_no")[0].value = no;
+function selectForm(no, bno1, bno2){
+	document.getElementsByName("investment_no")[0].value = no;
+	document.getElementsByName("bs3_no1")[0].value = bno1;
+	document.getElementsByName("bs3_no2")[0].value = bno2;
 	
 	document.getElementById("content").submit(); // content라는 id의 form태그 submit
 }

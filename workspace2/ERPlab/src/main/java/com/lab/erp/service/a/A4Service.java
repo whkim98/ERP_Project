@@ -75,7 +75,7 @@ public class A4Service {
 		return cdao.clientList(map);
 	}
 	public Erp_ClientVO selectClient(int client_no) {
-		return cdao.selectClient(client_no);
+		return cdao.selectClienta4(client_no);
 	}
 	public Erp_ClientVO searchcl(Map<String, Object> map) {
 		return cdao.searchcl(map);

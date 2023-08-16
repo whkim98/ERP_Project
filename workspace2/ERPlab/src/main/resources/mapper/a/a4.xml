@@ -107,6 +107,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and i.ctgr_no = #{ctgr_no} 
 		and i.comcode_no = #{comcode_no} 
 		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					im.imkind_name like '%${word}%' or cl.client_name like '%${word}%' 
+					or t.team_name like '%${word}%' or date_format(c.closing_date, '%m월 %d일') like '%${word}%' 
+					or i.investment_code like '%${word}%' or i.investment_content like '%${word}%'
+					)
+			</if>
 			<if test="type == 'imkind_name'">
 				and im.imkind_name like '%${word}%' 
 			</if>

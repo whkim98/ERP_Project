@@ -58,87 +58,48 @@ border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
-function surf(v){
-	let sel = document.getElementsByName("type")[0].value;		// 검색할 option들 
-	let val = v.toLowerCase();	// 검색어로 들어온 value를 대소문자 구분 없이 소문자로 판단
-	let tr = document.getElementsByClassName("filter");		// class를 filert로 지정해놓은 것 > tr을 지정해 놓았음
-	if(sel == 'investment_code'){		// select option의 value 판단
-		for (let i = 0; i < tr.length; i++) {	// tr의 length만큼 for문 실행
-			let code = tr[i].getElementsByClassName("code");	// tr안의 class가 code라는 것을 for문 실행만큼 계속 가져옴
-	        if (code[0].innerHTML.toLowerCase().indexOf(val) != -1) {	// code안의 html에 매개변수로 가져온 v가 포함되어있는 지 판단 
-	          tr[i].style.display = ""		// 포함하면 그대로 출력
-	        } else {
-	          tr[i].style.display = "none"	// 포함하지 않으면 숨김
-	        }
-	    }
-	}else if(sel == 'imkind_name'){
-		for (let i = 0; i < tr.length; i++) {
-			let imkind = tr[i].getElementsByClassName("imkind_name");
-	        if (imkind[0].value.toLowerCase().indexOf(val) != -1) {	// imkind안의 value에 매개변수로 가져온 v가 포함되어있는 지 판단 
-	          tr[i].style.display = ""
-	        } else {
-	          tr[i].style.display = "none"
-	        }
-	    }
-	}else if(sel == 'investment_content'){
-		for (let i = 0; i < tr.length; i++) {
-			let cont = tr[i].getElementsByClassName("cont");
-	        if (cont[0].innerHTML.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'client_name'){
-		for (let i = 0; i < tr.length; i++) {
-			let cname = tr[i].getElementsByClassName("client_name");
-	        if (cname[0].value.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'closing_date'){
-		for (let i = 0; i < tr.length; i++) {
-			let date = tr[i].getElementsByClassName("closing_date");
-	        if (date[0].value.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'team_name'){
-		for (let i = 0; i < tr.length; i++) {
-			let tname = tr[i].getElementsByClassName("team_name");
-	        if (tname[0].value.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'all'){
-		for (let i = 0; i < tr.length; i++) {
-			let w = tr[i].getElementsByClassName("investment_withdrawal");
-			let n = tr[i].getElementsByClassName("investment_note");
-			let p = tr[i].getElementsByClassName("investment_price");
-			let tname = tr[i].getElementsByClassName("team_name");
-			let date = tr[i].getElementsByClassName("closing_date");
-			let cname = tr[i].getElementsByClassName("client_name");
-			let cont = tr[i].getElementsByClassName("cont");
-			let imkind = tr[i].getElementsByClassName("imkind_name");
-			let code = tr[i].getElementsByClassName("code");
-	        if (tname[0].value.toLowerCase().indexOf(val) != -1 || code[0].innerHTML.toLowerCase().indexOf(val) != -1 || 
-	        	imkind[0].value.toLowerCase().indexOf(val) != -1 || cont[0].innerHTML.toLowerCase().indexOf(val) != -1 || 
-	        	cname[0].value.toLowerCase().indexOf(val) != -1 || date[0].value.toLowerCase().indexOf(val) != -1 || 
-	        	tname[0].value.toLowerCase().indexOf(val) != -1 || w[0].value.toLowerCase().indexOf(val) != -1 || 
-	        	n[0].value.toLowerCase().indexOf(val) != -1 || p[0].value.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
+
+function surf(v, code){		// list ajax 함수 > A4Controller, a4.xml(investmentList select문)
+	var type = document.getElementsByName("type")[0].value;
+	var url = "${pageContext.request.contextPath}/a/a4/a41/loanAjax";	// controller mapping
+	if(v == ''){
+		v = null;
+	}
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;		// 넘길 데이터
+	
+	sendRequest(url,param,getlist,"POST");
+}
+function getlist(){
+	if(xhr.readyState==4 && xhr.status==200) {	
+		var data = xhr.response;
+		let procode = document.getElementById("procode"); 	// list가 들어갈 테이블 id
+		let newTr = document.createElement("tr");		// tr 만듦
+		let newTd = document.createElement("td");		// td 만듦
+		if(data != ""){
+			procode.innerHTML = '';							// 일단 테이블 비워줌
+			procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>적요</td></tr>';
+			var data2 = JSON.parse(data);
+			data2.forEach(function(map){		// 받아온 list 테이블에 입히기
+				newTr = document.createElement("tr");
+				procode.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.investment_code;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.investment_price;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.investment_content;
+				newTr.appendChild(newTd);
+			});
+		}else {
+			procode.innerHTML = '';
+			procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>적요</td></tr>';
+			procode.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
+		}
 	}
 }
+
 
 //전체목록조회 > 새창으로
 function searchim(){
@@ -220,7 +181,7 @@ function teamname(){
 					<tr>
 						<td>
 							<select name="type">
-								<option value="all">전체</option>
+								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
 								<option value="investment_code" ${param.type == 'investment_code' ? 'selected' : '' }>코드</option>
 								<option value="imkind_name" ${param.type == 'imkind_name' ? 'selected' : '' }>종류</option>
 								<option value="investment_content" ${param.type == 'investment_content' ? 'selected' : '' }>적요</option>
@@ -230,8 +191,8 @@ function teamname(){
 							</select>
 						</td>
 						<td>
-							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value)">
-							<input type="button" value="전체목록" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?type=null&comcode_code=${comcode_code }'">
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
+							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
 						</td>
 					</tr>
 				</table>
@@ -246,15 +207,8 @@ function teamname(){
 						<td>적요</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
-					<tr onclick="selectForm(${map.investment_no}, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
-						<td class="code">${map.investment_code }
-						<input type="hidden" class="imkind_name" value="${map.imkind_name }">
-						<input type="hidden" class="client_name" value="${map.client_name }">
-						<input type="hidden" class="closing_date" value="${map.closing_date }">
-						<input type="hidden" class="investment_note" value="${map.investment_note }">
-						<input type="hidden" class="investment_price" value="${map.investment_price }">
-						<input type="hidden" class="investment_withdrawal" value="${map.investment_withdrawal }">
-						<input type="hidden" class="team_name" value="${map.team_name }"></td>
+					<tr onclick="selectForm(${map.investment_no}, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter" id="filter">
+						<td class="code">${map.investment_code }</td>
 						<td class="price">${map.investment_price }</td>
 						<td class="cont">${map.investment_content }</td>
 					</tr>
