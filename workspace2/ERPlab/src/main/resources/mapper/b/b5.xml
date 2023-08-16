@@ -30,5 +30,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select employee1_no from erp_employee1 where employee1_code = #{employee1_code}
 </select>
 
+<select id="selectAttendance" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
+	select * from erp_employee1 e1 
+	left join erp_employee2 e2 on e1.employee1_no = e2.employee1_no 
+	left join erp_attendance ea on e2.employee2_no = ea.employee2_no
+	left join erp_hdkind eh on ea.hdkind_no = eh.hdkind_no;
+</select>
+
+<insert id="insertAttendance" parameterType="com.lab.erp.vo.b.b5.Erp_AttendanceVO">
+	insert into erp_attendance(hdkind_no, employee2_no, attendance_start, attendance_end) values(#{hdkind_no}, #{employee2_no}, #{attendance_start}, #{attendance_end})
+</insert>
+
+<select id="selectLocal" parameterType="map" resultType="double">
+	SELECT employee2_holiday - (
+	select eh.hdkind_days * (SELECT 
+    COUNT(DATE_ADD(#{attendance_start}, INTERVAL seq.seq DAY)) - 
+    (SELECT COUNT(*) FROM erp_localdate WHERE erp_localdate.localdate_date BETWEEN #{attendance_start} AND #{attendance_end}) AS date_between
+    FROM (
+    SELECT (t4.i*1000 + t3.i*100 + t2.i*10 + t1.i) AS seq
+    FROM
+    (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t1,
+    (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t2,
+    (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t3,
+    (SELECT 0 AS i UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9) t4
+    ) seq
+    WHERE DATE_ADD(#{attendance_start}, INTERVAL seq.seq DAY) &lt;= #{attendance_end}) from erp_hdkind eh where eh.hdkind_no = #{hdkind_no}
+    )
+    FROM erp_employee2 WHERE employee2_no = #{employee2_no};
+</select>
+
+<update id="updateHoliday" parameterType="com.lab.erp.vo.login.Erp_Employee2VO">
+	update erp_employee2 set employee2_holiday = #{employee2_holiday} where employee2_no = #{employee2_no}
+</update>
 
 </mapper>

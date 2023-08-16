@@ -53,6 +53,8 @@ public class B6Controller {
 	public String insert(String salarytype_name, String salary_code, String salary_date, String salary_start, String salary_end, String employee1_code, Erp_SalaryVO vo, Model model) {
 		int employee2_no = b6.selectEmployee(employee1_code);
 		
+		System.out.println(employee2_no);
+		
 		int salarytype_no = b6.salaryType(salarytype_name);
 		
 		double salarytype_magnification = b6.magnification(salarytype_no);
@@ -66,19 +68,19 @@ public class B6Controller {
 		
 		System.out.println(vo.getSalary_end());
 		
-		Map<String, Object> mapM = new HashMap<>();
-		mapM.put("employee2_no", employee2_no);
-		mapM.put("salary_date", vo.getSalary_date());
+		System.out.println(vo.getSalary_date());
 		
-		int month = b6.selectMonth(mapM);
+		int month = b6.selectMonth(salary_date);
+		
+		System.out.println(month);
 		
 		int employee2_salary = b6.selectSalary(employee2_no);
 		
-		Map<String, Object> mapY = new HashMap<>();
-		mapY.put("employee2_no", employee2_no);
-		mapY.put("salary_date", vo.getSalary_date());
+		System.out.println(employee2_salary);
 		
-		int year = b6.selectYear(mapY);
+		int year = b6.selectYear(salary_date);
+		
+		System.out.println(year);
 		
 		int totalDays = YearMonth.of(year, month).lengthOfMonth();
 		
@@ -91,9 +93,14 @@ public class B6Controller {
 	           }
 	       }
 	        
+	       
+	    System.out.println(weekdays);
+	    System.out.println(salarytype_magnification);
 	    double salary_cash = (employee2_salary / 12.0 / weekdays / 8) * salarytype_magnification;
 	    
 	    vo.setSalary_cash(salary_cash);
+	    
+	    System.out.println(salary_cash);
 	    
 		int su = b6.insertSalary(vo);
 		

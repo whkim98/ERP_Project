@@ -19,12 +19,12 @@ private SqlSession sqlSession;
 		this.sqlSession = sqlSession;
 	}
 
-	public int selectMonth(Map<String, Object> map) {
-		return sqlSession.selectOne("b6.selectMonth", map);
+	public int selectMonth(String salary_date) {
+		return sqlSession.selectOne("b6.selectMonth", salary_date);
 	}
 	
-	public int selectYear(Map<String, Object> map) {
-		return sqlSession.selectOne("b6.selectYear", map);
+	public int selectYear(String salary_date) {
+		return sqlSession.selectOne("b6.selectYear", salary_date);
 	}
 	
 	public int selectSalary(int employee2_no) {

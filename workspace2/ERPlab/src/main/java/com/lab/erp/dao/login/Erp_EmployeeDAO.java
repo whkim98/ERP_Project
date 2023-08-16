@@ -81,4 +81,9 @@ public class Erp_EmployeeDAO {
 	public int selectEmployeeno(String employee1_code) {
 		return sqlSession.selectOne("b5.selectEmployeeno", employee1_code);
 	}
+	
+	public List<Erp_Employee1VO> selectAttendance(){
+		return sqlSession.selectList("b5.selectAttendance");
+	}
+	
 }
