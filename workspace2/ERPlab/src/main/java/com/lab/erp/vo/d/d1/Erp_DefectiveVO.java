@@ -14,5 +14,6 @@ public class Erp_DefectiveVO {
 	private String defective_date;
 	private int goods_no;
 	private int ped_no;
+	private int comcode_no;
 
 }

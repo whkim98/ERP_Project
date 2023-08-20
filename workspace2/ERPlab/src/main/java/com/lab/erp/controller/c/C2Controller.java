@@ -75,6 +75,7 @@ public class C2Controller {
 	}
 	
 	@RequestMapping("/c21/clientAjax")
+	@ResponseBody
 	public List<Map<String, Object>> clientAjax(String type, String word, String comcode_code){
 		
 		int comcode_no = ls.comNo(comcode_code);
@@ -123,19 +124,6 @@ public class C2Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}else {
-			int client_no = c2.getClNo(vo.getClient_registeredno());
-			for(int i = 0; i < goods_no.length; i++) {
-				Erp_GoodsconnectVO gcvo = new Erp_GoodsconnectVO();
-				int gno = 0;
-				if(goods_no[i] == "") {
-					gno = 1;
-				}else {
-					gno = Integer.parseInt(goods_no[i]);
-				}
-				gcvo.setGoods_no(gno);
-				gcvo.setClient_no(client_no);
-				c2.inputGC(gcvo);
-			}
 			return "redirect:/c/c2/c21?comcode_code="+comcode_code;
 		}
 	}
@@ -168,15 +156,12 @@ public class C2Controller {
 		
 		List<Map<String, Object>> list = c2.clientListb4(map);
 		
-		List<Map<String, Object>> gclist = c2.clientGoods(vo.getClient_no());
-		
 		Map<String, Object> clmap = c2.selectClientb4(vo.getClient_no());
 		
-		model.addAttribute("gclist", gclist);
 		model.addAttribute("list", list);
-		model.addAttribute("clmap", clmap);
+		model.addAttribute("inmap", clmap);
 		
-		return ViewPath.C2 + "/c21/updateForm";
+		return ViewPath.C2 + "/c21/inputClient";
 	}
 	
 	@RequestMapping("/c21/update")
@@ -208,19 +193,6 @@ public class C2Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}else {
-			for(int i = 0; i < goods_no.length; i++) {
-				Erp_GoodsconnectVO gcvo = new Erp_GoodsconnectVO();
-				int gno = 0;
-				if(goods_no[i] == "") {
-					gno = 1;
-				}else {
-					gno = Integer.parseInt(goods_no[i]);
-				}
-				gcvo.setGoods_no(gno);
-				gcvo.setClient_no(vo.getClient_no());
-				c2.updateGC(gcvo);
-			}
-			
 			return "redirect:/c/c2/c21/updateForm?comcode_code="+comcode_code+"&client_no="+vo.getClient_no();
 		}
 	}
@@ -241,8 +213,6 @@ public class C2Controller {
 		
 		int delete = c2.deleteClient(vo.getClient_no());
 		
-		c2.deleteGCClient(vo.getClient_no());
-		
 		if(delete == 0) {
 			msg = "삭제 실패";
 			url = "redirect:/c/c2/c21/updateForm?comcode_code="+comcode_code+"&client_no="+vo.getClient_no();
@@ -255,37 +225,22 @@ public class C2Controller {
 		}
 	}
 	
-	@RequestMapping("/c21/goodsList")
-	public String goodsList(Model model) {
-		List<Erp_GoodsVO> list = c2.goodsList();
-		
-		model.addAttribute("list", list);
-		
-		return ViewPath.WINDOW + "/c/c21/goodsList";
+	@RequestMapping(value = "/c21/registeredno", produces = "application/text;charset=utf8")
+	@ResponseBody
+	public String registeredno(String client_registeredno) {
+		try {
+			if(client_registeredno == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			c2.getClNo(client_registeredno);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
+		}
 	}
 	
-	@RequestMapping("/c21/searchbn")
-	public String searchbn(String btype, String bnword, Model model) {
-		if(btype == null || bnword == null) {
-			btype = null;
-			bnword = null;
-		}
-		
-		Map<String, Object> map = new HashMap<>();
-		
-		map.put("btype", btype);
-		map.put("bnword", bnword);
-		
-		List<Erp_BusinesstypeVO> list = c2.btName(map);
-		if(list.isEmpty()) {
-			list = null;
-		}
-		
-		model.addAttribute("list", list);
-		
-		return ViewPath.WINDOW + "/c/c2/c21/businessName";
-	}
-	@RequestMapping("/c21/searchbs")
+	@RequestMapping("/c21/btsubctgr")
 	public String searchbs(String btype, String bword, Model model) {
 		if(btype == null || bword == null) {
 			btype = null;
@@ -304,9 +259,9 @@ public class C2Controller {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.WINDOW + "/c/c2/c21/businessSub";
+		return ViewPath.WINDOW + "/c/c2/c21/btsubctgr";
 	}
-	@RequestMapping("/c21/searchcs")
+	@RequestMapping("/c21/cslist")
 	public String searchcs(String cstype, String csword, Model model) {
 		if(cstype == null || csword == null) {
 			cstype = null;
@@ -322,9 +277,9 @@ public class C2Controller {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.WINDOW + "/c/c2/c21/csList";
+		return ViewPath.WINDOW + "/c/c2/c21/cslist";
 	}
-	@RequestMapping("/c21/searchct")
+	@RequestMapping("/c21/ctlist")
 	public String searchct(String ctype, String cword, Model model) {
 		if(ctype == null || cword == null) {
 			ctype = null;
@@ -340,7 +295,7 @@ public class C2Controller {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.WINDOW + "/c/c2/c21/countryList";
+		return ViewPath.WINDOW + "/c/c2/c21/ctlist";
 	}
 	
 	@RequestMapping("/c21/clientsort")
@@ -434,7 +389,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == "" || comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -442,8 +397,56 @@ public class C2Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(vo.getReceivable_collect() == "") {
+			vo.setReceivable_collect("99990101");
+		}
+		
+		vo.setComcode_no(comcode_no);
+		double tax = vo.getReceivable_price() * 0.1;
+		
+		vo.setReceivable_tax((int)tax);
+		
+		int total = vo.getReceivable_price() + vo.getReceivable_tax();
+		
+		vo.setReceivable_total(total);
+		
 		int insert = c2.createReceivable(vo);
 		if(insert != 0) {
+			Erp_ClosingVO cvo = new Erp_ClosingVO();
+			cvo.setDebtor_no(132);
+			cvo.setCreditor_no(181);
+			cvo.setClosing_code(vo.getReceivable_cino());
+			cvo.setClosing_debtor(vo.getReceivable_total());
+			cvo.setClosing_creditor(vo.getReceivable_total());
+			cvo.setComcode_no(comcode_no);
+			cvo.setCtgr_no(36);
+			c2.createClosing(cvo);
+			
+			Map<String, Object> dmap = c2.getBsNo(3);
+			Map<String, Object> cmap = c2.getBsNo(6);
+			
+			Map<String, Object> map = new HashMap<>();
+			
+			map.put("bs3_amount", vo.getReceivable_total());
+			map.put("bs3_no", dmap.get("bs3_no"));
+			map.put("bs2_no", dmap.get("bsno2"));
+			map.put("bs1_no", dmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
+			map.put("bs3_amount", (-vo.getReceivable_total()));
+			map.put("bs3_no", cmap.get("bs3_no"));
+			map.put("bs2_no", cmap.get("bsno2"));
+			map.put("bs1_no", cmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
 			return "redirect:/c/c2/c22?comcode_code="+comcode_code;
 		}else {
 			msg = "등록 실패";
@@ -506,9 +509,70 @@ public class C2Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
+		Map<String, Object> imap = c2.selectReceivable(vo.getReceivable_no());
+		
+		double tax = vo.getReceivable_price() * 0.1;
+		vo.setReceivable_tax((int)tax);
+		
+		int total = vo.getReceivable_price() + (int)tax;
+		vo.setReceivable_total(total);
 		
 		int update = c2.updateReceivable(vo);
+		
+		int cno = c2.getClosingNo(vo.getReceivable_cino());
+		
 		if(update != 0) {
+			Erp_ClosingVO cvo = new Erp_ClosingVO();
+			cvo.setDebtor_no(132);
+			cvo.setCreditor_no(181);
+			cvo.setClosing_code(vo.getReceivable_cino());
+			cvo.setClosing_debtor(vo.getReceivable_total());
+			cvo.setClosing_creditor(vo.getReceivable_total());
+			cvo.setClosing_no(cno);
+			c2.updateClosing(cvo);
+			
+			Map<String, Object> map = new HashMap<>();
+			
+			
+			Map<String, Object> dmap = c2.getBsNo(3);
+			Map<String, Object> cmap = c2.getBsNo(6);
+			
+			map.put("bs3_amount", (-(int)imap.get("receivable_total")));
+			map.put("bs3_no", dmap.get("bs3_no"));
+			map.put("bs2_no", dmap.get("bsno2"));
+			map.put("bs1_no", dmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
+			map.put("bs3_amount", (int)imap.get("receivable_total"));
+			map.put("bs3_no", cmap.get("bs3_no"));
+			map.put("bs2_no", cmap.get("bsno2"));
+			map.put("bs1_no", cmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
+			map.put("bs3_amount", vo.getReceivable_total());
+			map.put("bs3_no", dmap.get("bs3_no"));
+			map.put("bs2_no", dmap.get("bsno2"));
+			map.put("bs1_no", dmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
+			map.put("bs3_amount", (-vo.getReceivable_total()));
+			map.put("bs3_no", cmap.get("bs3_no"));
+			map.put("bs2_no", cmap.get("bsno2"));
+			map.put("bs1_no", cmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
 			return "redirect:/c/c2/c22/updateForm?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
 		}else {
 			msg = "수정 실패";
@@ -518,7 +582,7 @@ public class C2Controller {
 	}
 	
 	@RequestMapping("/c22/delete")
-	public String deleteReceivable(String comcode_code, Model model, Erp_BondbillsVO vo) {
+	public String deleteReceivable(String comcode_code, Model model, Erp_ReceivableVO vo) {
 		String msg = null;
 		String url = null;
 		
@@ -530,8 +594,42 @@ public class C2Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		int delete = c2.deleteBills(vo.getBondbills_no());
+		Erp_BondbillsVO bvo = c2.getBillsTotal(vo.getReceivable_no());
+		
+		int total = vo.getReceivable_total() - bvo.getBondbills_total();
+		
+		int delete = c2.deleteBills(vo.getReceivable_no());
+		
+		int cno = c2.getClosingNo(vo.getReceivable_cino());
+		
+		c2.deleteClosing(cno);
+		
+		c2.deleteReceive(vo.getReceivable_no());
+		
 		if(delete != 0) {
+			Map<String, Object> map = new HashMap<>();
+			
+			Map<String, Object> dmap = c2.getBsNo(3);
+			Map<String, Object> cmap = c2.getBsNo(6);
+			
+			map.put("bs3_amount", (-total));
+			map.put("bs3_no", dmap.get("bs3_no"));
+			map.put("bs2_no", dmap.get("bsno2"));
+			map.put("bs1_no", dmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
+			map.put("bs3_amount", total);
+			map.put("bs3_no", cmap.get("bs3_no"));
+			map.put("bs2_no", cmap.get("bsno2"));
+			map.put("bs1_no", cmap.get("bs1_no"));
+			
+			c2.updateBs3Amount(map);
+			c2.updateBs2Amount(map);
+			c2.updateBs1Amount(map);
+			
 			return "redirect:/c/c2/c22?comcode_code="+comcode_code;
 		}else {
 			msg = "삭제 실패";
@@ -567,23 +665,26 @@ public class C2Controller {
 		}
 		
 		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> rmap = new HashMap<>();
 		
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
 		
-		if(vo == null) {
+		if(vo.getReceivable_no() == 0) {
 			list = c2.bondbillsList(map);
 		}else {
 			map.put("receivable_no", vo.getReceivable_no());
+			rmap = c2.selectReceivable(vo.getReceivable_no());
 			list = c2.receiveBondbills(map);
 		}
 		
+		model.addAttribute("rmap", rmap);
 		model.addAttribute("list", list);
 		model.addAttribute("dlist", dlist);
 		model.addAttribute("clist", clist);
 		
-		return ViewPath.C2 + "inputBondbills";
+		return ViewPath.C2 + "/c22/inputBondbills";
 	}
 	
 	@RequestMapping("/c22/billsAjax")
@@ -613,11 +714,33 @@ public class C2Controller {
 		
 		return list;
 	}
+	@RequestMapping("/c22/billsAjax2")
+	@ResponseBody
+	public List<Map<String, Object>> billsAjax2(String comcode_code, String type, String word){
+		List<Map<String, Object>> list = null;
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		
+		list = c2.bondbillsList(map);
+		
+		return list;
+	}
 	
 	@RequestMapping("/c22/createBondbills")
 	@Transactional
 	public String createBondbills(String comcode_code, String bs3_no1, String bs3_no2, Model model, 
-			Erp_BondbillsVO vo, String receivable_clno, String debtor_no, String creditor_no) {
+			Erp_BondbillsVO vo, String receivable_cino, String debtor_no, String creditor_no) {
 		Map<String, Object> inmap = c2.selectReceivable(vo.getReceivable_no());
 		
 		String msg = null;
@@ -661,16 +784,16 @@ public class C2Controller {
 		
 		c2.inputBills(vo);
 		
-		int getbills = c2.getBillsTotal(vo.getReceivable_no());
-		if(getbills > (int)inmap.get("receivable_total")) {
+		Erp_BondbillsVO getbills = c2.getBillsTotal(vo.getReceivable_no());
+		if(getbills.getBondbills_total() > (int)inmap.get("receivable_total")) {
 			msg = "총 채권금액에 초과합니다. 다시 확인해주세요.";
-			url = "/c/c2/c22/inputBondbills?comcode_code="+comcode_code;
+			url = "/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
 			
 			return ViewPath.RESULT + "loginresult";
 		}
 		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
-		cvo.setClosing_code(receivable_clno);
+		cvo.setClosing_code(receivable_cino);
 		cvo.setCtgr_no(36);
 		cvo.setComcode_no(comcode_no);
 		cvo.setDebtor_no(deptno);
@@ -703,14 +826,12 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("comcode_code", comcode_code);
-		model.addAttribute("receivable_no", vo.getReceivable_no());
-		
-		return "redirect:/c/c2/c22/inputBondbills";
+		return "redirect:/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
 	}
 	
 	@RequestMapping("/c22/updateFormB")
-	public String updateFormB(String comcode_code, Model model, Erp_BondbillsVO vo, String type, String word) {
+	public String updateFormB(String comcode_code, Model model, Erp_BondbillsVO vo, String type, String word, 
+			String bs3_no1, String bs3_no2) {
 		String msg = null;
 		String url = null;
 		
@@ -733,6 +854,7 @@ public class C2Controller {
 			word = null;
 		}
 		
+		Map<String, Object> rmap = new HashMap<>();
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("type", type);
@@ -743,24 +865,28 @@ public class C2Controller {
 			list = c2.bondbillsList(map);
 		}else {
 			map.put("receivable_no", vo.getReceivable_no());
+			rmap = c2.selectReceivable(vo.getReceivable_no());
 			list = c2.receiveBondbills(map);
 		}
 		
 		Map<String, Object> inmap = c2.selectBondbills(vo.getBondbills_no()); 
 		
+		model.addAttribute("rmap", rmap);
+		model.addAttribute("bs3_no1", bs3_no1);
+		model.addAttribute("bs3_no2", bs3_no2);
 		model.addAttribute("inmap", inmap);
 		model.addAttribute("list", list);
 		model.addAttribute("dlist", dlist);
 		model.addAttribute("clist", clist);
 		
-		return ViewPath.C2 + "inputBondbills";
+		return ViewPath.C2 + "/c22/inputBondbills";
 	}
 	
 	@RequestMapping("/c22/updateBondbills")
 	@Transactional
 	public String updateBonbills(String comcode_code, Model model, Erp_BondbillsVO vo, 
 			String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22,
-			String receivable_clno, String debtor_no, String creditor_no) {
+			String receivable_cino, String debtor_no, String creditor_no) {
 		String msg = null;
 		String url = null;
 		
@@ -812,11 +938,12 @@ public class C2Controller {
 		c2.updateBills(vo);
 		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
-		cvo.setClosing_code(receivable_clno);
+		cvo.setClosing_code(vo.getBondbills_code());
 		cvo.setDebtor_no(deptno);
 		cvo.setCreditor_no(creditno);
 		cvo.setClosing_debtor(vo.getBondbills_total());
 		cvo.setClosing_creditor(vo.getBondbills_total());
+		cvo.setClosing_no(c2.getClosingNo(vo.getBondbills_code()));
 		
 		c2.updateClosing(cvo);
 		Map<String, Object> map = new HashMap<>();
@@ -863,17 +990,13 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("receivable_no", vo.getReceivable_no());
-		model.addAttribute("comcode_code", comcode_code);
-		model.addAttribute("bondbills_no", vo.getBondbills_no());
-		
-		return "redirect:/c/c2/c22/updateFormB";
+		return "redirect:/c/c2/c22/updateFormB?bs3_no1="+bs3_no12+"&bs3_no2="+bs3_no22+"&receivable_no="+vo.getReceivable_no()+"&comcode_code="+comcode_code+"&bondbills_no="+vo.getBondbills_no();
 	}
 	
 	@RequestMapping("/c22/deleteBondbills")
 	@Transactional
 	public String deleteBondbills(String comcode_code, Model model, Erp_BondbillsVO vo, 
-			String bs3_no1, String bs3_no2, String receivable_code) {
+			String bs3_no1, String bs3_no2, String receivable_cino) {
 		int b1 = 0;
 		int b2 = 0;
 		
@@ -901,7 +1024,7 @@ public class C2Controller {
 		
 		c2.deleteBills(vo.getBondbills_no());
 		
-		int cno = c2.getClosingNo(receivable_code);
+		int cno = c2.getClosingNo(vo.getBondbills_code());
 		
 		c2.deleteClosing(cno);
 		
@@ -931,7 +1054,51 @@ public class C2Controller {
 		model.addAttribute("comcode_code", comcode_code);
 		model.addAttribute("receivable_no", vo.getReceivable_no());
 		
-		return "redirect:/c/c2/c22/inputBondbills";
+		return "redirect:/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
+	}
+	
+	@RequestMapping("/c22/getUniqueCIno")
+	@ResponseBody
+	public String getUniqueCIno(String receivable_cino) {
+		try {
+			if(receivable_cino == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			c2.getUniqueCIno(receivable_cino);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
+		}
+	}
+	@RequestMapping("/c22/getUniqueCode")
+	@ResponseBody
+	public String getUniqueCode(String receivable_code) {
+		try {
+			if(receivable_code == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			c2.getUniqueCode(receivable_code);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
+		}
+	}
+	
+	@RequestMapping("/c22/getBondbillsCode")
+	@ResponseBody
+	public String getBondbillsCode(String bondbills_code) {
+		try {
+			if(bondbills_code == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			c2.getBondbillsCode(bondbills_code);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
+		}
 	}
 	
 	
@@ -1013,12 +1180,12 @@ public class C2Controller {
 		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		cvo.setClosing_code(vo.getReturn_code());
-		cvo.setClosing_debtor(vo.getReturn_total());
-		cvo.setClosing_creditor(vo.getReturn_total());
+		cvo.setClosing_debtor(vo.getReturn_total()*vo.getReturn_qty());
+		cvo.setClosing_creditor(vo.getReturn_total()*vo.getReturn_qty());
 		cvo.setComcode_no(comcode_no);
 		cvo.setCtgr_no(37);
-		cvo.setDebtor_no(6);
-		cvo.setCreditor_no(1);
+		cvo.setDebtor_no(134);
+		cvo.setCreditor_no(133);
 		
 		c2.createClosing(cvo);
 		
@@ -1027,7 +1194,7 @@ public class C2Controller {
 		
 		Map<String, Object> map = new HashMap<>();
 		
-		map.put("bs3_amount", vo.getReturn_total());
+		map.put("bs3_amount", vo.getReturn_total()*vo.getReturn_qty());
 		map.put("bs3_no", dmap.get("bs3_no"));
 		map.put("bs2_no", dmap.get("bsno2"));
 		map.put("bs1_no", dmap.get("bs1_no"));
@@ -1036,7 +1203,7 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		map.put("bs3_amount", (-vo.getReturn_total()));
+		map.put("bs3_amount", (-vo.getReturn_total()*vo.getReturn_qty()));
 		map.put("bs3_no", cmap.get("bs3_no"));
 		map.put("bs2_no", cmap.get("bsno2"));
 		map.put("bs1_no", cmap.get("bs1_no"));
@@ -1045,9 +1212,7 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("comcode_code", comcode_code);
-		
-		return "redirect:/c/c2/c23/inputReturn";
+		return "redirect:/c/c2/c23/inputReturn?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/c23/updateForm")
@@ -1108,8 +1273,8 @@ public class C2Controller {
 		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		cvo.setClosing_code(vo.getReturn_code());
-		cvo.setClosing_debtor(vo.getReturn_total());
-		cvo.setClosing_creditor(vo.getReturn_total());
+		cvo.setClosing_debtor(vo.getReturn_total()*vo.getReturn_qty());
+		cvo.setClosing_creditor(vo.getReturn_total()*vo.getReturn_qty());
 		cvo.setDebtor_no(134);
 		cvo.setCreditor_no(133);
 		cvo.setClosing_no(cno);
@@ -1120,7 +1285,7 @@ public class C2Controller {
 		Map<String, Object> dmap = c2.getBsNo(6);
 		Map<String, Object> cmap = c2.getBsNo(1);
 		
-		map.put("bs3_amount", (-(int)inmap.get("return_total")));
+		map.put("bs3_amount", (-(int)inmap.get("return_total")*(int)inmap.get("return_qty")));
 		map.put("bs3_no", dmap.get("bs3_no"));
 		map.put("bs2_no", dmap.get("bsno2"));
 		map.put("bs1_no", dmap.get("bs1_no"));
@@ -1129,7 +1294,7 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		map.put("bs3_amount", (int)inmap.get("return_total"));
+		map.put("bs3_amount", (int)inmap.get("return_total")*(int)inmap.get("return_qty"));
 		map.put("bs3_no", cmap.get("bs3_no"));
 		map.put("bs2_no", cmap.get("bsno2"));
 		map.put("bs1_no", cmap.get("bs1_no"));
@@ -1138,21 +1303,19 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		map.put("bs3_amount", vo.getReturn_total());
+		map.put("bs3_amount", vo.getReturn_total()*vo.getReturn_qty());
 		
 		c2.updateBs3Amount(map);
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		map.put("bs3_amount", (-vo.getReturn_total()));
+		map.put("bs3_amount", (-vo.getReturn_total()*vo.getReturn_qty()));
 		
 		c2.updateBs3Amount(map);
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("comcode_code", comcode_code);
-		
-		return "redirect:/c/c2/c23/inputReturn";
+		return "redirect:/c/c2/c23/inputReturn?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/c23/delete")
@@ -1180,7 +1343,7 @@ public class C2Controller {
 		Map<String, Object> dmap = c2.getBsNo(6);
 		Map<String, Object> cmap = c2.getBsNo(1);
 		
-		map.put("bs3_amount", (-vo.getReturn_total()));
+		map.put("bs3_amount", (-vo.getReturn_total()*vo.getReturn_qty()));
 		map.put("bs3_no", dmap.get("bs3_no"));
 		map.put("bs2_no", dmap.get("bsno2"));
 		map.put("bs1_no", dmap.get("bs1_no"));
@@ -1189,7 +1352,7 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		map.put("bs3_amount", vo.getReturn_total());
+		map.put("bs3_amount", vo.getReturn_total()*vo.getReturn_qty());
 		map.put("bs3_no", cmap.get("bs3_no"));
 		map.put("bs2_no", cmap.get("bsno2"));
 		map.put("bs1_no", cmap.get("bs1_no"));
@@ -1198,9 +1361,75 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("comcode_code", comcode_code);
+		return "redirect:/c/c2/c23/inputReturn?comcode_code="+comcode_code;
+	}
+	
+	@RequestMapping("/c23/goodsreturn")
+	public String goodsreturn(String comcode_code, String btype, String bnword, Model model){
+		Map<String, Object> map = new HashMap<>();
 		
-		return "redirect:/c/c2/c23/inputReturn";
+		if(btype == null || bnword == null) {
+			btype = null;
+			bnword = null;
+		}
+		
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == "") {
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("btype", btype);
+		map.put("bnword", bnword);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = c2.goodsReturn(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "/c/c2/c23/goodsList";
+	}
+	@RequestMapping("/c23/goodsreturnajax")
+	@ResponseBody
+	public List<Map<String, Object>> goodsreturnajax(String comcode_code, String btype, String bnword){
+		Map<String, Object> map = new HashMap<>();
+		
+		if(btype == null || bnword == null) {
+			btype = null;
+			bnword = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("btype", btype);
+		map.put("bnword", bnword);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = c2.goodsReturn(map);
+		
+		return list;
+	}
+	
+	@RequestMapping("/c23/returncode")
+	@ResponseBody
+	public String returncode(String return_code) {
+		try {
+			if(return_code == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			c2.getReturnCode(return_code);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
+		}
 	}
 	
 	
@@ -1374,9 +1603,7 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("comcode_code", comcode_code);
-		
-		return "redirect:/c/c2/c25/inputLocalSales";
+		return "redirect:/c/c2/c25/inputLocalSales?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/c25/updateForm")
@@ -1563,11 +1790,7 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		model.addAttribute("comcode_code", comcode_code);
-		model.addAttribute("localsales_no", vo.getLocalsales_no());
-		model.addAttribute("localsales_cino", vo.getLocalsales_cino());
-		
-		return "redirect:/c/c2/c25/updateForm";
+		return "redirect:/c/c2/c25/updateForm?comcode_code="+comcode_code+"&localsales_no="+vo.getLocalsales_no()+"&localsales_cino="+vo.getLocalsales_cino();
 	}
 	
 	@RequestMapping("/c25/delete")
@@ -1632,7 +1855,7 @@ public class C2Controller {
 		
 		model.addAttribute("comcode_code", comcode_code);
 		
-		return "redirect:/c/c2/c25/inputLocalSales";
+		return "redirect:/c/c2/c25/inputLocalSales?comcode_code="+comcode_code;
 	}
 	
 }

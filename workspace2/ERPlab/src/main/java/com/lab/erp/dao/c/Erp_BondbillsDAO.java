@@ -42,8 +42,12 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("c2.selectBondbills", bondbills_no);
 	}
 	
-	public int getBillsTotal(int receivable_no) {
+	public Erp_BondbillsVO getBillsTotal(int receivable_no) {
 		return sqlSession.selectOne("c2.getBillsTotal", receivable_no);
+	}
+	
+	public int getBondbillsCode(String bondbills_code) {
+		return sqlSession.selectOne("c2.getBondbillsCode",bondbills_code);
 	}
 	
 }

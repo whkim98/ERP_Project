@@ -26,8 +26,16 @@ private SqlSession sqlSession;
 		return sqlSession.update("c2.updateReceivable", vo);
 	}
 	
+	public int updateReceiveTotal(Erp_ReceivableVO vo) {
+		return sqlSession.update("c2.updateReceiveTotal", vo);
+	}
+	
 	public int deleteReceivable(int receivable_no) {
 		return sqlSession.delete("c2.deleteReceivable", receivable_no);
+	}
+	
+	public int deleteReceive(int receivable_no) {
+		return sqlSession.delete("c2.deleteReceive", receivable_no);
 	}
 	
 	public List<Map<String, Object>> receivableList(Map<String, Object> map){
@@ -36,6 +44,13 @@ private SqlSession sqlSession;
 	
 	public Map<String, Object> selectReceivable(int receivable_no){
 		return sqlSession.selectOne("c2.selectReceivable", receivable_no);
+	}
+	
+	public int getUniqueCIno(String receivable_cino) {
+		return sqlSession.selectOne("c2.getUniqueCIno", receivable_cino);
+	}
+	public int getUniqueCode(String receivable_code) {
+		return sqlSession.selectOne("c2.getUniqueCode", receivable_code);
 	}
 	
 }

@@ -5,8 +5,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="c2">
 
 <!-- 상품리스트 -->
-	<select id="goodsList" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
-		select * from erp_goods
+	<select id="goodsList" resultType="map" parameterType="map">
+		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec  
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk 
+		where g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.comcode_no = #{comcode_no} 
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' 
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="type == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+		</if>
 	</select>
 
 <!-- 업태 -->
@@ -24,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 <!-- 업종 -->
 	<select id="btSubctgr" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
-		select businesstype_no, businesstype_ctgr, businesstype_subctgr, businesstype_description 
+		select businesstype_no, businesstype_name, businesstype_ctgr, businesstype_subctgr, businesstype_description 
 		from erp_businesstype 
 		<if test="btype != null">
 			<if test="btype == 'businesstype_subctgr'">
@@ -32,6 +61,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="btype == 'businesstype_ctgr'">
 				where businesstype_ctgr like '%${bword}%'
+			</if>
+			<if test="btype == 'businesstype_name'">
+				where businesstype_name like '%${bword}%'
 			</if>
 		</if>
 	</select>
@@ -188,38 +220,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where receivable_no = #{receivable_no}
 	</update>
 	
+	<update id="updateReceiveTotal" parameterType="com.lab.erp.vo.c.Erp_ReceivableVO">
+		update erp_receivable set 
+		receivable_price = #{receivable_price},
+		receivable_tax = #{receivable_tax},
+		receivable_total = #{receivable_total} 
+		where receivable_no = #{receivable_no}
+	</update>
+	
 	<delete id="deleteReceivable" parameterType="int">
 		delete from erp_receivable where receivable_no = #{receivable_no}
 	</delete>
 	
 	<select id="receivableList" parameterType="map" resultType="map">
-		select r.*, c.client_name from erp_receivable r, erp_client c where comcode_no = #{comcode_no}
+		select r.*, c.client_name from erp_receivable r, erp_client c 
+		where r.comcode_no = #{comcode_no} 
+		and r.client_no = c.client_no
 		<if test="type != null">
-			<if test="type == ''">
-				<if test="type == 'all'">
-					and (
-						r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
-						or c.client_name like '%${word}%' or r.receivable_expiry like '%${word}%'
-						)
-				</if>
-				<if test="type == 'receivable_cino'">
-					and r.receivable_cino like '%${word}%'
-				</if>
-				<if test="type == 'receivable_collected'">
-					and r.receivable_collected = #{word}
-				</if>
-				<if test="type == 'client_name'">
-					and c.client_name like '%${word}%'
-				</if>
-				<if test="type == 'receivable_expiry'">
-					and r.receivable_expiry like '%${word}%'
-				</if>
+			<if test="type == 'all'">
+				and (
+					r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
+					or c.client_name like '%${word}%' or date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
+					)
+			</if>
+			<if test="type == 'receivable_cino'">
+				and r.receivable_cino like '%${word}%'
+			</if>
+			<if test="type == 'receivable_collected'">
+				and r.receivable_collected = #{word}
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'receivable_expiry'">
+				and date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
 	</select>
 	
 	<select id="selectReceivable" parameterType="int" resultType="map">
-		select * from erp_receivable where receivable_no = #{receivable_no}
+		select r.*, c.debtor_no, c.creditor_no, d.bs3_no bs3_no1, cr.bs3_no bs3_no2, cl.client_name, cl.client_registeredno, cl.client_manager 
+		from erp_receivable r, erp_closing c, erp_debtor d, erp_creditor cr, erp_client cl 
+		where r.receivable_no = #{receivable_no} 
+		and r.client_no = cl.client_no 
+		and r.receivable_cino = c.closing_code  
+		and d.debtor_no = c.debtor_no 
+		and c.creditor_no = cr.creditor_no 
+	</select>
+	
+	<select id="getUniqueCIno" parameterType="String" resultType="int">
+		select receivable_no from erp_receivable where receivable_cino = #{receivable_cino}
+	</select>
+	<select id="getUniqueCode" parameterType="String" resultType="int">
+		select receivable_no from erp_receivable where receivable_code = #{receivable_code}
 	</select>
 <!-- 수금 -->
 	<insert id="inputBills" parameterType="com.lab.erp.vo.c.Erp_BondbillsVO">
@@ -239,6 +292,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteBills" parameterType="int">
 		delete from erp_bondbills where bondbills_no = #{bondbills_no}
 	</delete>
+	<delete id="deleteReceive" parameterType="int">
+		delete from erp_bondbills where receivable_no = #{receivable_no}
+	</delete>
 	
 	<select id="bondbillsList" parameterType="map" resultType="map">
 		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.* 
@@ -249,9 +305,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-					r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
+					r.receivable_cino like '%${word}%' or r.receivable_collected like ${word == '미수금' ? 0 : 1} 
 					or c.client_name like '%${word}%' or r.receivable_expiry like '%${word}%' 
-					or b.bondbills_date like '%${word}%'
+					or date_format(b.bondbills_date, '%m월 %d일') like '%${word}%'
 					)
 			</if>
 			<if test="type == 'receivable_cino'">
@@ -267,15 +323,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and r.receivable_expiry like '%${word}%'
 			</if>
 			<if test="type == 'bondbills_date'">
-				and b.bondbills_date like '%${word}%'
+				and date_format(b.bondbills_date, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
 	</select>
 	
 	<select id="receiveBondbills" parameterType="map" resultType="map">
-		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.* 
-		from erp_bondbills b, erp_receivable r, erp_client c 
+		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.*, 
+		d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+		from erp_bondbills b, erp_receivable r, erp_client c, erp_closing cl, erp_debtor d, erp_creditor cr  
 		where b.receivable_no = #{receivable_no} 
+		and b.bondbills_code = cl.closing_code 
+		and cl.debtor_no = d.debtor_no 
+		and cl.creditor_no = cr.creditor_no
 		and r.receivable_no = b.receivable_no 
 		and r.client_no = c.client_no
 		<if test="type != null">
@@ -283,7 +343,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and (
 					r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
 					or c.client_name like '%${word}%' or r.receivable_expiry like '%${word}%' 
-					or b.bondbills_date like '%${word}%'
+					or date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
 					)
 			</if>
 			<if test="type == 'receivable_cino'">
@@ -296,7 +356,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and c.client_name like '%${word}%'
 			</if>
 			<if test="type == 'receivable_expiry'">
-				and r.receivable_expiry like '%${word}%'
+				and date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
 			</if>
 			<if test="type == 'bondbills_date'">
 				and b.bondbills_date like '%${word}%'
@@ -305,27 +365,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectBondbills" parameterType="int" resultType="map">
-		select r.receivable_cino, b.* 
-		from erp_bondbills b, erp_receivable r 
+		select r.receivable_cino, r.receivable_total, r.receivable_price, r.receivable_expiry, c.client_name, b.*, 
+		d.bs3_no bs3_no1, cr.bs3_no bs3_no2, cl.debtor_no, cl.creditor_no 
+		from erp_bondbills b, erp_receivable r, erp_client c, erp_closing cl, erp_debtor d, erp_creditor cr 
 		where b.bondbills_no = #{bondbills_no} 
 		and r.receivable_no = b.receivable_no 
+		and r.client_no = c.client_no 
+		and b.bondbills_code = cl.closing_code 
+		and cl.debtor_no = d.debtor_no 
+		and cl.creditor_no = cr.creditor_no 
 	</select>
 	
 	<select id="getBillsTotal" parameterType="int" resultType="com.lab.erp.vo.c.Erp_BondbillsVO">
-		select bondbills_total from erp_bondbills 
+		select sum(bondbills_price) bondbills_price, sum(bondbills_tax) bondbills_tax, sum(bondbills_total) bondbills_total from erp_bondbills 
 		where receivable_no = #{receivable_no} 
 		group by receivable_no
 	</select>
 	
+	<select id="getBondbillsCode" parameterType="String" resultType="int">
+		select bondbills_no from erp_bondbills where bondbills_code = #{bondbills_code}
+	</select>
+	
 <!-- 반품 -->
 	<insert id="inputReturn" parameterType="com.lab.erp.vo.c.c2.Erp_ReturnVO">
-		insert into erp_return(ctgr_no,return_code,goods_no,return_comment,return_date,return_qty,client_no,return_tax,return_price,return_total,comcode_no) 
-		values(37,#{return_code},#{goods_no},#{return_comment},#{return_date},#{return_qty},#{client_no},#{return_tax},#{return_price},#{return_total},#{comcode_no})
+		insert into erp_return(ctgr_no,return_code,goodslot_no,return_comment,return_date,return_qty,client_no,return_tax,return_price,return_total,comcode_no) 
+		values(37,#{return_code},#{goodslot_no},#{return_comment},#{return_date},#{return_qty},#{client_no},#{return_tax},#{return_price},#{return_total},#{comcode_no})
 	</insert>
 	
 	<update id="updateReturn" parameterType="com.lab.erp.vo.c.c2.Erp_ReturnVO">
 		update erp_return set 
-		goods_no = #{goods_no},
+		goodslot_no = #{goodslot_no},
 		return_comment = #{return_comment},
 		return_date = #{return_date},
 		return_qty = #{return_qty},
@@ -347,9 +416,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="returnList" parameterType="map" resultType="map">
-		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, gt.goodsst_spec, r.* 
+		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, c.client_registeredno, c.client_manager, gt.goodsst_spec, r.* 
 		from erp_return r, erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_goodslot gl, erp_client c 
-		where r.goods_no = g.goods_no 
+		where r.goodslot_no = gl.goodslot_no 
 		and g.goods_no = gl.goods_no 
 		and g.goodskind_no = gk.goodskind_no 
 		and gk.goodssort_no = gs.goodssort_no 
@@ -390,14 +459,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectReturn" parameterType="int" resultType="map">
-		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, gt.goodsst_spec, r.* 
-		from erp_return r, erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c 
-		where r.goods_no = g.goods_no 
+		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, c.client_registeredno, c.client_manager, gt.goodsst_spec, 
+		gl.goodslot_total, gl.goodslot_lot, r.* 
+		from erp_return r, erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c, erp_goodslot gl 
+		where r.goodslot_no = gl.goodslot_no 
+		and g.goods_no = gl.goods_no 
 		and g.goodskind_no = gk.goodskind_no 
 		and gk.goodssort_no = gs.goodssort_no 
 		and g.goodsst_no = gt.goodsst_no 
 		and g.client_no1 = c.client_no 
 		and r.return_no = #{return_no}
+	</select>
+	
+	<select id="goodsReturn" resultType="map" parameterType="map">
+		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec, gl.goodslot_lot, gl.goodslot_no, gl.goodslot_total, c.client_name 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_goodslot gl, erp_client c 
+		where g.goodskind_no = gk.goodskind_no 
+		and g.client_no1 = c.client_no 
+		and g.goods_no = gl.goods_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.comcode_no = #{comcode_no} 
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' or gl.goodslot_lot like '%${bnword}%' 
+					or c.client_name like '%${bnword}%' 
+					)
+			</if>
+			<if test="btype == 'goodslot_lot'">
+				and gl.goodslot_lot like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="type == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+			<if test="btype == 'client_name'">
+				and c.client_name like '%${bnword}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="getReturnCode" parameterType="String" resultType="int">
+		select return_no from erp_return where return_code = #{return_code}
 	</select>
 	
 <!-- 국내영업매출 -->
@@ -430,7 +547,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where l.team_no = t.team_no 
 		and l.goods_no = g.goods_no 
 		and l.client_no = c.client_no 
-		and l.settletype_no = s.settletype 
+		and l.settletype_no = s.settletype_no 
 		and l.comcode_no = #{comcode_no}
 		<if test="type != null">
 			<if test="type == 'all'">
@@ -438,7 +555,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					c.client_name like '%${word}%' or g.goods_name like '%${word}%' 
 					or l.localsales_cino like '%${word}%' or t.team_name like '%${word}%' 
 					or s.settletype_condition like '%${word}%' or s.settletype_type like '%${word}%' 
-					or l.localsales_date like '%${word}%' 
+					or date_format(l.localsales_date, '%m월 %d일') like '%${word}%' 
 					)
 			</if>
 			<if test="type == 'client_name'">
@@ -460,17 +577,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and s.settletype_type like '%${word}%'
 			</if>
 			<if test="type == 'localsales_date'">
-				and l.localsales_date like '%${word}%'
+				and date_format(l.localsales_date, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
 	</select>
 	
 	<select id="selectLocalSales" parameterType="int" resultType="map">
-		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type 
+		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type, gl.goodslot_lot, g.goods_name
 		from erp_localsales l, erp_client c, erp_team t, erp_settletype s 
 		where l.team_no = t.team_no 
 		and l.client_no = c.client_no 
-		and l.settletype_no = s.settletype 
+		and l.settletype_no = s.settletype_no 
 		and l.localsales_no = #{localsales_no}
 	</select>
 	

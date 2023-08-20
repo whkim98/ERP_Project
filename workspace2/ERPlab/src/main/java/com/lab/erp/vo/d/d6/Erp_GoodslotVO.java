@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Erp_GoodslotVO {
 	private int goodslot_no;
 	private String goodslot_lot;
+	private int goodslot_qty;
 	private String goodslot_production;
 	private String goodslot_expiry;
 	private int goodslot_price;

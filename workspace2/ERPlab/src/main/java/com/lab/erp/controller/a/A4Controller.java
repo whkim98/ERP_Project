@@ -79,6 +79,7 @@ public class A4Controller {
 			type = null;
 			word = null;
 		}
+		
 		int ctgr = 8;
 		int comcode_no = ls.comNo(comcode_code);
 		

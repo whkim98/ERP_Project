@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 
-<%@include file="/WEB-INF/views/layout/header.jsp" %>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
@@ -12,7 +11,13 @@
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
  font-size:10px;
+
 }
+
+.notosanskr{ 
+ 	margin-top: 70px;
+}
+
 
 .A31 input{
 	width:
@@ -58,146 +63,97 @@ border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
-function surf(v){
-	let sel = document.getElementsByName("type")[0].value;		
-	let val = v.toLowerCase();	
-	let tr = document.getElementsByClassName("filter");		
-	if(sel == 'receivable_cino'){		
-		for (let i = 0; i < tr.length; i++) {	
-			let code = tr[i].getElementsByClassName("code");	
-	        if (code[0].innerHTML.toLowerCase().indexOf(val) != -1) {	
-	          tr[i].style.display = ""		
-	        } else {
-	          tr[i].style.display = "none"	
-	        }
-	    }
-	}else if(sel == 'receivable_expiry'){
-		for (let i = 0; i < tr.length; i++) {
-			let expiry = tr[i].getElementsByClassName("receivable_expiry");
-	        if (expiry[0].value.toLowerCase().indexOf(val) != -1) {	
-	          tr[i].style.display = ""
-	        } else {
-	          tr[i].style.display = "none"
-	        }
-	    }
-	}else if(sel == 'receivable_collected'){
-		for (let i = 0; i < tr.length; i++) {
-			let cont = tr[i].getElementsByClassName("cont");
-	        if (cont[0].innerHTML.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'client_name'){
-		for (let i = 0; i < tr.length; i++) {
-			let cname = tr[i].getElementsByClassName("client_name");
-	        if (cname[0].value.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'receivable_total'){
-		for (let i = 0; i < tr.length; i++) {
-			let date = tr[i].getElementsByClassName("price");
-	        if (date[0].innerHTML.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
-	}else if(sel == 'all'){
-		for (let i = 0; i < tr.length; i++) {
-			let expiry = tr[i].getElementsByClassName("receivable_expiry");
-			let cname = tr[i].getElementsByClassName("client_name");
-			let cont = tr[i].getElementsByClassName("cont");
-			let code = tr[i].getElementsByClassName("code");
-			let price = tr[i].getElementsByClassName("price");
-	        if (expiry[0].value.toLowerCase().indexOf(val) != -1 || code[0].innerHTML.toLowerCase().indexOf(val) != -1 || 
-	        	price[0].innerHTML.toLowerCase().indexOf(val) != -1 || cont[0].innerHTML.toLowerCase().indexOf(val) != -1 || 
-	        	cname[0].value.toLowerCase().indexOf(val) != -1) {
-	          tr[i].style.display = "";
-	        } else {
-	          tr[i].style.display = "none";
-	        }
-	    }
+function surf(v, code, no){
+	var type = document.getElementsByName("type")[0].value;
+	if(v == ''){
+		type = null;
+		v = null;
 	}
+	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type+"&receivable_no="+no;
+	
+	sendRequest(url,param,getlist,"POST");
 }
-
-//전체목록조회 > 새창으로
-function searchim(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searchim", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
-}
-function searcht(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
-}
-function acList(code, team){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/acList?comcode_code="+code+"&team_code="+team, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
-}
-function clList(code){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a4/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
-}
-
-//자동완성 > AJAX
-function imkind(e, name){
-	if(e.keyCode == 13){
-		if(name == ""){		// 매개변수값이 비어있는 지 판단
-			alert("종류를 입력해주세요.");
-			document.getElementById("imkind_name").focus();
-			return;	// 비어있으면 imkind_name에 포커싱되고 메소드 종료
-		}
-		var url = "${pageContext.request.contextPath}/a/a4/imkind";		// url 경로 지정 > controller 매핑
-		var param = "imkind_name=" + encodeURIComponent(name);		// controller에 넘길 데이터 인코드해서 세팅
-		
-		sendRequest(url, param, investmentkind, "POST");	// httpRequest.js에 있는 sendRequest함수 실행 > (경로,넘길데이터,콜벡함수,방식);
-	}
-}
-function investmentkind(){	// 콜벡함수
-	if(xhr.readyState==4 && xhr.status==200) {		// 신호가 정상인 지 판단
-		var data = xhr.response;	// 넘어온 데이터 세팅
-		if(data != ""){			// 넘어온 데이터가 null인지 판단
-			var data2 = JSON.parse(data);		// 넘어온 데이터 json으로 변형
-			document.getElementById("imkind_name").value = data2.imkind_name;	// 넘어온 데이터 input태그에 세팅
-			document.getElementById("imkind_no").value = data2.imkind_no;
-		}else {
-			document.getElementById("imkind_name").value = '';		// 데이터가 비어있으면 실행
-			alert("조회된 종류가 없습니다. 조회 버튼을 클릭하여 목록에서 종류를 선택해주세요.");
-		}
-	}
-}
-
-function team(e, name){
-	if(e.keyCode == 13){
-		if(name == ""){
-			alert("팀명을 입력해주세요.");
-			document.getElementById("team_name").focus();
-			return;
-		}
-		var url = "${pageContext.request.contextPath}/a/a4/team";
-		var param = "team_name=" + encodeURIComponent(name);
-		
-		sendRequest(url, param, teamname, "POST");
-	}
-}
-function teamname(){
-	if(xhr.readyState==4 && xhr.status==200) {
+function getlist(){
+	if(xhr.readyState==4 && xhr.status==200) {	
 		var data = xhr.response;
+		let procode = document.getElementById("procode");
+		let newTr = document.createElement("tr");
+		let newTd = document.createElement("td");
+		procode.innerHTML = '';
+		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
-			document.getElementById("team_name").value = data2.team_name;
-			document.getElementById("team_no").value = data2.team_no;
+			data2.forEach(function(map){
+				newTr = document.createElement("tr");
+				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				procode.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.receivable_cino;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.bondbills_total;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.bondbills_date;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.receivable_total;
+				newTr.appendChild(newTd);
+			});
 		}else {
-			document.getElementById("team_name").value = '';
-			alert("중복된 팀 이름입니다. 조회 버튼을 클릭하여 목록에서 팀을 선택해주세요.");
+			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+		}
+	}
+}
+function surf1(v, code){
+	var type = document.getElementsByName("type")[0].value;
+	if(v == ''){
+		type = null;
+		v = null;
+	}
+	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax2";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;
+	
+	sendRequest(url,param,getlist,"POST");
+}
+function getlist(){
+	if(xhr.readyState==4 && xhr.status==200) {	
+		var data = xhr.response;
+		let procode = document.getElementById("procode");
+		let newTr = document.createElement("tr");
+		let newTd = document.createElement("td");
+		procode.innerHTML = '';
+		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
+		if(data != ""){
+			var data2 = JSON.parse(data);
+			data2.forEach(function(map){
+				newTr = document.createElement("tr");
+				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				procode.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.receivable_cino;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.bondbills_total;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.bondbills_date;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.receivable_total;
+				newTr.appendChild(newTd);
+			});
+		}else {
+			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
 		}
 	}
 }
 </script>
-
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">자금 조달</h1>
+			<h1 style="font-size: 20pt;">수금</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -213,10 +169,18 @@ function teamname(){
 								<option value="receivable_total" ${param.type == 'receivable_total' ? 'selected' : '' }>금액</option>
 							</select>
 						</td>
-						<td>
-							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value)">
-							<input type="button" value="전체목록" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?type=null&comcode_code=${comcode_code }'">
-						</td>
+						<c:if test="${rmap.receivable_no != null }">
+							<td>
+								<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}', ${rmap.receivable_no })">
+								<input type="button" value="전체목록" onclick="surf('', '${comcode_code}', ${rmap.receivable_no })">
+							</td>
+						</c:if>
+						<c:if test="${rmap.receivable_no == null }">
+							<td>
+								<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf1(this.value, '${comcode_code}')">
+								<input type="button" value="전체목록" onclick="surf1('', '${comcode_code}')">
+							</td>
+						</c:if>
 					</tr>
 				</table>
 			</div>
@@ -225,17 +189,17 @@ function teamname(){
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
-						<td>코드</td>
-						<td>금액</td>
-						<td>적요</td>
+						<td>채권코드</td>
+						<td>수금액</td>
+						<td>수금일자</td>
+						<td>채권 총액</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
-					<tr onclick="selectForm(${map.investment_no}, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
-						<td class="code">${map.receivable_cino }
-						<input type="hidden" class="receivable_expiry" value="${map.receivable_expiry }">
-						<input type="hidden" class="client_name" value="${map.client_name }">
-						<td class="price">${map.receivable_total }</td>
-						<td class="cont">${map.receivable_collected == 0 ? '미수금' : '수금'}</td>
+					<tr onclick="selectForm(${map.receivable_no}, ${map.bondbills_no }, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
+						<td class="code">${map.receivable_cino }</td>
+						<td class="price">${map.bondbills_total }</td>
+						<td class="cont">${map.bondbills_date}</td>
+						<td>${map.receivable_total}</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -245,12 +209,13 @@ function teamname(){
 				</table>
 			</div>
 			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22/inputBondbills?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/c/c2/c22/updateFormB" id="content" method="post">
 				<input type="hidden" name="receivable_no">
+				<input type="hidden" name="bondbills_no">
 				<input type="hidden" name="bs3_no1">
 				<input type="hidden" name="bs3_no2">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
@@ -265,76 +230,58 @@ function teamname(){
 		<div id="add" class="divform3">
 			<c:choose>
 				<c:when test="${inmap != null }">
-					<form action="${pageContext.request.contextPath }/a/a4/a41/update" method="POST" id="update">
+					<form action="${pageContext.request.contextPath }/c/c2/c22/updateBondbills" method="POST" id="update">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="investment_no" value="${inmap.investment_no }">
-						<input type="hidden" name="imkind_no" id="imkind_no" value="${inmap.imkind_no }">
-						<input type="hidden" name="ctgr_no" id="ctgr_no" value="8">
-						<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
-						<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
-						<input type="hidden" name="account_no" id="account_no" value="${inmap.account_no }">
+						<input type="hidden" name="bondbills_no" value="${inmap.bondbills_no }">
+						<input type="hidden" name="receivable_no" value="${inmap.receivable_no }">
 						<input type="hidden" name="bs3_no11" id="bs3_no11" value="${bs3_no1 }">
 						<input type="hidden" name="bs3_no21" id="bs3_no21" value="${bs3_no2 }">
 						<input type="hidden" name="bs3_no12" id="bs3_no12">
 						<input type="hidden" name="bs3_no22" id="bs3_no22">
-						<input type="hidden" name="investment_status" id="investment_status" value="1">
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
 							<span class="red">는 필수 입력란입니다.</span>
 						</div>
+						
+						<div>
+							<label>수금 코드 </label>
+							<input type="text" name="bondbills_code" id="bondbills_code" value="${inmap.bondbills_code }" readonly="readonly" maxlength="30" class="required">
+						</div>
 							
 						<div>
-							<label>코드 </label>
-							<input type="text" name="investment_code" id="investment_code" value="${inmap.investment_code }" readonly="readonly" maxlength="30" class="required">
+							<label>CI NUMBER </label>
+							<input type="text" name="receivable_cino" id="receivable_cino" value="${inmap.receivable_cino }" readonly="readonly" class="required">
 						</div>
 						
 						<div>
 							<label>기간 </label>
-							<input type="date" name="investment_start" id="investment_start" value="${inmap.investment_start }"> ~ <input type="date" name="investment_end" id="investment_end" value="${inmap.investment_end }">
+							<input type="date" name="receivable_expiry" id="receivable_expiry" value="${inmap.receivable_expiry }">
 						</div>
 						
 						<div>
-							<label>금액 </label>
-							<input type="text" name="investment_price" id="investment_price" value="${inmap.investment_price }">
-						</div>				
+							<label>채권 총액 </label>
+							<input type="text" name="receivable_total" id="receivable_total" value="${inmap.receivable_total }">
+						</div>
 						
 						<div>
 							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" value="${cvo.client_name }">
-							<input type="button" onclick="clList('${comcode_code}')" value="조회">
-						</div>	
-							
-						<div>
-							<label>사업자등록번호 </label>
-							<input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly" value="${cvo.client_registeredno }">
+							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }">
 						</div>	
 						
 						<div>
-							<label>담당자 </label>
-							<input type="text" name="client_manager" id="client_manager" readonly="readonly" value="${cvo.client_manager }">
+							<label>수금액 </label>
+							<input type="text" name="bondbills_price" id="bondbills_price" value="${inmap.bondbills_price }" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)">
 						</div>
 						
 						<div>
-							<label>투자 종류</label>
-							<input type="text" name="imkind_name" id="imkind_name" value="${inmap.imkind_name }" onkeypress="imkind(event, this.value)">
-							<input type="button" onclick="searchim()" value="조회">
+							<label>세액 </label>
+							<input type="text" name="bondbills_tax" id="bondbills_tax" value="${inmap.bondbills_tax }" readonly="readonly">
 						</div>
 						
 						<div>
-							<label>적요 </label>
-							<input type="text" name="investment_content" id="investment_content" value="${inmap.investment_content }" maxlength="500">
-						</div>
-						
-						<div>
-							<label>은행 </label>
-							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}', '${inmap.team_code }')" value="${avo.account_bank }" readonly="readonly">
-							<input type="button" onclick="acList('${comcode_code}', '${inmap.team_code }')" value="조회">
-						</div>
-						
-						<div>
-							<label>계좌번호 </label>
-							<td><input type="text" name="account_num" id="account_num" value="${avo.account_num }" readonly="readonly">
+							<label>수금 총액 </label>
+							<td><input type="text" name="bondbills_total" id="bondbills_total" value="${inmap.bondbills_total }" readonly="readonly">
 						</div>
 						
 						<div>
@@ -342,7 +289,7 @@ function teamname(){
 							<select name="debtor_no" id="debtor_no" onchange="check12()" class="required">
 								<c:forEach var="vo1" items="${dlist }">
 								<c:choose>
-								<c:when test="${vo1.bs3_ctgr == inmap.bs3_ctgr1 }">
+								<c:when test="${vo1.bs3_no == inmap.bs3_no1 }">
 									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }" selected>${vo1.bs3_ctgr }</option>
 								</c:when>
 								<c:otherwise>
@@ -358,7 +305,7 @@ function teamname(){
 							<select name="creditor_no" id="creditor_no" onchange="check22()" class="required">
 								<c:forEach var="vo2" items="${clist }">
 								<c:choose>
-								<c:when test="${vo2.bs3_ctgr == inmap.bs3_ctgr2 }">
+								<c:when test="${vo2.bs3_no == inmap.bs3_no2 }">
 									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }" selected>${vo2.bs3_ctgr }</option>
 								</c:when>
 								<c:otherwise>
@@ -369,94 +316,78 @@ function teamname(){
 							</select>
 						</div>
 						
-						<div>
-							<label>담당팀 </label>
-							<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }">
-							<input type="button" onclick="searcht()" value="조회">
-						</div>		
-						
-						<div>
-							<label>비고 </label>
-							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500">
-						</div>	
-						
 						<div align="right">
 							<input type="button" value="update" onclick="sub(this.form)">
-							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
+							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.bondbills_no }, '${comcode_code }', '${inmap.receivable_cino }')">
+							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
 						</div>
 					</form>
 				</c:when>
 				<c:otherwise>
-					<form action="${pageContext.request.contextPath }/a/a4/a41/createLoan" method="POST" id="create">
+					<form action="${pageContext.request.contextPath }/c/c2/c22/createBondbills" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="imkind_no" id="imkind_no" value="13">
-						<input type="hidden" name="ctgr_no" id="ctgr_no" value="8">
-						<input type="hidden" name="client_no" id="client_no" value="17">
-						<input type="hidden" name="team_no" id="team_no" value="1">
+						<input type="hidden" name="receivable_no" value="${rmap.receivable_no }">
 						<input type="hidden" name="bs3_no1" id="bs3_no1">
 						<input type="hidden" name="bs3_no2" id="bs3_no2">
-						<input type="hidden" name="account_no" id="account_no" value="1">
-						<input type="hidden" name="investment_status" id="investment_status" value="1">
-							<h3>차입 등록 사항</h3>
+						<h3>수금 등록 사항</h3>
+						<div class="warning_box">
+							<span class="red bigger">* </span>
+							<div class="yellow_box"></div>
+							<span class="red">는 필수 입력란입니다.</span>
+						</div>
+							
 						<div>
-							<label>코드 </label>
-							<input type="text" name="investment_code" id="investment_code" onblur="imcode(this.value)" maxlength="30" class="required">
-							<h6 id="imcodecheck" style="color:red;"></h6>
+							<label>수금 코드 </label>
+							<input type="text" name="bondbills_code" id="bondbills_code" maxlength="30" class="required" onblur="code(this.value)">
+							<h6 id="billscode" style="color:red;"></h6>
 						</div>
 						
 						<div>
-							<label>기간 </label>
-							<input type="date" name="investment_start" id="investment_start"> ~ <input type="date" name="investment_end" id="investment_end">
+							<label>CI NUMBER </label>
+							<input type="text" name="receivable_cino" id="receivable_cino" value="${rmap.receivable_cino }" readonly="readonly" maxlength="30" class="required">
 						</div>
 						
 						<div>
-							<label>금액 </label>
-							<input type="text" name="investment_price" id="investment_price">
-						</div>				
+							<label>만기도래일 </label>
+							<input type="date" name="receivable_expiry" id="receivable_expiry" value="${rmap.receivable_expiry }" readonly="readonly">
+						</div>
+						
+						<div>
+							<label>채권 총액 </label>
+							<input type="text" name="receivable_total" id="receivable_total" value="${rmap.receivable_total }" readonly="readonly">
+						</div>
 						
 						<div>
 							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')">
-							<input type="button" onclick="clList('${comcode_code}')" value="조회">
-						</div>	
-							
-						<div>
-							<label>사업자등록번호 </label>
-							<input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly">
+							<input type="text" name="client_name" id="client_name" value="${rmap.client_name }" readonly="readonly">
 						</div>	
 						
 						<div>
-							<label>담당자 </label>
-							<input type="text" name="client_manager" id="client_manager" readonly="readonly">
+							<label>수금액 </label>
+							<input type="text" name="bondbills_price" id="bondbills_price" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)" class="required">
 						</div>
 						
 						<div>
-							<label>투자 종류</label>
-							<input type="text" name="imkind_name" id="imkind_name" onkeypress="imkind(event, this.value)">
-							<input type="button" onclick="searchim()" value="조회">
+							<label>세액 </label>
+							<input type="text" name="bondbills_tax" id="bondbills_tax" readonly="readonly">
 						</div>
 						
 						<div>
-							<label>적요 </label>
-							<input type="text" name="investment_content" id="investment_content" maxlength="500">
+							<label>수금 총액 </label>
+							<input type="text" name="bondbills_total" id="bondbills_total" readonly="readonly">
 						</div>
 						
 						<div>
-							<label>은행 </label>
-							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}', '${map.team_code }')" readonly="readonly">
-							<input type="button" onclick="acList('${comcode_code}', '${map.team_code }')" value="조회">
-						</div>
-						
-						<div>
-							<label>계좌번호 </label>
-							<input type="text" name="account_num" id="account_num" readonly="readonly">
+							<label>수금일자 </label>
+							<input type="text" name="bondbills_date" id="bondbills_date" class="required">
 						</div>
 						
 						<div>
 							<label>차변 </label>
 							<select name="debtor_no" id="debtor_no" onchange="check1()" class="required">
+								<option value="0" selected>선택</option>
 								<c:forEach var="vo1" items="${dlist }">
-									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }" selected>${vo1.bs3_ctgr }</option>
+									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }">${vo1.bs3_ctgr }</option>
 								</c:forEach>
 							</select>
 						</div>	
@@ -464,25 +395,16 @@ function teamname(){
 						<div>
 							<label>대변</label> 
 							<select name="creditor_no" id="creditor_no" onchange="check2()" class="required">
+								<option value="0" selected>선택</option>
 								<c:forEach var="vo2" items="${clist }">
-									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }" selected>${vo2.bs3_ctgr }</option>
+									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }">${vo2.bs3_ctgr }</option>
 								</c:forEach>
 							</select>
 						</div>
-						
 						<div>
-							<label>담당팀 </label>
-							<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
-							<input type="button" onclick="searcht()" value="조회">
-						</div>		
-						
-						<div>
-							<label>비고 </label>
-							<input type="text" name="investment_note" id="investment_note" maxlength="500">
-						</div>	
-						<div>
-							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
+							<input type="button" id="register" value="save" onclick="sub(this.form, ${rmap.receivable_price})" disabled="disabled">
 							<input type="reset" value="reset">
+							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
 						</div>
 					</form>
 				</c:otherwise>
@@ -494,33 +416,22 @@ function teamname(){
 <script type="text/javascript">
 
 // 삭제버튼 경로 및 넘길 parameter 설정
-function deletei(no1, no2, ino, code){
-	location.href='${pageContext.request.contextPath }/a/a4/a41/delete?investment_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code;
+function deletei(no1, no2, ino, code, rcode){
+	location.href='${pageContext.request.contextPath }/c/c2/c22/deleteBondbills?bondbills_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code+"&receivable_cino="+rcode;
 }
 
-
-// 코드 UNIQUE 검사 AJAX
-function imcode(v){
-	var url = "${pageContext.request.contextPath }/a/a4/imcode";	// controller mapping 지정
-	var param = "investment_code="+encodeURIComponent(v);			// parameter로 넘길 데이터 인코드해서 설정
-	
-	sendRequest(url,param,imcodecheck,"POST");		// httpRequest.js파일에 있는 sendRequest메소드 실행 > (경로, 데이터, 콜벡함수, 방식)
-}
-function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
-	if(xhr.readyState==4 && xhr.status==200) {		// 신호가 정상인지 판단
-		var data = xhr.responseText;				// controller에서 넘어온 데이터
-		if(data != ""){		// 데이터가 정상적으로 넘어왔는 지 판단
-			if(data == "사용 가능한 코드입니다."){		// 데이터값 판단
-				document.getElementById("imcodecheck").innerText = data;	// imcodecheck라는 id의 text에 넘어온 data 저장
-				document.getElementById("imcodecheck").style.color = "blue";
-				document.getElementById("register").disabled = false;		// register 라는 id의 태그 활성화 > 버튼 활성화
-			}else {
-				document.getElementById("imcodecheck").innerText = data;
-				document.getElementById("register").disabled = true;		// 버튼 비활성화
-				document.getElementById("investment_code").focus();			// investment_code에 커서 지정
-			}
-		}
+function conculator(e, v){
+	if(e.keyCode == 13){
+		document.getElementById("bondbills_tax").value = Number(v) * 0.1;
+		let tax = document.getElementById("bondbills_tax").value; 
+		document.getElementById("bondbills_total").value = Number(v) + Number(tax);
 	}
+}
+
+function conculator1(v){
+	document.getElementById("bondbills_tax").value = Number(v) * 0.1;
+	let tax = document.getElementById("bondbills_tax").value; 
+	document.getElementById("bondbills_total").value = Number(v) + Number(tax);
 }
 
 
@@ -569,10 +480,16 @@ function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
 
 	
 // submit 유효성 검사
-function sub(f){
+function sub(f, total){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
-	if(f.investment_code.value == ""){
-		f.investment_code.focus();
+	if(f.bondbills_price.value == ""){
+		f.bondbills_price.focus();
+		return;
+	}else if(f.bondbills_tax.value == ""){
+		f.bondbills_tax.focus();
+		return;
+	}else if(f.bondbills_total.value == ""){
+		f.bondbills_total.focus();
 		return;
 	}else if(f.debtor_no.value == 0){
 		f.debtor_no.focus();
@@ -584,75 +501,13 @@ function sub(f){
 		alert("계정과목이 같습니다. 다시 선택해주세요.");
 		f.debtor_no.focus();
 		return;
-	}else if(f.investment_price.value == ""){
-		var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");	// 확인 true, 취소 false
-		if(ch){
-			f.investment_price.value = 0;
-			f.submit();
-		}else{
-			f.investment_price.focus();
-			return;
-		}
-	}else if(!pat.test(f.investment_price.value)){
-		alert("100,000,000미만, 숫자만 입력 가능합니다.");
-		f.investment_price.focus();
+	}else if(f.bondbills_date.value == ""){
+		f.bondbills_date.focus();
 		return;
-	}else if(f.investment_start.value == "" || f.investment_end.value == ""){
-		var ch = confirm("기간이 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_end.focus();
-			return;
-		}
-	}else if(f.client_name.value == ""){
-		var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_name.focus();
-			return;
-		}
-	}else if(f.imkind_name.value == ""){
-		var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.imkind_name.focus();
-			return;
-		}
-	}else if(f.investment_content.value == ""){
-		var ch = confirm("적요가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_content.focus();
-			return;
-		}
-	}else if(f.account_bank.value == ""){
-		var ch = confirm("계좌가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.account_bank.focus();
-			return;
-		}
-	}else if(f.team_name.value == ""){
-		var ch = confirm("담당팀이 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.team_name.focus();
-			return;
-		}
-	}else if(f.investment_note.value == ""){
-		var ch = confirm("비고가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_note.focus();
-			return;
-		}
+	}else if(!pat.test(f.bondbills_price.value)){
+		alert("채권 금액인 "+total+"원 미만, 숫자만 입력 가능합니다.");
+		f.bondbills_price.focus();
+		return;
 	}else {
 		var ch = confirm("등록하시겠습니까?");
 		if(ch){
@@ -663,44 +518,35 @@ function sub(f){
 	}
 }
 
-
-// 거래처 자동완성 AJAX
-function searchcl(e, code){
-	if(e.keyCode == 13){
-		var clname = document.getElementById("client_name").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("client_name").focus();
-			return;
-		}
-		var url = "${pageContext.request.contextPath}/a/a4/searchcl";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
-		
-		sendRequest(url, param, clName, "POST");
-	}
+//코드 UNIQUE 검사 AJAX
+function code(v){
+	var url = "${pageContext.request.contextPath }/c/c2/c22/getBondbillsCode";
+	var param = "bondbills_code="+encodeURIComponent(v);
+	
+	sendRequest(url,param,codecheck,"POST");
 }
-function clName(){
+function codecheck(){
 	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);	// ajax로 받아온 데이터를 json으로 변형
-			document.getElementById("client_no").value = data2.client_no;
-			document.getElementById("client_name").value = data2.client_name;
-			document.getElementById("client_registeredno").value = data2.client_registeredno;
-			document.getElementById("client_manager").value = data2.client_manager;
-		}else {
-			document.getElementById("client_name").value = '';
-			document.getElementById("client_registeredno").value = '';
-			document.getElementById("client_manager").value = '';
-			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
+		var data = xhr.responseText;
+		if(data != ""){	
+			if(data == "사용 가능한 코드입니다."){
+				document.getElementById("billscode").innerText = data;
+				document.getElementById("billscode").style.color = "blue";
+				document.getElementById("register").disabled = false;
+			}else {
+				document.getElementById("billscode").innerText = data;
+				document.getElementById("register").disabled = true;
+				document.getElementById("bondbills_code").focus();	
+			}
 		}
 	}
 }
 
 
 // 리스트에서 글 선택 시 넘어가는 form
-function selectForm(no, bno1, bno2){
-	document.getElementsByName("investment_no")[0].value = no;
+function selectForm(no, bno, bno1, bno2){
+	document.getElementsByName("receivable_no")[0].value = no;
+	document.getElementsByName("bondbills_no")[0].value = bno;
 	document.getElementsByName("bs3_no1")[0].value = bno1;
 	document.getElementsByName("bs3_no2")[0].value = bno2;
 	
@@ -709,4 +555,6 @@ function selectForm(no, bno1, bno2){
 
 
 </script>
-<%@ include file="/WEB-INF/views/layout/footer.jsp"%>
+</div>
+</body>
+</html>

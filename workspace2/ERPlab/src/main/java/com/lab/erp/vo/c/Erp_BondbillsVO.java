@@ -9,6 +9,7 @@ import lombok.*;
 public class Erp_BondbillsVO {
 
 	private int bondbills_no;
+	private String bondbills_code;
 	private int receivable_no;
 	private String bondbills_date;
 	private int bondbills_price;

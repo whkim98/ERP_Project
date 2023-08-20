@@ -3,11 +3,13 @@
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 
 <%@include file="/WEB-INF/views/layout/header.jsp" %>
+
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <link href="/webdesign/assets/css/dh/main.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/css/a/a_company.css" />
+
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -48,12 +50,15 @@
 	background-color: #000;
 }
 </style>
+
+
 <script type="text/javascript" charset="UTF-8">
 
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
 	var url = "${pageContext.request.contextPath}/a/a4/a42/leaseAjax";
 	if(v == ''){
+		type = null;
 		v = null;
 	}
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
@@ -72,6 +77,7 @@ function getlist(){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
+				newTr.setAttribute("onclick", "selectForm("+map.investment_no+", "+map.bs3_no1+", "+map.bs3_no2+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.investment_code;
@@ -158,7 +164,224 @@ function teamname(){
 		}
 	}
 }
+
+//삭제버튼 경로 및 넘길 parameter 설정
+function deletei(no1, no2, ino, code){
+	location.href='${pageContext.request.contextPath }/a/a4/a42/delete?investment_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code;
+}
+
+
+// 코드 UNIQUE 검사 AJAX
+function imcode(v){
+	var url = "${pageContext.request.contextPath }/a/a4/imcode";	// controller mapping 지정
+	var param = "investment_code="+encodeURIComponent(v);			// parameter로 넘길 데이터 인코드해서 설정
+	
+	sendRequest(url,param,imcodecheck,"POST");		// httpRequest.js파일에 있는 sendRequest메소드 실행 > (경로, 데이터, 콜벡함수, 방식)
+}
+function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
+	if(xhr.readyState==4 && xhr.status==200) {		// 신호가 정상인지 판단
+		var data = xhr.responseText;				// controller에서 넘어온 데이터
+		if(data != ""){		// 데이터가 정상적으로 넘어왔는 지 판단
+			if(data == "사용 가능한 코드입니다."){		// 데이터값 판단
+				document.getElementById("imcodecheck").innerText = data;	// imcodecheck라는 id의 text에 넘어온 data 저장
+				document.getElementById("imcodecheck").style.color = "blue";
+				document.getElementById("register").disabled = false;		// register 라는 id의 태그 활성화 > 버튼 활성화
+			}else {
+				document.getElementById("imcodecheck").innerText = data;
+				document.getElementById("register").disabled = true;		// 버튼 비활성화
+				document.getElementById("investment_code").focus();			// investment_code에 커서 지정
+			}
+		}
+	}
+}
+
+
+//	bs3_no 세팅
+	function check1(){
+		let t = document.getElementById("debtor_no");	// debtor_no 불러옴
+		let arr = document.querySelectorAll("#debtor_no > option");	// debtor_no의 옵션 태그들 nodelist로 불러옴
+		let bs3_no1 = document.getElementById("bs3_no1");	// bs3_no1 불러옴
+		arr.forEach(function(e, i, array) {
+			if(t.value == e.value){		// 위에서 선언한 debtor_no를 불러온 값과 option태그들의 value값을 for문으로 전부 검사
+				bs3_no1.value = e.id;	// value가 같으면 해당 옵션태그의 id를 bs3_no1에 저장
+			}					// check 메소드 전부 동일
+		});
+	}
+	function check2(){
+		let t = document.getElementById("creditor_no");
+		let arr = document.querySelectorAll("#creditor_no > option");
+		let bs3_no2 = document.getElementById("bs3_no2");
+		arr.forEach(function(e, i, array) {
+			if(t.value == e.value){
+				bs3_no2.value = e.id;
+			}
+		});
+	}
+	
+	function check12(){
+		let t = document.getElementById("debtor_no");
+		let arr = document.querySelectorAll("#debtor_no > option");
+		let bs3_no1 = document.getElementById("bs3_no12");
+		arr.forEach(function(e, i, array) {
+			if(t.value == e.value){
+				bs3_no1.value = e.id;
+			}
+		});
+	}
+	function check22(){
+		let t = document.getElementById("creditor_no");
+		let arr = document.querySelectorAll("#creditor_no > option");
+		let bs3_no2 = document.getElementById("bs3_no22");
+		arr.forEach(function(e, i, array) {
+			if(t.value == e.value){
+				bs3_no2.value = e.id;
+			}
+		});
+	}
+
+	
+// submit 유효성 검사
+function sub(f){
+	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
+	if(f.investment_code.value == ""){
+		f.investment_code.focus();
+		return;
+	}else if(f.debtor_no.value == 0){
+		f.debtor_no.focus();
+		return;
+	}else if(f.creditor_no.value == 0){
+		f.creditor_no.focus();
+		return;
+	}else if(f.creditor_no.value == f.debtor_no.value){
+		alert("계정과목이 같습니다. 다시 선택해주세요.");
+		f.debtor_no.focus();
+		return;
+	}else if(f.investment_price.value == ""){
+		var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");	// 확인 true, 취소 false
+		if(ch){
+			f.investment_price.value = 0;
+			f.submit();
+		}else{
+			f.investment_price.focus();
+			return;
+		}
+	}else if(!pat.test(f.investment_price.value)){
+		alert("100,000,000미만, 숫자만 입력 가능합니다.");
+		f.investment_price.focus();
+		return;
+	}else if(f.investment_start.value == "" || f.investment_end.value == ""){
+		var ch = confirm("기간이 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.investment_end.focus();
+			return;
+		}
+	}else if(f.client_name.value == ""){
+		var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.client_name.focus();
+			return;
+		}
+	}else if(f.imkind_name.value == ""){
+		var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.imkind_name.focus();
+			return;
+		}
+	}else if(f.investment_content.value == ""){
+		var ch = confirm("적요가 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.investment_content.focus();
+			return;
+		}
+	}else if(f.account_bank.value == ""){
+		var ch = confirm("계좌가 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.account_bank.focus();
+			return;
+		}
+	}else if(f.team_name.value == ""){
+		var ch = confirm("담당팀이 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.team_name.focus();
+			return;
+		}
+	}else if(f.investment_note.value == ""){
+		var ch = confirm("비고가 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.investment_note.focus();
+			return;
+		}
+	}else {
+		var ch = confirm("등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			return;
+		}
+	}
+}
+
+
+// 거래처 자동완성 AJAX
+function searchcl(e, code){
+	if(e.keyCode == 13){
+		var clname = document.getElementById("client_name").value;
+		if(clname == ""){
+			alert("조회할 거래처명을 입력해주세요.");
+			document.getElementById("client_name").focus();
+			return;
+		}
+		var url = "${pageContext.request.contextPath}/a/a4/searchcl";
+		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
+		
+		sendRequest(url, param, clName, "POST");
+	}
+}
+function clName(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.response;
+		if(data != ""){
+			var data2 = JSON.parse(data);	// ajax로 받아온 데이터를 json으로 변형
+			document.getElementById("client_no").value = data2.client_no;
+			document.getElementById("client_name").value = data2.client_name;
+			document.getElementById("client_registeredno").value = data2.client_registeredno;
+			document.getElementById("client_manager").value = data2.client_manager;
+		}else {
+			document.getElementById("client_name").value = '';
+			document.getElementById("client_registeredno").value = '';
+			document.getElementById("client_manager").value = '';
+			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
+		}
+	}
+}
+
+
+// 리스트에서 글 선택 시 넘어가는 form
+function selectForm(no, bno1, bno2){
+	document.getElementsByName("investment_no")[0].value = no;
+	document.getElementsByName("bs3_no1")[0].value = bno1;
+	document.getElementsByName("bs3_no2")[0].value = bno2;
+	
+	document.getElementById("content").submit(); // content라는 id의 form태그 submit
+}
+
+
 </script>
+
 
 	<div class="notosanskr">
 		<div align="center">
@@ -464,220 +687,7 @@ function teamname(){
 </div>
 <script type="text/javascript">
 
-// 삭제버튼 경로 및 넘길 parameter 설정
-function deletei(no1, no2, ino, code){
-	location.href='${pageContext.request.contextPath }/a/a4/a42/delete?investment_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code;
-}
-
-
-// 코드 UNIQUE 검사 AJAX
-function imcode(v){
-	var url = "${pageContext.request.contextPath }/a/a4/imcode";	// controller mapping 지정
-	var param = "investment_code="+encodeURIComponent(v);			// parameter로 넘길 데이터 인코드해서 설정
-	
-	sendRequest(url,param,imcodecheck,"POST");		// httpRequest.js파일에 있는 sendRequest메소드 실행 > (경로, 데이터, 콜벡함수, 방식)
-}
-function imcodecheck(){		// imcode의 sendRequest에서 지정한 콜벡함수
-	if(xhr.readyState==4 && xhr.status==200) {		// 신호가 정상인지 판단
-		var data = xhr.responseText;				// controller에서 넘어온 데이터
-		if(data != ""){		// 데이터가 정상적으로 넘어왔는 지 판단
-			if(data == "사용 가능한 코드입니다."){		// 데이터값 판단
-				document.getElementById("imcodecheck").innerText = data;	// imcodecheck라는 id의 text에 넘어온 data 저장
-				document.getElementById("imcodecheck").style.color = "blue";
-				document.getElementById("register").disabled = false;		// register 라는 id의 태그 활성화 > 버튼 활성화
-			}else {
-				document.getElementById("imcodecheck").innerText = data;
-				document.getElementById("register").disabled = true;		// 버튼 비활성화
-				document.getElementById("investment_code").focus();			// investment_code에 커서 지정
-			}
-		}
-	}
-}
-
-
-//	bs3_no 세팅
-	function check1(){
-		let t = document.getElementById("debtor_no");	// debtor_no 불러옴
-		let arr = document.querySelectorAll("#debtor_no > option");	// debtor_no의 옵션 태그들 nodelist로 불러옴
-		let bs3_no1 = document.getElementById("bs3_no1");	// bs3_no1 불러옴
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){		// 위에서 선언한 debtor_no를 불러온 값과 option태그들의 value값을 for문으로 전부 검사
-				bs3_no1.value = e.id;	// value가 같으면 해당 옵션태그의 id를 bs3_no1에 저장
-			}					// check 메소드 전부 동일
-		});
-	}
-	function check2(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no2");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
-	
-	function check12(){
-		let t = document.getElementById("debtor_no");
-		let arr = document.querySelectorAll("#debtor_no > option");
-		let bs3_no1 = document.getElementById("bs3_no12");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no1.value = e.id;
-			}
-		});
-	}
-	function check22(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no22");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
-
-	
-// submit 유효성 검사
-function sub(f){
-	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
-	if(f.investment_code.value == ""){
-		f.investment_code.focus();
-		return;
-	}else if(f.debtor_no.value == 0){
-		f.debtor_no.focus();
-		return;
-	}else if(f.creditor_no.value == 0){
-		f.creditor_no.focus();
-		return;
-	}else if(f.creditor_no.value == f.debtor_no.value){
-		alert("계정과목이 같습니다. 다시 선택해주세요.");
-		f.debtor_no.focus();
-		return;
-	}else if(f.investment_price.value == ""){
-		var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");	// 확인 true, 취소 false
-		if(ch){
-			f.investment_price.value = 0;
-			f.submit();
-		}else{
-			f.investment_price.focus();
-			return;
-		}
-	}else if(!pat.test(f.investment_price.value)){
-		alert("100,000,000미만, 숫자만 입력 가능합니다.");
-		f.investment_price.focus();
-		return;
-	}else if(f.investment_start.value == "" || f.investment_end.value == ""){
-		var ch = confirm("기간이 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_end.focus();
-			return;
-		}
-	}else if(f.client_name.value == ""){
-		var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_name.focus();
-			return;
-		}
-	}else if(f.imkind_name.value == ""){
-		var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.imkind_name.focus();
-			return;
-		}
-	}else if(f.investment_content.value == ""){
-		var ch = confirm("적요가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_content.focus();
-			return;
-		}
-	}else if(f.account_bank.value == ""){
-		var ch = confirm("계좌가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.account_bank.focus();
-			return;
-		}
-	}else if(f.team_name.value == ""){
-		var ch = confirm("담당팀이 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.team_name.focus();
-			return;
-		}
-	}else if(f.investment_note.value == ""){
-		var ch = confirm("비고가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_note.focus();
-			return;
-		}
-	}else {
-		var ch = confirm("등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			return;
-		}
-	}
-}
-
-
-// 거래처 자동완성 AJAX
-function searchcl(e, code){
-	if(e.keyCode == 13){
-		var clname = document.getElementById("client_name").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("client_name").focus();
-			return;
-		}
-		var url = "${pageContext.request.contextPath}/a/a4/searchcl";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
-		
-		sendRequest(url, param, clName, "POST");
-	}
-}
-function clName(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);	// ajax로 받아온 데이터를 json으로 변형
-			document.getElementById("client_no").value = data2.client_no;
-			document.getElementById("client_name").value = data2.client_name;
-			document.getElementById("client_registeredno").value = data2.client_registeredno;
-			document.getElementById("client_manager").value = data2.client_manager;
-		}else {
-			document.getElementById("client_name").value = '';
-			document.getElementById("client_registeredno").value = '';
-			document.getElementById("client_manager").value = '';
-			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
-		}
-	}
-}
-
-
-// 리스트에서 글 선택 시 넘어가는 form
-function selectForm(no, bno1, bno2){
-	document.getElementsByName("investment_no")[0].value = no;
-	document.getElementsByName("bs3_no1")[0].value = bno1;
-	document.getElementsByName("bs3_no2")[0].value = bno2;
-	
-	document.getElementById("content").submit(); // content라는 id의 form태그 submit
-}
-
 
 </script>
+
 <%@ include file="/WEB-INF/views/layout/footer.jsp"%>

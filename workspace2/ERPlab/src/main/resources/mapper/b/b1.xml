@@ -66,6 +66,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select closing_no from erp_closing where closing_code = #{closing_code}
 	</select>
 	
+	<select id="getClosingCode" parameterType="String" resultType="map">
+		select c.*, d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+		from erp_closing c, erp_debtor d, erp_creditor cr 
+		where c.closing_code = #{closing_code} 
+		and c.debtor_no = d.debtor_no 
+		and c.creditor_no = cr.creditor_no 
+	</select>
+	
 	<update id="updateBs3Amount" parameterType="map">
 		update erp_bs3 set bs3_amount = bs3_amount + #{bs3_amount} where bs3_no = #{bs3_no}
 	</update>

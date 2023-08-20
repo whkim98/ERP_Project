@@ -3,5 +3,476 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="d1">
+	<!-- insert 할때 상품 고르기 -->
+	<select id="goodsList" parameterType="map" resultType="map">
+		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec, c.client_name 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c 
+		where g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c.client_no 
+		and g.comcode_no = #{comcode_no} 
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' 
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="type == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+		</if>
+	</select>
+	
+	
+	<!-- 생산의뢰 select된 상품 불러오기 및 CUD -->
+	<select id="selectRequestGoods" parameterType="int" resultType="map">
+		select g.*, gs.goodssort_name, gk.goodskind_name 
+		from erp_goods g, erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr  
+		where cr.goods_no = g.goods_no 
+		and g.goodssort_no = gs.goodssort_no 
+		and gs.goodskind_no = gk.goodskind_no 
+		and cr.requestproduct_no = #{requestproduct_no}
+	</select>
+	
+	<insert id="createConnectRequest" parameterType="com.lab.erp.vo.d.d1.Erp_ConnectrequestVO">
+		insert into erp_connectrequest(requestproduct_no,goods_no,connectrequest_qty) 
+		values(#{requestproduct_no},#{goods_no},#{connectrequest_qty})
+	</insert>
+	
+	<update id="updateConnectRequest" parameterType="com.lab.erp.vo.d.d1.Erp_ConnectrequestVO">
+		update erp_connectrequest set 
+		requestproduct_no = #{requestproduct_no},
+		goods_no = #{goods_no},
+		connectrequest_qty = #{connectrequest_qty} 
+		where connectrequest_no = #{connectrequest_no}
+	</update>
+	
+	<delete id="deleteConnectRequest" parameterType="int">
+		delete from erp_connectrequest where connectrequest_no = #{connectrequest_no}
+	</delete>
+	<delete id="deleteConnectRequestNo" parameterType="int">
+		delete from erp_connectrequest where requestproduct_no = #{requestproduct_no}
+	</delete>
+	
+	
+	<!-- 작업지시서 select된 상품 불러오기 및 CUD -->
+	<select id="selectPedGoods" parameterType="int" resultType="map">
+		select g.*, w.*, gt.goodsst_size, gt.goodsst_unit 
+		from erp_pedwork p, erp_goods g, erp_goodsst gt, erp_worktype w 
+		where p.goods_no = g.goods_no 
+		and p.worktype_no = w.worktype_no 
+		and g.goodsst_no = gt.goodsst_no
+		and p.ped_no = #{ped_no}
+	</select>
+	
+	<insert id="createPedWork" parameterType="com.lab.erp.vo.d.d1.Erp_PedworkVO">
+		insert into erp_pedword(ped_no,worktype_no,goods_no) 
+		values(#{ped_no},#{worktype_no},#{goods_no})
+	</insert>
+	
+	<update id="updatePedWork" parameterType="com.lab.erp.vo.d.d1.Erp_PedworkVO">
+		update erp_pedwork set 
+		worktype_no = #{worktype_no}
+		goods_no = #{goods_no} 
+		where pedwork_no = #{pedwork_no}
+	</update>
+	
+	<delete id="deletePedWork" parameterType="int">
+		delete from erp_pedwork where pedwork_no = #{pedwork_no}
+	</delete>
+	<delete id="deletePedWorkNo" parameterType="int">
+		delete from erp_pedwork where ped_no = #{ped_no}
+	</delete>
+	
+	
+	<!-- 생산실적 select된 상품 불러오기 및 CUD -->
+	<select id="selectEvGoods" parameterType="int" resultType="map">
+		select g.*, gl.goodslot_lot, gl.goodslot_qty, c.client_name 
+		from erp_goods g, erp_goodslot gl, erp_client c, erp_lotconnev ev  
+		where g.client_no1 = c.client_no 
+		and g.goods_no = gl.goods_no 
+		and ev.goodslot_no = gl.goodslot_no 
+		and ev.evaluation_no = #{evaluation_no}
+	</select>
+	
+	<insert id="createLotEv" parameterType="com.lab.erp.vo.d.d1.Erp_LotconnevVO">
+		insert into erp_lotconnev(lotconnev_qty,lotconnev_rest,goodslot_no,evaluation_no) 
+		values(#{lotconnev_qty},#{lotconnev_rest},#{goodslot_no},#{evaluation_no})
+	</insert>
+	
+	<update id="updateLotEv" parameterType="com.lab.erp.vo.d.d1.Erp_LotconnevVO">
+		update erp_lotconnev set 
+		lotconnev_qty = #{lotconnev_qty},
+		lotconnev_rest = #{lotconnev_rest},
+		goodslot_no = #{goodslot_no},
+		evaluation_no = #{evaluation_no} 
+		where lotconnev_no = #{lotconnev_no}
+	</update>
+	
+	<delete id="deleteLotEv" parameterType="int">
+		delete from erp_lotconnev where lotconnev_no = #{lotconnev_no}
+	</delete>
+	<delete id="deleteLotEvNo" parameterType="int">
+		delete from erp_lotconnev where evaluation_no = #{evaluation_no}
+	</delete>
 
+
+	<!-- 의뢰 -->
+	<insert id="createRequestProduct" parameterType="com.lab.erp.vo.d.d1.Erp_RequestproductVO">
+		insert into erp_requestproduct(client_no,requestproduct_content,requestproduct_start,requestproduct_end,requestproduct_name,employee1_no,comcode_no) 
+		values(#{client_no},#{requestproduct_content},#{requestproduct_start},#{requestproduct_end},#{requestproduct_name},#{employee1_no},#{comcode_no})
+	</insert>
+	
+	
+	<update id="updateRequestProduct" parameterType="com.lab.erp.vo.d.d1.Erp_RequestproductVO">
+		update erp_requestproduct set 
+		client_no = #{client_no},
+		requestproduct_content = #{requestproduct_content},
+		requestproduct_start = #{requestproduct_start},
+		requestproduct_end = #{requestproduct_end},
+		requestproduct_name = #{requestproduct_name},
+		employee1_no = #{employee1_no} 
+		where requestproduct_no = #{requestproduct_no]
+	</update>
+	
+	<delete id="deleteRequestProduct" parameterType="com.lab.erp.vo.d.d1.Erp_RequestproductVO">
+		delete from erp_requestproduct where requestproduct_no = #{requestproduct_no]
+	</delete>
+	
+	<select id="requestProductList" parameterType="map" resultType="map">
+		select c.debtor_no, d.bs3_no bs3_no1, c.creditor_no, cr.bs3_no bs3_no2, r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
+		from erp_closing c, erp_debtor d, erp_creditor cr, erp_requestproduct r, erp_client cl, erp_employee1 e 
+		where r.client_no = cl.client_no 
+		and r.employee1_no = e.employee1_no 
+		and r.requestproduct_code = c.closing_code 
+		and c.debtor_no = d.debtor_no 
+		and c.creditor_no = cr.creditor_no 
+		and r.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'requestproduct_code'">
+				and r.requestproduct_code like '%${word}%' 
+			</if>
+			<if test="type == 'client_name'">
+				and cl.client_name like '%${word}%'
+			</if>
+			<if test="type == 'requestproduct_name'">
+				and r.requestproduct_name like '%${word}%'
+			</if>
+			<if test="type == 'requestproduct_end'">
+				and date_format(r.requestproduct_end, '%m월 %d일') like '%${word}%'
+			</if>
+			<if test="type == 'requestproduct_content'">
+				and r.requestproduct_content like '%${word}%'
+			</if>
+			<if test="type == 'closing_date'">
+				and date_format(c.closing_date, '%m월 %d일') like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectRequestProduct" parameterType="int" resultType="map">
+		select c.debtor_no, d.bs3_no bs3_no1, c.creditor_no, cr.bs3_no bs3_no2, r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
+		from erp_closing c, erp_debtor d, erp_creditor cr, erp_requestproduct r, erp_client cl, erp_employee1 e 
+		where r.client_no = cl.client_no 
+		and r.employee1_no = e.employee1_no 
+		and r.requestproduct_code = c.closing_code 
+		and c.debtor_no = d.debtor_no 
+		and c.creditor_no = cr.creditor_no 
+		and r.requestproduct_no = #{requestproduct_no}
+	</select>
+	
+	
+	<!-- 작업의뢰서 -->
+	<insert id="createPed" parameterType="com.lab.erp.vo.d.d1.Erp_PedVO">
+		insert into erp_ped(ped_content,ped_date,ped_startdate,employee1_no,company_no,team_no,requestproduct_no,comcode_no) 
+		values(#{ped_content},sysdate(),#{ped_startdate},#{employee1_no},#{company_no},#{team_no},#{requestproduct_no},#{comcode_no})
+	</insert>
+	
+	<update id="updatePed" parameterType="com.lab.erp.vo.d.d1.Erp_PedVO">
+		update erp_ped set 
+		#{ped_content},
+		#{ped_startdate},
+		#{employee1_no},
+		#{company_no},
+		#{team_no} 
+		where ped_no = #{ped_no} 
+	</update>
+	
+	<delete id="deletePed" parameterType="int">
+		delete from erp_ped where ped_no = #{ped_no}
+	</delete>
+	<delete id="deletePedRequest" parameterType="int">
+		delete from erp_ped where requestproduct_no = #{requestproduct_no}
+	</delete>
+	
+	<select id="selectPed" parameterType="int" resultType="map">
+		select r.requestproduct_start,r.requestproduct_end,r.requestproduct_name,r.requestproduct_content,c.client_name,p.*,
+		t.team_name, e.employee1_name, e2.employee2_position, co.company_name 
+		from erp_requestproduct r, erp_ped p, erp_client c, erp_employee1 e, erp_employee2 e2, erp_team t, erp_company co 
+		where r.requestproduct_no = p.requestproduct_no 
+		and r.client_no = c.client_no 
+		and p.team_no = t.team_no 
+		and p.employee1_no = e.employee1_no 
+		and e.employee1_no = e2.employee1_no 
+		and p.requestproduct_no = r.requestproduct_no 
+		and p.company_no = co.company_no 
+		and p.ped_no = #{ped_no}
+	</select>
+	
+	<select id="pedList" parameterType="map" resultType="map">
+		select r.requestproduct_name, r.requestproduct_end, t.team_name, p.* 
+		from erp_requestproduct r, erp_ped p, erp_team t 
+		where p.requestproduct_no = r.requestproduct_no 
+		and p.team_no = t.team_no 
+		and p.comcode_no = #{comcode_no}
+		<if test="requestproduct_no != null">
+			and r.requestproduct_no = #{requestproduct_no} 
+		</if>
+	</select>
+	
+	
+	<!-- 생산 / 제조 -->
+	<insert id="createProduct" parameterType="com.lab.erp.vo.d.d1.Erp_ProductVO">
+		insert into erp_product(product_code,product_name,product_install,product_end,ped_no,product_path,employee1_no,product_content,product_qty,product_tax,product_budget,product_totalbudget,comcode_no) 
+		values(#{product_code},#{product_name},#{product_install},#{product_end},#{ped_no},#{product_path},#{employee1_no},#{product_content},#{product_qty},#{product_tax},#{product_budget},#{product_totalbudget},#{comcode_no})
+	</insert>
+	
+	<update id="updateProduct" parameterType="com.lab.erp.vo.d.d1.Erp_ProductVO">
+		update erp_product set 
+		product_name = #{product_name},
+		product_install = #{product_install},
+		product_end = #{product_end},
+		product_path = #{product_path},
+		employee1_no = #{employee1_no},
+		product_content = #{product_content},
+		product_qty = #{product_qty},
+		product_tax = #{product_tax},
+		product_budget = #{product_budget},
+		product_totalbudget = #{product_totalbudget} 
+		where product_no = #{product_no}
+	</update>
+	
+	<delete id="deleteProduct" parameterType="int">
+		delete from erp_product where product_no = #{product_no}
+	</delete>
+	
+	<select id="selectProduct" parameterType="int" resultType="map">
+		select p.*, c.client_name, t.team_name, e.employee1_name, co.company_name, r.requestproduct_name 
+		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_ped pd, erp_company co 
+		where p.employee1_no = e.employee1_no 
+		and pd.team_no = t.team_no 
+		and r.client_no = c.client_no 
+		and pd.company_no = co.company_no 
+		and pd.requestproduct_no = r.requestproduct_no 
+		and p.ped_no = pd.ped_no 
+		and p.product_no = #{product_no} 
+	</select>
+	
+	<select id="productList" parameterType="map" resultType="map">
+		select p.*, c.client_name, t.team_name, e.employee1_name, co.company_name, r.requestproduct_name 
+		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_ped pd, erp_company co 
+		where p.employee1_no = e.employee1_no 
+		and pd.team_no = t.team_no 
+		and r.client_no = c.client_no 
+		and pd.company_no = co.company_no 
+		and pd.requestproduct_no = r.requestproduct_no 
+		and p.ped_no = pd.ped_no 
+		and p.comcode_no = #{comcode_no} 
+	</select>
+	
+	
+	<!-- 불량 분석 -->
+	<insert id="createDefective" parameterType="com.lab.erp.vo.d.d1.Erp_DefectiveVO">
+		insert into erp_defective(defective_comment,defective_number,defective_date,goods_no,ped_no) 
+		values(#{defective_comment},#{defective_number},#{defective_date},#{goods_no},#{ped_no})
+	</insert>
+	
+	<update id="updateDefective" parameterType="com.lab.erp.vo.d.d1.Erp_DefectiveVO">
+		update erp_defective set 
+		defective_comment = #{defective_comment},
+		defective_number = #{defective_number},
+		defective_date = #{defective_date} 
+		where defective_no = #{defective_no}
+	</update>
+	
+	<delete id="deleteDefective" parameterType="int">
+		delete from erp_defective where defective_no = #{defective_no}
+	</delete>
+	
+	<select id="defectiveList" parameterType="map" resultType="map">
+		select p.product_name, d.* 
+		from erp_product p, erp_defective d, erp_ped pd  
+		where d.ped_no = pd.ped_no 
+		and pd.ped_no = p.ped_no 
+		and p.comcode_no = #{comcode_no}
+	</select>
+	<select id="defectiveListAll" parameterType="map" resultType="map">
+		select * 
+		from erp_defective 
+		where comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="selectDefective" parameterType="int" resultType="map">
+		select p.product_name, d.* 
+		from erp_product p, erp_defective d, erp_ped pd  
+		where d.ped_no = pd.ped_no 
+		and pd.ped_no = p.ped_no 
+		and d.defective_no = #{defective_no} 
+	</select>
+	<select id="selectDefectiveAll" parameterType="int" resultType="map">
+		select * 
+		from erp_defective 
+		where defective_no = #{defective_no}
+	</select>
+	
+	
+	<!-- 생산 실적 관리 -->
+	<insert id="createEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
+		insert into erp_evaluation(evaluation_qty,evaluation_rest,evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,ped_no,evaluation_date,employee2_no) 
+		values(#{evaluation_qty},#{evaluation_rest},#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{ped_no},#{evaluation_date},#{employee2_no})
+	</insert>
+	
+	<update id="updateEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
+		update erp_evaluation set 
+		evaluation_qty = #{evaluation_qty},
+		evaluation_rest = #{evaluation_rest},
+		evaluation_paperend = #{evaluation_paperend},
+		evaluation_actualend = #{evaluation_actualend},
+		evaluation_content = #{evaluation_content},
+		evaluation_status = #{evaluation_status},
+		evaluation_date = #{evaluation_date},
+		employee2_no = #{employee2_no} 
+		where evaluation_no = #{evaluation_no}
+	</update>
+	
+	<delete id="deleteEvaluation" parameterType="int">
+		delete from erp_evaluation where evaluation_no = #{evaluation_no}
+	</delete>
+	
+	<select id="evaluationList" parameterType="map" resultType="map">
+		select p.product_name, e.employee1_name, e2.employee2_position, ev.* 
+		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2, erp_ped pd 
+		where ev.employee2_no = e2.employee2_no 
+		and e.employee1_no = e2.employee1_no 
+		and ev.ped_no = pd.ped_no 
+		and pd.ped_no = p.ped_no 
+		and p.comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="selectEvaluation" parameterType="int" resultType="map">
+		select p.product_name, e.employee1_name, e2.employee2_position, ev.* 
+		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2, erp_ped pd 
+		where ev.employee2_no = e2.employee2_no 
+		and e.employee1_no = e2.employee1_no 
+		and ev.ped_no = pd.ped_no 
+		and pd.ped_no = p.ped_no 
+		and ev.evaluation_no = #{evaluation_no} 
+	</select>
+	
+	
+	<!-- 실적 관리 -->
+	<insert id="createEvaluemng" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluemngVO">
+		insert into erp_evaluemng(evaluemng_outstatus,evaluation_no,team_no,evaluemng_date) 
+		values(#{evaluemng_outstatus},#{evaluation_no},#{team_no},sysdate())
+	</insert>
+	
+	<update id="updateEvaluemng" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluemngVO">
+		update erp_evaluemng set 
+		evaluemng_outstatus = #{evaluemng_outstatus},
+		evaluation_no = #{evaluation_no},
+		team_no = #{team_no} 
+		where evaluemng_no = #{evaluemng_no} 
+	</update>
+	
+	<delete id="deleteEvaluemng" parameterType="int">
+		delete from erp_evaluemng where evaluemng_no = #{evaluemng_no} 
+	</delete>
+	
+	<select id="evmngList" parameterType="map" resultType="map">
+		select p.product_name, e.employee1_name, e2.employee2_position, ev.*, em.evaluemng_outstatus, em.evaluemng_date, t.team_name  
+		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2, erp_ped pd, erp_evaluemng em, erp_team t
+		where ev.employee2_no = e2.employee2_no 
+		and e.employee1_no = e2.employee1_no 
+		and ev.ped_no = pd.ped_no 
+		and pd.ped_no = p.ped_no 
+		and p.comcode_no = #{comcode_no}
+	</select>
+	
+	
+	<!-- 공정 재고 관리 -->
+	<insert id="createProInven" parameterType="com.lab.erp.vo.d.d1.Erp_ProinventoryVO">
+		insert into erp_proinventory(company_no,proinventory_statue,comcode_no) 
+		values(#{company_no},#{proinventory_statue},#{comcode_no})
+	</insert>
+	
+	<insert id="createInvenLot" parameterType="com.lab.erp.vo.d.d1.Erp_InvenlotVO">
+		insert into erp_invenlot(invenlot_qty,invenlot_recode,invenlot_availability,invenlot_date,goodslot_no,proinventory_no) 
+		values(#{invenlot_qty},#{invenlot_recode},#{invenlot_availability},#{invenlot_date},#{goodslot_no},#{proinventory_no})
+	</insert>
+	
+	<update id="updateProInven" parameterType="com.lab.erp.vo.d.d1.Erp_ProinventoryVO">
+		update erp_proinventory set 
+		company_no = #{company_no},
+		proinventory_statue = #{proinventory_statue} 
+		where proinventory_no = #{proinventory_no}
+	</update>
+	
+	<update id="updateInvenLot" parameterType="com.lab.erp.vo.d.d1.Erp_InvenlotVO">
+		update erp_invenlot set 
+		invenlot_qty = #{invenlot_qty},
+		invenlot_recode = #{invenlot_recode},
+		invenlot_availability = #{invenlot_availability},
+		invenlot_date = #{invenlot_date},
+		goodslot_no = #{goodslot_no},
+		proinventory_no = #{proinventory_no} 
+		where invenlot_no = #{invenlot_no}
+	</update>
+	
+	<delete id="deleteProInven" parameterType="int">
+		delete from erp_proinventory where proinventory_no = #{proinventory_no}
+	</delete>
+	<delete id="deleteLot" parameterType="int">
+		delete from erp_invenlot where goodslot_no = #{goodslot_no}
+	</delete>
+	<delete id="deleteInvenLot" parameterType="int">
+		delete from erp_invenlot where invenlot_no = #{invenlot_no}
+	</delete>
+	<delete id="deleteInvenPro" parameterType="int">
+		delete from erp_invenlot where proinventory_no = #{proinventory_no}
+	</delete>
+	
+	<select id="proinvenList" parameterType="map" resultType="map">
+		select co.*, p.proinventory_statue 
+		from epr_company co, erp_proinventory p 
+		where p.comcode_no = #{comcode_no} 
+		order by co.company_name asc
+	</select>
+	
+	<select id="selectProInven" parameterType="map" resultType="map">
+		select g.*, gl.*, gs.*, gk.*, gt.*, gl.*, gv.* 
+		from erp_goods g, erp_goodskind gk, erp_goodssort gs, erp_goodsst gt, erp_goodslot gl, erp_goodslev gv, erp_invenlot i 
+		where g.goods_no = gl.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and g.goodsst_no  = gt.goodsst_no 
+		and g.goodslev_no = gv.goodslev_no 
+		and gs.goodssort_no = gk.goodssort_no 
+		and i.goodslot_no = gl.goodslot_no 
+		and i.proinventory_no = #{proinventory_no}
+		order by goods_name asc
+	</select>
 </mapper>

@@ -192,6 +192,10 @@ public class C2Service {
 		return rdao.updateReceivable(vo);
 	}
 	
+	public int updateReceiveTotal(Erp_ReceivableVO vo) {
+		return rdao.updateReceiveTotal(vo);
+	}
+	
 	public int deleteReceivable(int receivable_no) {
 		return rdao.deleteReceivable(receivable_no);
 	}
@@ -202,6 +206,13 @@ public class C2Service {
 	
 	public Map<String, Object> selectReceivable(int receivable_no){
 		return rdao.selectReceivable(receivable_no);
+	}
+	
+	public int getUniqueCIno(String receivable_cino) {
+		return rdao.getUniqueCIno(receivable_cino);
+	}
+	public int getUniqueCode(String receivable_code) {
+		return rdao.getUniqueCode(receivable_code);
 	}
 	
 	public int inputBills(Erp_BondbillsVO vo) {
@@ -216,6 +227,10 @@ public class C2Service {
 		return bbdao.deleteBills(bondbills_no);
 	}
 	
+	public int deleteReceive(int receivable_no) {
+		return rdao.deleteReceive(receivable_no);
+	}
+	
 	public List<Map<String, Object>> bondbillsList(Map<String, Object> map){
 		return bbdao.bondbillsList(map);
 	}
@@ -228,8 +243,12 @@ public class C2Service {
 		return bbdao.selectBondbills(bondbills_no);
 	}
 	
-	public int getBillsTotal(int receivable_no) {
+	public Erp_BondbillsVO getBillsTotal(int receivable_no) {
 		return bbdao.getBillsTotal(receivable_no);
+	}
+	
+	public int getBondbillsCode(String bondbills_code) {
+		return bbdao.getBondbillsCode(bondbills_code);
 	}
 	
 	
@@ -258,6 +277,10 @@ public class C2Service {
 		return redao.getReturn(return_no);
 	}
 	
+	public int getReturnCode(String return_code) {
+		return redao.getReturnCode(return_code);
+	}
+	
 	
 //	국내영업매출
 	public int inputLocalSales(Erp_LocalsalesVO vo) {
@@ -284,8 +307,11 @@ public class C2Service {
 	public List<Erp_GoodsVO> getSalesGoods(int goods_no){
 		return gsdao.getSalesGoods(goods_no);
 	}
-	public List<Erp_GoodsVO> goodsList(){
-		return gsdao.goodsList();
+	public List<Map<String, Object>> goodsList(Map<String, Object> map){
+		return gsdao.goodsList(map);
+	}
+	public  List<Map<String, Object>> goodsReturn(Map<String, Object> map){
+		return gsdao.goodsReturn(map);
 	}
 	
 //	salesgoods

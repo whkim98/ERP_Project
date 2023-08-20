@@ -2,16 +2,21 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 
-<%@include file="/WEB-INF/views/layout/header.jsp" %>
+
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
+<link rel="stylesheet" href="/css/a/a_company.css"/>
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
  font-size:10px;
+
+}
+
+.notosanskr{ 
+ 	margin-top: 70px;
 }
 
 .A31 input{
@@ -63,8 +68,10 @@ function surf(v, code){		// list ajax 함수 > A4Controller, a4.xml(investmentLi
 	var type = document.getElementsByName("type")[0].value;
 	var url = "${pageContext.request.contextPath}/a/a4/a41/loanAjax";	// controller mapping
 	if(v == ''){
+		type = null;
 		v = null;
 	}
+	console.log(v);
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;		// 넘길 데이터
 	
 	sendRequest(url,param,getlist,"POST");
@@ -75,12 +82,13 @@ function getlist(){
 		let procode = document.getElementById("procode"); 	// list가 들어갈 테이블 id
 		let newTr = document.createElement("tr");		// tr 만듦
 		let newTd = document.createElement("td");		// td 만듦
+		procode.innerHTML = '';							// 일단 테이블 비워줌
+		procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>적요</td></tr>';
 		if(data != ""){
-			procode.innerHTML = '';							// 일단 테이블 비워줌
-			procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>적요</td></tr>';
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){		// 받아온 list 테이블에 입히기
 				newTr = document.createElement("tr");
+				newTr.setAttribute("onclick", "selectForm("+map.investment_no+", "+map.bs3_no1+", "+map.bs3_no2+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.investment_code;
@@ -93,8 +101,6 @@ function getlist(){
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML = '';
-			procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>적요</td></tr>';
 			procode.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
 		}
 	}
@@ -170,7 +176,7 @@ function teamname(){
 	}
 }
 </script>
-
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
 			<h1 style="font-size: 20pt;">자금 조달</h1>
@@ -684,4 +690,6 @@ function selectForm(no, bno1, bno2){
 
 
 </script>
-<%@ include file="/WEB-INF/views/layout/footer.jsp"%>
+</div>
+</body>
+</html>

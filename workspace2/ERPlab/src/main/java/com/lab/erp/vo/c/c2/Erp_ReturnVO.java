@@ -11,7 +11,7 @@ public class Erp_ReturnVO {
 	private int return_no;
 	private int ctgr_no;
 	private String return_code;
-	private int goods_no;
+	private int goodslot_no;
 	private String return_comment;
 	private String return_date;
 	private int return_qty;

@@ -27,11 +27,11 @@ private SqlSession sqlSession;
 	}
 	
 	public List<Erp_BusinesstypeVO> btName(Map<String, Object> map) {
-		return sqlSession.selectOne("c2.btName", map);
+		return sqlSession.selectList("c2.btName", map);
 	}
 	
 	public List<Erp_BusinesstypeVO> btSubctgr(Map<String, Object> map) {
-		return sqlSession.selectOne("c2.btSubctgr", map);
+		return sqlSession.selectList("c2.btSubctgr", map);
 	}
 		
 	

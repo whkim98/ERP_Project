@@ -41,4 +41,8 @@ private SqlSession sqlSession;
 	public Erp_ReturnVO getReturn(int return_no) {
 		return sqlSession.selectOne("c2.getReturn", return_no);
 	}
+	
+	public int getReturnCode(String return_code) {
+		return sqlSession.selectOne("c2.getReturnCode", return_code);
+	}
 }
