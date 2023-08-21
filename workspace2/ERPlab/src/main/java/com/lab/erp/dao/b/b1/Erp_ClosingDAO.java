@@ -57,4 +57,10 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("b4.ctgrAmount", map);
 	}
 	
+	
+//	d1
+	public Map<String, Object> getClosingCode(String closing_code){
+		return sqlSession.selectOne("b1.getClosingCode",closing_code);
+	}
+	
 }

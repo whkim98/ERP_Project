@@ -1,7 +1,14 @@
 package com.lab.erp.controller.c;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,25 +35,59 @@ import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c2.Erp_ReturnVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
 
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletConnection;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpUpgradeHandler;
+import jakarta.servlet.http.Part;
+
 @Controller
 @RequestMapping("/c/c2")
 public class C2Controller {
 	private C2Service c2;
 	private LoginService ls;
+	private HttpServletRequest request;
 	
 	@Autowired
-	public C2Controller(C2Service c2, LoginService ls) {
+	public C2Controller(C2Service c2, LoginService ls, HttpServletRequest request) {
 		this.c2 = c2;
 		this.ls = ls;
+		this.request = request;
 	}
 	
+	public String resultComcode(String comcode_code, Model model) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}else {
+			return "";
+		}
+	}
 //	거래처
 	@RequestMapping("/c21")
 	public String clientList(Model model, String type, String word, String comcode_code) {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -103,7 +144,8 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -133,7 +175,8 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -171,7 +214,8 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -203,7 +247,8 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -329,7 +374,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -389,7 +434,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "" || comcode_code == null) {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -457,7 +502,7 @@ public class C2Controller {
 	
 	@RequestMapping("/c22/updateForm")
 	public String updateFormR(String comcode_code, Model model, Erp_ReceivableVO vo, String type, String word) {
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			String msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			String url = "/";
 			model.addAttribute("msg", msg);
@@ -502,7 +547,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -586,7 +631,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -645,7 +690,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -746,7 +791,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -835,7 +880,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -861,7 +906,7 @@ public class C2Controller {
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
 		
-		if(vo == null || vo.getReceivable_no() == 0) {
+		if(vo.getReceivable_no() == 0) {
 			list = c2.bondbillsList(map);
 		}else {
 			map.put("receivable_no", vo.getReceivable_no());
@@ -890,7 +935,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -1003,7 +1048,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -1108,7 +1153,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
@@ -1220,7 +1265,7 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
-		if(comcode_code == "") {
+		if(comcode_code == null) {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);

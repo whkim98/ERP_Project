@@ -35,6 +35,10 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d1.proinvenList", map);
 	}
 	
+	public Map<String, Object> selectPro(int proinventory_no){
+		return sqlSession.selectOne("d1.selectPro", proinventory_no);
+	}
+	
 	public List<Map<String, Object>> selectProInven(Map<String, Object> map){
 		return sqlSession.selectList("d1.selectProInven", map);
 	}

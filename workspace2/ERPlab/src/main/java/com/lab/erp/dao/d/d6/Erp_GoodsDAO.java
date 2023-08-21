@@ -51,4 +51,20 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d1.selectEvGoods", evaluation_no);
 	}
 	
+	public int createGoods(Erp_GoodsVO vo) {
+		return sqlSession.insert("d6.createGoods", vo);
+	}
+	
+	public int updateGoods(Erp_GoodsVO vo) {
+		return sqlSession.update("d6.updateGoods", vo);
+	}
+	
+	public int deleteGoods(int goods_no) {
+		return sqlSession.delete("d6.deleteGoods", goods_no);
+	}
+	
+	public int goodsno(String goods_code) {
+		return sqlSession.selectOne("d6.goodsno", goods_code);
+	}
+	
 }

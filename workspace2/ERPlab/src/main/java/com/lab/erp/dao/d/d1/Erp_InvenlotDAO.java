@@ -1,5 +1,7 @@
 package com.lab.erp.dao.d.d1;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,9 @@ private SqlSession sqlSession;
 	
 	public int deleteInvenPro(int proinventory_no) {
 		return sqlSession.insert("d1.deleteInvenPro", proinventory_no);
+	}
+	
+	public Map<String, Object> selectProinventoryGoods(int goodslot_no){
+		return sqlSession.selectOne("d1.selectProinventoryGoods", goodslot_no);
 	}
 }

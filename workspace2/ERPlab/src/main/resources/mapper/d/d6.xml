@@ -3,5 +3,104 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="d6">
+	<select id="sortkind" resultType="map">
+		select gs.*, gk.* from erp_goodssort gs, erp_goodskind gk where gs.goodssort_no = gk.goodssort_no
+	</select>
+	
+	<select id="goodslev" resultType="com.lab.erp.vo.d.d6.Erp_GoodslevVO">
+		select * from erp_goodslev
+	</select>
+	
+	<select id="goodsno" parameterType="String" resultType="int">
+		select goods_no from erp_goods where goods_code = #{goods_code}
+	</select>
+	
+	<select id="goodsstno" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsstVO" resultType="int">
+		select goodsst_no from erp_goodsst 
+		where goodsst_unit = #{goodsst_unit} 
+		and goodsst_spec = #{goodsst_spec} 
+		and goodsst_size = #{goodsst_size} 
+		and goodsst_package = #{goodsst_package} 
+		and goodsst_ea = #{goodsst_ea}
+	</select>
+	
+	<select id="goodslotno" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO" resultType="int">
+		select goodslot_no from erp_goodslot 
+		where goodslot_lot = #{goodslot_lot}
+		and goodslot_qty = #{goodslot_qty} 
+		and goodslot_production = #{goodslot_production} 
+		and goodslot_expiry = #{goodslot_expiry} 
+		and goodslot_price = #{goodslot_price} 
+		and goodslot_tax = #{goodslot_tax} 
+		and goodslot_total = #{goodslot_total} 
+		and goods_no = #{goods_no} 
+	</select>
 
+	<insert id="createGoodsst" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsstVO">
+		insert into erp_goodsst(goodsst_unit,goodsst_spec,goodsst_size,goodsst_package,goodsst_ea) 
+		values(#{goodsst_unit},#{goodsst_spec},#{goodsst_size},#{goodsst_package},#{goodsst_ea})
+	</insert>
+
+	<insert id="createGoods" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		insert into erp_goods(goods_code,goods_barcode,goods_name,goodskind_no,goods_customerprice,goods_description,goodsst_no,client_no1,client_no2,goods_stockqty,goodslev_no,goods_location,comcode_no) 
+		values(#{goods_code},#{goods_barcode},#{goods_name},#{goodskind_no},#{goods_customerprice},#{goods_description},#{goodsst_no},#{client_no1},#{client_no2},#{goods_stockqty},#{goodslev_no},#{goods_location},#{comcode_no})
+	</insert>
+	
+	<insert id="createGoodsLot" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
+		insert into erp_goodslot(goodslot_lot,goodslot_qty,goodslot_production,goodslot_expiry,goodslot_price,goodslot_tax,goodslot_total,goods_no) 
+		values(#{goodslot_lot},#{goodslot_qty},#{goodslot_production},#{goodslot_expiry},#{goodslot_price},#{goodslot_tax},#{goodslot_total},#{goods_no})
+	</insert>
+	
+	<update id="updateGoodsst" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsstVO">
+		update erp_goodsst set 
+		goodsst_unit = #{goodsst_unit},
+		goodsst_spec = #{goodsst_spec},
+		goodsst_size = #{goodsst_size},
+		goodsst_package = #{goodsst_package},
+		goodsst_ea = #{goodsst_ea} 
+		where goodsst_no = #{goodsst_no}
+	</update>
+	
+	<update id="updateGoods" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		update erp_goods set 
+		goods_code = #{goods_code},
+		goods_barcode = #{goods_barcode},
+		goods_name = #{goods_name},
+		goodskind_no = #{goodskind_no},
+		goods_customerprice = #{goods_customerprice},
+		goods_description = #{goods_description},
+		goodsst_no = #{goodsst_no},
+		client_no1 = #{client_no1},
+		client_no2 = #{client_no2},
+		goods_stockqty = #{goods_stockqty},
+		goodslev_no = #{goodslev_no},
+		goods_location = #{goods_location} 
+		where goods_no = #{goods_no}
+	</update>
+	
+	<update id="updateGoodsLot" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
+		update erp_goodslot set 
+		goodslot_lot = #{goodslot_lot},
+		goodslot_qty = #{goodslot_qty},
+		goodslot_production = #{goodslot_production},
+		goodslot_expiry = #{goodslot_expiry},
+		goodslot_price = #{goodslot_price},
+		goodslot_tax = #{goodslot_tax},
+		goodslot_total = #{goodslot_total},
+		goods_no = #{goods_no} 
+		where goodslot_no = #{goodslot_no}
+	</update>
+	
+	<delete id="deleteGoodsLot" parameterType="int">
+		delete from erp_goodslot where goodslot_no = #{goodslot_no}
+	</delete>
+	
+	<delete id="deleteGoods" parameterType="int">
+		delete from erp_goods where goods_no = #{goods_no}
+	</delete>
+	
+	<delete id="deleteGoodsst" parameterType="int">
+		delete from erp_goodsst where goodsst_no = #{goodsst_no} 
+	</delete>
+	
 </mapper>

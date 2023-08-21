@@ -276,8 +276,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 <!-- 수금 -->
 	<insert id="inputBills" parameterType="com.lab.erp.vo.c.Erp_BondbillsVO">
-		insert into erp_bondbills(receivable_no,bondbills_date,bondbills_price,bondbills_tax,bondbills_total) 
-		values(#{receivable_no},#{bondbills_date},#{bondbills_price},#{bondbills_tax},#{bondbills_total})
+		insert into erp_bondbills(bondbills_code, receivable_no,bondbills_date,bondbills_price,bondbills_tax,bondbills_total) 
+		values(#{bondbills_code}, #{receivable_no},#{bondbills_date},#{bondbills_price},#{bondbills_tax},#{bondbills_total})
 	</insert>
 	
 	<update id="updateBills" parameterType="com.lab.erp.vo.c.Erp_BondbillsVO">

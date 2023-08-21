@@ -5,9 +5,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="d1">
 	<!-- insert 할때 상품 고르기 -->
 	<select id="goodsList" parameterType="map" resultType="map">
-		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec, c.client_name 
-		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c 
+		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec, c.client_name, gl.* 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c, 
+		(select goods_no, truncate(avg(goodslot_total),0) goodslot_total from erp_goodslot group by goods_no) gl 
 		where g.goodskind_no = gk.goodskind_no 
+		and gl.goods_no = g.goods_no 
 		and gk.goodssort_no = gs.goodssort_no 
 		and g.goodsst_no = gt.goodsst_no 
 		and g.client_no1 = c.client_no 
@@ -72,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 작업지시서 select된 상품 불러오기 및 CUD -->
 	<select id="selectPedGoods" parameterType="int" resultType="map">
-		select g.*, w.*, gt.goodsst_size, gt.goodsst_unit 
+		select g.*, w.*, gt.goodsst_size, gt.goodsst_unit, p.pedwork_no  
 		from erp_pedwork p, erp_goods g, erp_goodsst gt, erp_worktype w 
 		where p.goods_no = g.goods_no 
 		and p.worktype_no = w.worktype_no 
@@ -186,7 +188,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectRequestProduct" parameterType="int" resultType="map">
-		select c.debtor_no, d.bs3_no bs3_no1, c.creditor_no, cr.bs3_no bs3_no2, r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
+		select c.debtor_no, c.closing_debtor, c.closing_creditor, d.bs3_no bs3_no1, c.creditor_no, cr.bs3_no bs3_no2, r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
 		from erp_closing c, erp_debtor d, erp_creditor cr, erp_requestproduct r, erp_client cl, erp_employee1 e 
 		where r.client_no = cl.client_no 
 		and r.employee1_no = e.employee1_no 
@@ -298,8 +300,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 불량 분석 -->
 	<insert id="createDefective" parameterType="com.lab.erp.vo.d.d1.Erp_DefectiveVO">
-		insert into erp_defective(defective_comment,defective_number,defective_date,goods_no,ped_no) 
-		values(#{defective_comment},#{defective_number},#{defective_date},#{goods_no},#{ped_no})
+		insert into erp_defective(defective_comment,defective_number,defective_date,goodslot_no,ped_no) 
+		values(#{defective_comment},#{defective_number},#{defective_date},#{goodslot_no},#{ped_no})
 	</insert>
 	
 	<update id="updateDefective" parameterType="com.lab.erp.vo.d.d1.Erp_DefectiveVO">
@@ -343,14 +345,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산 실적 관리 -->
 	<insert id="createEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
-		insert into erp_evaluation(evaluation_qty,evaluation_rest,evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,ped_no,evaluation_date,employee2_no) 
-		values(#{evaluation_qty},#{evaluation_rest},#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{ped_no},#{evaluation_date},#{employee2_no})
+		insert into erp_evaluation(evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,ped_no,evaluation_date,employee2_no) 
+		values(#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{ped_no},#{evaluation_date},#{employee2_no})
 	</insert>
 	
 	<update id="updateEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
 		update erp_evaluation set 
-		evaluation_qty = #{evaluation_qty},
-		evaluation_rest = #{evaluation_rest},
 		evaluation_paperend = #{evaluation_paperend},
 		evaluation_actualend = #{evaluation_actualend},
 		evaluation_content = #{evaluation_content},
@@ -463,8 +463,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by co.company_name asc
 	</select>
 	
+	<select id="selectPro" parameterType="int" resultType="map">
+		select co.*, p.* from erp_proinventory p, erp_company co 
+		where p.company_no = co.company_no 
+		and p.proinventory_no = #{proinventory_no}
+	</select>
+	
 	<select id="selectProInven" parameterType="map" resultType="map">
-		select g.*, gl.*, gs.*, gk.*, gt.*, gl.*, gv.* 
+		select g.*, gl.*, gs.*, gk.*, gt.*, gl.*, gv.*, i.* 
 		from erp_goods g, erp_goodskind gk, erp_goodssort gs, erp_goodsst gt, erp_goodslot gl, erp_goodslev gv, erp_invenlot i 
 		where g.goods_no = gl.goods_no 
 		and g.goodskind_no = gk.goodskind_no 
@@ -474,5 +480,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and i.goodslot_no = gl.goodslot_no 
 		and i.proinventory_no = #{proinventory_no}
 		order by goods_name asc
+	</select>
+	
+	<select id="selectProInventoryGoods" parameterType="int" resultType="map">
+		select g.*, gl.*, gs.*, gk.*, gt.*, gl.*, gv.*, i.* 
+		from erp_goods g, erp_goodskind gk, erp_goodssort gs, erp_goodsst gt, erp_goodslot gl, erp_goodslev gv, erp_invenlot i 
+		where g.goods_no = gl.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and g.goodsst_no  = gt.goodsst_no 
+		and g.goodslev_no = gv.goodslev_no 
+		and gs.goodssort_no = gk.goodssort_no 
+		and i.goodslot_no = gl.goodslot_no 
+		and gl.goodslot_no = #{goodslot_no} 
 	</select>
 </mapper>

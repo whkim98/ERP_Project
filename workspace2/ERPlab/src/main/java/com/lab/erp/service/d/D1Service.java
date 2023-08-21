@@ -1,6 +1,7 @@
 package com.lab.erp.service.d;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ import com.lab.erp.dao.d.d1.Erp_ProductDAO;
 import com.lab.erp.dao.d.d1.Erp_ProinventoryDAO;
 import com.lab.erp.dao.d.d1.Erp_RequestproductDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodsDAO;
+import com.lab.erp.dao.d.d6.Erp_GoodslevDAO;
+import com.lab.erp.dao.d.d6.Erp_GoodslotDAO;
+import com.lab.erp.dao.d.d6.Erp_GoodssortDAO;
+import com.lab.erp.dao.d.d6.Erp_GoodsstDAO;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.d.d1.Erp_ConnectrequestVO;
@@ -33,10 +38,19 @@ import com.lab.erp.vo.d.d1.Erp_PedworkVO;
 import com.lab.erp.vo.d.d1.Erp_ProductVO;
 import com.lab.erp.vo.d.d1.Erp_ProinventoryVO;
 import com.lab.erp.vo.d.d1.Erp_RequestproductVO;
+import com.lab.erp.vo.d.d6.Erp_GoodsVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslevVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
+import com.lab.erp.vo.d.d6.Erp_GoodsstVO;
 
 @Service
 public class D1Service {
 	private Erp_GoodsDAO gdao;
+	private Erp_GoodslevDAO gvdao;
+	private Erp_GoodslotDAO gldao;
+	private Erp_GoodssortDAO gsdao;
+	private Erp_GoodsstDAO gtdao;
+	
 	private Erp_ConnectrequestDAO crdao;
 	private Erp_PedworkDAO pwdao;
 	private Erp_LotconnevDAO lcdao;
@@ -48,17 +62,23 @@ public class D1Service {
 	private Erp_EvaluemngDAO emdao;
 	private Erp_ProinventoryDAO pidao;
 	private Erp_InvenlotDAO idao;
+	
+	
 	private Erp_Bs3DAO bsdao;
 	private Erp_ClosingDAO cldao;
 	
 	
 	@Autowired
-	public D1Service(Erp_GoodsDAO gdao, Erp_ConnectrequestDAO crdao, Erp_PedworkDAO pwdao, Erp_LotconnevDAO lcdao,
-			Erp_RequestproductDAO rpdao, Erp_PedDAO pdao, Erp_ProductDAO ptdao, Erp_DefectiveDAO ddao,
-			Erp_EvaluationDAO edao, Erp_EvaluemngDAO emdao, Erp_ProinventoryDAO pidao, Erp_InvenlotDAO idao,
-			Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao) {
-		super();
+	public D1Service(Erp_GoodsDAO gdao, Erp_GoodslevDAO gvdao, Erp_GoodslotDAO gldao,
+			Erp_GoodssortDAO gsdao, Erp_GoodsstDAO gtdao, Erp_ConnectrequestDAO crdao, Erp_PedworkDAO pwdao,
+			Erp_LotconnevDAO lcdao, Erp_RequestproductDAO rpdao, Erp_PedDAO pdao, Erp_ProductDAO ptdao,
+			Erp_DefectiveDAO ddao, Erp_EvaluationDAO edao, Erp_EvaluemngDAO emdao, Erp_ProinventoryDAO pidao,
+			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao) {
 		this.gdao = gdao;
+		this.gvdao = gvdao;
+		this.gldao = gldao;
+		this.gsdao = gsdao;
+		this.gtdao = gtdao;
 		this.crdao = crdao;
 		this.pwdao = pwdao;
 		this.lcdao = lcdao;
@@ -79,6 +99,7 @@ public class D1Service {
 	public List<Erp_Bs3VO> ctgrDebtor(int ctgr_no){
 		return bsdao.ctgrDebtor(ctgr_no);
 	}
+	
 	public List<Erp_Bs3VO> ctgrCreditor(int ctgr_no){
 		return bsdao.ctgrCreditor(ctgr_no);
 	}
@@ -111,6 +132,9 @@ public class D1Service {
 	}
 	public Erp_ClosingVO getClosing(int closing_no) {
 		return cldao.getClosing(closing_no);
+	}
+	public Map<String, Object> getClosingCode(String closing_code){
+		return cldao.getClosingCode(closing_code);
 	}
 	
 	
@@ -343,6 +367,10 @@ public class D1Service {
 		return pidao.proinvenList(map);
 	}
 	
+	public Map<String, Object> selectPro(int proinventory_no){
+		return pidao.selectPro(proinventory_no);
+	}
+	
 	public List<Map<String, Object>> selectProInven(Map<String, Object> map){
 		return pidao.selectProInven(map);
 	}
@@ -365,5 +393,72 @@ public class D1Service {
 	
 	public int deleteInvenPro(int proinventory_no) {
 		return idao.deleteInvenPro(proinventory_no);
+	}
+	
+	public Map<String, Object> selectProinventoryGoods(int goodslot_no){
+		return idao.selectProinventoryGoods(goodslot_no);
+	}
+	
+	
+//	goods and proinventory > 생산된 재고관리
+	// 상품 규격
+	public int createGoodsst(Erp_GoodsstVO vo) {
+		return gtdao.createGoodsst(vo);
+	}
+	
+	public int updateGoodsst(Erp_GoodsstVO vo) {
+		return gtdao.updateGoodsst(vo);
+	}
+	
+	public int deleteGoodsst(int goodsst_no) {
+		return gtdao.deleteGoodsst(goodsst_no);
+	}
+	
+	public int goodsstno(Erp_GoodsstVO vo) {
+		return gtdao.goodsstno(vo);
+	}
+	
+	// 상품
+	public int createGoods(Erp_GoodsVO vo) {
+		return gdao.createGoods(vo);
+	}
+	
+	public int updateGoods(Erp_GoodsVO vo) {
+		return gdao.updateGoods(vo);
+	}
+	
+	public int deleteGoods(int goods_no) {
+		return gdao.deleteGoods(goods_no);
+	}
+	
+	public int goodsno(String goods_code) {
+		return gdao.goodsno(goods_code);
+	}
+	
+	// 상품 로트
+	public int createGoodsLot(Erp_GoodslotVO vo) {
+		return gldao.createGoodsLot(vo);
+	}
+	
+	public int updateGoodsLot(Erp_GoodslotVO vo) {
+		return gldao.updateGoodsLot(vo);
+	}
+	
+	public int deleteGoodsLot(int goodslot_no) {
+		return gldao.deleteGoodsLot(goodslot_no);
+	}
+	
+	public int goodslotno(Erp_GoodslotVO vo) {
+		return gldao.goodslotno(vo);
+	}
+	
+	// 상품 종류, 분류
+	public List<Map<String, Object>> sortkind(){
+		return gsdao.sortkind();
+	}
+	
+	// 상품 등급
+	public List<Erp_GoodslevVO> goodslev(){
+		return gvdao.goodslev();
 	}
 }
