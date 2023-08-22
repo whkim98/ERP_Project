@@ -13,3 +13,4 @@ public class Erp_HdkindVO {
 	private int hdkind_days;
 	
 }
+ 

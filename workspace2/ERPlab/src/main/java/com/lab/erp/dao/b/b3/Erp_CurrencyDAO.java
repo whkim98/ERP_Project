@@ -1,4 +1,4 @@
-package com.lab.erp.dao.b.b2;
+package com.lab.erp.dao.b.b3;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;

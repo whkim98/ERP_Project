@@ -15,9 +15,9 @@
 	<input type="button" value="계좌 현황/관리" onclick="#">
 	<input type="button" value="자금관리" onclick="#">
 	<input type="button" value="예산관리" onclick="#">
-	<input type="button" value="전표입력" onclick="#">
-	<input type="button" value="외화관리" onclick="#">
-	<input type="button" value="전자세금계산서" onclick="#">
+	<input type="button" value="전표입력" onclick="location.href='${pageContext.request.contextPath }/b31main'">
+	<input type="button" value="외화관리" onclick="location.href='${pageContext.request.contextPath }/b33main'">
+	<input type="button" value="전자세금계산서" onclick="location.href='${pageContext.request.contextPath }/b32main'">
 	<input type="button" value="마감결산" onclick="#">
 	<input type="button" value="원가분석" onclick="#">
 </div>
