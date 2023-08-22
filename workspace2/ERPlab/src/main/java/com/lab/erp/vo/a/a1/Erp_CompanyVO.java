@@ -29,4 +29,6 @@ public class Erp_CompanyVO {
 	private String company_fax;
 	private String company_email;
 	
+	private int comcode_no;
+	
 }

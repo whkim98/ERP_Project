@@ -1,6 +1,12 @@
 package com.lab.erp.controller.b;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.erp.service.b.B5Service;
+import com.lab.erp.vo.b.b5.Erp_AttendanceVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 import com.lab.erp.vo.login.Erp_Employee2VO;
 
@@ -95,8 +102,81 @@ public class B5Controller {
 	}
 	
 	@RequestMapping("/greeting/attendance")
-	public String attendance() {
+	public String attendance(Model model) {
+		List<Erp_Employee1VO> list = b5.selectAttendance();
+		model.addAttribute("list", list);
 		return "/b/b5/b53/attendancelist";
+	}
+	
+	@RequestMapping("/greeting/attendance/insertForm")
+	public String insertForm(Model model, int employee2_no) {
+		model.addAttribute("employee2_no", employee2_no);
+		return "/b/b5/b53/attendanceInsertForm";
+	}
+	
+	@RequestMapping("/greeting/attendance/insert")
+	public String insert(int employee2_no, int hdkind_no, String attendance_start, String attendance_end, Erp_AttendanceVO vo, Erp_Employee2VO evo) {
+		vo.setEmployee2_no(employee2_no);
+		vo.setHdkind_no(hdkind_no);
+		vo.setAttendance_start(attendance_start);
+		vo.setAttendance_end(attendance_end);
+		
+		int su = b5.insertAttendance(vo);
+		
+		System.out.println(vo.getAttendance_end());
+		System.out.println(vo.getAttendance_start());
+		
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date start = null;
+		Date end = null;
+		
+		try {
+			start = format.parse(attendance_start);
+			end = format.parse(attendance_end);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		int SATURDAY = Calendar.SATURDAY;
+		int SUNDAY = Calendar.SUNDAY;
+		
+		Calendar calendar = Calendar.getInstance();
+		
+		calendar.setTime(start);
+		
+		int weekendDays = 0;
+		
+		while (!calendar.getTime().after(end)) {
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek == SATURDAY || dayOfWeek == SUNDAY) {
+                weekendDays++;
+            }
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        System.out.println(weekendDays);
+    
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("attendance_start", attendance_start);
+		map.put("attendance_end", attendance_end);
+		map.put("employee2_no", employee2_no);
+		map.put("hdkind_no", hdkind_no);
+		
+		double employee2_holiday = b5.selectLocal(map) - weekendDays;
+		
+		System.out.println(employee2_holiday);
+		
+		evo.setEmployee2_no(employee2_no);
+		evo.setEmployee2_holiday(employee2_holiday);
+		
+		int su2 = b5.updateHoliday(evo);
+		
+		return "";
+		
 	}
 	
 }

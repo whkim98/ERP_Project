@@ -3,5 +3,85 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b1">
-
+	<!-- 동현 -->
+	<select id="bs3List" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		select * from erp_bs3
+	</select>
+	
+	<select id="ctgrDebtor" parameterType="int" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		select b.*, d.debtor_no from erp_bs3 b, erp_debtor d where d.ctgr_no = #{ctgr_no} and b.bs3_no = d.bs3_no
+	</select>
+	
+	<select id="ctgrCreditor" parameterType="int" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		select b.*, c.creditor_no from erp_bs3 b, erp_creditor c where c.ctgr_no = #{ctgr_no} and b.bs3_no = c.bs3_no
+	</select>
+	
+	<select id="getBsNo" parameterType="int" resultType="map">
+		select b1.bs1_no, b2.bs2_no bsno2, b3.* from erp_bs1 b1, erp_bs2 b2, erp_bs3 b3 
+		where b2.bs2_no = b3.bs2_no 
+		and b1.bs1_no = b2.bs1_no 
+		and b3.bs3_no = #{bs3_no}
+	</select>
+	
+	<!-- 직접입력 -->
+	<select id="autoDebtor" parameterType="map" resultType="map">
+		select b3.*, d.debtor_no 
+		from erp_bs3 b3, erp_debtor d 
+		where b3.bs3_no = d.bs3_no 
+		and d.ctgr_no = #{ctgr_no} 
+		and b3.bs3_ctgr = #{bs3_ctgr}
+	</select>
+	<select id="autoCreditor" parameterType="map" resultType="map">
+		select b3.*, c.creditor_no 
+		from erp_bs3 b3, erp_creditor c 
+		where b3.bs3_no = c.bs3_no 
+		and c.ctgr_no = #{ctgr_no} 
+		and b3.bs3_ctgr = #{bs3_ctgr}
+	</select>
+	
+	<insert id="createClosing" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+		insert into erp_closing(ctgr_no,closing_code,closing_date,debtor_no,closing_debtor,creditor_no,closing_creditor,comcode_no) 
+		values(#{ctgr_no},#{closing_code},sysdate(),#{debtor_no},#{closing_debtor},#{creditor_no},#{closing_creditor},#{comcode_no})		
+	</insert>
+	
+	<update id="updateClosing" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+		update erp_closing set 
+		closing_code = #{closing_code},
+		debtor_no = #{debtor_no},
+		closing_debtor = #{closing_debtor},
+		creditor_no = #{creditor_no},
+		closing_creditor = #{closing_creditor} 
+		where closing_no = #{closing_no}
+	</update>
+	
+	<delete id="deleteClosing" parameterType="int">
+		delete from erp_closing where closing_no = #{closing_no}
+	</delete>
+	
+	<select id="getClosing" parameterType="int" resultType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+		select * from erp_closing where closing_no = #{closing_no}
+	</select>
+	
+	<select id="getClosingNo" parameterType="String" resultType="int">
+		select closing_no from erp_closing where closing_code = #{closing_code}
+	</select>
+	
+	<select id="getClosingCode" parameterType="String" resultType="map">
+		select c.*, d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+		from erp_closing c, erp_debtor d, erp_creditor cr 
+		where c.closing_code = #{closing_code} 
+		and c.debtor_no = d.debtor_no 
+		and c.creditor_no = cr.creditor_no 
+	</select>
+	
+	<update id="updateBs3Amount" parameterType="map">
+		update erp_bs3 set bs3_amount = bs3_amount + #{bs3_amount} where bs3_no = #{bs3_no}
+	</update>
+	<update id="updateBs2Amount" parameterType="map">
+		update erp_bs2 set bs2_amount = bs2_amount + #{bs3_amount} where bs2_no = #{bs2_no}
+	</update>
+	<update id="updateBs1Amount" parameterType="map">
+		update erp_bs1 set bs1_amount = bs1_amount + #{bs3_amount} where bs1_no = #{bs1_no}
+	</update>
+	
 </mapper>

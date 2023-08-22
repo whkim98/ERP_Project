@@ -15,7 +15,7 @@ public class Erp_InvestmentVO {
 	private String investment_content;
 	private String investment_note;
 	private int investment_price;
-	private String team_no;
+	private int team_no;
 	private String investment_start;
 	private String investment_end;
 	private String investment_withdrawal;
@@ -23,5 +23,7 @@ public class Erp_InvestmentVO {
 	private int imkind_no;
 	private int investment_status;
 	private int comcode_no;
+	private int debtor_no;
+	private int creditor_no;
 
 }

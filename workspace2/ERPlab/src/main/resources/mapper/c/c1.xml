@@ -3,5 +3,44 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="c1">
+<select id="internationList" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+select * from erp_client ec 
+left join erp_country eco on ec.country_no = eco.country_no
+left join erp_clientsort ecs on ec.clientsort_no = ecs.clientsort_no
+left join erp_businesstype eb on ec.businesstype_no = eb.businesstype_no
+</select>
+
+<select id="selectType" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
+select * from erp_businesstype
+</select>
+
+<update id="updateClient" parameterType="map">
+	update erp_client set businesstype_no = #{businesstype_no} where client_no = #{client_no}
+</update>
+
+<select id="selectForsales" resultType="com.lab.erp.vo.c.c1.Erp_ForsalesVO">
+	select * from erp_forsales ef
+	left join erp_team et on ef.team_no = et.team_no
+	left join erp_client ec on ef.client_no = ec.client_no
+	left join erp_goods eg on ef.goods_no = eg.goods_no
+	left join erp_incoterms ei on ef.incoterms_no = ei.incoterms_no
+	left join erp_settletype es on ef.settletype_no = es.settletype_no
+</select>
+
+<select id="selectGoods" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+	select * from erp_goods
+</select>
+
+<insert id="insertForsales" parameterType="com.lab.erp.vo.c.c1.Erp_ForsalesVO">
+	insert into erp_forsales(team_no, client_no, forsales_date, goods_no, forsales_qty, forsales_price, forsales_tax, forsales_total, incoterms_no, settletype_no)
+	values(#{team_no}, #{client_no}, #{forsales_date}, #{goods_no}, #{forsales_qty}, #{forsales_price}, #{forsales_tax}, #{forsales_total}, #{incoterms_no}, #{settletype_no})
+</insert>
+
+<select id="selectImportpay" resultType="com.lab.erp.vo.c.c1.Erp_ImportpayVO">
+	select * from erp_importpay ei
+	left join erp_client ec on ei.client_no = ec.client_no
+	left join erp_import eip on ei.import_no = eip.import_no
+	left join erp_goods eg on eip.goods_no = eg.goods_no
+</select>
 
 </mapper>

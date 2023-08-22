@@ -9,7 +9,7 @@
  */
  
 @font-face {
-	font-family: 'NotoSans';
+	font-family: 'NotoSans' !important;
 	src: url('../fonts/NotoSansKR-Medium.otf') format('truetype');
 }
 
@@ -358,7 +358,9 @@ template {
 /* ================================================================================================================ */
 
 
-
+* { 
+	font-family: 'Noto Sans KR', sans-serif;
+}
 
 
 

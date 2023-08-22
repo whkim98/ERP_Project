@@ -26,5 +26,23 @@ public class Erp_ClientVO {
 	private String client_manager;
 	private String client_contact;
 	private int comcode_no;
+	
+// 국가===========================================
+	
+	private int country_code;
+	private String country_name;
+	
+// 업종코드목록 ====================================
+	
+	private int businesstype_code;
+	private String businesstype_name;
+	private String businesstype_biotore;
+	private String businesstype_ctgr;
+	private String businesstype_subctgr;
+	private String businesstype_description;
 
+// 거래처종류 ======================================
+	
+	private String clientsort_name;
+	
 }

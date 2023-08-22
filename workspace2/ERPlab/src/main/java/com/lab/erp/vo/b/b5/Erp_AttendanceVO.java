@@ -12,11 +12,9 @@ public class Erp_AttendanceVO {
 	
 	private int attendance_no;
 	private int employee2_no;
-	private int attendance_workdays;
 	private int hdkind_no;
-	private String attendance_usedate;
-	private BigDecimal attendance_usedays;
-	private BigDecimal attendance_approved;
 	private int comcode_no;
+	private String attendance_start;
+	private String attendance_end;
 
 }

@@ -10,6 +10,7 @@ public class Erp_StatementVO {
 
 	private int statement_no;
 	private int ctgr_no;
+	private String statement_code;
 	private String statement_date;
 	private int client_no;
 	private int team_no;

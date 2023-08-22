@@ -1,5 +1,7 @@
 package com.lab.erp.vo.login;
 
+import java.math.BigDecimal;
+
 import lombok.*;
 
 @Data
@@ -41,5 +43,17 @@ public class Erp_Employee1VO {
 	private int attendance_no;
 	private String resign_date;
 	private int resign_cost;
+	
+//	근태 컬럼 =======================================
+	
+	private int hdkind_no;
+	private String attendance_start;
+	private String attendance_end;
+	
+//	근태종류 컬럼 ====================================
+	
+	private String hdkind_name;
+	private double hdkind_days;
+	private double hdkind_approved;
 	
 }

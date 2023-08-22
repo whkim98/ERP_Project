@@ -13,6 +13,5 @@ public class Erp_EvaluemngVO {
 	private int evaluation_no;
 	private int team_no;
 	private String evaluemng_date;
-	private int evaluemng_totalnum;
 	
 }

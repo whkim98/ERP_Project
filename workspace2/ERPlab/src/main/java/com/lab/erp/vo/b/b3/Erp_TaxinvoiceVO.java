@@ -9,6 +9,7 @@ import lombok.*;
 public class Erp_TaxinvoiceVO {
 	
 	private int taxinvoice_no;
+	private String taxinvoice_code;
 	private int tikind_no;
 	private int company_no;
 	private int client_no;

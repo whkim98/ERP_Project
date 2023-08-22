@@ -1,0 +1,70 @@
+.event_container {
+    padding: 2%;
+}
+
+.event_container > .event_title {
+    border-bottom: thick double #ff9633;
+}
+
+.event_container > .event_body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.event_container > .event_body > .event_regist {
+    width: 45%;
+    height: 100%;
+    display: flex;
+    overflow: scroll;
+}
+
+.event_container > .event_body > .regits_form {
+    width: 50%;
+    height: 100%;
+}
+
+.event_container > .event_body > .regits_form .sec {
+    display: flex;
+    margin: 2%;
+}
+
+.event_container > .event_body > .regits_form .sec > label {
+    width: 40%;
+}
+
+.event_container > .event_body > .regits_form .sec > input:focus,
+select:focus {
+    border-color: #000b9e;
+}
+
+.event_container > .event_body > .regits_form .sec > .goods_regist {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.event_container > .event_body > .regits_form .sec > .goods_regist > #goods_no {
+    width: 80%;
+}
+
+.event_container > .event_body > .regits_form .sec > input[type="number"] {
+    appearance: none;
+    background: rgba(160, 160, 160, 0.075);
+    border: solid 1px rgba(160, 160, 160, 0.3);
+    outline: 0;
+    padding: 0 1em;
+    text-decoration: none;
+    width: 100%;
+}
+
+.event_container > .event_body > .regits_form button {
+    border-color: #000b9e;
+}
+
+.post .content {
+    font-size: 1.1rem;
+}
+
+.items {
+    border-bottom: 1px solid #ff9633;
+}

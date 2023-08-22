@@ -1,11 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
@@ -13,6 +9,11 @@
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
  font-size:10px;
+
+}
+
+.notosanskr{ 
+ 	margin-top: 70px;
 }
 
 .A31 input{
@@ -49,11 +50,10 @@
 	background-color: #000;
 }
 </style>
-</head>
-<body class="notosanskr">
-	<div>
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
+	<div class="notosanskr">
 		<div align="center">
-			<h2>프로젝트 등록</h2>
+			<h1 style="font-size: 20pt;">프로젝트 등록</h1>
 		</div>
 		<div align="center" class="divform1">
 			<table>
@@ -256,7 +256,7 @@
 				document.getElementById("client_name").focus();
 				return;
 			}
-			var url = "${pageContext.request.contextPath}/a/a3/a32/searchcl?&comcode_code="+code;
+			var url = "${pageContext.request.contextPath}/a/a3/a32/searchcl";
 			var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 			
 			sendRequest(url, param, clName, "POST");
@@ -329,4 +329,6 @@
 		}
 	}
 </script>
-<%@ include file="/WEB-INF/views/layout/footer.jsp"%>
+</div>
+</body>
+</html>

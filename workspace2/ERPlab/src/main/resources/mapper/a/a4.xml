@@ -3,28 +3,90 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="a4">
+	<!-- 전체 리스트 -->
+	<select id="clientList" parameterType="map" resultType="map">
+		select c.*, ct.country_name from erp_client c, erp_country ct 
+		where comcode_no = #{comcode_no} 
+		and c.country_no = ct.country_no 
+		<if test="type != null">
+			<if test="type == 'country_name'">
+				and ct.country_name like '%${word}%' 
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%' 
+			</if>
+		</if>
+	</select>
+	<select id="accountList" parameterType="map" resultType="map">
+		select a.*, t.team_name, t.team_code from erp_account a, erp_team t 
+		where a.comcode_no = #{comcode_no} 
+		and a.team_nos like '%${team_code}%'
+		<if test="type != null">
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%' 
+			</if>
+			<if test="type == 'account_bank'">
+				and a.account_bank like '%${word}%' 
+			</if>
+			<if test="type == 'account_num'">
+				and a.account_num like '%${word}%' 
+			</if>
+		</if>
+	</select>
+	<select id="imkindList" resultType="com.lab.erp.vo.a.a4.Erp_ImkindVO">
+		select * from erp_imkind
+	</select>
+	<select id="leasetypeList" resultType="com.lab.erp.vo.a.a4.Erp_LeasetypeVO">
+		select * from erp_leasetype
+	</select>
+
+	<!-- 자동완성 및 no -->
+	<select id="searchim" parameterType="String" resultType="com.lab.erp.vo.a.a4.Erp_ImkindVO">
+		select * from erp_imkind where imkind_name like '%${imkind_name}%'
+	</select>
+	<select id="searchlt" parameterType="String" resultType="com.lab.erp.vo.a.a4.Erp_LeasetypeVO">
+		select * from erp_leasetype where leasetype_name like '%${leasetype_name}%'
+	</select>
+	<select id="searchcl" parameterType="map" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select * from erp_client where client_name like '%${client_name}%' and comcode_no = #{comcode_no}
+	</select>
+	<select id="searchac" parameterType="int" resultType="com.lab.erp.vo.b.b2.Erp_AccountVO">
+		select * from erp_account where team_no = #{team_no}
+	</select>
+	
+	
+	<!-- 거래처, 계좌 정보 -->
+	<select id="selectClient" parameterType="int" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select * from erp_client where client_no = #{client_no}
+	</select>
+	<select id="selectAccount" parameterType="int" resultType="com.lab.erp.vo.b.b2.Erp_AccountVO">
+		select * from erp_account where account_no = #{account_no}
+	</select>
+	
 	
 	<!-- 자금조달 - 투자 -->
 	<insert id="createInvestment" parameterType="com.lab.erp.vo.a.a4.Erp_InvestmentVO">
-		insert into erp_investment(ctgr_no,investment_code,client_no,investment_content,investment_note,investment_price,team_no,investment_start,investment_end,investment_withdrawal,account_no,imkind_no,investment_status,comcode_no) 
-		values(#{ctgr_no},#{investment_code},#{client_no},#{investment_content},#{investment_note},#{investment_price},#{team_no},#{investment_start},#{investment_end},#{investment_withdrawal},#{account_no},#{imkind_no},#{investment_status},#{comcode_no})
+		insert into erp_investment(ctgr_no,investment_code,client_no,investment_content,investment_note,investment_price,team_no,investment_start,investment_end,investment_withdrawal,account_no,imkind_no,investment_status,comcode_no,debtor_no,creditor_no) 
+		values(#{ctgr_no},#{investment_code},#{client_no},#{investment_content,jdbcType=VARCHAR},#{investment_note,jdbcType=VARCHAR},#{investment_price},#{team_no},#{investment_start,jdbcType=DATE},#{investment_end,jdbcType=DATE},#{investment_withdrawal,jdbcType=DATE},#{account_no},#{imkind_no},#{investment_status},#{comcode_no},#{debtor_no},#{creditor_no})
 	</insert>
 	
 	<update id="updateInvestment" parameterType="com.lab.erp.vo.a.a4.Erp_InvestmentVO">
 		update erp_investment set 
 		investment_code = #{investment_code},
 		client_no = #{client_no},
-		investment_content = #{investment_content},
-		investment_note = #{investment_note},
+		investment_content = #{investment_content,jdbcType=VARCHAR},
+		investment_note = #{investment_note,jdbcType=VARCHAR},
 		investment_price = #{investment_price},
 		team_no = #{team_no},
 		investment_start = #{investment_start},
-		investment_end = #{investment_end},
-		investment_withdrawal = #{investment_withdrawal},
+		investment_end = #{investment_end,jdbcType=DATE},
+		investment_withdrawal = #{investment_withdrawal,jdbcType=DATE},
 		account_no = #{account_no},
 		imkind_no = #{imkind_no},
 		investment_status = #{investment_status},
-		comcode_no = #{comcode_no} 
+		comcode_no = #{comcode_no}, 
+		debtor_no = #{debtor_no},
+		creditor_no = #{creditor_no} 
 		where investment_no = #{investment_no}
 	</update>
 	
@@ -33,25 +95,61 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="investmentList" parameterType="map" resultType="map">
-		select i.*, im.imkind_name, cl.client_name, t.team_name, c.closing_debtor, c.closing_creditor, to_date(c.closing_date, 'YYYY-MM-DD') 
-		from erp_investment i, erp_imkind im, erp_client cl, erp_team t, erp_closing c 
+		select i.*, im.imkind_name, cl.client_name, t.team_name, t.team_code, c.closing_debtor, c.closing_creditor, date_format(c.closing_date, '%m월 %d일') closing_date, 
+		d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+		from erp_investment i, erp_imkind im, erp_client cl, erp_team t, erp_closing c, erp_debtor d, erp_creditor cr 
 		where i.client_no = cl.client_no 
+		and i.debtor_no = d.debtor_no 
+		and i.creditor_no = cr.creditor_no 
 		and i.imkind_no = im.imkind_no 
 		and i.team_no = t.team_no 
-		and i.ctgr_no = c.ctgr_no 
-		and i.comcode_no = #{comcode_no}
+		and i.investment_code = c.closing_code 
+		and i.ctgr_no = #{ctgr_no} 
+		and i.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					im.imkind_name like '%${word}%' or cl.client_name like '%${word}%' 
+					or t.team_name like '%${word}%' or date_format(c.closing_date, '%m월 %d일') like '%${word}%' 
+					or i.investment_code like '%${word}%' or i.investment_content like '%${word}%'
+					)
+			</if>
+			<if test="type == 'imkind_name'">
+				and im.imkind_name like '%${word}%' 
+			</if>
+			<if test="type == 'client_name'">
+				and cl.client_name like '%${word}%' 
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%' 
+			</if>
+			<if test="type == 'closing_date'">
+				and date_format(c.closing_date, '%m월 %d일') like '%${word}%' 
+			</if>
+			<if test="type == 'investment_code'">
+				and i.investment_code like '%${word}%' 
+			</if>
+			<if test="type == 'investment_content'">
+				and i.investment_content like '%${word}%'
+			</if>
+		</if>
 	</select>
 	
-	<select id="selectInvestment" parameterType="int" resultType="map">
-		select i.*, im.imkind_name, cl.client_name, cl.client_manager, cl.client_contact, 
-		t.team_name, a.account_bank, a.account_num 
-		from erp_investment i, erp_imkind im, erp_client cl, erp_team t, erp_account a 
-		where i.client_no = cl.client_no 
-		and i.imkind_no = im.imkind_no 
+	<select id="selectInvestment" parameterType="map" resultType="map">
+		select i.*, im.imkind_name, t.team_name, t.team_code, c.closing_no, c.closing_creditor, date_format(c.closing_date, '%m월 %d일') closing_date, 
+		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no1}) bs3_ctgr1, 
+		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no2}) bs3_ctgr2 
+		from erp_investment i, erp_imkind im, erp_team t, erp_closing c 
+		where i.imkind_no = im.imkind_no 
 		and i.team_no = t.team_no 
-		and i.account_no = a.account_no 
+		and i.investment_code = c.closing_code 
 		and i.investment_no = #{investment_no}
-	</select>	<!-- 차변대변 관련 항목은 따로 map으로 뽑아서 넘기기 -->
+	</select>
+	
+	<select id="getImCode" parameterType="String" resultType="int">
+		select investment_no from erp_investment where investment_code = #{investment_code}
+	</select>
+	
 	
 	<!-- 차입 -->
 	<insert id="createLoan" parameterType="com.lab.erp.vo.a.a4.Erp_LoanVO">
@@ -81,23 +179,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="loanList" parameterType="map" resultType="map">
-		select l.*, cl.client_name, t.team_name, c.closing_debtor, c.closing_creditor, to_date(c.closing_date, 'YYYY-MM-DD') 
+		select l.*, cl.client_name, t.team_name, c.closing_debtor, c.closing_creditor, to_date(c.closing_date, 'YYYY-MM-DD') closing_date 
 		from erp_loan l, erp_client cl, erp_team t, erp_closing c 
 		where l.client_no = cl.client_no 
 		and l.team_no = t.team_no 
-		and l.ctgr_no = c.ctgr_no 
-		and l.comcode_no = #{comcode_no}
+		and l.loan_code = c.closing_code  
+		and l.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'client_name'">
+				and cl.client_name like '%${word}%' 
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%' 
+			</if>
+			<if test="type == 'closing_date'">
+				and c.closing_date like '%${word}%' 
+			</if>
+			<if test="type == 'loan_code'">
+				and l.loan_code like '%${word}%' 
+			</if>
+			<if test="type == 'loan_content'">
+				and l.loan_content like '%${word}%'
+			</if>
+		</if>
 	</select>
 	
-	<select id="selectLoan" parameterType="int" resultType="map">
-		select l.*, cl.client_name, cl.client_manager, cl.client_contact, 
-		t.team_name, a.account_bank, a.account_num 
-		from erp_loan l, erp_client cl, erp_team t, erp_account a 
-		where l.client_no = cl.client_no 
-		and l.team_no = t.team_no 
-		and l.account_no = a.account_no 
+	<select id="selectLoan" parameterType="map" resultType="map">
+		select l.*, t.team_name, c.closing_creditor, to_date(cl.closing_date, 'YYYY-MM-DD') closing_date, 
+		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no1}) bs3_ctgr1, 
+		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no2}) bs3_ctgr2 
+		from erp_loan l, erp_team t, erp_closing c  
+		where l.team_no = t.team_no 
+		and l.loan_code = c.closing_code 
 		and l.loan_no = #{loan_no}
 	</select>
+	
+	<select id="getLoCode" parameterType="String" resultType="int">
+		select loan_no from erp_loan where loan_code = #{loan_code}
+	</select>
+	
 	
 	<!-- 상환 -->
 	<insert id="inputRepay" parameterType="com.lab.erp.vo.a.a4.Erp_RepayVO">
@@ -122,10 +242,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from erp_repay where repay_code = #{repay_code}
 	</select>
 	
-	<select id="repayCode" parameterType="String" resultType="com.lab.erp.vo.a.a4.Erp_RepayVO">
+	<select id="repayCode" parameterType="String" resultType="map">
 		select repay_code, sum(repay_pay) repay_pay repay from erp_repay where repay_code = #{repay_code} 
 		group by repay_code
 	</select>
+	
 	
 	<!-- 임대 -->
 	<insert id="createLease" parameterType="com.lab.erp.vo.a.a4.Erp_LeaseVO">
@@ -155,17 +276,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from erp_lease where lease_no = #{lease_no}
 	</delete>
 	
-	<select id="">
-		select l.*, c.client_name, t.team_name, lt.leasetype_name, cl.closing_debtor, cl.closing_creditor, to_date(cl.closing_date, 'YYYY-MM-DD') 
-		from erp_lease l, erp_client c, erp_team t, erp_leasetype lt, erp_closing cl, erp_debtor d, erp_creditor cr 
+	<select id="leaseList" parameterType="map" resultType="map">
+		select l.*, c.client_name, t.team_name, lt.leasetype_name, cl.closing_debtor, cl.closing_creditor, to_date(cl.closing_date, 'YYYY-MM-DD') closing_date 
+		from erp_lease l, erp_client c, erp_team t, erp_leasetype lt, erp_closing cl 
 		where l.client_no = c.client_no 
 		and l.team_no = t.team_no 
 		and l.leasetype_no = lt.leasetype_no 
-		and l.debtor_no = d.debtor_no 
-		and l.creditor_no = cr.creditor_no 
-		and l.ctgr_no = d.ctgr_no 
-		and l.ctgr_no = cr.ctgr_no 
-		and l.ctgr_no = cl.ctgr_no 
-		and l.comcode_no = #{comcode_no}
+		and l.lease_code = cl.closing_code 
+		and l.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'leasetype_name'">
+				and lt.leasetype_name like '%${word}%' 
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%' 
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%' 
+			</if>
+			<if test="type == 'closing_date'">
+				and cl.closing_date like '%${word}%' 
+			</if>
+			<if test="type == 'lease_code'">
+				and l.lease_code like '%${word}%' 
+			</if>
+			<if test="type == 'lease_content'">
+				and l.lease_content like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectLease" parameterType="map" resultType="map">
+		select l.*, c.closing_debtor, c.closing_creditor, to_date(cl.closing_date, 'YYYY-MM-DD') closing_date, 
+		t.team_name, lt.leasetype_name, 
+		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no1}) bs3_ctgr1, 
+		(select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no2}) bs3_ctgr2 
+		from erp_lease l, erp_leasetype lt, erp_closing c, erp_team t 
+		where l.leasetype_no = lt.leasetype_no 
+		and l.team_no = t.team_no 
+		and l.lease_code = c.closing_code 
+		and l.lease_no = #{lease_no}
+	</select>
+	
+	<select id="getLeCode" parameterType="String" resultType="int">
+		select lease_no from erp_lease where lease_code = #{lease_code}
 	</select>
 </mapper>

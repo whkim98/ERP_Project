@@ -12,10 +12,9 @@
 <!-- 각각의 버튼 누르면 페이지 이동 -->
 <h2>해외영업팀</h2>
 <br>
-	<input type="button" value="국가별분류" onclick="#">
-	<input type="button" value="해외 거래처관리" onclick="#">
-	<input type="button" value="수출관리" onclick="#">
-	<input type="button" value="수출채권" onclick="#">
+	<input type="button" value="해외 거래처관리" onclick="location.href='${pageContext.request.contextPath}/internationalsales/list'">
+	<input type="button" value="수출관리" onclick="location.href='${pageContext.request.contextPath}/internationalsales/export'">
+	<input type="button" value="수출채권" onclick="location.href='${pageContext.request.contextPath}/internationalsales/importpay'">
 	<input type="button" value="수입(매입)" onclick="#">
 	<input type="button" value="수입발주관리" onclick="#">
 	<input type="button" value="수입채무관리" onclick="#">

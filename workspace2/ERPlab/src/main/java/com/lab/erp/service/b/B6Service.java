@@ -24,12 +24,12 @@ public class B6Service {
 	}
 	
 	//추가근무수당 정산
-	public int selectMonth(Map<String, Object> map) {
-		return sdao.selectMonth(map);
+	public int selectMonth(String salary_date) {
+		return sdao.selectMonth(salary_date);
 	}
 	
-	public int selectYear(Map<String, Object> map) {
-		return sdao.selectYear(map);
+	public int selectYear(String salary_date) {
+		return sdao.selectYear(salary_date);
 	}
 	
 	public int selectSalary(int employee2_no) {

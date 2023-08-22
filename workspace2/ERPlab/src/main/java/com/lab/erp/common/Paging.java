@@ -1,12 +1,12 @@
 package com.lab.erp.common;
 
 public class Paging {
-	private final int perPage = 5;
+	private final int perPage = 2;
 	private int pageCount;
 	private int boardCount;
 	private int first;
 	private int last;
-	private final int perSection = 10;
+	private final int perSection = 4;
 	private int begin;
 	private int end;
 	private int section;

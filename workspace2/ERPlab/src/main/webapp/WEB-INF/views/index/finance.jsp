@@ -19,6 +19,10 @@
 	<input type="button" value="외화관리" onclick="location.href='${pageContext.request.contextPath }/b33main'">
 	<input type="button" value="전자세금계산서" onclick="location.href='${pageContext.request.contextPath }/b32main'">
 	<input type="button" value="마감결산" onclick="#">
+	<input type="button" value="전표입력" onclick="#">
+	<input type="button" value="외화관리" onclick="#">
+	<input type="button" value="전자세금계산서" onclick="#">
+	<input type="button" value="마감결산" onclick="location.href='${pageContext.request.contextPath }/b/b4/b41?comcode_code=${comcode_code }'">
 	<input type="button" value="원가분석" onclick="#">
 </div>
 </body>

@@ -9,7 +9,6 @@ import lombok.*;
 public class Erp_GoodsstVO {
 
 	private int goodsst_no;
-	private String goodsst_lot;
 	private String goodsst_unit;
 	private String goodsst_spec;
 	private String goodsst_size;

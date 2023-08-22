@@ -10,7 +10,7 @@ public class Erp_GoodsVO {
 
 	private int goods_no;
 	private String goods_code;
-	private int goods_barcode;
+	private String goods_barcode;
 	private String goods_name;
 	private int goodskind_no;
 	private int goods_price;

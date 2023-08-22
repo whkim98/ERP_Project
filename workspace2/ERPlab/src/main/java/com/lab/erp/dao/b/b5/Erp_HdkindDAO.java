@@ -13,6 +13,4 @@ private SqlSession sqlSession;
 		this.sqlSession = sqlSession;
 	}
 
-	
-	
 }

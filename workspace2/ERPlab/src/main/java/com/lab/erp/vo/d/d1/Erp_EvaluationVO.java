@@ -9,8 +9,6 @@ import lombok.*;
 public class Erp_EvaluationVO {
 
 	private int evaluation_no;
-	private int evaluation_qty;
-	private int evaluation_rest;
 	private String evaluation_paperend;
 	private String evaluation_actualend;
 	private String evaluation_content;

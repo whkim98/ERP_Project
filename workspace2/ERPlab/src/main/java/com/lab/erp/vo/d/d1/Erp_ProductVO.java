@@ -9,6 +9,7 @@ import lombok.*;
 public class Erp_ProductVO {
 
 	private int product_no;
+	private String product_code;
 	private String product_name;
 	private String product_install;
 	private String product_end;
