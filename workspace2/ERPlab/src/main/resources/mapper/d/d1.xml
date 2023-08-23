@@ -3,6 +3,24 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="d1">
+	<!-- 거래처 -->
+	<select id="searchcl" parameterType="map" resultType="map">
+		select c.*, ct.*, b.* from erp_client c, erp_businesstype b, erp_country ct 
+		where c.client_name like '%${client_name}%' 
+		and c.comcode_no = #{comcode_no} 
+		and c.businesstype_no = b.businesstype_no 
+		and c.country_no = ct.country_no 
+	</select>
+	
+	<!-- 직원 -->
+	<select id="searchecode" parameterType="String" resultType="map">
+		select e.*, e2.*, t.* 
+		from erp_employee1 e, erp_employee2 e2, erp_team t 
+		where e.employee1_code like '%${employee1_code}%' 
+		and e.employee1_no = e2.employee1_no 
+		and e2.team_no = t.team_no 
+	</select>
+
 	<!-- insert 할때 상품 고르기 -->
 	<select id="goodsList" parameterType="map" resultType="map">
 		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec, c.client_name, gl.* 
@@ -43,24 +61,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산의뢰 select된 상품 불러오기 및 CUD -->
 	<select id="selectRequestGoods" parameterType="int" resultType="map">
-		select g.*, gs.goodssort_name, gk.goodskind_name 
-		from erp_goods g, erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr  
-		where cr.goods_no = g.goods_no 
-		and g.goodssort_no = gs.goodssort_no 
+		select gs.goodssort_name, gk.goodskind_name, cr.*, c.client_name 
+		from erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr, erp_client c 
+		where cr.goodskind_no = gk.goodskind_no  
+		and cr.client_no1 = c.client_no 
 		and gs.goodskind_no = gk.goodskind_no 
 		and cr.requestproduct_no = #{requestproduct_no}
 	</select>
 	
 	<insert id="createConnectRequest" parameterType="com.lab.erp.vo.d.d1.Erp_ConnectrequestVO">
-		insert into erp_connectrequest(requestproduct_no,goods_no,connectrequest_qty) 
-		values(#{requestproduct_no},#{goods_no},#{connectrequest_qty})
+		insert into erp_connectrequest(requestproduct_no,connectrequest_qty,goods_code,goods_barcode,goods_name,goodskind_no,goods_customerprice,goods_description,client_no1,client_no2,goodsst_unit,goodsst_spec,goodsst_size,goodsst_package,goodsst_ea)  
+		values(#{requestproduct_no},#{connectrequest_qty},#{goods_code},#{goods_barcode},#{goods_name},#{goodskind_no},#{goods_customerprice},#{goods_description},#{client_no1},#{client_no2},#{goodsst_unit},#{goodsst_spec},#{goodsst_size},#{goodsst_package},#{goodsst_ea})
 	</insert>
 	
 	<update id="updateConnectRequest" parameterType="com.lab.erp.vo.d.d1.Erp_ConnectrequestVO">
 		update erp_connectrequest set 
 		requestproduct_no = #{requestproduct_no},
-		goods_no = #{goods_no},
-		connectrequest_qty = #{connectrequest_qty} 
+		connectrequest_qty = #{connectrequest_qty}, 
+		goods_code = #{goods_code},
+		goods_barcode = #{goods_barcode},
+		goods_name = #{goods_name},
+		goodskind_no = #{goodskind_no},
+		goods_customerprice = #{goods_customerprice},
+		goods_description = #{goods_description},
+		client_no1 = #{client_no1},
+		client_no2 = #{client_no2},
+		goodsst_unit = #{goodsst_unit},
+		goodsst_spec = #{goodsst_spec},
+		goodsst_size = #{goodsst_size},
+		goodsst_package = #{goodsst_package},
+		goodsst_ea = #{goodsst_ea} 
 		where connectrequest_no = #{connectrequest_no}
 	</update>
 	
@@ -136,8 +166,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 의뢰 -->
 	<insert id="createRequestProduct" parameterType="com.lab.erp.vo.d.d1.Erp_RequestproductVO">
-		insert into erp_requestproduct(client_no,requestproduct_content,requestproduct_start,requestproduct_end,requestproduct_name,employee1_no,comcode_no) 
-		values(#{client_no},#{requestproduct_content},#{requestproduct_start},#{requestproduct_end},#{requestproduct_name},#{employee1_no},#{comcode_no})
+		insert into erp_requestproduct(requestproduct_code,client_no,requestproduct_content,requestproduct_start,requestproduct_end,requestproduct_name,employee1_no,comcode_no) 
+		values(#{requestproduct_code},#{client_no},#{requestproduct_content},#{requestproduct_start},#{requestproduct_end},#{requestproduct_name},#{employee1_no},#{comcode_no})
 	</insert>
 	
 	
@@ -157,13 +187,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="requestProductList" parameterType="map" resultType="map">
-		select c.debtor_no, d.bs3_no bs3_no1, c.creditor_no, cr.bs3_no bs3_no2, r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
-		from erp_closing c, erp_debtor d, erp_creditor cr, erp_requestproduct r, erp_client cl, erp_employee1 e 
+		select r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
+		from erp_requestproduct r, erp_client cl, erp_employee1 e 
 		where r.client_no = cl.client_no 
 		and r.employee1_no = e.employee1_no 
-		and r.requestproduct_code = c.closing_code 
-		and c.debtor_no = d.debtor_no 
-		and c.creditor_no = cr.creditor_no 
 		and r.comcode_no = #{comcode_no} 
 		<if test="type != null">
 			<if test="type == 'requestproduct_code'">
@@ -181,21 +208,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="type == 'requestproduct_content'">
 				and r.requestproduct_content like '%${word}%'
 			</if>
-			<if test="type == 'closing_date'">
-				and date_format(c.closing_date, '%m월 %d일') like '%${word}%'
-			</if>
 		</if>
 	</select>
 	
 	<select id="selectRequestProduct" parameterType="int" resultType="map">
-		select c.debtor_no, c.closing_debtor, c.closing_creditor, d.bs3_no bs3_no1, c.creditor_no, cr.bs3_no bs3_no2, r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
-		from erp_closing c, erp_debtor d, erp_creditor cr, erp_requestproduct r, erp_client cl, erp_employee1 e 
+		select r.*, e.*, cl.*, b.*, e2.*, t.*, ct.*  
+		from erp_requestproduct r, erp_client cl, erp_employee1 e, erp_employee2 e2, erp_businesstype b, erp_team t, erp_country ct 
 		where r.client_no = cl.client_no 
+		and e.employee1_no = e2.employee1_no 
+		and e2.team_no = t.team_no 
+		and ct.country_no = cl.country_no 
+		and cl.businesstype_no = b.businesstype_no 
 		and r.employee1_no = e.employee1_no 
-		and r.requestproduct_code = c.closing_code 
-		and c.debtor_no = d.debtor_no 
-		and c.creditor_no = cr.creditor_no 
 		and r.requestproduct_no = #{requestproduct_no}
+	</select>
+	
+	<select id="getRequestProductNo" parameterType="String" resultType="int">
+		select requestproduct_no from erp_requestproduct where requestproduct_code = #{requestproduct_code}
 	</select>
 	
 	

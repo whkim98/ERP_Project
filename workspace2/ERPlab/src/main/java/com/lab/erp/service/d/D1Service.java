@@ -231,6 +231,10 @@ public class D1Service {
 		return rpdao.selectRequestProduct(requestproduct_no);
 	}
 	
+	public int getRequestProductNo(String requestproduct_code) {
+		return rpdao.getRequestProductNo(requestproduct_code);
+	}
+	
 	
 //	ped 작업지시서
 	public int createPed(Erp_PedVO vo) {
@@ -460,5 +464,15 @@ public class D1Service {
 	// 상품 등급
 	public List<Erp_GoodslevVO> goodslev(){
 		return gvdao.goodslev();
+	}
+	
+	// 거래처
+	public Map<String, Object> searchcl(Map<String, Object> map){
+		return rpdao.searchcl(map);
+	}
+	
+	// 직원
+	public Map<String, Object> searchecode(String employee1_code){
+		return rpdao.searchecode(employee1_code);
 	}
 }

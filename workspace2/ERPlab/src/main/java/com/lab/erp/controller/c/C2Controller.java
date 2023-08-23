@@ -65,21 +65,7 @@ public class C2Controller {
 		this.request = request;
 	}
 	
-	public String resultComcode(String comcode_code, Model model) {
-		String msg = null;
-		String url = null;
-		
-		if(comcode_code == null || comcode_code.isEmpty()) {
-			request.getSession().invalidate();
-			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
-			url = "/";
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			return "";
-		}
-	}
+	
 //	거래처
 	@RequestMapping("/c21")
 	public String clientList(Model model, String type, String word, String comcode_code) {

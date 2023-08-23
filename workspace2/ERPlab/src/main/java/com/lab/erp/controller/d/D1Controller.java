@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lab.erp.common.ViewPath;
+import com.lab.erp.service.a.A4Service;
 import com.lab.erp.service.d.D1Service;
 import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
+import com.lab.erp.vo.c.Erp_ClientVO;
 import com.lab.erp.vo.d.d1.Erp_ConnectrequestVO;
 import com.lab.erp.vo.d.d1.Erp_DefectiveVO;
 import com.lab.erp.vo.d.d1.Erp_EvaluationVO;
@@ -40,14 +42,24 @@ public class D1Controller {
 	private LoginService ls;
 	private D1Service d1;
 	private HttpServletRequest request;
+	private A4Service a4;
 	
 	@Autowired
-	public D1Controller(LoginService ls, D1Service d1, HttpServletRequest request) {
+	public D1Controller(LoginService ls, D1Service d1, HttpServletRequest request, A4Service a4) {
 		this.ls = ls;
 		this.d1 = d1;
 		this.request = request;
+		this.a4 = a4;
 	}
 	
+	
+	@RequestMapping("/selectre")
+	public String re(Model model) {
+		List<Map<String, Object>> sortkind = d1.sortkind();
+		
+		model.addAttribute("sortkind", sortkind);
+		return ViewPath.D1 + "/d12/selectRequestProduct";
+	}
 	
 //	생산의뢰 requestproduct
 	@RequestMapping("/d12/inputRequestProduct")
@@ -78,12 +90,8 @@ public class D1Controller {
 		map.put("comcode_no", comcode_no);
 		
 		List<Map<String, Object>> list = d1.requestProductList(map);
-		List<Erp_Bs3VO> dlist = d1.ctgrDebtor(48);
-		List<Erp_Bs3VO> clist = d1.ctgrCreditor(48);
 		
 		model.addAttribute("list", list);
-		model.addAttribute("dlist", dlist);
-		model.addAttribute("clist", clist);
 		
 		return ViewPath.D1 + "/d12/inputRequestProduct";
 		
@@ -119,18 +127,19 @@ public class D1Controller {
 		List<Map<String, Object>> list = d1.requestProductList(map);
 		Map<String, Object> inmap = d1.selectRequestProduct(vo.getRequestproduct_no());
 		List<Map<String, Object>> glist = d1.selectRequestGoods(vo.getRequestproduct_no());
+		List<Map<String, Object>> sortkind = d1.sortkind();
 		
+		model.addAttribute("sortkind", sortkind);
 		model.addAttribute("list", list);
 		model.addAttribute("inmap", inmap);
 		model.addAttribute("glist", glist);
 		
-		return ViewPath.D1 + "/d12/inputRequestProduct";
+		return ViewPath.D1 + "/d12/selectRequestProduct";
 	}
 	
 	@RequestMapping("/d12/createRequestProduct")
 	@Transactional
-	public String createRequestProduct(Erp_RequestproductVO vo, String bs3_no1, String bs3_no2, String qty, String goodslot_total,
-			String debtor_no, String creditor_no, String[] goods_no, String[] connectrequest_qty, String comcode_code, Model model) {
+	public String createRequestProduct(Erp_RequestproductVO vo, Erp_ConnectrequestVO crlist, String comcode_code, Model model) {
 		String msg = null;
 		String url = null;
 		
@@ -145,91 +154,25 @@ public class D1Controller {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
-		int debtno = 0;
-		int creditno = 0;
-		int b1 = 0;
-		int b2 = 0;
-		int total = 0;
-		int goodsqty = 0;
-		int tqty = 0;
-		
-		if(debtor_no == "") {
-			debtno = 0;
-		}else {
-			debtno = Integer.parseInt(debtor_no);
-		}
-		if(creditor_no == "") {
-			creditno = 0;
-		}else {
-			creditno = Integer.parseInt(creditor_no);
-		}
-		if(bs3_no1 == "") {
-			b1 = 0;
-		}else {
-			b1 = Integer.parseInt(bs3_no1);
-		}
-		if(bs3_no2 == "") {
-			b2 = 0;
-		}else {
-			b2 = Integer.parseInt(bs3_no2);
-		}
-		tqty = Integer.parseInt(qty);
-		total = Integer.parseInt(goodslot_total);
-		
-		total *= tqty;
-		
 		vo.setComcode_no(comcode_no);
 		
 		d1.createRequestProduct(vo);
 		
-		for(int i = 0; i < goods_no.length; i++) {
-			Erp_ConnectrequestVO crvo = new Erp_ConnectrequestVO();
-			int goodsno = 0;
-			if(goods_no[i] != null) {
-				goodsno = Integer.parseInt(goods_no[i]);
-			}
-			if(connectrequest_qty[i] != null) {
-				goodsqty = Integer.parseInt(connectrequest_qty[i]);
-			}
-			crvo.setGoods_no(goodsno);
-			crvo.setConnectrequest_qty(goodsqty);
-			crvo.setRequestproduct_no(vo.getRequestproduct_no());
-			d1.createConnectRequest(crvo);
+		int rpno = d1.getRequestProductNo(vo.getRequestproduct_code());
+		
+		for(int i = 0; i < crlist.getCrlist().size(); i++) {
+			crlist.getCrlist().get(i).setRequestproduct_no(rpno);
 		}
 		
-		Erp_ClosingVO cvo = new Erp_ClosingVO();
+		/* Erp_ConnectrequestVO crlist > vo자체를 crlist라는 변수명으로 받아와서
+		 * List<Erp_ConnectrequestVO> 선언 후 
+		 * 확장형 for문으로 List 자체를 insert
+		 * */
+		List<Erp_ConnectrequestVO> cvo = crlist.getCrlist();
 		
-		cvo.setClosing_code(vo.getRequestproduct_code());
-		cvo.setCtgr_no(48);
-		cvo.setDebtor_no(debtno);
-		cvo.setCreditor_no(creditno);
-		cvo.setClosing_debtor(total);
-		cvo.setClosing_creditor(total);
-		cvo.setComcode_no(comcode_no);
-		
-		d1.createClosing(cvo);
-		
-		Map<String, Object> map = new HashMap<>();
-		Map<String, Object> dmap = d1.getBsNo(b1);
-		Map<String, Object> cmap = d1.getBsNo(b2);
-		
-		map.put("bs3_amount", total);
-		map.put("bs1_no", dmap.get("bs1_no"));
-		map.put("bs2_no", dmap.get("bsno2"));
-		map.put("bs3_no", dmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
-		
-		map.put("bs3_amount", (-total));
-		map.put("bs1_no", cmap.get("bs1_no"));
-		map.put("bs2_no", cmap.get("bsno2"));
-		map.put("bs3_no", cmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
+		for(Erp_ConnectrequestVO crvo : cvo) {
+			d1.createConnectRequest(crvo);
+		}
 		
 		return "redirect:/d/d1/d12/inputRequestProduct?comcode_code="+comcode_code;
 	}
@@ -252,46 +195,10 @@ public class D1Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		int debtno = 0;
-		int creditno = 0;
-		int b11 = 0;
-		int b21 = 0;
-		int b12 = 0;
-		int b22 = 0;
 		int total = 0;
 		int goodsqty = 0;
 		int tqty = 0;
 		
-		if(debtor_no == "") {
-			debtno = 0;
-		}else {
-			debtno = Integer.parseInt(debtor_no);
-		}
-		if(creditor_no == "") {
-			creditno = 0;
-		}else {
-			creditno = Integer.parseInt(creditor_no);
-		}
-		if(bs3_no11 == "") {
-			b11 = 0;
-		}else {
-			b11 = Integer.parseInt(bs3_no11);
-		}
-		if(bs3_no21 == "") {
-			b21 = 0;
-		}else {
-			b21 = Integer.parseInt(bs3_no21);
-		}
-		if(bs3_no12 == "") {
-			b12 = 0;
-		}else {
-			b12 = Integer.parseInt(bs3_no12);
-		}
-		if(bs3_no22 == "") {
-			b22 = 0;
-		}else {
-			b22 = Integer.parseInt(bs3_no22);
-		}
 		if(goodslot_total == "") {
 			total = 0;
 		}else {
@@ -319,68 +226,11 @@ public class D1Controller {
 			if(connectrequest_qty[i] != null) {
 				goodsqty = Integer.parseInt(connectrequest_qty[i]);
 			}
-			crvo.setGoods_no(goodsno);
+//			crvo.setGoods_no(goodsno);
 			crvo.setConnectrequest_qty(goodsqty);
 			crvo.setRequestproduct_no(vo.getRequestproduct_no());
 			d1.updateConnectRequest(crvo);
 		}
-		
-		int cno = d1.getClosingNo(vo.getRequestproduct_code());
-		
-		Erp_ClosingVO cvo = new Erp_ClosingVO();
-		
-		cvo.setClosing_code(vo.getRequestproduct_code());
-		cvo.setDebtor_no(debtno);
-		cvo.setCreditor_no(creditno);
-		cvo.setClosing_debtor(total);
-		cvo.setClosing_creditor(total);
-		cvo.setClosing_no(cno);
-		
-		d1.updateClosing(cvo);
-		
-		Map<String, Object> map = new HashMap<>();
-		Map<String, Object> dmap = d1.getBsNo(b11);
-		Map<String, Object> cmap = d1.getBsNo(b21);
-		
-		map.put("bs3_amount", (-(int)imap.get("closing_debtor")));
-		map.put("bs1_no", dmap.get("bs1_no"));
-		map.put("bs2_no", dmap.get("bsno2"));
-		map.put("bs3_no", dmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
-		
-		map.put("bs3_amount", (int)imap.get("closing_creditor"));
-		map.put("bs1_no", cmap.get("bs1_no"));
-		map.put("bs2_no", cmap.get("bsno2"));
-		map.put("bs3_no", cmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
-		
-		
-		dmap = d1.getBsNo(b12);
-		cmap = d1.getBsNo(b22);
-		
-		map.put("bs3_amount", total);
-		map.put("bs1_no", dmap.get("bs1_no"));
-		map.put("bs2_no", dmap.get("bsno2"));
-		map.put("bs3_no", dmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
-		
-		map.put("bs3_amount", (-total));
-		map.put("bs1_no", cmap.get("bs1_no"));
-		map.put("bs2_no", cmap.get("bsno2"));
-		map.put("bs3_no", cmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
 		
 		return "redirect:/d/d1/d12/updateForm?comcode_code="+comcode_code+"&requestproduct_no="+vo.getRequestproduct_no();
 	}
@@ -400,21 +250,9 @@ public class D1Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		int b1 = 0;
-		int b2 = 0;
 		int total = 0;
 		int tqty = 0;
 		
-		if(bs3_no1 == "") {
-			b1 = 0;
-		}else {
-			b1 = Integer.parseInt(bs3_no1);
-		}
-		if(bs3_no2 == "") {
-			b2 = 0;
-		}else {
-			b2 = Integer.parseInt(bs3_no2);
-		}
 		tqty = Integer.parseInt(qty);
 		total = Integer.parseInt(goodslot_total);
 		
@@ -424,33 +262,17 @@ public class D1Controller {
 		
 		d1.deleteRequestProduct(vo.getRequestproduct_no());
 		
-		int cno = d1.getClosingNo(vo.getRequestproduct_code());
-		
-		d1.deleteClosing(cno);
-		
-		Map<String, Object> map = new HashMap<>();
-		Map<String, Object> dmap = d1.getBsNo(b1);
-		Map<String, Object> cmap = d1.getBsNo(b2);
-		
-		map.put("bs3_amount", (-total));
-		map.put("bs1_no", dmap.get("bs1_no"));
-		map.put("bs2_no", dmap.get("bsno2"));
-		map.put("bs3_no", dmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
-		
-		map.put("bs3_amount", total);
-		map.put("bs1_no", cmap.get("bs1_no"));
-		map.put("bs2_no", cmap.get("bsno2"));
-		map.put("bs3_no", cmap.get("bs3_no"));
-		
-		d1.updateBs1Amount(map);
-		d1.updateBs2Amount(map);
-		d1.updateBs3Amount(map);
-		
 		return "redirect:/d/d1/d12/inputRequestProduct?comcode_code="+comcode_code;
+	}
+	
+	@RequestMapping("/d12/deleteGoods")
+	@ResponseBody
+	public List<Map<String, Object>> selectRequestProductGoods(Erp_RequestproductVO vo, Erp_ConnectrequestVO cvo){
+		d1.deleteConnectRequest(cvo.getConnectrequest_no());
+		
+		List<Map<String, Object>> list = d1.selectRequestGoods(vo.getRequestproduct_no());
+		
+		return list;
 	}
 	
 	
@@ -1676,6 +1498,103 @@ public class D1Controller {
 		d1.deleteInvenLot(ivo.getInvenlot_no());
 		
 		return "redirect:/d/d1/d17/inputGoods?comcode_code="+comcode_code+"&proinventory_no="+ivo.getProinventory_no();
+	}
+	
+	@RequestMapping("/d12/searchcl")
+	@ResponseBody
+	public Map<String, Object> searchcl(String client_name, String comcode_code) {
+		try {
+			Map<String, Object> map = new HashMap<>();
+			
+			int comcode_no = ls.comNo(comcode_code);
+			
+			map.put("comcode_no", comcode_no);
+			map.put("client_name", client_name);
+			
+			Map<String, Object> vo = d1.searchcl(map);
+			
+			System.out.println(vo);
+			
+			return vo;
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	@RequestMapping("/d12/searchecode")
+	@ResponseBody
+	public Map<String, Object> searchecode(String employee1_code) {
+		try {
+			
+			Map<String, Object> vo = d1.searchecode(employee1_code);
+			
+			return vo;
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	@RequestMapping("/d12/clList")
+	public String clList(String comcode_code, Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.clientList(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "d/d1/d12/clList";
+	}
+	@RequestMapping("/d12/clList1")
+	public String clList1(String comcode_code, Model model, String type, String word, String i) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.clientList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i",i);
+		
+		return ViewPath.WINDOW + "d/d1/d12/clList1";
+	}
+	@RequestMapping("/d12/clList2")
+	public String clList2(String comcode_code, Model model, String type, String word, String i) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.clientList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i",i);
+		
+		return ViewPath.WINDOW + "d/d1/d12/clList2";
 	}
 	
 }

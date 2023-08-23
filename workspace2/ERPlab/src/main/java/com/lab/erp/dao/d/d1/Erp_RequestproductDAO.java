@@ -39,4 +39,16 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d1.selectRequestProduct", requestproduct_no);
 	}
 	
+	public Map<String, Object> searchcl(Map<String, Object> map){
+		return sqlSession.selectOne("d1.searchcl", map);
+	}
+	
+	public Map<String, Object> searchecode(String employee1_code){
+		return sqlSession.selectOne("d1.searchecode", employee1_code);
+	}
+	
+	public int getRequestProductNo(String requestproduct_code) {
+		return sqlSession.selectOne("d1.getRequestProductNo",requestproduct_code);
+	}
+	
 }
