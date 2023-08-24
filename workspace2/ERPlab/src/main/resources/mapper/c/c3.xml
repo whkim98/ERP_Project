@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.c3.C3Repository">
 	<select id="findAll" resultType="com.lab.erp.vo.c.c3.Erp_EventVO">
-	 	SELECT * FROM erp_event
+	 	SELECT * FROM erp_event ORDER BY event_no DESC
 	</select>
 	
 	<insert id="save" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO" keyProperty="event_no" useGeneratedKeys="true" keyColumn="event_no">
@@ -13,11 +13,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="update" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
-		UPDATE erp_company SET 
-		WHERE company_no = #{company_no}
+		UPDATE erp_company SET event_code = #{event_code}, event_name = #{event_name}, event_start = #{event_start}, event_end = #{event_end}, event_period = #{event_period}, goods_no = #{goods_no}, event_price = #{event_price}, event_qty = #{event_qty}, event_tax = #{event_tax}, event_total = #{event_total}, event_manager = #{event_manager}, event_remark = #{event_remark}
+		WHERE event_no = #{event_no}
 	</update>
 	
 	<delete id="delete" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO">
 		DELETE FROM erp_event WHERE event_no = #{event_no}
 	</delete>
+	
+	<select id="findGoodsAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		SELECT * FROM erp_goods
+	</select>	
 </mapper>
