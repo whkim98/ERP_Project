@@ -20,6 +20,7 @@ import com.lab.erp.dao.d.d1.Erp_PedworkDAO;
 import com.lab.erp.dao.d.d1.Erp_ProductDAO;
 import com.lab.erp.dao.d.d1.Erp_ProinventoryDAO;
 import com.lab.erp.dao.d.d1.Erp_RequestproductDAO;
+import com.lab.erp.dao.d.d1.Erp_WorktypeDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodsDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodslevDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodslotDAO;
@@ -38,6 +39,7 @@ import com.lab.erp.vo.d.d1.Erp_PedworkVO;
 import com.lab.erp.vo.d.d1.Erp_ProductVO;
 import com.lab.erp.vo.d.d1.Erp_ProinventoryVO;
 import com.lab.erp.vo.d.d1.Erp_RequestproductVO;
+import com.lab.erp.vo.d.d1.Erp_WorktypeVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslevVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
@@ -62,6 +64,7 @@ public class D1Service {
 	private Erp_EvaluemngDAO emdao;
 	private Erp_ProinventoryDAO pidao;
 	private Erp_InvenlotDAO idao;
+	private Erp_WorktypeDAO wdao;
 	
 	
 	private Erp_Bs3DAO bsdao;
@@ -73,7 +76,7 @@ public class D1Service {
 			Erp_GoodssortDAO gsdao, Erp_GoodsstDAO gtdao, Erp_ConnectrequestDAO crdao, Erp_PedworkDAO pwdao,
 			Erp_LotconnevDAO lcdao, Erp_RequestproductDAO rpdao, Erp_PedDAO pdao, Erp_ProductDAO ptdao,
 			Erp_DefectiveDAO ddao, Erp_EvaluationDAO edao, Erp_EvaluemngDAO emdao, Erp_ProinventoryDAO pidao,
-			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao) {
+			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao, Erp_WorktypeDAO wdao) {
 		this.gdao = gdao;
 		this.gvdao = gvdao;
 		this.gldao = gldao;
@@ -92,6 +95,7 @@ public class D1Service {
 		this.idao = idao;
 		this.bsdao = bsdao;
 		this.cldao = cldao;
+		this.wdao = wdao;
 	}
 
 
@@ -261,6 +265,18 @@ public class D1Service {
 		return pdao.selectPed(ped_no);
 	}
 	
+	public int getPedNo(Erp_PedVO vo) {
+		return pdao.getPedNo(vo);
+	}
+	
+	public List<Erp_WorktypeVO> workTypeList(){
+		return wdao.workTypeList();
+	}
+	
+	public Erp_WorktypeVO selectWorkType(int connectrequest_no) {
+		return wdao.selectWorkType(connectrequest_no);
+	}
+	
 	
 //	product 생산 / 제조
 	public int createProduct(Erp_ProductVO vo) {
@@ -281,6 +297,14 @@ public class D1Service {
 	
 	public Map<String, Object> selectProduct(int product_no){
 		return ptdao.selectProduct(product_no);
+	}
+	
+	public List<Map<String, Object>> employee(Map<String, Object> map){
+		return ptdao.employee(map);
+	}
+	
+	public int getProductCode(String product_code) {
+		return ptdao.getProductCode(product_code);
 	}
 	
 	

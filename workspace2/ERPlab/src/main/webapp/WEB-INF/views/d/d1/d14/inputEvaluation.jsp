@@ -234,10 +234,6 @@ function getlist(){
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="bondbills_no" value="${inmap.bondbills_no }">
 						<input type="hidden" name="receivable_no" value="${inmap.receivable_no }">
-						<input type="hidden" name="bs3_no11" id="bs3_no11" value="${bs3_no1 }">
-						<input type="hidden" name="bs3_no21" id="bs3_no21" value="${bs3_no2 }">
-						<input type="hidden" name="bs3_no12" id="bs3_no12">
-						<input type="hidden" name="bs3_no22" id="bs3_no22">
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -245,23 +241,26 @@ function getlist(){
 						</div>
 						
 						<div>
-							<label>수금 코드 </label>
-							<input type="text" name="bondbills_code" id="bondbills_code" value="${inmap.bondbills_code }" readonly="readonly" maxlength="30" class="required">
+							<label>서류상 종료 날짜 </label>
+							<input type="date" name="evaluation_paperend" id="evaluation_paperend" value="${inmap.evaluation_paperend }" class="required">
 						</div>
 							
 						<div>
-							<label>CI NUMBER </label>
-							<input type="text" name="receivable_cino" id="receivable_cino" value="${inmap.receivable_cino }" readonly="readonly" class="required">
+							<label>실제 종료 날짜 </label>
+							<input type="date" name="evaluation_actualend" id="evaluation_actualend" value="${inmap.evaluation_actualend }" class="required">
 						</div>
 						
 						<div>
-							<label>기간 </label>
-							<input type="date" name="receivable_expiry" id="receivable_expiry" value="${inmap.receivable_expiry }">
+							<label>평가 내용 </label>
+							<input type="text" name="evaluation_content" id="evaluation_content" value="${inmap.evaluation_content }">
 						</div>
 						
 						<div>
-							<label>채권 총액 </label>
-							<input type="text" name="receivable_total" id="receivable_total" value="${inmap.receivable_total }">
+							<label>상태 </label>
+							<select name="evaluation_status" id="evaluation_status">
+								<option value="0" ${inmap.evaluation_status == 0 ? 'selected' : ''}>미완료</option>
+								<option value="1" ${inmap.evaluation_status == 1 ? 'selected' : ''}>정상 완료</option>
+							</select>
 						</div>
 						
 						<div>

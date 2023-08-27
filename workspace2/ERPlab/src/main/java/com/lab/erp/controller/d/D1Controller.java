@@ -1,6 +1,8 @@
 package com.lab.erp.controller.d;
 
 import java.util.HashMap;
+
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ import com.lab.erp.vo.d.d1.Erp_PedworkVO;
 import com.lab.erp.vo.d.d1.Erp_ProductVO;
 import com.lab.erp.vo.d.d1.Erp_ProinventoryVO;
 import com.lab.erp.vo.d.d1.Erp_RequestproductVO;
+import com.lab.erp.vo.d.d1.Erp_WorktypeVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslevVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
@@ -50,15 +53,6 @@ public class D1Controller {
 		this.d1 = d1;
 		this.request = request;
 		this.a4 = a4;
-	}
-	
-	
-	@RequestMapping("/selectre")
-	public String re(Model model) {
-		List<Map<String, Object>> sortkind = d1.sortkind();
-		
-		model.addAttribute("sortkind", sortkind);
-		return ViewPath.D1 + "/d12/selectRequestProduct";
 	}
 	
 //	생산의뢰 requestproduct
@@ -97,15 +91,8 @@ public class D1Controller {
 		
 	}
 	
-	@RequestMapping("/d12/updateForm")
-	public String updateFormRP(Model model, Erp_RequestproductVO vo, String comcode_code, String type, String word) {
-		Map<String, Object> map = new HashMap<>();
-		
-		if(type == null || word == null) {
-			type = null;
-			word = null;
-		}
-		
+	@RequestMapping("/d12/addRequestProduct")
+	public String re(Model model, String comcode_code) {
 		String msg = null;
 		String url = null;
 		
@@ -118,19 +105,31 @@ public class D1Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		int comcode_no = ls.comNo(comcode_code);
+		List<Map<String, Object>> sortkind = d1.sortkind();
 		
-		map.put("type", type);
-		map.put("word", word);
-		map.put("comcode_no", comcode_no);
+		model.addAttribute("sortkind", sortkind);
+		return ViewPath.D1 + "/d12/selectRequestProduct";
+	}
+	
+	@RequestMapping("/d12/updateForm")
+	public String updateFormRP(Model model, Erp_RequestproductVO vo, String comcode_code) {
+		String msg = null;
+		String url = null;
 		
-		List<Map<String, Object>> list = d1.requestProductList(map);
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> inmap = d1.selectRequestProduct(vo.getRequestproduct_no());
 		List<Map<String, Object>> glist = d1.selectRequestGoods(vo.getRequestproduct_no());
 		List<Map<String, Object>> sortkind = d1.sortkind();
 		
 		model.addAttribute("sortkind", sortkind);
-		model.addAttribute("list", list);
 		model.addAttribute("inmap", inmap);
 		model.addAttribute("glist", glist);
 		
@@ -139,7 +138,7 @@ public class D1Controller {
 	
 	@RequestMapping("/d12/createRequestProduct")
 	@Transactional
-	public String createRequestProduct(Erp_RequestproductVO vo, Erp_ConnectrequestVO crlist, String comcode_code, Model model) {
+	public String createRequestProduct(Erp_RequestproductVO vo, Erp_ConnectrequestVO crlist1, String comcode_code, Model model) {
 		String msg = null;
 		String url = null;
 		
@@ -159,16 +158,11 @@ public class D1Controller {
 		d1.createRequestProduct(vo);
 		
 		int rpno = d1.getRequestProductNo(vo.getRequestproduct_code());
+		List<Erp_ConnectrequestVO> cvo = crlist1.getCrlist1();
 		
-		for(int i = 0; i < crlist.getCrlist().size(); i++) {
-			crlist.getCrlist().get(i).setRequestproduct_no(rpno);
+		for(int i = 0; i < crlist1.getCrlist1().size(); i++) {
+			crlist1.getCrlist1().get(i).setRequestproduct_no(rpno);
 		}
-		
-		/* Erp_ConnectrequestVO crlist > vo자체를 crlist라는 변수명으로 받아와서
-		 * List<Erp_ConnectrequestVO> 선언 후 
-		 * 확장형 for문으로 List 자체를 insert
-		 * */
-		List<Erp_ConnectrequestVO> cvo = crlist.getCrlist();
 		
 		for(Erp_ConnectrequestVO crvo : cvo) {
 			d1.createConnectRequest(crvo);
@@ -179,9 +173,7 @@ public class D1Controller {
 	
 	@RequestMapping("/d12/update")
 	@Transactional
-	public String updateRequestProduct(Erp_RequestproductVO vo, String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, 
-			String debtor_no, String creditor_no, String[] goods_no, String[] connectrequest_qty, String goodslot_total, String qty, String comcode_code, Model model) {
-		Map<String, Object> imap = d1.selectRequestProduct(vo.getRequestproduct_no());
+	public String updateRequestProduct(Erp_RequestproductVO vo, Erp_ConnectrequestVO crlist, Erp_ConnectrequestVO crlist1, String comcode_code, Model model) {
 		
 		String msg = null;
 		String url = null;
@@ -194,50 +186,33 @@ public class D1Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
-		
-		int total = 0;
-		int goodsqty = 0;
-		int tqty = 0;
-		
-		if(goodslot_total == "") {
-			total = 0;
-		}else {
-			total = Integer.parseInt(goodslot_total);
-		}
-		if(qty == "") {
-			goodsqty = 0;
-		}else {
-			goodsqty = Integer.parseInt(qty);
-		}
-		
-		tqty = Integer.parseInt(qty);
-		total = Integer.parseInt(goodslot_total);
-		
-		total *= tqty;
 		
 		d1.updateRequestProduct(vo);
 		
-		for(int i = 0; i < goods_no.length; i++) {
-			Erp_ConnectrequestVO crvo = new Erp_ConnectrequestVO();
-			int goodsno = 0;
-			if(goods_no[i] != null) {
-				goodsno = Integer.parseInt(goods_no[i]);
-			}
-			if(connectrequest_qty[i] != null) {
-				goodsqty = Integer.parseInt(connectrequest_qty[i]);
-			}
-//			crvo.setGoods_no(goodsno);
-			crvo.setConnectrequest_qty(goodsqty);
-			crvo.setRequestproduct_no(vo.getRequestproduct_no());
+		List<Erp_ConnectrequestVO> cvo = crlist.getCrlist();
+		
+		for(Erp_ConnectrequestVO crvo : cvo) {
 			d1.updateConnectRequest(crvo);
 		}
 		
-		return "redirect:/d/d1/d12/updateForm?comcode_code="+comcode_code+"&requestproduct_no="+vo.getRequestproduct_no();
+		List<Erp_ConnectrequestVO> cvo1 = crlist1.getCrlist1();
+		
+		if(cvo1 == null) {
+			return "redirect:/d/d1/d12/updateForm?comcode_code="+comcode_code+"&requestproduct_no="+vo.getRequestproduct_no();
+		}else {
+			for(int i = 0; i < crlist1.getCrlist1().size(); i++) {
+				crlist1.getCrlist1().get(i).setRequestproduct_no(vo.getRequestproduct_no());
+			}
+			for(Erp_ConnectrequestVO crvo : cvo1) {
+				d1.createConnectRequest(crvo);
+			}
+			return "redirect:/d/d1/d12/updateForm?comcode_code="+comcode_code+"&requestproduct_no="+vo.getRequestproduct_no();
+		}
 	}
 	
 	@RequestMapping("/d12/delete")
-	public String deleteRequestProduct(Erp_RequestproductVO vo, String comcode_code, 
-			String bs3_no1, String bs3_no2, String qty, String goodslot_total, Model model) {
+	@Transactional
+	public String deleteRequestProduct(Erp_RequestproductVO vo, String comcode_code, Model model) {
 		String msg = null;
 		String url = null;
 		
@@ -249,14 +224,6 @@ public class D1Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
-		
-		int total = 0;
-		int tqty = 0;
-		
-		tqty = Integer.parseInt(qty);
-		total = Integer.parseInt(goodslot_total);
-		
-		total *= tqty;
 		
 		d1.deleteConnectRequestNo(vo.getRequestproduct_no());
 		
@@ -305,10 +272,38 @@ public class D1Controller {
 		map.put("comcode_no", comcode_no);
 		
 		List<Map<String, Object>> list = d1.pedList(map);
+		List<Map<String, Object>> sortkind = d1.sortkind();
 		
+		model.addAttribute("sortkind", sortkind);
 		model.addAttribute("list", list);
 		
 		return ViewPath.D1 + "/d13/inputPed";
+	}
+	
+	@RequestMapping("/d13/addPed")
+	public String addPed(Model model, String comcode_code, Erp_RequestproductVO vo) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		List<Map<String, Object>> sortkind = d1.sortkind();
+		List<Map<String, Object>> glist = d1.selectRequestGoods(vo.getRequestproduct_no());
+		List<Erp_WorktypeVO> wlist = d1.workTypeList();
+		
+		model.addAttribute("requestproduct_no", vo.getRequestproduct_no());
+		model.addAttribute("wlist", wlist);
+		model.addAttribute("sortkind", sortkind);
+		model.addAttribute("glist" ,glist);
+		
+		return ViewPath.D1 + "/d13/test";
 	}
 	
 	@RequestMapping("/d13/updateForm")
@@ -341,17 +336,23 @@ public class D1Controller {
 		List<Map<String, Object>> list = d1.pedList(map);
 		Map<String, Object> inmap = d1.selectPed(vo.getPed_no());
 		List<Map<String, Object>> plist = d1.selectPedGoods(vo.getPed_no());
+		List<Map<String, Object>> glist = d1.selectRequestGoods(vo.getRequestproduct_no());
+		List<Map<String, Object>> sortkind = d1.sortkind();
+		List<Erp_WorktypeVO> wlist = d1.workTypeList();
 		
+		model.addAttribute("wlist", wlist);
+		model.addAttribute("sortkind", sortkind);
+		model.addAttribute("glist", glist);
 		model.addAttribute("list", list);
 		model.addAttribute("inmap", inmap);
 		model.addAttribute("plist", plist);
 		
-		return ViewPath.D1 + "/d13/inputPed";
+		return ViewPath.D1 + "/d13/test";
 	}
 	
 	@RequestMapping("/d13/createPed")
 	@Transactional
-	public String createPed(Erp_PedVO vo, String comcode_code, String[] goods_no, String[] worktype_no, Model model) {
+	public String createPed(Erp_PedVO vo, String comcode_code, Model model, Erp_WorktypeVO wlist, Erp_ConnectrequestVO crlist1, Erp_ConnectrequestVO crlist) {
 		String msg = null;
 		String url = null;
 		
@@ -370,12 +371,27 @@ public class D1Controller {
 		
 		d1.createPed(vo);
 		
-		for(int i = 0; i < goods_no.length; i++) {
-			Erp_PedworkVO pvo = new Erp_PedworkVO();
-			pvo.setGoods_no(Integer.parseInt(goods_no[i]));
-			pvo.setWorktype_no(Integer.parseInt(worktype_no[i]));
-			pvo.setPed_no(vo.getPed_no());
-			d1.createPedWork(pvo);
+		Erp_PedworkVO pvo = new Erp_PedworkVO();
+		
+		List<Erp_PedworkVO> pwlist = pvo.getPwlist();
+		
+		List<Erp_WorktypeVO> wtlist = wlist.getWlist();
+		for(int i = 0; i < wtlist.size(); i++) {
+			pwlist.get(i).setWorktype_no(wtlist.get(i).getWorktype_no());
+		}
+		
+		if(crlist1 != null) {
+			List<Erp_ConnectrequestVO> cvo1 = crlist1.getCrlist1();
+			for(Erp_ConnectrequestVO crvo : cvo1) {
+				d1.createConnectRequest(crvo);
+			}
+		}
+		
+		List<Map<String, Object>> glist = d1.selectRequestGoods(vo.getRequestproduct_no());
+		for(int i = 0; i < glist.size(); i++) {
+			pwlist.get(i).setConnectrequest_no((int)glist.get(i).get("connectrequest_no"));
+			pwlist.get(i).setPed_no(d1.getPedNo(vo));
+			d1.createPedWork(pwlist.get(i));
 		}
 		
 		return "redirect:/d/d1/d13/inputPed?comcode_code="+comcode_code;
@@ -383,7 +399,7 @@ public class D1Controller {
 	
 	@RequestMapping("/d13/update")
 	@Transactional
-	public String updatePed(Erp_PedVO vo, String[] worktype_no, String[] goods_no, String[] pedwork_no, String comcode_code, Model model) {
+	public String updatePed(Erp_PedVO vo, String comcode_code, Model model, Erp_WorktypeVO wlist, Erp_ConnectrequestVO crlist1, Erp_ConnectrequestVO crlist, Erp_PedworkVO pvo) {
 		String msg = null;
 		String url = null;
 		
@@ -398,18 +414,29 @@ public class D1Controller {
 		
 		d1.updatePed(vo);
 		
-		for(int i = 0; i < goods_no.length; i++) {
-			Erp_PedworkVO pvo = new Erp_PedworkVO();
-			pvo.setGoods_no(Integer.parseInt(goods_no[i]));
-			pvo.setWorktype_no(Integer.parseInt(worktype_no[i]));
-			pvo.setPedwork_no(Integer.parseInt(pedwork_no[i]));
-			d1.updatePedWork(pvo);
+		List<Erp_PedworkVO> pwlist = pvo.getPwlist();
+		
+		List<Erp_ConnectrequestVO> cvo = crlist.getCrlist();
+		for(Erp_ConnectrequestVO crvo : cvo) {
+			d1.updateConnectRequest(crvo);
 		}
 		
-		return "redirect:/d/d1/d13/inputPed?comcode_code="+comcode_code;
+		if(crlist1 != null) {
+			List<Erp_ConnectrequestVO> cvo1 = crlist1.getCrlist1();
+			for(Erp_ConnectrequestVO crvo : cvo1) {
+				d1.createConnectRequest(crvo);
+			}
+		}
+		
+		for(Erp_PedworkVO pp : pwlist) {
+			d1.updatePedWork(pp);
+		}
+		
+		return "redirect:/d/d1/d13/updateForm?comcode_code="+comcode_code+"&requestproduct_no="+vo.getRequestproduct_no()+"&ped_no="+vo.getPed_no();
 	}
 	
 	@RequestMapping("/d13/delete")
+	@Transactional
 	public String deletePed(Erp_PedVO vo, String comcode_code, Model model) {
 		String msg = null;
 		String url = null;
@@ -427,7 +454,7 @@ public class D1Controller {
 		
 		d1.deletePedWorkNo(vo.getPed_no());
 		
-		return "redirect:/d/d13/inputPed?comcode_code="+comcode_code;
+		return "redirect:/d/d1/d13/inputPed?comcode_code="+comcode_code;
 	}
 	
 	
@@ -468,6 +495,17 @@ public class D1Controller {
 		model.addAttribute("clist", clist);
 		
 		return ViewPath.D1 + "/d11/inputProduct";
+	}
+	
+	@RequestMapping("/d11/addProduct")
+	public String addProduct(Model model) {
+		List<Erp_Bs3VO> dlist = d1.ctgrDebtor(47);
+		List<Erp_Bs3VO> clist = d1.ctgrCreditor(47);
+		
+		model.addAttribute("dlist", dlist);
+		model.addAttribute("clist", clist);
+		
+		return ViewPath.D1 + "/d11/selectProduct";
 	}
 	
 	@RequestMapping("/d11/updateForm")
@@ -595,10 +633,12 @@ public class D1Controller {
 		d1.updateBs2Amount(map);
 		d1.updateBs3Amount(map);
 		
+		
 		return "redirect:/d/d1/d11/inputProduct?comcode_code"+comcode_code;
 	}
 	
-	@RequestMapping("/d11/update")
+	@RequestMapping(value="/d11/update", produces = "application/text;charset=utf8")
+	@Transactional
 	public String updateProduct(String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, 
 			String debtor_no, String creditor_no, Model model, String comcode_code, Erp_ProductVO vo) {
 		String msg = null;
@@ -643,12 +683,12 @@ public class D1Controller {
 			b21 = Integer.parseInt(bs3_no21);
 		}
 		if(bs3_no12 == "") {
-			b12 = 0;
+			b12 = b11;
 		}else {
 			b12 = Integer.parseInt(bs3_no12);
 		}
 		if(bs3_no22 == "") {
-			b22 = 0;
+			b22 = b21;
 		}else {
 			b22 = Integer.parseInt(bs3_no22);
 		}
@@ -671,6 +711,7 @@ public class D1Controller {
 		Map<String, Object> map = new HashMap<>();
 		Map<String, Object> dmap = d1.getBsNo(b11);
 		Map<String, Object> cmap = d1.getBsNo(b21);
+		
 		
 		map.put("bs3_amount", (-(int)imap.get("product_totalbudget")));
 		map.put("bs1_no", dmap.get("bs1_no"));
@@ -712,10 +753,13 @@ public class D1Controller {
 		d1.updateBs2Amount(map);
 		d1.updateBs3Amount(map);
 		
-		return "redirect:/d/d1/d11/updateForm?comcode_code="+comcode_code+"&product_no="+vo.getProduct_no()+"&product_code="+vo.getProduct_code();
+		String code = URLEncoder.encode(vo.getProduct_code());
+		
+		return "redirect:/d/d1/d11/updateForm?comcode_code="+comcode_code+"&product_no="+vo.getProduct_no()+"&product_code="+code;
 	}
 	
 	@RequestMapping("/d11/delete")
+	@Transactional
 	public String deleteProduct(String bs3_no1, String bs3_no2, Model model, String comcode_code, Erp_ProductVO vo) {
 		String msg = null;
 		String url = null;
@@ -773,6 +817,96 @@ public class D1Controller {
 		
 		return "redirect:/d/d1/d11/inputProduct?comcode_code="+comcode_code;
 	}
+	
+	@RequestMapping("/d11/employee")
+	public String employee(String comcode_code, Model model, String type, String word) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = d1.employee(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "d/d1/d11/employee";
+	}
+	
+	@RequestMapping("/d11/requestproduct")
+	public String requestproduct(String comcode_code, String type, String word, Model model) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = d1.requestProductList(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "d/d1/d11/requestproduct";
+	}
+	
+	@RequestMapping(value="/d11/getProductCode", produces = "application/text;charset=utf8")
+	@ResponseBody
+	public String getProductCode(String product_code) {
+		try {
+			
+			if(product_code == "") {
+				return "공백은 허용되지 않습니다.";
+			}
+			
+			int no = d1.getProductCode(product_code);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(Exception e) {
+			return "사용 가능한 코드입니다.";
+		}
+	}
+	
+//	@RequestMapping("/d/d11/inputGoods")
+//	public String inputGoods() {
+//		
+//	}
 	
 	
 //	생산 실적 관리
@@ -1513,7 +1647,26 @@ public class D1Controller {
 			
 			Map<String, Object> vo = d1.searchcl(map);
 			
-			System.out.println(vo);
+			return vo;
+		}catch(Exception e) {
+			return null;
+		}
+	}
+	
+	@RequestMapping("/d12/searchcli")
+	@ResponseBody
+	public Map<String, Object> searchcli(String client_name, String comcode_code, String i) {
+		try {
+			Map<String, Object> map = new HashMap<>();
+			
+			int comcode_no = ls.comNo(comcode_code);
+			
+			map.put("comcode_no", comcode_no);
+			map.put("client_name", client_name);
+			
+			request.setAttribute("i", i);
+			
+			Map<String, Object> vo = d1.searchcl(map);
 			
 			return vo;
 		}catch(Exception e) {
@@ -1595,6 +1748,63 @@ public class D1Controller {
 		model.addAttribute("i",i);
 		
 		return ViewPath.WINDOW + "d/d1/d12/clList2";
+	}
+	@RequestMapping("/d12/clList3")
+	public String clList3(String comcode_code, Model model, String type, String word, String i) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.clientList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i",i);
+		
+		return ViewPath.WINDOW + "d/d1/d12/clList3";
+	}
+	@RequestMapping("/d12/clList4")
+	public String clList4(String comcode_code, Model model, String type, String word, String i) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.clientList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i",i);
+		
+		return ViewPath.WINDOW + "d/d1/d12/clList4";
+	}
+	
+	@RequestMapping("/d12/getRequestCode")
+	@ResponseBody
+	public String getRequestCode(String requestproduct_code) {
+		try {
+			if(requestproduct_code == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			int code = d1.getRequestProductNo(requestproduct_code);
+			
+			return "이미 존재하는 코드입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 코드입니다.";
+		}
 	}
 	
 }

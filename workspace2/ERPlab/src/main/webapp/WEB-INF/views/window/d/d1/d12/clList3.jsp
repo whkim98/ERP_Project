@@ -42,8 +42,8 @@
 
 <script type="text/javascript">
 	function setParentText(no, name, h){
-    	opener.document.getElementById("crlist["+h+"].client_no1").value = no;
-    	opener.document.getElementById("crlist["+h+"].client_name1").value = name;
+    	opener.document.getElementById("crlist1["+h+"].client_no1").value = no;
+    	opener.document.getElementById("crlist1["+h+"].client_name1").value = name;
     	window.close();
     }
 	

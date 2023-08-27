@@ -13,7 +13,7 @@ public class Erp_ProductVO {
 	private String product_name;
 	private String product_install;
 	private String product_end;
-	private int ped_no;
+	private int requestproduct_no;
 	private String product_path;
 	private int employee1_no;
 	private String product_content;

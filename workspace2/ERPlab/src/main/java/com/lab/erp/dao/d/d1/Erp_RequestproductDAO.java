@@ -24,11 +24,11 @@ private SqlSession sqlSession;
 	}
 	
 	public int updateRequestProduct(Erp_RequestproductVO vo) {
-		return sqlSession.insert("d1.updateRequestProduct", vo);
+		return sqlSession.update("d1.updateRequestProduct", vo);
 	}
 	
 	public int deleteRequestProduct(int requestproduct_no) {
-		return sqlSession.insert("d1.deleteRequestProduct", requestproduct_no);
+		return sqlSession.delete("d1.deleteRequestProduct", requestproduct_no);
 	}
 	
 	public List<Map<String, Object>> requestProductList(Map<String, Object> map){

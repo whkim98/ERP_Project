@@ -12,9 +12,9 @@
 <!-- 각각의 버튼 누르면 페이지 이동 -->
 <h2>생산팀</h2>
 <br>
-	<input type="button" value="자체 생산/제조" onclick="#">
-	<input type="button" value="생산의뢰" onclick="#">
-	<input type="button" value="작업지시서" onclick="#">
+	<input type="button" value="자체 생산/제조" onclick="location.href='${pageContext.request.contextPath}/d/d1/d11/inputProduct?comcode_code=${comcode_code}'">
+	<input type="button" value="생산의뢰" onclick="location.href='${pageContext.request.contextPath}/d/d1/d12/inputRequestProduct?comcode_code=${comcode_code}'">
+	<input type="button" value="작업지시서" onclick="location.href='${pageContext.request.contextPath}/d/d1/d13/inputPed?comcode_code=${comcode_code}'">
 	<input type="button" value="생산실적관리" onclick="#">
 	<input type="button" value="작업실적관리" onclick="#">
 	<input type="button" value="불량분석" onclick="#">

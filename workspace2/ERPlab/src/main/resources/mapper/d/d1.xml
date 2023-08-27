@@ -61,11 +61,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산의뢰 select된 상품 불러오기 및 CUD -->
 	<select id="selectRequestGoods" parameterType="int" resultType="map">
-		select gs.goodssort_name, gk.goodskind_name, cr.*, c.client_name 
-		from erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr, erp_client c 
-		where cr.goodskind_no = gk.goodskind_no  
-		and cr.client_no1 = c.client_no 
-		and gs.goodskind_no = gk.goodskind_no 
+		select gs.goodssort_name, gk.goodskind_name, cr.*, c1.client_name client_name1, c2.client_name client_name2, gk.goodskind_no 
+		from erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr, erp_client c1, erp_client c2   
+		where cr.goodskind_no = gk.goodskind_no 
+		and cr.client_no1 = c1.client_no 
+		and cr.client_no2 = c2.client_no 
+		and gs.goodssort_no = gk.goodssort_no 
 		and cr.requestproduct_no = #{requestproduct_no}
 	</select>
 	
@@ -104,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 작업지시서 select된 상품 불러오기 및 CUD -->
 	<select id="selectPedGoods" parameterType="int" resultType="map">
-		select g.*, w.*, gt.goodsst_size, gt.goodsst_unit, p.pedwork_no  
+		select g.*, w.*, gt.*, p.* 
 		from erp_pedwork p, erp_goods g, erp_goodsst gt, erp_worktype w 
 		where p.goods_no = g.goods_no 
 		and p.worktype_no = w.worktype_no 
@@ -112,15 +113,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and p.ped_no = #{ped_no}
 	</select>
 	
+	<select id="workTypeList" resultType="com.lab.erp.vo.d.d1.Erp_WorktypeVO">
+		select * from erp_worktype
+	</select>
+	
+	<select id="selectWorkType" parameterType="int" resultType="com.lab.erp.vo.d.d1.Erp_WorktypeVO">
+		select w.* from erp_worktype w, erp_pedwork p, erp_connectrequest c 
+		where w.worktype_no = p.worktype_no 
+		and p.connectrequest_no = c.connectrequest_no 
+		and c.connectrequest_no = #{connectrequest_no}
+	</select>
+	
 	<insert id="createPedWork" parameterType="com.lab.erp.vo.d.d1.Erp_PedworkVO">
-		insert into erp_pedword(ped_no,worktype_no,goods_no) 
-		values(#{ped_no},#{worktype_no},#{goods_no})
+		insert into erp_pedword(ped_no,worktype_no,connectrequest_no) 
+		values(#{ped_no},#{worktype_no},#{connectrequest_no})
 	</insert>
 	
 	<update id="updatePedWork" parameterType="com.lab.erp.vo.d.d1.Erp_PedworkVO">
 		update erp_pedwork set 
 		worktype_no = #{worktype_no}
-		goods_no = #{goods_no} 
+		connectrequest_no = #{connectrequest_no} 
 		where pedwork_no = #{pedwork_no}
 	</update>
 	
@@ -179,11 +191,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		requestproduct_end = #{requestproduct_end},
 		requestproduct_name = #{requestproduct_name},
 		employee1_no = #{employee1_no} 
-		where requestproduct_no = #{requestproduct_no]
+		where requestproduct_no = #{requestproduct_no}
 	</update>
 	
 	<delete id="deleteRequestProduct" parameterType="com.lab.erp.vo.d.d1.Erp_RequestproductVO">
-		delete from erp_requestproduct where requestproduct_no = #{requestproduct_no]
+		delete from erp_requestproduct where requestproduct_no = #{requestproduct_no}
 	</delete>
 	
 	<select id="requestProductList" parameterType="map" resultType="map">
@@ -198,6 +210,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="type == 'client_name'">
 				and cl.client_name like '%${word}%'
+			</if>
+			<if test="type == 'employee1_name'">
+				and e.employee1_name like '%${word}%'
 			</if>
 			<if test="type == 'requestproduct_name'">
 				and r.requestproduct_name like '%${word}%'
@@ -224,7 +239,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getRequestProductNo" parameterType="String" resultType="int">
-		select requestproduct_no from erp_requestproduct where requestproduct_code = #{requestproduct_code}
+		select requestproduct_no from erp_requestproduct 
+		where requestproduct_code = #{requestproduct_code}
+	</select>
+	
+	<select id="employee" parameterType="map" resultType="map">
+		select e.*, e2.*, t.*, d.* 
+		from erp_employee1 e, erp_employee2 e2, erp_team t, erp_dept d 
+		where e2.comcode_no = #{comcode_no} 
+		and e.employee1_no = e2.employee1_no 
+		and t.team_no = e2.team_no 
+		and t.dept_no = d.dept_no 
+		<if test="type != null">
+			<if test="type == 'employee1_code'">
+				and e.employee1_code like '%${word}%'
+			</if>
+			<if test="type == 'employee1_name'">
+				and e.employee1_name like '%${word}%'
+			</if>
+			<if test="type == 'employee2_position'">
+				and e2.employee2_position like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'dept_name'">
+				and d.dept_name like '%${word}%'
+			</if>
+		</if>
 	</select>
 	
 	
@@ -236,11 +278,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="updatePed" parameterType="com.lab.erp.vo.d.d1.Erp_PedVO">
 		update erp_ped set 
-		#{ped_content},
-		#{ped_startdate},
-		#{employee1_no},
-		#{company_no},
-		#{team_no} 
+		ped_content = #{ped_content},
+		ped_startdate = #{ped_startdate},
+		employee1_no = #{employee1_no},
+		company_no = #{company_no},
+		team_no = #{team_no} 
 		where ped_no = #{ped_no} 
 	</update>
 	
@@ -252,9 +294,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="selectPed" parameterType="int" resultType="map">
-		select r.requestproduct_start,r.requestproduct_end,r.requestproduct_name,r.requestproduct_content,c.client_name,p.*,
-		t.team_name, e.employee1_name, e2.employee2_position, co.company_name 
-		from erp_requestproduct r, erp_ped p, erp_client c, erp_employee1 e, erp_employee2 e2, erp_team t, erp_company co 
+		select r.*, c.* ,p.*,
+		t.*, e.*, e2.*, co.* 
+		from erp_requestproduct r, erp_ped p, erp_client c, erp_employee1 e, erp_employee2 e2, 
+		erp_team t, erp_company co 
 		where r.requestproduct_no = p.requestproduct_no 
 		and r.client_no = c.client_no 
 		and p.team_no = t.team_no 
@@ -266,7 +309,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="pedList" parameterType="map" resultType="map">
-		select r.requestproduct_name, r.requestproduct_end, t.team_name, p.* 
+		select r.*, t.*, p.* 
 		from erp_requestproduct r, erp_ped p, erp_team t 
 		where p.requestproduct_no = r.requestproduct_no 
 		and p.team_no = t.team_no 
@@ -276,11 +319,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 	
+	<select id="getPedNo" parameterType="com.lab.erp.vo.d.d1.Erp_PedVO" resultType="int">
+		select ped_no from erp_ped 
+		where ped_content = #{ped_content},
+		and ped_startdate = #{ped_startdate},
+		and employee1_no = #{employee1_no},
+		and company_no = #{company_no},
+		and team_no = #{team_no} 
+		and requestproduct_no = #{requestproduct_no} 
+	</select>
+	
 	
 	<!-- 생산 / 제조 -->
 	<insert id="createProduct" parameterType="com.lab.erp.vo.d.d1.Erp_ProductVO">
-		insert into erp_product(product_code,product_name,product_install,product_end,ped_no,product_path,employee1_no,product_content,product_qty,product_tax,product_budget,product_totalbudget,comcode_no) 
-		values(#{product_code},#{product_name},#{product_install},#{product_end},#{ped_no},#{product_path},#{employee1_no},#{product_content},#{product_qty},#{product_tax},#{product_budget},#{product_totalbudget},#{comcode_no})
+		insert into erp_product(product_code,product_name,product_install,product_end,requestproduct_no,product_path,employee1_no,product_content,product_qty,product_tax,product_budget,product_totalbudget,comcode_no) 
+		values(#{product_code},#{product_name},#{product_install},#{product_end},#{requestproduct_no},#{product_path},#{employee1_no},#{product_content},#{product_qty},#{product_tax},#{product_budget},#{product_totalbudget},#{comcode_no})
 	</insert>
 	
 	<update id="updateProduct" parameterType="com.lab.erp.vo.d.d1.Erp_ProductVO">
@@ -303,27 +356,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="selectProduct" parameterType="int" resultType="map">
-		select p.*, c.client_name, t.team_name, e.employee1_name, co.company_name, r.requestproduct_name 
-		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_ped pd, erp_company co 
+		select p.*, c.*, t.*, e.*, r.*, e2.* 
+		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_employee2 e2 
 		where p.employee1_no = e.employee1_no 
-		and pd.team_no = t.team_no 
+		and t.team_no = e2.team_no 
 		and r.client_no = c.client_no 
-		and pd.company_no = co.company_no 
-		and pd.requestproduct_no = r.requestproduct_no 
-		and p.ped_no = pd.ped_no 
+		and p.requestproduct_no = r.requestproduct_no 
+		and e.employee1_no = e2.employee1_no 
 		and p.product_no = #{product_no} 
 	</select>
 	
 	<select id="productList" parameterType="map" resultType="map">
-		select p.*, c.client_name, t.team_name, e.employee1_name, co.company_name, r.requestproduct_name 
-		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_ped pd, erp_company co 
+		select p.*, c.client_name, t.team_name, e.employee1_name, r.requestproduct_name 
+		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_employee2 e2  
 		where p.employee1_no = e.employee1_no 
-		and pd.team_no = t.team_no 
+		and e2.team_no = t.team_no 
 		and r.client_no = c.client_no 
-		and pd.company_no = co.company_no 
-		and pd.requestproduct_no = r.requestproduct_no 
-		and p.ped_no = pd.ped_no 
+		and p.requestproduct_no = r.requestproduct_no 
+		and e.employee1_no = e2.employee1_no 
 		and p.comcode_no = #{comcode_no} 
+	</select>
+	
+	<select id="getProductCode" parameterType="String" resultType="int">
+		select product_no from erp_product where product_code = #{product_code}
 	</select>
 	
 	
@@ -374,8 +429,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산 실적 관리 -->
 	<insert id="createEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
-		insert into erp_evaluation(evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,ped_no,evaluation_date,employee2_no) 
-		values(#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{ped_no},#{evaluation_date},#{employee2_no})
+		insert into erp_evaluation(evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,requestproduct_no,evaluation_date,employee2_no) 
+		values(#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{requestproduct_no},#{evaluation_date},#{employee2_no})
 	</insert>
 	
 	<update id="updateEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
@@ -394,22 +449,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="evaluationList" parameterType="map" resultType="map">
-		select p.product_name, e.employee1_name, e2.employee2_position, ev.* 
-		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2, erp_ped pd 
+		select p.*, e.employee1_name, e2.employee2_position, ev.* 
+		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2 
 		where ev.employee2_no = e2.employee2_no 
 		and e.employee1_no = e2.employee1_no 
-		and ev.ped_no = pd.ped_no 
-		and pd.ped_no = p.ped_no 
+		and ev.requestproduct_no = p.requestproduct_no 
 		and p.comcode_no = #{comcode_no}
 	</select>
 	
 	<select id="selectEvaluation" parameterType="int" resultType="map">
-		select p.product_name, e.employee1_name, e2.employee2_position, ev.* 
-		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2, erp_ped pd 
+		select p.*, e.employee1_name, e2.employee2_position, ev.* 
+		from erp_product p, erp_evaluation ev, erp_employee1 e, erp_employee2 e2 
 		where ev.employee2_no = e2.employee2_no 
 		and e.employee1_no = e2.employee1_no 
-		and ev.ped_no = pd.ped_no 
-		and pd.ped_no = p.ped_no 
+		and ev.requestproduct_no = p.requestproduct_no 
 		and ev.evaluation_no = #{evaluation_no} 
 	</select>
 	

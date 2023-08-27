@@ -9,13 +9,13 @@
 </head>
 <body>
 <div>
-<form action="${pageContext.request.contextPath}/d/d1/d12/clList" method="POST">
+<form action="${pageContext.request.contextPath}/d/d1/d11/employee" method="POST">
 	<select name="type">
-		<option value="client_no">번호</option>
-		<option value="client_name">거래처명</option>
-		<option value="client_manager">담당자명</option>
-		<option value="businesstype_name">업태</option>
-		<option value="businesstype_subctgr">종목</option>
+		<option value="employee1_code">코드</option>
+		<option value="employee1_name">이름</option>
+		<option value="employee2_position">직급</option>
+		<option value="team_name">팀</option>
+		<option value="dept_name">부서</option>
 	</select>
 	<input type="hidden" name="comcode_code" value="${comcode_code }">
 	<input type="text" name="word" id="word">
@@ -23,27 +23,32 @@
 </form>
 	<table>
 		<tr>
-			<td>거래처명</td>
-			<td>사업자등록번호</td>
-			<td>담당자</td>
+			<td>사원코드</td>
+			<td>이름</td>
+			<td>직급</td>
+			<td>팀</td>
+			<td>부서</td>
 		</tr>
 		<c:if test="${list == null }">
 			<td colspan="3">정보가 존재하지 않습니다.</td>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.client_no }, '${vo.client_name}', '${i }')">
-					<td>${vo.client_name}</td>
-					<td>${vo.client_registeredno }</td>
-					<td>${vo.client_manager }</td>
+				<tr onclick="setParentText(${vo.employee1_no }, '${vo.employee1_name}', '${vo.employee2_position}')">
+					<td>${vo.employee1_code}</td>
+					<td>${vo.employee1_name }</td>
+					<td>${vo.employee2_position }</td>
+					<td>${vo.team_name }</td>
+					<td>${vo.dept_name }</td>
 				</tr>
 		</c:forEach>
 	</table>
 </div>
 
 <script type="text/javascript">
-	function setParentText(no, name, h){
-    	opener.document.getElementById("crlist["+h+"].client_no1").value = no;
-    	opener.document.getElementById("crlist["+h+"].client_name1").value = name;
+	function setParentText(no, name, position){
+    	opener.document.getElementById("employee1_no").value = no;
+    	opener.document.getElementById("employee1_name").value = name;
+    	opener.document.getElementById("employee2_position").value = position;
     	window.close();
     }
 	

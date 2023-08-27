@@ -31,7 +31,7 @@
 			<td colspan="3">정보가 존재하지 않습니다.</td>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.client_no }, '${vo.client_name}', '${i }')">
+				<tr onclick="setParentText(${vo.client_no }, '${vo.client_name}', ${i })">
 					<td>${vo.client_name}</td>
 					<td>${vo.client_registeredno }</td>
 					<td>${vo.client_manager }</td>
@@ -42,8 +42,8 @@
 
 <script type="text/javascript">
 	function setParentText(no, name, h){
-    	opener.document.getElementById("crlist["+h+"].client_no1").value = no;
-    	opener.document.getElementById("crlist["+h+"].client_name1").value = name;
+    	opener.document.getElementById("crlist1["+h+"].client_no2").value = no;
+    	opener.document.getElementById("crlist1["+h+"].client_name2").value = name;
     	window.close();
     }
 	

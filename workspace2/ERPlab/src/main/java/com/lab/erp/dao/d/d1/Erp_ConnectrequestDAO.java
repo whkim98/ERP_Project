@@ -20,15 +20,15 @@ private SqlSession sqlSession;
 	}
 	
 	public int updateConnectRequest(Erp_ConnectrequestVO vo) {
-		return sqlSession.insert("d1.updateConnectRequest", vo);
+		return sqlSession.update("d1.updateConnectRequest", vo);
 	}
 	
 	public int deleteConnectRequest(int connectrequest_no) {
-		return sqlSession.insert("d1.deleteConnectRequest", connectrequest_no);
+		return sqlSession.delete("d1.deleteConnectRequest", connectrequest_no);
 	}
 	
 	public int deleteConnectRequestNo(int requestproduct_no) {
-		return sqlSession.insert("d1.deleteConnectRequestNo", requestproduct_no);
+		return sqlSession.delete("d1.deleteConnectRequestNo", requestproduct_no);
 	}
 	
 }

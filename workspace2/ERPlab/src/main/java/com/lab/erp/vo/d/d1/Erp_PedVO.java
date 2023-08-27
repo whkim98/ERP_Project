@@ -1,5 +1,7 @@
 package com.lab.erp.vo.d.d1;
 
+import java.util.List;
+
 import lombok.*;
 
 @Data
@@ -17,5 +19,7 @@ public class Erp_PedVO {
 	private int team_no;
 	private int requestproduct_no;
 	private int comcode_no;
+	
+	private List<Erp_PedVO> pdlist;
 
 }

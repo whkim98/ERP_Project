@@ -29,4 +29,5 @@ public class Erp_ConnectrequestVO {
 	
 //	자신이 자료형이 되는 List 생성
 	private List<Erp_ConnectrequestVO> crlist;
+	private List<Erp_ConnectrequestVO> crlist1;
 }

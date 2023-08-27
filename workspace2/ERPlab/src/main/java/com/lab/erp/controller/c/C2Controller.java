@@ -1088,7 +1088,7 @@ public class C2Controller {
 		return "redirect:/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
 	}
 	
-	@RequestMapping("/c22/getUniqueCIno")
+	@RequestMapping(value="/c22/getUniqueCIno", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getUniqueCIno(String receivable_cino) {
 		try {
@@ -1102,7 +1102,7 @@ public class C2Controller {
 			return "사용 가능한 코드입니다.";
 		}
 	}
-	@RequestMapping("/c22/getUniqueCode")
+	@RequestMapping(value="/c22/getUniqueCode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getUniqueCode(String receivable_code) {
 		try {
@@ -1117,7 +1117,7 @@ public class C2Controller {
 		}
 	}
 	
-	@RequestMapping("/c22/getBondbillsCode")
+	@RequestMapping(value="/c22/getBondbillsCode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getBondbillsCode(String bondbills_code) {
 		try {
@@ -1448,7 +1448,7 @@ public class C2Controller {
 		return list;
 	}
 	
-	@RequestMapping("/c23/returncode")
+	@RequestMapping(value="/c23/returncode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String returncode(String return_code) {
 		try {

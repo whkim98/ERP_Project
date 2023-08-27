@@ -94,6 +94,7 @@
          <div class="taxinvoice-contentItem">
          	<p>
                <input type="button" id="addRow" value="품목추가">
+               <input type="button" id="deleteRow" value="품목삭제"> 품목은 최대 16개까지 추가, 삭제 가능
          	</p>
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
@@ -137,11 +138,11 @@
 						<td><input type="text" name="crlist[${status.index }].goodsst_package" id="crlist[${status.index }].goodsst_package" value="${i.goodsst_package }"></td>
 						<td>
 							<input type="text" name="crlist[${status.index }].client_name1" id="crlist[${status.index }].client_name1" value="${i.client_name1}" onkeypress="searchcl1(event, '${comcode_code}',${status.index })">
-							<input type="button" onclick="clList1('${comcode_code}',${status.index })" value="search">
+							<input type="button" onclick="clList3('${comcode_code}',${status.index })" value="search">
 						</td>
 						<td>
 							<input type="text" name="crlist[${status.index }].client_name2" id="crlist[${status.index }].client_name2" value="${i.client_name2}" onkeypress="searchcl2(event, '${comcode_code}',${status.index })">
-							<input type="button" onclick="clList2('${comcode_code}',${status.index })" value="search">
+							<input type="button" onclick="clList4('${comcode_code}',${status.index })" value="search">
 						</td>
 						<td><input type="text" name="crlist[${status.index }].goodsst_ea" id="crlist[${status.index }].goodsst_ea" value="${i.goodsst_ea }"></td>
 						<td>
@@ -405,10 +406,6 @@ function searchAddr() {
         customInput.style.display = "none";
 }
 
-
-
-
-
 const itemTable = document.getElementById('itemTable');
 
 const addRowButton = document.getElementById('addRow');
@@ -419,7 +416,7 @@ addRowButton.addEventListener('click', function() {
     if (itemTable.rows.length <= 16) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
-        
+        j += 1;
         for (let i = 0; i < 14; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
@@ -455,7 +452,6 @@ addRowButton.addEventListener('click', function() {
     } else {
         alert('품목은 최대 16개까지 추가할 수 있습니다.');
     }
-    j += 1;
 });
 
 
@@ -533,8 +529,8 @@ function searchcl1(e, code, n){
 			return;
 		}
 		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
+		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcl";
+		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
 		sendRequest(url, param, clName1, "POST");
 	}
@@ -563,8 +559,8 @@ function searchcl2(e, code, n){
 			return;
 		}
 		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
+		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcl";
+		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
 		sendRequest(url, param, clName2, "POST");
 	}
@@ -592,8 +588,8 @@ function searchcl3(e, code, n){
 			return;
 		}
 		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
+		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcl";
+		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
 		sendRequest(url, param, clName3, "POST");
 	}
@@ -621,8 +617,8 @@ function searchcl4(e, code, n){
 			return;
 		}
 		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
+		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcl";
+		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
 		sendRequest(url, param, clName4, "POST");
 	}
