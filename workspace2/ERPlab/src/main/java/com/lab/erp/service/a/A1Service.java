@@ -23,11 +23,14 @@ public class A1Service {
 	// 전체 회사 정보 출력
 	public List<Erp_CompanyVO> list() {return a1Repository.findAll();}
 	
+	// 회사 정보 수정
+	public int update(Erp_CompanyVO erp_CompanyVO) {return a1Repository.update(erp_CompanyVO);}
+	
 	// 회사 정보 저장
 	public int save(Erp_CompanyVO erp_CompanyVO) {return a1Repository.save(erp_CompanyVO);}
 	
 	// 회사 정보 삭제
-	public int delete(Erp_CompanyVO erp_CompanyVO) {return a1Repository.delete(erp_CompanyVO);}
+	public int delete(int company_no) {return a1Repository.delete(company_no);}
 	
 	// 전체 회사 정보
 	public int countAll() {return a1Repository.countAll();}
@@ -35,5 +38,4 @@ public class A1Service {
 	// 업정코드목록조회 정보 출력
 	public List<Erp_BusinesstypeVO> bstlist() {return a1Repository.findBstAll();}
 	
-
 }

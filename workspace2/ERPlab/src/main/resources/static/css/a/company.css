@@ -15,10 +15,11 @@
 .comp_container > .comp_body > .comp_regist {
     width: 45%;
     height: 100%;
-    display: flex;
     overflow: hidden;
 }
-
+.comp_container > .comp_body > .comp_regist > .comp_search {
+	width: 100%;
+}
 .comp_container > .comp_body > .vertical_line {
 	height: 100vh;
 	width: 0.075vw;
@@ -74,7 +75,7 @@ select:focus {
 }
 
 .comp_container > .comp_body > .regits_form .sec > .businesstype_comp {
-	 width: 100%;
+	width: 100%;
     display: flex;
     justify-content: space-between;
 }
@@ -97,31 +98,6 @@ select:focus {
 
 #company_businesstype {
     width: 80%;
-}
-
-#wrapper {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #fff;
-    display: none;
-    overflow-y: scroll;
-}
-
-.businesstype_title > .close_businesstype {
-    width: 40px;
-    height: 40px;
-    border: none;
-    padding: 0px;
-    align-items: center;
-    letter-spacing: 0;
-    line-height: 0;
-}
-
-.post .content {
-    font-size: 1.1rem;
 }
 
 .selected_comp_items{

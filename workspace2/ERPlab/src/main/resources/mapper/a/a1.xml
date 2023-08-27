@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.a1.A1Repository">
 	<select id="findAll" resultType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
-	 	SELECT * FROM erp_company ORDER BY company_no DESC;
+	 	SELECT * FROM erp_company ORDER BY company_no DESC
 	</select>
 	
 	<insert id="save" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO" keyProperty="company_no" useGeneratedKeys="true" keyColumn="company_no">
@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="update" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
-		UPDATE erp_company SET 
+		UPDATE erp_company SET comptype_no = #{comptype_no}, company_registeredno = #{company_registeredno}, company_corporatedno = #{company_corporatedno}, company_representative = #{company_representative}, company_businesstype = #{company_businesstype}, businesstype_no = #{businesstype_no}, company_addr1 = #{company_addr1}, company_addr2 = #{company_addr2}, company_postal = #{company_postal}, company_opendate = #{company_opendate}, company_use = #{company_use}, company_foreign = #{company_foreign}, company_directno = #{company_directno}, company_fax = #{company_fax}, company_email = #{company_email}
 		WHERE company_no = #{company_no}
 	</update>
 	
@@ -29,5 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 	SELECT * FROM erp_businesstype
 	</select>
 
-	
+	<select id="searchedList" resultType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
+	 	SELECT * FROM erp_company where #{type} == #{word} ORDER BY company_no DESC;
+	</select>
 </mapper>

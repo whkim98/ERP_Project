@@ -6,13 +6,37 @@
         <title>ERP lab 회사정보</title>
         <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
-        <link rel="stylesheet" href="/css/a/a_company.css" />
+        <link rel="stylesheet" href="/css/a/company.css" />
     </head>
     <body>
         <div class="comp_container">
-            <h2 class="comp_title"><a th:href="@{/a/a_company}">회사등록</a></h2>
+            <h2 class="comp_title"><a th:href="@{/a/a1/company}">회사등록</a></h2>
             <div class="comp_body">
                 <div class="comp_regist">
+					<table class="comp_search">
+						<tr>
+							<td>
+								<select name="search_type" id="search_type">
+									<option value="all" selected}>전체</option>
+									<option value="company_no" }>코드</option>
+									<option value="event_code"}>행사코드</option>
+									<option value="event_name"}>행사명</option>
+									<option value="event_start"  }>행사시작일</option>
+									<option value="company_corporatedno"  }>행사종료일</option>
+									<option value="company_representative"}>행사기간</option>
+									<option value="businesstype_no"  }>상품코드</option>
+									<option value="company_opendate"  }>상품명</option>
+									<option value="company_use" }>단가</option>
+									<option value="company_foreign"  }>담당자</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" id="search_word" name="word" placeholder="검색어를 입력하세요" autocomplete="off">
+								<input type="button" value="전체목록" id="list_reset">
+							</td>
+						</tr>
+					</table>
+					<table id="search_result">
                     <table class="comp_list">
                         <tr class="comp_top">
                             <th class="sec1">코드</th>
@@ -36,7 +60,7 @@
 						<div class="yellow_box"></div>
 						<span class="red">는 필수 입력란입니다.</span>
 					</div>
-                    <form th:action="@{/a/a_company}" method="post" id="comp_frm">
+                    <form th:action="@{/a/a1/company}" method="post" id="comp_frm">
 						<input type="hidden" name="company_no" id="company_no" th:value="${erp_CompanyVO?.company_no}"/>
 						
                         <div class="sec">
@@ -86,7 +110,7 @@
                         </div>
 
                         <div class="sec">
-                            <label for="company_representative">대표자성</label>
+                            <label for="company_representative">대표자성명</label>
                             <input
                                 type="text"
                                 name="company_representative"
@@ -204,14 +228,16 @@
                                 th:value="${erp_CompanyVO?.company_email}"
                             />
                         </div>
+                        
+                        <input type="hidden" name="comcode_no" id="comcode_no" th:value="${erp_CompanyVO?.comcode_no}"/>
 
                         <div class="sec" id="new_btn_sec">
                             <button type="reset">RESET</button>
                             <button type="button" id="comp_save_btn">SAVE</button>
                         </div>
                         <div class="sec" id="old_btn_sec">
-							<button type="button">DELETE</button>
-							<button type="button">UPDAET</button>
+							<button type="button" id="comp_delete_btn">DELETE</button>
+							<button type="button" id="comp_update_btn">UPDAET</button>
 						</div>
 						
 						<div id="errormsg" class="hidden" th:text="${error}"></div>
@@ -219,61 +245,67 @@
                 </div>
             </div>
         </div>
-        
-          <div id="wrapper">
-            <div id="main">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="businesstype_title">
-                                <span>업종코드목록조회</span>
-                                <button class="close_businesstype">X</button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="items">
-                            <td>
-                                <article class="post" th:each="bst_item : ${bst_list}">
-                                    <header>
-                                        <div class="title">
-                                            <h2>[[${bst_item.businesstype_subctgr}]]</h2>
-                                            <p>
-                                                [[${bst_item.businesstype_name}]] > [[${bst_item.businesstype_biotore}]] > [[${bst_item.businesstype_ctgr}]] >
-                                                [[${bst_item.businesstype_subctgr}]]
-                                            </p>
-                                            <p class="hidden">[[${bst_item.businesstype_no}]]</p>
-                                        </div>
-                                    </header>
-                                    <p class="content">
-                                        업종코드 : [[${bst_item.businesstype_code}]]<br />
-                                        적용 범위 및 기준 : <br />
-                                        [[${bst_item.businesstype_description}]]
-                                        <br />
-                                    </p>
-                                    <footer>
-                                        <ul class="actions">
-                                            <li>
-                                                <button class="button large comp_type_select_btn" th:id="${bst_item.businesstype_code}">
-													SELECT
-												</button>
-                                            </li>
-                                        </ul>
-                                    </footer>
-                                </article>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
         
       	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>
         <script src="/webdesign/assets/js/breakpoints.min.js"></script>
         <script src="/webdesign/assets/js/util.js"></script>
         <script src="/webdesign/assets/js/main.js"></script>
-        <script src="/js/a/a_company.js"></script>
+        <script src="/js/a/a1/company.js"></script>
+        
+		<script th:inline="javascript">
+			// 회사 리스트 검색 필터링 기능
+			let search_filter = (type, word) => {				
+				if(word=="" || word==undefined || word==null) return null;
+				let searched_list = [];
+				let list = [[${comp_list}]];
+				
+				for(let i = 0; i<list.length; i++){
+					let json_data = JSON.stringify(list[i]);
+					let key_value = json_data.replace("{", "").replace("}", "").replace(/"/gi, "").split(",");
+					
+					for (let j = 0 ; j < key_value.length; j++){
+						let key = key_value[j].split(":")[0];
+						let value = key_value[j].split(":")[1];	
+						if (type=="all") {
+							if(value==word) searched_list.push(list[i]);
+						}
+						else {
+							if(key==type && value==word) searched_list.push(list[i]);
+						}
+					}
+				}	
+				return searched_list;
+			}
+			
+			//회사리스트중 회사 클릭시 데이터값 전달 함수
+			let selected_vo = (tag) => {
+				let list = [[${comp_list}]];
+				let vo_no = tag.innerHTML;
+				for(let i = 0 ; i < list.length; i ++){
+					if (list[i].company_no == vo_no){
+						document.getElementById("company_no").value=list[i].company_no;
+						document.getElementById("comptype_no").value=list[i].comptype_no;
+						document.getElementById("company_name").value=list[i].company_name;
+						document.getElementById("company_registeredno").value=list[i].company_registeredno;
+						document.getElementById("company_corporatedno").value=list[i].company_corporatedno;
+						document.getElementById("company_representative").value=list[i].company_representative;
+						document.getElementById("company_businesstype").value=list[i].company_businesstype;
+						document.getElementById("businesstype_no").value=list[i].businesstype_no;
+						document.getElementById("company_addr1").value=list[i].company_addr1;
+						document.getElementById("company_addr2").value=list[i].company_addr2;
+						document.getElementById("company_postal").value=list[i].company_postal;
+						document.getElementById("company_opendate").value=list[i].company_opendate;
+						document.getElementById("company_use").value=list[i].company_use;
+						document.getElementById("company_foreign").value=list[i].company_foreign;
+						document.getElementById("company_directno").value=list[i].company_directno;
+						document.getElementById("company_fax").value=list[i].company_fax;
+						document.getElementById("company_email").value=list[i].company_email;
+					}
+				}
+			}
+		</script>
         
     </body>
 </html>

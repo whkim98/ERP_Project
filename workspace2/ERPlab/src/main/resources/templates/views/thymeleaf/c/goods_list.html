@@ -7,6 +7,7 @@
     
     <link rel="stylesheet" href="/css/common.css" />
     <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/c/event.css" />
 </head>
 <body>
      <div id="wrapper">
@@ -14,35 +15,37 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="businesstype_title">
-                                <span>업종코드목록조회</span>
+                            <th class="goods_title">
+                                <span>상품조회</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="items">
                             <td>
-                                <article class="post" th:each="bst_item : ${bst_list}">
+                                <article class="post" th:each="goods_item : ${goods_list}">
                                     <header>
                                         <div class="title">
-                                            <h2>[[${bst_item.businesstype_subctgr}]]</h2>
+                                            <h2>[[${goods_item.goods_name}]]</h2>
                                             <p>
-                                                [[${bst_item.businesstype_name}]] > [[${bst_item.businesstype_biotore}]] > [[${bst_item.businesstype_ctgr}]] >
-                                                [[${bst_item.businesstype_subctgr}]]
+                                        		상품코드 : [[${goods_item.goods_code}]] <br />
+												상품바코드 : [[${goods_item.goods_barcode}]] <br />        
+                                                소비자가 : [[${goods_item.goods_customerprice}]]원  
                                             </p>
-                                            <p class="hidden">[[${bst_item.businesstype_no}]]</p>
+                                            <p class="hidden">[[${goods_item.goods_no}]]</p>
                                         </div>
                                     </header>
                                     <p class="content">
-                                        업종코드 : [[${bst_item.businesstype_code}]]<br />
-                                        적용 범위 및 기준 : <br />
-                                        [[${bst_item.businesstype_description}]]
+                                        재고수량 : [[${goods_item.goods_stockqty}]]<br />
+                                        재고위치 : [[${goods_item.goods_location}]]
+                                        상품설명 : <br />
+                                        [[${goods_item.goods_description}]]
                                         <br />
                                     </p>
                                     <footer>
                                         <ul class="actions">
                                             <li>
-                                                <button class="button large comp_type_select_btn" th:id="${bst_item.businesstype_code}">
+                                                <button class="button large event_type_select_btn">
 													SELECT
 												</button>
                                             </li>
@@ -61,6 +64,6 @@
         <script src="/webdesign/assets/js/breakpoints.min.js"></script>
         <script src="/webdesign/assets/js/util.js"></script>
         <script src="/webdesign/assets/js/main.js"></script>
-        <script src="/js/a/a1/businesstype_list.js"></script>
+        <script src="/js/c/c3/event.js"></script>
 </body>
 </html>
