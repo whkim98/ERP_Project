@@ -12,11 +12,10 @@ public interface A1Repository {
 	
 	int update(Erp_CompanyVO erp_CompanyVO);
 		
-	int delete(int company_no);
+	int delete(Erp_CompanyVO erp_CompanyVO);
 	
 	int countAll();
 	
 	List<Erp_BusinesstypeVO> findBstAll();
 	
-	List<Erp_CompanyVO> searchedList(String type, String word);
 }
