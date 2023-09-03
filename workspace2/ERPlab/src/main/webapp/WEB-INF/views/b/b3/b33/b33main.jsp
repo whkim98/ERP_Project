@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=44, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%@ include file="/WEB-INF/views/layout/header.jsp" %>
+
     <div class="currency-container">
-   
-        <div class="b33-currency-head">   
+	
+        <div class="b33-currency-head">	
         <h1>외화관리</h1>
         </div>
         
@@ -82,7 +78,7 @@ xhr.onreadystatechange = function () {
             itemData.currSgn = item.getElementsByTagName("currSgn")[0].textContent;
             itemData.fxrt = item.getElementsByTagName("fxrt")[0].textContent;
             itemData.imexTp = item.getElementsByTagName("imexTp")[0].textContent;
-              itemData.mtryUtNm = item.getElementsByTagName("mtryUtNm")[0].textContent;
+            itemData.mtryUtNm = item.getElementsByTagName("mtryUtNm")[0].textContent;
 
             jsonData.push(itemData);
         }
@@ -111,10 +107,6 @@ xhr.onreadystatechange = function () {
         newTd.innerHTML = '적용개시일자';
         newTr.appendChild(newTd);
         newTd = document.createElement("td");
-
-        // newTd.innerHTML = '수출입구분';
-        // newTr.appendChild(newTd);
-        // newTd = document.createElement("td");
         
         if(itemData == ''){
             cp.innerHTML = '';
@@ -164,12 +156,13 @@ xhr.onreadystatechange = function () {
 }
 }
 
-xhr.send('');      
+xhr.send('');		
+
 
 // 검색 버튼 클릭 시 실행될 함수
 function filterExchangeList() {
     const searchOption = document.getElementById("b33searchOption").value;
-    const searchInput = document.getElementById("b33searchInput").value;
+    const searchInput = document.getElementById("b33searchInput").value.toUpperCase();
 
     const tableRows = document.querySelectorAll("#exchangeList tr");
 
@@ -179,11 +172,11 @@ function filterExchangeList() {
             let matchFound = false;
 
             if (searchOption === "b33searchCountryCode") {
-                matchFound = dataCells[0].textContent.includes(searchInput);
+                matchFound = dataCells[0].textContent.toUpperCase().includes(searchInput);
             } else if (searchOption === "b33searchCountryName") {
-                matchFound = dataCells[1].textContent.includes(searchInput);
+                matchFound = dataCells[1].textContent.toUpperCase().includes(searchInput);
             } else if (searchOption === "b33searchCurrency") {
-                matchFound = dataCells[3].textContent.includes(searchInput);
+                matchFound = dataCells[3].textContent.toUpperCase().includes(searchInput);
             }
 
             row.style.display = matchFound ? "" : "none";
@@ -196,8 +189,11 @@ const filterButton = document.getElementById("filterButton");
 
 filterButton.addEventListener("click", filterExchangeList);
 
-consol.log()
 
 </script>
-</body>
-</html>
+    
+
+<%@ include file="/WEB-INF/views/layout/footer.jsp" %>
+    
+    
+    
