@@ -21,17 +21,17 @@ public class A1Service {
 	}
 	
 	// 전체 회사 정보 출력
-	public List<Erp_CompanyVO> list() {return a1Repository.findAll();}
+	public List<Erp_CompanyVO> list_company() {return a1Repository.findAll_company();}
 	
 	// 회사 정보 저장
-	public int save(Erp_CompanyVO erp_CompanyVO) {return a1Repository.save(erp_CompanyVO);}
+	public int save_company(Erp_CompanyVO erp_CompanyVO) {return a1Repository.save_company(erp_CompanyVO);}
+
+	// 회사 정보 수정
+	public int update_company(Erp_CompanyVO erp_CompanyVO) {return a1Repository.update_company(erp_CompanyVO);}
 	
 	// 회사 정보 삭제
-	public int delete(Erp_CompanyVO erp_CompanyVO) {return a1Repository.delete(erp_CompanyVO);}
-	
-	// 전체 회사 정보
-	public int countAll() {return a1Repository.countAll();}
-	
+	public int delete_company(int company_no) {return a1Repository.delete_company(company_no);}
+
 	// 업정코드목록조회 정보 출력
 	public List<Erp_BusinesstypeVO> bstlist() {return a1Repository.findBstAll();}
 	

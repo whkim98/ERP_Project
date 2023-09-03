@@ -2,6 +2,60 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="d4">
-
+<mapper namespace="com.lab.erp.repository.d4.D4Repository">
+	
+	<!-- 품질관리 -->
+	<select id="findAll_qc" resultType="com.lab.erp.vo.d.d4.Erp_QcVO">
+	 	SELECT * FROM erp_qc ORDER BY qc_no DESC
+	</select>
+	
+	<insert id="save_qc" flushCache="true" parameterType="com.lab.erp.vo.d.d4.Erp_QcVO" keyProperty="qc_no" useGeneratedKeys="true" keyColumn="qc_no">
+		INSERT INTO erp_qc (qc_date, goods_no, qc_num, qc_clause, qc_grade, qc_result, qc_revalue, qc_remark, comcode_no) 
+		VALUES (#{qc_date}, #{goods_no}, #{qc_num}, #{qc_clause}, #{qc_grade}, #{qc_result}, #{qc_revalue}, #{qc_remark}, #{comcode_no})
+	</insert>
+	
+	<update id="update_qc" flushCache="true" parameterType="com.lab.erp.vo.d.d4.Erp_QcVO">
+		UPDATE erp_qc SET qc_date = #{qc_date}, goods_no = #{goods_no}, qc_num = #{qc_num}, qc_clause = #{qc_clause}, qc_grade = #{qc_grade}, qc_result = #{qc_result}, qc_revalue = #{qc_revalue}, qc_remark = #{qc_remark}, comcode_no = #{comcode_no}
+		WHERE qc_no = #{qc_no}
+	</update>
+	
+	<delete id="delete_qc" flushCache="true" parameterType="com.lab.erp.vo.d.d4.Erp_QcVO">
+		DELETE FROM erp_qc WHERE qc_no = #{qc_no}
+	</delete>
+	
+	
+	<!-- 설비/장비관리 -->
+	<select id="findAll_equipment" resultType="com.lab.erp.vo.d.d4.Erp_EquipmentVO">
+	 	SELECT * FROM erp_equipment ORDER BY equipment_no DESC
+	</select>
+	
+	<insert id="save_equipment" flushCache="true" parameterType="com.lab.erp.vo.d.d4.Erp_EquipmentVO" keyProperty="equipment_no" useGeneratedKeys="true" keyColumn="equipment_no">
+		INSERT INTO erp_equipment (equipment_date, eqkind_no, equipment_code, equipment_name, equipment_production, equipment_expiry, equipment_contents, eqgrade_no, equipment_result, equipment_revalue, equipment_remark, comcode_no) 
+		VALUES (#{equipment_date}, #{eqkind_no}, #{equipment_code}, #{equipment_name}, #{equipment_production}, #{equipment_expiry}, #{equipment_contents}, #{eqgrade_no}, #{equipment_result}, #{equipment_revalue}, #{equipment_remark}, #{comcode_no})
+	</insert>
+	
+	<update id="update_equipment" flushCache="true" parameterType="com.lab.erp.vo.d.d4.Erp_EquipmentVO">
+		UPDATE erp_equipment SET equipment_date = #{equipment_date}, eqkind_no = #{eqkind_no}, equipment_code = #{equipment_code}, equipment_name = #{equipment_name}, equipment_production = #{equipment_production}, equipment_expiry = #{equipment_expiry}, equipment_contents = #{equipment_contents}, eqgrade_no = #{eqgrade_no}, equipment_result = #{equipment_result}, equipment_revalue = #{equipment_revalue}, equipment_remark = #{equipment_remark}, comcode_no = #{comcode_no}
+		WHERE equipment_no = #{equipment_no}
+	</update>
+	
+	<delete id="delete_equipment" flushCache="true" parameterType="com.lab.erp.vo.d.d4.Erp_EquipmentVO">
+		DELETE FROM erp_equipment WHERE equipment_no = #{equipment_no}
+	</delete>
+	
+	
+	<!-- 상품조회 -->
+	<select id="findGoodsAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		SELECT * FROM erp_goods
+	</select>
+	
+	<!-- 설비/장비 종류 조회 -->
+	<select id="findEqKindAll" resultType="com.lab.erp.vo.d.d4.Erp_EqkindVO">
+		SELECT * FROM erp_eqkind
+	</select>
+	
+	<!-- 설비/장비 관리 등급 조회-->
+	<select id="findEqGradeAll" resultType="com.lab.erp.vo.d.d4.Erp_EqgradeVO">
+		SELECT * FROM erp_eqgrade
+	</select>
 </mapper>

@@ -1,22 +1,22 @@
-// 회사목록 조회 버튼
-let companylist_search_btn = document.getElementById("companylist_search");
-companylist_search_btn.addEventListener('click', () => {
-	window.open("../c3/company_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+// 설비/장비종류목록 조회 버튼
+let eqkindlist_search_btn = document.getElementById("eqkindlist_search");
+eqkindlist_search_btn.addEventListener('click', () => {
+	window.open("../d4/eqkind_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
-// 상품목록 조회 버튼
-let goodslist_search_btn = document.getElementById("goodslist_search");
-goodslist_search_btn.addEventListener('click', () => {
-	window.open("../c3/goods_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+// 설비/장비등급목록 조회 버튼
+let eqgradelist_search_btn = document.getElementById("eqgradelist_search");
+eqgradelist_search_btn.addEventListener('click', () => {
+	window.open("../d4/eqgrade_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
-// 창고 리스트 클릭시 정보출력
-let warehouse_items = document.getElementsByClassName("warehouse_items");
-for(let i = 0; i < warehouse_items.length; i++){
-	warehouse_items[i].addEventListener('click', (e) => {
-		//클릭된 창고 색변경
-		reset(warehouse_items, warehouse_items.length, "warehouse_items");
-		e.target.parentElement.className="warehouse_items selected_warehouse_items";
+// 행사 리스트 클릭시 정보출력
+let equipment_items = document.getElementsByClassName("equipment_items");
+for(let i = 0; i < equipment_items.length; i++){
+	equipment_items[i].addEventListener('click', (e) => {
+		//클릭된 행사 색변경
+		reset(equipment_items, equipment_items.length, "equipment_items");
+		e.target.parentElement.className="equipment_items selected_equipment_items";
 		
 		//클릭시 하단부 버튼 RESET/SAVE -> DELETE/UPDATE로 변경
 		buttonController(true);
@@ -46,9 +46,9 @@ let buttonController = (status) => {
 }
 
 // input, label, 리스트 제외한 다른 영역 클릭시 DELETE/UPDATE -> RESET/SAVE 로 변경
-let warehouse_container = document.getElementsByClassName("warehouse_container");
-warehouse_container[0].addEventListener('click', (e) => {
-	let listarea = document.getElementsByClassName("warehouse_regist");
+let equipment_container = document.getElementsByClassName("equipment_container");
+equipment_container[0].addEventListener('click', (e) => {
+	let listarea = document.getElementsByClassName("equipment_regist");
 	let labelarea = document.getElementsByTagName("label");
 	let inputarea = document.getElementsByTagName("input");
 	
@@ -62,7 +62,7 @@ warehouse_container[0].addEventListener('click', (e) => {
 			
 		if(flag) {
 			buttonController(false);
-			reset(warehouse_items, warehouse_items.length, "warehouse_items");
+			reset(equipment_items, equipment_items.length, "equipment_items");
 			empty_inputs();
 		}
 	}
@@ -70,18 +70,26 @@ warehouse_container[0].addEventListener('click', (e) => {
 
 // 입력란 값 제거 함수
 let empty_inputs = () => {
-	document.getElementById("warehouse_no").value="";
-	document.getElementById("company_no").value="";
-	document.getElementById("warehouse_date").value="";
-	document.getElementById("goods_no").value="";
-	document.getElementById("warehouse_qty").value="";
-	document.getElementById("warehouse_release").value="";
+	document.getElementById("equipment_no").value="";
+	document.getElementById("equipment_date").value="";
+	document.getElementById("eqkind_name").value="";
+	document.getElementById("eqkind_no").value="";
+	document.getElementById("equipment_code").value="";
+	document.getElementById("equipment_name").value="";
+	document.getElementById("equipment_production").value="";
+	document.getElementById("equipment_expiry").value="";
+	document.getElementById("equipment_contents").value="";
+	document.getElementById("eqgrade_name").value="";
+	document.getElementById("eqgrade_no").value="";
+	document.getElementById("equipment_result").value="";
+	document.getElementById("equipment_revalue").value="";
+	document.getElementById("equipment_remark").value="";
 }
 
 // 페이지 로딩시 error 문구 여부를 통해 focus 맞추기
 window.onload = () => {
 	let errormsg = document.getElementById("errormsg").innerHTML;
-	errormsg = errormsg == "company_no" ? "company_name" : errormsg== "goods_no" ? "goods_name" : errormsg;
+	errormsg = errormsg == "eqkind_no" ? "eqkind_name" : errormsg == "eqgrade_no" ? "eqgrade_name" : errormsg;
 	if (errormsg != null) document.getElementById(errormsg).focus();
 }
 
@@ -92,7 +100,7 @@ let empty_input_confirm = () => {
 	let flag = false;
 	let tagName = "";
 	for(let i = 0 ; i < inputboxes.length ; i++){
-		if(inputboxes[i].id=="warehouse_no" || inputboxes[i].id=="search_word") continue;
+		if(inputboxes[i].id=="equipment_no" || inputboxes[i].id=="search_word") continue;
 		else{
 			if (inputboxes[i].value == "" || inputboxes[i].value == null) {
 				flag = true;
@@ -120,13 +128,13 @@ let empty_input_confirm = () => {
 }
 
 // SAVE 버튼 클릭 기능
-let warehouse_save_btn = document.getElementById("warehouse_save_btn");
-warehouse_save_btn.addEventListener('click', () => {
+let equipment_save_btn = document.getElementById("equipment_save_btn");
+equipment_save_btn.addEventListener('click', () => {
 	let res = empty_input_confirm();
-	if (res) document.getElementById("warehouse_frm").submit();
+	if (res) document.getElementById("equipment_frm").submit();
 });
 
-// 행사리스트 검색조회
+// 설비/장비리스트 검색조회
 let search_word = document.getElementById("search_word");
 let word="";
 let select_value = "all";
@@ -144,31 +152,31 @@ search_type.addEventListener('change', ()=>{
 	if (search_res != null) getlist(search_res);
 });
 
-// 창고리스트 검색 조회 결과 출력 기능
+// 설비/장비리스트 검색 조회 결과 출력 기능
 function getlist(list){
 	let search_result = document.getElementById("search_result");
 	let newTr = document.createElement("tr");
 	let newTd = document.createElement("td");
 	search_result.innerHTML = '';
-	search_result.innerHTML += '<tr><td>창고코드</td><td>입고일</td><td>상품코드</td><td>수량</td><td>출고일</td></tr>';
+	search_result.innerHTML += '<tr><td>코드</td><td>설비/장비</td><td>설비/장비명</td><td>제조년월</td><td>합/불여부</td></tr>';
 	if(list != null || list.length != 0){
 		list.forEach(function(item){
 			newTr = document.createElement("tr");
 			search_result.appendChild(newTr);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.warehouse_no;
+			newTd.innerHTML = item.equipment_no;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.warehouse_date;
+			newTd.innerHTML = item.equipment_code;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.goods_no;
+			newTd.innerHTML = item.equipment_name;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.warehouse_qty;
+			newTd.innerHTML = item.equipment_production;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.warehouse_release;
+			newTd.innerHTML = item.equipment_result;
 			newTr.appendChild(newTd);
 		});
 	}else {
@@ -176,42 +184,18 @@ function getlist(list){
 	}
 }
 
-// 창고 수정 버튼
-let warehouse_update_btn = document.getElementById("warehouse_update_btn");
-warehouse_update_btn.addEventListener('click', () => {
-	let warehouse_frm = document.getElementById("warehouse_frm");
-	warehouse_frm.action="/c/c32/warehouse_update";
-	warehouse_frm.submit();
+// 설비/장비 수정 버튼
+let equipment_update_btn = document.getElementById("equipment_update_btn");
+equipment_update_btn.addEventListener('click', () => {
+	let equipment_frm = document.getElementById("equipment_frm");
+	equipment_frm.action="/d/d42/equipment_update";
+	equipment_frm.submit();
 });
 
-// 창고 삭제 버튼
-let warehouse_delete_btn = document.getElementById("warehouse_delete_btn");
-warehouse_delete_btn.addEventListener('click', () => {
-	let warehouse_frm = document.getElementById("warehouse_frm");
-	warehouse_frm.action="/c/c32/warehouse_delete";
-	warehouse_frm.submit();
+// 설비/장비 삭제 버튼
+let equipment_delete_btn = document.getElementById("equipment_delete_btn");
+equipment_delete_btn.addEventListener('click', () => {
+	let equipment_frm = document.getElementById("equipment_frm");
+	equipment_frm.action="/d/d42/equipment_delete";
+	equipment_frm.submit();
 });
-
-// 행사기간 자동 확인 함수
-let warehouse_period_calc = () => {
-	console.log("수정중")
-	let start = document.getElementById("warehouse_date").valueAsNumber;
-	let end = document.getElementById("warehouse_release").valueAsNumber;
-	if(start && end) incorrect_warehouse_period_chker(start, end);
-}
-
-// 행사기간 오입력시 알림창 출력 및 값 제거
-let incorrect_warehouse_period_chker = (start, end) => {
-	if(start > end) {
-		alert("입고/출고 기간이 잘못 입력되었습니다.");
-		document.getElementById("warehouse_date").value="";
-		document.getElementById('warehouse_release').value="";
-		document.getElementById("warehouse_date").focus();
-	}
-}
-
-// 행사기간 자동 계산
-let warehouse_start = document.getElementById("warehouse_date");
-warehouse_start.addEventListener("change", warehouse_period_calc);
-let warehouse_end = document.getElementById("warehouse_release");
-warehouse_end.addEventListener("change", warehouse_period_calc);

@@ -15,7 +15,6 @@
 .comp_container > .comp_body > .comp_regist {
     width: 45%;
     height: 100%;
-    display: flex;
     overflow: hidden;
 }
 

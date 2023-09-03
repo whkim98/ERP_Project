@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ERP lab 설비/장비관리</title>
+        <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+        <link rel="stylesheet" href="/css/d/equipment.css" />
+    </head>
+    <body>
+        <div class="equipment_container">
+            <h2 class="equipment_title"><a th:href="@{/d/d42/equipment}">설비/장비관리</a></h2>
+            <div class="equipment_body">
+                <div class="equipment_regist">
+					<table class="equipment_search">
+						<tr>
+							<td>
+								<select name="search_type" id="search_type">
+									<option value="all" selected}>전체</option>
+									<option value="equipment_no">코드</option>
+									<option value="equipment_date">평가일자</option>
+									<option value="eqkind_no">설비/장비종류</option>
+									<option value="equipment_code">설비/장비코드</option>
+									<option value="equipment_name">설비/장비명</option>
+									<option value="equipment_production">제조년월</option>
+									<option value="equipment_expiry">사용연한</option>
+									<option value="equipment_contents">관리내용</option>
+									<option value="eqgrade_no">관리등급</option>
+									<option value="equipment_result">합/불여부</option>
+									<option value="equipment_revalue">재평가여부</option>
+									<option value="equipment_remark">비고</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" id="search_word" name="word" placeholder="검색어를 입력하세요" autocomplete="off">
+								<input type="button" value="전체목록" id="list_reset">
+							</td>
+						</tr>
+					</table>
+					<table id="search_result">
+                    <table class="equipment_list">
+                        <tr class="equipment_top">
+							<th class="sec1">코드</th>
+                            <th class="sec2">설비/장비코드</th>
+                            <th class="sec3">설비/장비명</th>
+                            <th class="sec4">제조년월</th>
+                            <th class="sec5">합/불여부</th>
+                        </tr>
+                        <tr class="equipment_items" th:each="equipment_item : ${equipment_list}">
+							<td>[[${equipment_item.equipment_no}]]</td>
+                            <td>[[${equipment_item.equipment_code}]]</td>
+                            <td>[[${equipment_item.equipment_name}]]</td>
+                            <td>[[${equipment_item.equipment_production}]]</td>
+                            <td>[[${equipment_item.equipment_result}]]</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <hr class="vertical_line">
+                
+                <div class="regits_form">
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
+                    <form th:action="@{/d/d42/equipment}" method="post" id="equipment_frm">
+						<input type="hidden" name="equipment_no" id="equipment_no" th:value="${erp_EquipmentVO?.equipment_no}"/>
+						
+						<div class="sec">
+                            <label for="equipment_date">평가일자</label>
+                            <input
+                                type="date"
+                                name="equipment_date"
+                                id="equipment_date"
+                                th:value="${erp_EquipmentVO?.equipment_date}"
+                            />
+                        </div>
+                        
+              			<div class="sec">
+                            <label for="eqkind_name">설비/장비종류</label>
+                            <div class="eqkind_regist">
+                                <input
+                                    type="text"
+                                    name="eqkind_name"
+                                    id="eqkind_name"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="eqkindlist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+
+						<input type="hidden" name="eqkind_no" id="eqkind_no" th:value="${erp_EquipmentVO?.eqkind_no}">
+
+                	  	<div class="sec">
+                            <label for="equipment_code">설비/장비코드</label>
+                            <input
+                                type="text"
+                                name="equipment_code"
+                                id="equipment_code"
+                                class="required"
+                                th:value="${erp_EquipmentVO?.equipment_code}"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="equipment_name">설비/장비명</label>
+                            <input
+                                type="text"
+                                name="equipment_name"
+                                id="equipment_name"
+                                class="required"
+                                th:value="${erp_EquipmentVO?.equipment_name}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="equipment_production">제조년월</label>
+                            <input
+                                type="text"
+                                name="equipment_production"
+                                id="equipment_production"
+                                class="required"
+                                th:value="${erp_EquipmentVO?.equipment_production}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="equipment_expiry">사용연한</label>
+                            <input
+                                type="text"
+                                name="equipment_expiry"
+                                id="equipment_expiry"
+                                class="required"
+                                th:value="${erp_EquipmentVO?.equipment_expiry}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="equipment_contents">관리내용</label>
+                            <input
+                                type="text"
+                                name="equipment_contents"
+                                id="equipment_contents"
+                                class="required"
+                                th:value="${erp_EquipmentVO?.equipment_contents}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="eqgrade_name">관리등급</label>
+                            <div class="eqgrade_regist">
+                                <input
+                                    type="text"
+                                    name="eqgrade_name"
+                                    id="eqgrade_name"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="eqgradelist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+
+						<input type="hidden" name="eqkind_no" id="eqkind_no" th:value="${erp_EquipmentVO?.eqgrade_no}">
+
+                        
+                       <div class="sec">
+                            <label for="equipment_result">합/불유무</label>
+                            <select name="equipment_result" id="equipment_result" class="required">
+                                <option value="0" th:selected="${erp_EquipmentVO?.equipment_result} == 0">불합격(0)</option>
+                                <option value="1" th:selected="${erp_EquipmentVO?.equipment_result} == 1">합격(1)</option>
+                            </select>
+                        </div>
+                       
+                       <div class="sec">
+                            <label for="equipment_revalue">재평가등급</label>
+                            <input
+                                type="text"
+                                name="equipment_revalue"
+                                id="equipment_revalue"
+                                th:value="${erp_EquipmentVO?.equipment_revalue}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="equipment_remark">비고</label>
+                            <input
+                                type="text"
+                                name="equipment_remark"
+                                id="equipment_remark"
+                                th:value="${erp_EquipmentVO?.equipment_remark}"
+                            />
+                        </div>
+                       
+ 						<div class="sec" id="new_btn_sec">
+                            <button type="reset">RESET</button>
+                            <button type="button" id="equipment_save_btn">SAVE</button>
+                        </div>
+                        <div class="sec" id="old_btn_sec">
+							<button type="button" id="equipment_delete_btn">DELETE</button>
+							<button type="button" id="equipment_update_btn">UPDAET</button>
+						</div>
+						
+						<div id="errormsg" th:text="${error}"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/d/d4/equipment.js"></script>
+        <script th:inline="javascript">
+			// 설비/장비 리스트 검색 필터링 기능
+			let search_filter = (type,word) => {
+				if(word=="" || word==undefined || word==null) return null;
+				let searched_list = [];
+				let list = [[${equipment_list}]];
+				
+				for(let i = 0 ; i < list.length; i++){
+					let json_data = JSON.stringify(list[i]);
+					let key_value = json_data.replace("{", "").replace("}", "").replace(/"/gi, "").split(",");
+					
+					for(let j = 0 ; j < key_value.length; j++) {
+						let key = key_value[j].split(":")[0];
+						let value = key_value[j].split(":")[1];	
+						if (type=="all") {
+							if(value==word) searched_list.push(list[i]);
+						}
+						else {
+							if(key==type && value==word) searched_list.push(list[i]);
+						}
+					}
+				}
+				return searched_list;
+			}
+			
+			// 설비/장비리스트중 창고 클릭시 데이터값 전달 함수
+				let selected_vo = (tag) => {
+				let list = [[${equipment_list}]];
+				let vo_no = tag.innerHTML;
+				for(let i = 0 ; i < list.length; i ++){
+					if (list[i].equipment_no == vo_no){
+						document.getElementById("equipment_no").value=list[i].equipment_no;
+						document.getElementById("equipment_date").value=list[i].equipment_date;
+						document.getElementById("eqkind_no").value=list[i].eqkind_no;
+						document.getElementById("equipment_code").value=list[i].equipment_code;
+						document.getElementById("equipment_name").value=list[i].equipment_name;
+						document.getElementById("equipment_production").value=list[i].equipment_production;
+						document.getElementById("equipment_expiry").value=list[i].eqiupment_expiry;
+						document.getElementById("equipment_contents").value=list[i].equipment_contents;
+						document.getElementById("eqgrade_no").value=list[i].eqgrade_no;
+						document.getElementById("equipment_result").value=list[i].equipment_result;
+						document.getElementById("equipment_revalue").value=list[i].equipment_revalue;
+						document.getElementById("equipment_remark").value=list[i].equipment_remark;						
+					}
+				}
+			}
+		</script>
+    </body>
+</html>

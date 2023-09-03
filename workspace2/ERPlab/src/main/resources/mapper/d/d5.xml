@@ -2,6 +2,23 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="d5">
-
+<mapper namespace="com.lab.erp.repository.d5.D5Repository">
+	
+	<select id="findAll_claim" resultType="com.lab.erp.vo.d.d5.Erp_ClaimVO">
+	 	SELECT * FROM erp_claim ORDER BY claim_no DESC
+	</select>
+	
+	<insert id="save_claim" flushCache="true" parameterType="com.lab.erp.vo.d.d5.Erp_ClaimVO" keyProperty="claim_no" useGeneratedKeys="true" keyColumn="claim_no">
+		INSERT INTO erp_claim (claim_date, client_no, claim_manager, cvalue_no, claim_contents, claim_response, claim_handle, comcode_no) 
+		VALUES ()
+	</insert>
+	
+	<update id="update_claim" flushCache="true" parameterType="com.lab.erp.vo.d.d5.Erp_ClaimVO">
+		UPDATE erp_claim SET 
+		WHERE claim_no = #{claim_no}
+	</update>
+	
+	<delete id="delete_cliam" flushCache="true" parameterType="com.lab.erp.vo.d.d5.Erp_ClaimVO">
+		DELETE FROM erp_claim WHERE claim_no = #{claim_no}
+	</delete>
 </mapper>

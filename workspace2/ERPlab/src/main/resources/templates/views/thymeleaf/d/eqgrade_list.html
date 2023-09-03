@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>업종코드목록조회</title>
+    <title>설비/장비종류조회</title>
     
     <link rel="stylesheet" href="/css/common.css" />
     <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/d/equipment.css" />
 </head>
 <body>
      <div id="wrapper">
@@ -14,35 +15,27 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="businesstype_title">
-                                <span>업종코드목록조회</span>
+                            <th class="equipment_title">
+                                <span>상품조회</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="items">
                             <td>
-                                <article class="post" th:each="bst_item : ${bst_list}">
+                                <article class="post" th:each="eqgrade_item : ${eqgrade_list}">
                                     <header>
                                         <div class="title">
-                                            <h2>[[${bst_item.businesstype_subctgr}]]</h2>
-                                            <p>
-                                                [[${bst_item.businesstype_name}]] > [[${bst_item.businesstype_biotore}]] > [[${bst_item.businesstype_ctgr}]] >
-                                                [[${bst_item.businesstype_subctgr}]]
-                                            </p>
-                                            <p class="hidden">[[${bst_item.businesstype_no}]]</p>
+                                            <h2>[[${eqgrade_item.goods_name}]]</h2>
+                                            <p></p>
+                                            <p class="hidden">[[${eqgrade_item.eqgrade_no}]]</p>
                                         </div>
                                     </header>
-                                    <p class="content">
-                                        업종코드 : [[${bst_item.businesstype_code}]]<br />
-                                        적용 범위 및 기준 : <br />
-                                        [[${bst_item.businesstype_description}]]
-                                        <br />
-                                    </p>
+                                    <p class="content"></p>
                                     <footer>
                                         <ul class="actions">
                                             <li>
-                                                <button class="button large comp_type_select_btn" th:id="${bst_item.businesstype_code}">
+                                                <button class="button large eqgrade_type_select_btn">
 													SELECT
 												</button>
                                             </li>
@@ -61,7 +54,6 @@
         <script src="/webdesign/assets/js/breakpoints.min.js"></script>
         <script src="/webdesign/assets/js/util.js"></script>
         <script src="/webdesign/assets/js/main.js"></script>
-        <script src="/js/a/a1/businesstype_list.js"></script>
-    
+        <script src="/js/d/d4/goods_list.js"></script>
 </body>
 </html>
