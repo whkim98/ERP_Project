@@ -63,56 +63,13 @@ border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
-function surf(v, code, no){
+function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
 	if(v == ''){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type+"&receivable_no="+no;
-	
-	sendRequest(url,param,getlist,"POST");
-}
-function getlist(){
-	if(xhr.readyState==4 && xhr.status==200) {	
-		var data = xhr.response;
-		let procode = document.getElementById("procode");
-		let newTr = document.createElement("tr");
-		let newTd = document.createElement("td");
-		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			data2.forEach(function(map){
-				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
-				procode.appendChild(newTr);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
-				newTr.appendChild(newTd);
-			});
-		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
-		}
-	}
-}
-function surf1(v, code){
-	var type = document.getElementsByName("type")[0].value;
-	if(v == ''){
-		type = null;
-		v = null;
-	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax2";
+	var url = "${pageContext.request.contextPath}/d/d1/d14/evAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -124,36 +81,40 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
+		procode.innerHTML += '<tr><td>생산코드</td><td>생산명</td><td>담당자</td><td>작성일</td><td>평가상태</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				newTr.setAttribute("onclick", "selectForm("+map.evaluation_no+", "+map.requestproduct_no+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
+				newTd.innerHTML = map.product_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
+				newTd.innerHTML = map.product_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
+				newTd.innerHTML = map.employee1_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
+				newTd.innerHTML = map.evaluation_date;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.evaluation_status == 0 ? '미완' : '완료';
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
 		}
 	}
 }
+
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">수금</h1>
+			<h1 style="font-size: 20pt;">생산 실적 평가</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -161,26 +122,18 @@ function getlist(){
 					<tr>
 						<td>
 							<select name="type">
-								<option value="all">전체</option>
-								<option value="receivable_cino" ${param.type == 'receivable_cino' ? 'selected' : '' }>CINO</option>
-								<option value="receivable_expiry" ${param.type == 'imkind_name' ? 'selected' : '' }>만기날짜</option>
-								<option value="receivable_collected" ${param.type == 'receivable_collected' ? 'selected' : '' }>수금여부</option>
-								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>거래처</option>
-								<option value="receivable_total" ${param.type == 'receivable_total' ? 'selected' : '' }>금액</option>
+								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
+								<option value="evaluation_date" ${param.type == 'evaluation_date' ? 'selected' : '' }>작성일</option>
+								<option value="product_code" ${param.type == 'product_code' ? 'selected' : '' }>생산코드</option>
+								<option value="product_name" ${param.type == 'product_name' ? 'selected' : '' }>생산명</option>
+								<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>담당자</option>
+								<option value="evaluation_status" ${param.type == 'evaluation_status' ? 'selected' : '' }>평가상태</option>
 							</select>
 						</td>
-						<c:if test="${rmap.receivable_no != null }">
-							<td>
-								<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}', ${rmap.receivable_no })">
-								<input type="button" value="전체목록" onclick="surf('', '${comcode_code}', ${rmap.receivable_no })">
-							</td>
-						</c:if>
-						<c:if test="${rmap.receivable_no == null }">
-							<td>
-								<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf1(this.value, '${comcode_code}')">
-								<input type="button" value="전체목록" onclick="surf1('', '${comcode_code}')">
-							</td>
-						</c:if>
+						<td>
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
+							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -189,17 +142,19 @@ function getlist(){
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
-						<td>채권코드</td>
-						<td>수금액</td>
-						<td>수금일자</td>
-						<td>채권 총액</td>
+						<td>생산코드</td>
+						<td>생산명</td>
+						<td>담당자</td>
+						<td>작성일</td>
+						<td>평가상태</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
-					<tr onclick="selectForm(${map.receivable_no}, ${map.bondbills_no }, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
-						<td class="code">${map.receivable_cino }</td>
-						<td class="price">${map.bondbills_total }</td>
-						<td class="cont">${map.bondbills_date}</td>
-						<td>${map.receivable_total}</td>
+					<tr onclick="selectForm(${map.evaluation_no}, ${map.requestproduct_no })" class="filter">
+						<td class="price">${map.product_code }</td>
+						<td class="cont">${map.product_name}</td>
+						<td>${map.employee1_name}</td>
+						<td class="code">${map.evaluation_date }</td>
+						<td>${map.evaluation_status == 0 ? '미완' : '완료'}</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -209,15 +164,13 @@ function getlist(){
 				</table>
 			</div>
 			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22/inputBondbills?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d14/inputEvaluation?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
-			<form action="${pageContext.request.contextPath }/c/c2/c22/updateFormB" id="content" method="post">
-				<input type="hidden" name="receivable_no">
-				<input type="hidden" name="bondbills_no">
-				<input type="hidden" name="bs3_no1">
-				<input type="hidden" name="bs3_no2">
+			<form action="${pageContext.request.contextPath }/d/d1/d14/updateForm" id="content" method="post">
+				<input type="hidden" name="evaluation_no">
+				<input type="hidden" name="requestproduct_no">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 			</form>
 		
@@ -230,14 +183,27 @@ function getlist(){
 		<div id="add" class="divform3">
 			<c:choose>
 				<c:when test="${inmap != null }">
-					<form action="${pageContext.request.contextPath }/c/c2/c22/updateBondbills" method="POST" id="update">
+					<form action="${pageContext.request.contextPath }/d/d1/d14/update" method="POST" id="update">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="bondbills_no" value="${inmap.bondbills_no }">
-						<input type="hidden" name="receivable_no" value="${inmap.receivable_no }">
+						<input type="hidden" name="evaluation_no" id="evaluation_no" value="${inmap.evaluation_no }">
+						<input type="hidden" name="requestproduct_no" id="requestproduct_no" value="${inmap.requestproduct_no }">
+						<input type="hidden" name="product_no" id="product_no" value="${inmap.product_no }">
+						<input type="hidden" name="product_lot" id="product_lot" value="${inmap.product_lot }">
+						<input type="hidden" name="employee2_no" id="employee2_no" value="${inmap.employee2_no }">
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
 							<span class="red">는 필수 입력란입니다.</span>
+						</div>
+						
+						<div>
+							<label>생산코드 </label>
+							<input type="text" name="product_code" id="product_code" value="${inmap.product_code }" class="required" onclick="selectProduct('${comcode_code}')" readonly="readonly">
+						</div>
+						
+						<div>
+							<label>생산명 </label>
+							<input type="text" name="product_name" id="product_name" value="${inmap.product_name }" class="required" readonly="readonly">
 						</div>
 						
 						<div>
@@ -264,146 +230,116 @@ function getlist(){
 						</div>
 						
 						<div>
-							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }">
+							<label>불량률 </label>
+							<input type="text" name="evaluation_rate" id="evaluation_rate" value="${inmap.evaluation_rate }">
+						</div>
+						
+						<table id="goodsList">
+							<tr>
+								<td>상품 코드</td>
+								<td>바코드</td>
+								<td>품명</td>
+								<td>생산 수량</td>
+								<td>불량 사유</td>
+								<td>불량 수량</td>
+							</tr>
+						<c:forEach var="vo" items="${dlist }">
+							<tr>
+								<td>${vo.goods_code }</td>
+								<td>${vo.goods_barcode }</td>
+								<td>${vo.goods_name }</td>
+								<td>${vo.goodslot_qty }</td>
+								<td><input type="text" value="${vo.defective_comment }" name="defective_comment"></td>
+								<td><input type="text" value="${vo.defective_number }" name="defective_number"></td>
+							</tr>
+						</c:forEach>
+						</table>
+						
+						<div>
+							<label>담당자 </label>
+							<input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="employee('${comcode_code}')">
 						</div>	
 						
 						<div>
-							<label>수금액 </label>
-							<input type="text" name="bondbills_price" id="bondbills_price" value="${inmap.bondbills_price }" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)">
-						</div>
-						
-						<div>
-							<label>세액 </label>
-							<input type="text" name="bondbills_tax" id="bondbills_tax" value="${inmap.bondbills_tax }" readonly="readonly">
-						</div>
-						
-						<div>
-							<label>수금 총액 </label>
-							<td><input type="text" name="bondbills_total" id="bondbills_total" value="${inmap.bondbills_total }" readonly="readonly">
-						</div>
-						
-						<div>
-							<label>차변 </label>
-							<select name="debtor_no" id="debtor_no" onchange="check12()" class="required">
-								<c:forEach var="vo1" items="${dlist }">
-								<c:choose>
-								<c:when test="${vo1.bs3_no == inmap.bs3_no1 }">
-									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }" selected>${vo1.bs3_ctgr }</option>
-								</c:when>
-								<c:otherwise>
-									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }">${vo1.bs3_ctgr }</option>
-								</c:otherwise>
-								</c:choose>
-								</c:forEach>
-							</select>
+							<label>직급 </label>
+							<input type="text" name="employee2_position" id="employee2_position" value="${inmap.employee2_position }">
 						</div>	
-						
-						<div>
-							<label>대변</label> 
-							<select name="creditor_no" id="creditor_no" onchange="check22()" class="required">
-								<c:forEach var="vo2" items="${clist }">
-								<c:choose>
-								<c:when test="${vo2.bs3_no == inmap.bs3_no2 }">
-									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }" selected>${vo2.bs3_ctgr }</option>
-								</c:when>
-								<c:otherwise>
-									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }">${vo2.bs3_ctgr }</option>
-								</c:otherwise>
-								</c:choose>
-								</c:forEach>
-							</select>
-						</div>
 						
 						<div align="right">
 							<input type="button" value="update" onclick="sub(this.form)">
-							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.bondbills_no }, '${comcode_code }', '${inmap.receivable_cino }')">
-							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
+							<input type="button" value="delete" onclick="deletei(${inmap.evaluation_no }, '${comcode_code }', ${inmap.requestproduct_no })">
 						</div>
 					</form>
 				</c:when>
 				<c:otherwise>
-					<form action="${pageContext.request.contextPath }/c/c2/c22/createBondbills" method="POST" id="create">
+					<form action="${pageContext.request.contextPath }/d/d1/d14/createEvaluation" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="receivable_no" value="${rmap.receivable_no }">
-						<input type="hidden" name="bs3_no1" id="bs3_no1">
-						<input type="hidden" name="bs3_no2" id="bs3_no2">
-						<h3>수금 등록 사항</h3>
+						<input type="hidden" name="employee2_no" id="employee2_no">
+						<input type="hidden" name="requestproduct_no" id="requestproduct_no">
+						<input type="hidden" name="product_no" id="product_no">
+						<input type="hidden" name="product_lot" id="product_lot">
+						<h3>생산 실적 평가</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
 							<span class="red">는 필수 입력란입니다.</span>
 						</div>
+						
+						<div>
+							<label>생산코드 </label>
+							<input type="text" name="product_code" id="product_code" class="required" readonly="readonly" onclick="selectProduct('${comcode_code}')">
+						</div>
+						
+						<div>
+							<label>생산명 </label>
+							<input type="text" name="product_name" id="product_name" class="required" readonly="readonly">
+						</div>
+						
+						<div>
+							<label>서류상 종료 날짜 </label>
+							<input type="date" name="evaluation_paperend" id="evaluation_paperend" class="required">
+						</div>
 							
 						<div>
-							<label>수금 코드 </label>
-							<input type="text" name="bondbills_code" id="bondbills_code" maxlength="30" class="required" onblur="code(this.value)">
-							<h6 id="billscode" style="color:red;"></h6>
+							<label>실제 종료 날짜 </label>
+							<input type="date" name="evaluation_actualend" id="evaluation_actualend" class="required">
 						</div>
 						
 						<div>
-							<label>CI NUMBER </label>
-							<input type="text" name="receivable_cino" id="receivable_cino" value="${rmap.receivable_cino }" readonly="readonly" maxlength="30" class="required">
+							<label>평가 내용 </label>
+							<input type="text" name="evaluation_content" id="evaluation_content">
 						</div>
 						
 						<div>
-							<label>만기도래일 </label>
-							<input type="date" name="receivable_expiry" id="receivable_expiry" value="${rmap.receivable_expiry }" readonly="readonly">
+							<label>상태 </label>
+							<select name="evaluation_status" id="evaluation_status">
+								<option value="0">미완료</option>
+								<option value="1">정상 완료</option>
+							</select>
 						</div>
 						
 						<div>
-							<label>채권 총액 </label>
-							<input type="text" name="receivable_total" id="receivable_total" value="${rmap.receivable_total }" readonly="readonly">
+							<label>불량률 </label>
+							<input type="text" name="evaluation_rate" id="evaluation_rate">
+							<input type="button" onclick="goodsList()" value="목록보기">
 						</div>
 						
+						<table id="goodsList">
+						</table>
+						
 						<div>
-							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" value="${rmap.client_name }" readonly="readonly">
+							<label>담당자 </label>
+							<input type="text" name="employee1_name" id="employee1_name" onclick="employee('${comcode_code}')">
 						</div>	
 						
 						<div>
-							<label>수금액 </label>
-							<input type="text" name="bondbills_price" id="bondbills_price" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)" class="required">
-						</div>
-						
-						<div>
-							<label>세액 </label>
-							<input type="text" name="bondbills_tax" id="bondbills_tax" readonly="readonly">
-						</div>
-						
-						<div>
-							<label>수금 총액 </label>
-							<input type="text" name="bondbills_total" id="bondbills_total" readonly="readonly">
-						</div>
-						
-						<div>
-							<label>수금일자 </label>
-							<input type="text" name="bondbills_date" id="bondbills_date" class="required">
-						</div>
-						
-						<div>
-							<label>차변 </label>
-							<select name="debtor_no" id="debtor_no" onchange="check1()" class="required">
-								<option value="0" selected>선택</option>
-								<c:forEach var="vo1" items="${dlist }">
-									<option value="${vo1.debtor_no }" id="${vo1.bs3_no }">${vo1.bs3_ctgr }</option>
-								</c:forEach>
-							</select>
+							<label>직급 </label>
+							<input type="text" name="employee2_position" id="employee2_position">
 						</div>	
-						
 						<div>
-							<label>대변</label> 
-							<select name="creditor_no" id="creditor_no" onchange="check2()" class="required">
-								<option value="0" selected>선택</option>
-								<c:forEach var="vo2" items="${clist }">
-									<option value="${vo2.creditor_no }" id="${vo2.bs3_no }">${vo2.bs3_ctgr }</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div>
-							<input type="button" id="register" value="save" onclick="sub(this.form, ${rmap.receivable_price})" disabled="disabled">
+							<input type="button" id="register" value="save" onclick="sub(this.form)">
 							<input type="reset" value="reset">
-							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
+							<input type="button" value="불량 정보" onclick="defective('${comcode_code}')">
 						</div>
 					</form>
 				</c:otherwise>
@@ -415,98 +351,31 @@ function getlist(){
 <script type="text/javascript">
 
 // 삭제버튼 경로 및 넘길 parameter 설정
-function deletei(no1, no2, ino, code, rcode){
-	location.href='${pageContext.request.contextPath }/c/c2/c22/deleteBondbills?bondbills_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code+"&receivable_cino="+rcode;
+function deletei(no, code, rno){
+	location.href='${pageContext.request.contextPath }/d/d1/d14/delete?evaluation_no='+no+'&comcode_code='+code+"&requestproduct_no="+rno;
 }
-
-function conculator(e, v){
-	if(e.keyCode == 13){
-		document.getElementById("bondbills_tax").value = Number(v) * 0.1;
-		let tax = document.getElementById("bondbills_tax").value; 
-		document.getElementById("bondbills_total").value = Number(v) + Number(tax);
-	}
-}
-
-function conculator1(v){
-	document.getElementById("bondbills_tax").value = Number(v) * 0.1;
-	let tax = document.getElementById("bondbills_tax").value; 
-	document.getElementById("bondbills_total").value = Number(v) + Number(tax);
-}
-
-
-//	bs3_no 세팅
-	function check1(){
-		let t = document.getElementById("debtor_no");	// debtor_no 불러옴
-		let arr = document.querySelectorAll("#debtor_no > option");	// debtor_no의 옵션 태그들 nodelist로 불러옴
-		let bs3_no1 = document.getElementById("bs3_no1");	// bs3_no1 불러옴
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){		// 위에서 선언한 debtor_no를 불러온 값과 option태그들의 value값을 for문으로 전부 검사
-				bs3_no1.value = e.id;	// value가 같으면 해당 옵션태그의 id를 bs3_no1에 저장
-			}					// check 메소드 전부 동일
-		});
-	}
-	function check2(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no2");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
-	
-	function check12(){
-		let t = document.getElementById("debtor_no");
-		let arr = document.querySelectorAll("#debtor_no > option");
-		let bs3_no1 = document.getElementById("bs3_no12");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no1.value = e.id;
-			}
-		});
-	}
-	function check22(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no22");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
 
 	
 // submit 유효성 검사
 function sub(f, total){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
-	if(f.bondbills_price.value == ""){
-		f.bondbills_price.focus();
+	if(f.product_code.value == ""){
+		f.product_code.focus();
 		return;
-	}else if(f.bondbills_tax.value == ""){
-		f.bondbills_tax.focus();
+	}else if(f.evaluation_paperend.value == ""){
+		f.evaluation_paperend.focus();
 		return;
-	}else if(f.bondbills_total.value == ""){
-		f.bondbills_total.focus();
+	}else if(f.evaluation_actualend.value == ""){
+		f.evaluation_actualend.focus();
 		return;
-	}else if(f.debtor_no.value == 0){
-		f.debtor_no.focus();
-		return;
-	}else if(f.creditor_no.value == 0){
-		f.creditor_no.focus();
-		return;
-	}else if(f.creditor_no.value == f.debtor_no.value){
-		alert("계정과목이 같습니다. 다시 선택해주세요.");
-		f.debtor_no.focus();
-		return;
-	}else if(f.bondbills_date.value == ""){
-		f.bondbills_date.focus();
-		return;
-	}else if(!pat.test(f.bondbills_price.value)){
-		alert("채권 금액인 "+total+"원 미만, 숫자만 입력 가능합니다.");
-		f.bondbills_price.focus();
-		return;
+	}else if(f.evaluation_content.value == ""){
+		var ch = confirm("내용이 입력되지 않았습니다. 등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			f.evaluation_content.focus();
+			return;
+		}
 	}else {
 		var ch = confirm("등록하시겠습니까?");
 		if(ch){
@@ -543,15 +412,93 @@ function codecheck(){
 
 
 // 리스트에서 글 선택 시 넘어가는 form
-function selectForm(no, bno, bno1, bno2){
-	document.getElementsByName("receivable_no")[0].value = no;
-	document.getElementsByName("bondbills_no")[0].value = bno;
-	document.getElementsByName("bs3_no1")[0].value = bno1;
-	document.getElementsByName("bs3_no2")[0].value = bno2;
+function selectForm(no, rno){
+	document.getElementsByName("evaluation_no")[0].value = no;
+	document.getElementsByName("requestproduct_no")[0].value = rno;
 	
 	document.getElementById("content").submit(); // content라는 id의 form태그 submit
 }
 
+function selectProduct(code){
+	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d14/selectProduct?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=1000");
+}
+
+function employee(code){
+	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d14/employee?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
+}
+
+function defective(code){
+	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d14/defective?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
+}
+
+
+function goodsList(){
+	var no = document.getElementById("product_no").value;
+	if(no == ""){
+		alert("생산코드를 선택하여 주십시오.");
+		document.getElementById("product_code").focus();
+		return;
+	}
+	var url = "${pageContext.request.contextPath }/d/d1/d14/goodsAjax";
+	var param = "product_no="+encodeURIComponent(no);
+	
+	sendRequest(url,param,goodsCheck,"POST");
+}
+function goodsCheck(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.response;
+		let g = document.getElementById("goodsList");
+		g.innerHTML = '';
+		let newTr = document.createElement("tr");
+		let newTd = document.createElement("td");
+		g.appendChild(newTr);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '상품 코드';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '바코드';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '품명';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '생산 수량';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '불량 사유';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '불량 수량';
+		newTr.appendChild(newTd);
+		if(data != ""){	
+			var data2 = JSON.parse(data);
+			data2.forEach(function(map){
+				newTr = document.createElement("tr");
+				g.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goods_code;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goods_barcode;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goods_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goodslot_qty;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="text" name="defective_comment">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="text" name="defective_number">';
+				newTr.appendChild(newTd);
+			});
+		}else {
+			g.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
+		}
+	}
+}
 
 </script>
 </div>

@@ -15,5 +15,6 @@ public class ViewPath {
 	public static final String C2 = "c/c2";
 	
 	public static final String D1 = "d/d1";
+	public static final String D2 = "d/d2";
 	
 }

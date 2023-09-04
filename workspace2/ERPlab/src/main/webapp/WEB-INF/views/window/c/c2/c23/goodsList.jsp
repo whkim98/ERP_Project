@@ -39,7 +39,7 @@
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.goodslot_no}, '${vo.goods_name}', '${vo.goodslot_lot }', '${vo.goods_barcode }', '${vo.goodslot_total }', '${vo.client_name }')">
+				<tr onclick="setParentText('${i}',${vo.connectrequest_qty}, '${vo.goods_code}', '${vo.goods_barcode }', '${vo.goods_name }', ${vo.goodskind_no }, ${vo.goods_customerprice }, '${vo.goods_description }', ${vo.client_no1 }, ${vo.client_no2 }, '${vo.goodsst_unit }', '${vo.goodsst_spec }', '${vo.goodsst_size }', '${vo.goodsst_package }', ${vo.goodsst_ea }, '${vo.client_name1 }', '${vo.client_name2 }')">
 					<td>${vo.goodslot_lot}</td>
 					<td>${vo.goods_barcode}</td>
 					<td>${vo.goods_name}</td>
@@ -53,15 +53,26 @@
 </div>
 
 <script type="text/javascript">
-	function setParentText(no, name, lot, barcode, total, cname){
-    	opener.document.getElementById("goodslot_no").value = no;
-    	opener.document.getElementById("goods_name").value = name;
-    	opener.document.getElementById("goodslot_lot").value = lot;
-    	opener.document.getElementById("goodslot_total").value = total;
-    	opener.document.getElementById("goods_barcode").value = barcode;
-    	opener.document.getElementById("client_name").value = cname;
+	function setParentText(h, no, code, barcode, name, gkno, cprice, dcp, cno1, cno2, unit, spec, size, pcg, ea, cname1, cname2){
+    	opener.document.getElementById("crlist1["+h+"].connectrequest_qty").value = no;
+    	opener.document.getElementById("crlist1["+h+"].goods_code").value = code;
+    	opener.document.getElementById("crlist1["+h+"].goods_barcode").value = barcode;
+    	opener.document.getElementById("crlist1["+h+"].goods_name").value = name;
+    	opener.document.getElementById("crlist1["+h+"].goodskind_no").value = gkno;
+    	opener.document.getElementById("crlist1["+h+"].goods_customerprice").value = cprice;
+    	opener.document.getElementById("crlist1["+h+"].goods_description").value = dcp;
+    	opener.document.getElementById("crlist1["+h+"].client_no1").value = cno1;
+    	opener.document.getElementById("crlist1["+h+"].client_no2").value = cno2;
+    	opener.document.getElementById("crlist1["+h+"].goodsst_unit").value = unit;
+    	opener.document.getElementById("crlist1["+h+"].goodsst_spec").value = spec;
+    	opener.document.getElementById("crlist1["+h+"].goodsst_size").value = size;
+    	opener.document.getElementById("crlist1["+h+"].goodsst_package").value = pcg;
+    	opener.document.getElementById("crlist1["+h+"].goodsst_ea").value = ea;
+    	opener.document.getElementById("crlist1["+h+"].client_name1").value = cname1;
+    	opener.document.getElementById("crlist1["+h+"].client_name2").value = cname2;
     	window.close();
     }
+	
 	
 	function bnajax(v, code){
 		var type = document.getElementsByName("btype")[0].value;
@@ -69,7 +80,7 @@
 			type = null;
 			v = null;
 		}
-		var url = "${pageContext.request.contextPath}/c/c2/c23/goodsreturnajax";
+		var url = "${pageContext.request.contextPath}/d/d1/d12/goodsListajax";
 		var param = "bnword="+v+"&btype="+type+"&comcode_code="+code;
 		
 		sendRequest(url,param,getlist,"POST");
@@ -82,11 +93,11 @@
 			let newTd = document.createElement("td");
 			procode.innerHTML = '';
 			procode.innerHTML += '<tr><td>로트</td><td>바코드</td><td>품명</td><td>제조사</td><td>분류</td><td>종류</td><td>사양</td><td>';
-			if(data != ""){
+			if(data != "")
 				var data2 = JSON.parse(data);
 				data2.forEach(function(map){
 					newTr = document.createElement("tr");
-					newTr.setAttribute("onclick", "setParentText("+map.goodslot_no+",'"+map.goods_name+"','"+map.goodslot_lot+"','"+map.goods_barcode+"','"+map.goodslot_total+"','"+map.client_name+"')");
+					newTr.setAttribute("onclick", "setParentText(`${i}`,"+map.connectrequest_qty+",'"+map.goods_code+"','"+map.goods_barcode+"','"+map.goods_name+"',"+map.goodskind_no+","+map.goods_customerprice+",'"+map.goods_description+"',"+map.client_no1+","+map.client_no2+",'"+map.goodsst_unit+"','"+map.goodsst_spec+"','"+map.goodsst_size+"','"+map.goodsst_package+"',"+map.goodsst_ea+",'"+map.client_name1+"','"+map.client_name2+"')");
 					procode.appendChild(newTr);
 					newTd = document.createElement("td");
 					newTd.innerHTML = map.goodslot_lot;

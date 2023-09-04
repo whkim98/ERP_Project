@@ -21,6 +21,9 @@ public class Erp_ProducttestVO {
 	private String producttest_content;
 	private int producttest_lossfull;
 	private int producttest_pnp;
+	private int producttest_type;
+	private int goodslot_no;
+	private int team_no;
 	private int comcode_no;
 
 }

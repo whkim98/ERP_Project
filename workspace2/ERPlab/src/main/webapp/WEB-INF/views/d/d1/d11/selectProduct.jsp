@@ -86,7 +86,7 @@
             </tr>
                  
             <tr>
-                <th>이메일</th>
+                <th>거래처 이메일</th>
                 <td colspan="3" id="client_email">${inmap.client_email}</td>
             </tr>
          </table>

@@ -27,6 +27,10 @@ private SqlSession sqlSession;
 		return sqlSession.update("b1.updateClosing", vo);
 	}
 	
+	public int updateClosingPrice(Erp_ClosingVO vo) {
+		return sqlSession.update("b1.updateClosingPrice", vo);
+	}
+	
 	public int deleteClosing(int closing_no) {
 		return sqlSession.delete("b1.deleteClosing", closing_no);
 	}

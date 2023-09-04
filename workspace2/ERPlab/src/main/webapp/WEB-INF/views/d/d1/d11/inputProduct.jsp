@@ -106,49 +106,6 @@ function getlist(){
 		}
 	}
 }
-function surf1(v, code){
-	var type = document.getElementsByName("type")[0].value;
-	if(v == ''){
-		type = null;
-		v = null;
-	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax2";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type;
-	
-	sendRequest(url,param,getlist,"POST");
-}
-function getlist(){
-	if(xhr.readyState==4 && xhr.status==200) {	
-		var data = xhr.response;
-		let procode = document.getElementById("procode");
-		let newTr = document.createElement("tr");
-		let newTd = document.createElement("td");
-		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			data2.forEach(function(map){
-				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
-				procode.appendChild(newTr);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
-				newTr.appendChild(newTd);
-			});
-		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
-		}
-	}
-}
 
 function requestproduct(code){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d11/requestproduct?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
@@ -159,7 +116,7 @@ function employee(code){
 }
 
 function requestpr(no,code){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/updateForm?comcode_code="+code+"&requestproduct_no="+no, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=1000");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/updateForm?comcode_code="+code+"&requestproduct_no="+no, "_blank", "scrollbars=yes, top=150, left=300, width=1500, height=1000");
 }
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
@@ -252,6 +209,12 @@ function requestpr(no,code){
 						</div>
 						
 						<div>
+							<label>생산 로트번호 </label>
+							<input type="text" name="product_lot" id="product_lot" maxlength="30" class="required" value="${inmap.product_lot }" onblur="lot(this.value)">
+							<h6 id="lot" style="color:red;"></h6>
+						</div>
+						
+						<div>
 							<label>생산명 </label>
 							<input type="text" name="product_name" id="product_name" maxlength="30" class="required" value="${inmap.product_name }">
 						</div>
@@ -295,7 +258,11 @@ function requestpr(no,code){
 						<div>
 							<label>생산 수량 </label>
 							<input type="text" name="product_qty" id="product_qty" class="required" value="${inmap.product_qty }">
+							<input type="button" onclick="goodsList()" value="목록보기">
 						</div>
+						
+						<table id="goodsList">
+						</table>
 						
 						<div>
 							<label>비고 </label>
@@ -362,6 +329,12 @@ function requestpr(no,code){
 						</div>
 						
 						<div>
+							<label>생산 로트번호 </label>
+							<input type="text" name="product_lot" id="product_lot" maxlength="30" class="required" onblur="lot(this.value)">
+							<h6 id="lot" style="color:red;"></h6>
+						</div>
+						
+						<div>
 							<label>생산명 </label>
 							<input type="text" name="product_name" id="product_name" maxlength="30" class="required">
 						</div>
@@ -404,8 +377,11 @@ function requestpr(no,code){
 						
 						<div>
 							<label>생산 수량 </label>
-							<input type="text" name="product_qty" id="product_qty" class="required">
+							<input type="button" onclick="goodsList()" value="목록보기">
 						</div>
+						
+						<table id="goodsList">
+						</table>
 						
 						<div>
 							<label>비고 </label>
@@ -565,6 +541,29 @@ function codecheck(){
 	}
 }
 
+function lot(v){
+	var url = "${pageContext.request.contextPath }/d/d1/d11/getLotNo";
+	var param = "goodslot_lot="+encodeURIComponent(v);
+	
+	sendRequest(url,param,lotcheck,"POST");
+}
+function lotcheck(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.responseText;
+		if(data != ""){	
+			if(data == "사용 가능한 코드입니다."){
+				document.getElementById("lot").innerText = data;
+				document.getElementById("lot").style.color = "blue";
+				document.getElementById("register").disabled = false;
+			}else {
+				document.getElementById("lot").innerText = data;
+				document.getElementById("register").disabled = true;
+				document.getElementById("product_lot").focus();	
+			}
+		}
+	}
+}
+
 
 // 리스트에서 글 선택 시 넘어가는 form
 function selectForm(no, code){
@@ -572,6 +571,68 @@ function selectForm(no, code){
 	document.getElementsByName("product_code")[0].value = code;
 	
 	document.getElementById("content").submit(); // content라는 id의 form태그 submit
+}
+
+function goodsList(){
+	var no = document.getElementById("requestproduct_no").value;
+	if(no == ""){
+		alert("의뢰를 선택하여 주십시오.");
+		document.getElementById("requestproduct_code").focus();
+		return;
+	}
+	var url = "${pageContext.request.contextPath }/d/d1/d11/goodsAjax";
+	var param = "requestproduct_no="+encodeURIComponent(no);
+	
+	sendRequest(url,param,goodsCheck,"POST");
+}
+function goodsCheck(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.response;
+		let g = document.getElementById("goodsList");
+		g.innerHTML = '';
+		let newTr = document.createElement("tr");
+		let newTd = document.createElement("td");
+		g.appendChild(newTr);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '상품 코드';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '바코드';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '품명';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '의뢰 수량';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '실 생산 수량';
+		newTr.appendChild(newTd);
+		if(data != ""){	
+			var data2 = JSON.parse(data);
+			data2.forEach(function(map){
+				newTr = document.createElement("tr");
+				g.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goods_code;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goods_barcode;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.goods_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.connectrequest_qty;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="text" name="qty">';
+				newTr.appendChild(newTd);
+			});
+		}else {
+			g.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
+		}
+	}
 }
 
 

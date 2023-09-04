@@ -98,10 +98,11 @@
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
                     <th>의뢰수량</th>
+                    <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
                     <th>종류</th>
-                    <th>소비자가</th>
+                    <th>원가</th>
                     <th>단위</th>
                     <th>사양</th>
                     <th>규격</th>
@@ -113,7 +114,11 @@
                 </tr>
                 <c:forEach var="i" items="${glist }" varStatus="status">
                 	<tr>
-	                	<td><input type="text" name="crlist[${status.index }].connectrequest_qty" id="crlist[${status.index }].connectrequest_qty" value="${i.connectrequest_qty }"></td>
+	                	<td>
+		                	<input type="button" onclick="goodsList1('${comcode_code}',${status.index })" value="search">
+		                	<input type="text" name="crlist[${status.index }].connectrequest_qty" id="crlist[${status.index }].connectrequest_qty" value="${i.connectrequest_qty }">
+		                </td>
+						<td><input type="text" name="crlist[${status.index }].goods_name" id="crlist[${status.index }].goods_name" value="${i.goods_name }"></td>
 						<td><input type="text" name="crlist[${status.index }].goods_code" id="crlist[${status.index }].goods_code" value="${i.goods_code }"></td>
 						<td><input type="text" name="crlist[${status.index }].goods_barcode" id="crlist[${status.index }].goods_barcode" value="${i.goods_barcode }"></td>
 						<td>
@@ -130,7 +135,7 @@
 								</c:forEach>
 							</select>
 						</td>
-						<td><input type="text" name="crlist[${status.index }].goods_customerprice" id="crlist[${status.index }].goods_customerprice" value="${i.goods_customerprice }"></td>
+						<td><input type="text" name="crlist[${status.index }].goodslot_price" id="crlist[${status.index }].goodslot_price" value="${i.goodslot_price }"></td>
 						<td><input type="text" name="crlist[${status.index }].goodsst_unit" id="crlist[${status.index }].goodsst_unit" value="${i.goodsst_unit }"></td>
 						<td><input type="text" name="crlist[${status.index }].goodsst_spec" id="crlist[${status.index }].goodsst_spec" value="${i.goodsst_spec }"></td>
 						<td><input type="text" name="crlist[${status.index }].goodsst_size" id="crlist[${status.index }].goodsst_size" value="${i.goodsst_size }"></td>
@@ -159,7 +164,7 @@
         <div>
            <input type="button" value="update" onclick="sub(this.form)">
            <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d1/d12/delete?requestproduct_no=${inmap.requestproduct_no }&comcode_code=${comcode_code }'">
-           <input type="button" value="PED" onclick="location.href='${pageContext.request.contextPath}/d/d1/d13/addPed?requestproduct_no=${inmap.requestproduct_no }&comcode_code=${comcode_code }'">
+           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d1/d12/inputRequestProduct?comcode_code=${comcode_code }'">
         </div>
         </form>
         </c:if>
@@ -247,6 +252,7 @@
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
                     <th>의뢰수량</th>
+                    <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
                     <th>종류</th>
@@ -261,7 +267,11 @@
                     <th>설명</th>
                 </tr>
                	<tr id="procode">
-					<td><input type="text" name="crlist1[0].connectrequest_qty" id="crlist1[0].connectrequest_qty"></td>
+					<td>
+						<input type="text" name="crlist1[0].connectrequest_qty" id="crlist1[0].connectrequest_qty">
+						<input type="button" onclick="goodsList('${comcode_code}',0)" value="search">
+					</td>
+					<td><input type="text" name="crlist1[0].goods_name" id="crlist1[0].goods_name"></td>
 					<td><input type="text" name="crlist1[0].goods_code" id="crlist1[0].goods_code"></td>
 					<td><input type="text" name="crlist1[0].goods_barcode" id="crlist1[0].goods_barcode"></td>
 					<td>
@@ -271,7 +281,7 @@
 							</c:forEach>
 						</select>
 					</td>
-					<td><input type="text" name="crlist1[0].goods_customerprice" id="crlist1[0].goods_customerprice"></td>
+					<td><input type="text" name="crlist1[0].goodslot_price" id="crlist1[0].goodslot_price"></td>
 					<td><input type="text" name="crlist1[0].goodsst_unit" id="crlist1[0].goodsst_unit"></td>
 					<td><input type="text" name="crlist1[0].goodsst_spec" id="crlist1[0].goodsst_spec"></td>
 					<td><input type="text" name="crlist1[0].goodsst_size" id="crlist1[0].goodsst_size"></td>
@@ -420,33 +430,35 @@ addRowButton.addEventListener('click', function() {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
         
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < 15; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].connectrequest_qty" id="crlist1['+j+'].connectrequest_qty"></td>';
+                cells[i].innerHTML = '<td><input type="button" onclick="goodsList(`${comcode_code}`,'+j+')" value="search"><input type="text" name="crlist1['+j+'].connectrequest_qty" id="crlist1['+j+'].connectrequest_qty"></td>';
             } else if (i === 1) {
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_name" id="crlist1['+j+'].goods_name"></td>';
+            } else if (i === 2) {
                 cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_code" id="crlist1['+j+'].goods_code"></td>';
-            } else if (i === 2){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_barcode" id="crlist1['+j+'].goods_barcode"></td>';
             } else if (i === 3){
-                cells[i].innerHTML = '<td><select name="crlist1['+j+'].goodskind_no" id="crlist1['+j+'].goodskind_no"><c:forEach var="sk" items="${sortkind }"><option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:forEach></select></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_barcode" id="crlist1['+j+'].goods_barcode"></td>';
             } else if (i === 4){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_customerprice" id="crlist1['+j+'].goods_customerprice"></td>';
+                cells[i].innerHTML = '<td><select name="crlist1['+j+'].goodskind_no" id="crlist1['+j+'].goodskind_no"><c:forEach var="sk" items="${sortkind }"><option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:forEach></select></td>';
             } else if (i === 5){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_unit" id="crlist1['+j+'].goodsst_unit"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodslot_price" id="crlist1['+j+'].goodslot_price"></td>';
             } else if (i === 6){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_spec" id="crlist1['+j+'].goodsst_spec"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_unit" id="crlist1['+j+'].goodsst_unit"></td>';
             } else if (i === 7){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_size" id="crlist1['+j+'].goodsst_size"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_spec" id="crlist1['+j+'].goodsst_spec"></td>';
             } else if (i === 8){
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_size" id="crlist1['+j+'].goodsst_size"></td>';
+            } else if (i === 9){
                 cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_package" id="crlist1['+j+'].goodsst_package"></td>';
-            }  else if (i === 9){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name1" id="crlist1['+j+'].client_name1" onkeypress="searchcl3(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList3(`${comcode_code}`,'+j+')" value="search"></td>';
             }  else if (i === 10){
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name1" id="crlist1['+j+'].client_name1" onkeypress="searchcl3(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList3(`${comcode_code}`,'+j+')" value="search"></td>';
+            }  else if (i === 11){
                 cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name2" id="crlist1['+j+'].client_name2" onkeypress="searchcl4(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList4(`${comcode_code}`,'+j+')" value="search"></td>';
-            } else if (i === 11){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_ea" id="crlist1['+j+'].goodsst_ea"></td>';
             } else if (i === 12){
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_ea" id="crlist1['+j+'].goodsst_ea"></td>';
+            } else if (i === 13){
                 cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_description" id="crlist1['+j+'].goods_description"></td><input type="hidden" name="crlist1['+j+'].client_no1" id="crlist1['+j+'].client_no1" value="17"><input type="hidden" name="crlist1['+j+'].client_no2" id="crlist1['+j+'].client_no2" value="17">';
             } else {
                 cells[i].innerHTML = '<td name="b32-clearRow"><input type="button" onclick="clearRow(this)" value="delete"></td>';
@@ -697,6 +709,13 @@ function clList3(code, h){
 }
 function clList4(code, h){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/clList4?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
+}
+
+function goodsList(code, h){
+	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/goodsList?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+}
+function goodsList1(code, h){
+	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/goodsList1?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 
 function code(v){

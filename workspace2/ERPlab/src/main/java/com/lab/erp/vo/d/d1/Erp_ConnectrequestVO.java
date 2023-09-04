@@ -18,6 +18,7 @@ public class Erp_ConnectrequestVO {
 	private String goods_name;
 	private int goodskind_no;
 	private int goods_customerprice;
+	private int goodslot_price;
 	private String goods_description;
 	private int client_no1;
 	private int client_no2;

@@ -11,15 +11,17 @@ public class Erp_OrderVO {
 	private int order_no;
 	private int ctgr_no;
 	private String order_code;
-	private int goods_no;
-	private int order_qty;
 	private String order_odate;
 	private int client_no;
 	private String order_status;
-	private int admin_no;
+	private int team_no;
 	private String order_schedule;
 	private int order_approval;
 	private String order_end;
+	private int order_price;
+	private int order_tax;
+	private int order_total;
+	private int order_type;
 	private int company_no;
 	private int comcode_no;
 

@@ -321,6 +321,10 @@ public class D1Service {
 		return ddao.deleteDefective(defective_no);
 	}
 	
+	public int deleteProAll(int requestproduct_no) {
+		return ddao.deleteProAll(requestproduct_no);
+	}
+	
 	public List<Map<String, Object>> defectiveList(Map<String, Object> map){
 		return ddao.defectiveList(map);
 	}
@@ -337,6 +341,10 @@ public class D1Service {
 		return ddao.selectDefectiveAll(defective_no);
 	}
 	
+	public List<Map<String, Object>> defectivePro(int requestproduct_no){
+		return ddao.defectivePro(requestproduct_no);
+	}
+	
 	
 //	evaluation 생산실적평가
 	public int createEvaluation(Erp_EvaluationVO vo) {
@@ -345,6 +353,10 @@ public class D1Service {
 	
 	public int updateEvaluation(Erp_EvaluationVO vo) {
 		return edao.updateEvaluation(vo);
+	}
+	
+	public int updateStatus(Erp_EvaluationVO vo) {
+		return edao.updateStatus(vo);
 	}
 	
 	public int deleteEvaluation(int evaluation_no) {
@@ -375,6 +387,14 @@ public class D1Service {
 	
 	public List<Map<String, Object>> evmngList(Map<String, Object> map){
 		return emdao.evmngList(map);
+	}
+	
+	public List<Integer> getEvaluemng(int evaluation_no){
+		return emdao.getEvaluemng(evaluation_no);
+	}
+	
+	public Map<String, Object> selectEvmng(int evaluemng_no){
+		return emdao.selectEvmng(evaluemng_no);
 	}
 	
 	
@@ -427,6 +447,10 @@ public class D1Service {
 		return idao.selectProinventoryGoods(goodslot_no);
 	}
 	
+	public List<Map<String, Object>> coList(Map<String, Object> map){
+		return pidao.coList(map);
+	}
+	
 	
 //	goods and proinventory > 생산된 재고관리
 	// 상품 규격
@@ -447,6 +471,7 @@ public class D1Service {
 	}
 	
 	// 상품
+	
 	public int createGoods(Erp_GoodsVO vo) {
 		return gdao.createGoods(vo);
 	}
@@ -463,6 +488,10 @@ public class D1Service {
 		return gdao.goodsno(goods_code);
 	}
 	
+	public List<Map<String, Object>> goodsListd17(Map<String, Object> map){
+		return gdao.goodsListd17(map);
+	}
+	
 	// 상품 로트
 	public int createGoodsLot(Erp_GoodslotVO vo) {
 		return gldao.createGoodsLot(vo);
@@ -472,12 +501,28 @@ public class D1Service {
 		return gldao.updateGoodsLot(vo);
 	}
 	
+	public int updateLotQty(Erp_GoodslotVO vo) {
+		return gldao.updateLotQty(vo);
+	}
+	
 	public int deleteGoodsLot(int goodslot_no) {
 		return gldao.deleteGoodsLot(goodslot_no);
 	}
 	
 	public int goodslotno(Erp_GoodslotVO vo) {
 		return gldao.goodslotno(vo);
+	}
+	
+	public String getLotNo1(String goodslot_lot) {
+		return gdao.getLotNo1(goodslot_lot);
+	}
+	
+	public List<Integer> getLotNo(String goodslot_lot){
+		return gldao.getLotNo(goodslot_lot);
+	}
+	
+	public List<Map<String, Object>> productLot(int product_no){
+		return gldao.productLot(product_no);
 	}
 	
 	// 상품 종류, 분류

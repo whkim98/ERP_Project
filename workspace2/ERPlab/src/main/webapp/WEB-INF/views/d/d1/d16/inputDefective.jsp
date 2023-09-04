@@ -106,49 +106,7 @@ function getlist(){
 		}
 	}
 }
-function surf1(v, code){
-	var type = document.getElementsByName("type")[0].value;
-	if(v == ''){
-		type = null;
-		v = null;
-	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax2";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type;
-	
-	sendRequest(url,param,getlist,"POST");
-}
-function getlist(){
-	if(xhr.readyState==4 && xhr.status==200) {	
-		var data = xhr.response;
-		let procode = document.getElementById("procode");
-		let newTr = document.createElement("tr");
-		let newTd = document.createElement("td");
-		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			data2.forEach(function(map){
-				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
-				procode.appendChild(newTr);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
-				newTr.appendChild(newTd);
-			});
-		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
-		}
-	}
-}
+
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">

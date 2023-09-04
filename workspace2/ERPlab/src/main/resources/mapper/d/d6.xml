@@ -35,6 +35,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and goodslot_total = #{goodslot_total} 
 		and goods_no = #{goods_no} 
 	</select>
+	
+	<select id="getLotNo" parameterType="String" resultType="int">
+		select goodslot_no from erp_goodslot where goodslot_lot = #{goodslot_lot} order by goodslot_no asc
+	</select>
+	
+	<select id="getLotNo1" parameterType="String" resultType="String">
+		select goodslot_lot from erp_goodslot where goodslot_lot = #{goodslot_lot} group by goodslot_lot
+	</select>
 
 	<insert id="createGoodsst" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsstVO">
 		insert into erp_goodsst(goodsst_unit,goodsst_spec,goodsst_size,goodsst_package,goodsst_ea) 
@@ -48,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="createGoodsLot" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
 		insert into erp_goodslot(goodslot_lot,goodslot_qty,goodslot_production,goodslot_expiry,goodslot_price,goodslot_tax,goodslot_total,goods_no) 
-		values(#{goodslot_lot},#{goodslot_qty},#{goodslot_production},#{goodslot_expiry},#{goodslot_price},#{goodslot_tax},#{goodslot_total},#{goods_no})
+		values(#{goodslot_lot},#{goodslot_qty},sysdate(),#{goodslot_expiry},#{goodslot_price},#{goodslot_tax},#{goodslot_total},#{goods_no})
 	</insert>
 	
 	<update id="updateGoodsst" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsstVO">
@@ -78,6 +86,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where goods_no = #{goods_no}
 	</update>
 	
+	<update id="updateGoodsOne" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		update erp_goods set goods_stockqty = goods_stockqty + #{goods_stockqty} where goods_no = #{goods_no}
+	</update>
+	
+	<update id="updateGoodsSub" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		update erp_goods set goods_stockqty = goods_stockqty - #{goods_stockqty} where goods_no = #{goods_no}
+	</update>
+	
 	<update id="updateGoodsLot" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
 		update erp_goodslot set 
 		goodslot_lot = #{goodslot_lot},
@@ -88,6 +104,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		goodslot_tax = #{goodslot_tax},
 		goodslot_total = #{goodslot_total},
 		goods_no = #{goods_no} 
+		where goodslot_no = #{goodslot_no}
+	</update>
+	
+	<update id="updateLotQty" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
+		update erp_goodslot set 
+		goodslot_qty = #{goodslot_qty}, 
+		goodslot_lot = #{goodslot_lot} 
+		where goodslot_no = #{goodslot_no}
+	</update>
+	
+	<update id="updateLotQtyOne" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
+		update erp_goodslot set 
+		goodslot_qty = goodslot_qty + #{goodslot_qty} 
+		where goodslot_no = #{goodslot_no}
+	</update>
+	
+	<update id="updateLotQtySub" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
+		update erp_goodslot set 
+		goodslot_qty = goodslot_qty - #{goodslot_qty} 
 		where goodslot_no = #{goodslot_no}
 	</update>
 	

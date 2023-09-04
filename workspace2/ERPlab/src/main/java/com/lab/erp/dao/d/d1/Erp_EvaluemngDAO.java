@@ -35,4 +35,12 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d1.evmngList", map);
 	}
 	
+	public List<Integer> getEvaluemng(int evaluation_no){
+		return sqlSession.selectList("d1.getEvaluemng", evaluation_no);
+	}
+	
+	public Map<String, Object> selectEvmng(int evaluemng_no){
+		return sqlSession.selectOne("d1.selectEvmng", evaluemng_no);
+	}
+	
 }
