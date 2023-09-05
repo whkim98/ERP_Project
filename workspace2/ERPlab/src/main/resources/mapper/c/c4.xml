@@ -2,6 +2,51 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="c4">
-
+<mapper namespace="com.lab.erp.repository.c4.C4Repository">
+	<!-- 영업실적관리 -->
+	<select id="findAll_salesresult" resultType="com.lab.erp.vo.c.c4.Erp_SalesresultVO">
+	 	SELECT * FROM erp_salesresult ORDER BY salesresult_no DESC
+	</select>
+	
+	<insert id="save_salesresult" flushCache="true" parameterType="com.lab.erp.vo.c.c4.Erp_SalesresultVO" keyProperty="salesresult_no" useGeneratedKeys="true" keyColumn="salesresult_no">
+		INSERT INTO erp_salesresult (ctgr_no, salesresult_start, salesresult_end, salesresult_goal, sales_no, forsales_no, localsales_no, storesales_no, online_no, salesresult_achieve, comcode_no) 
+		VALUES (#{ctgr_no}, #{salesresult_start}, #{salesresult_end}, #{salesresult_goal}, #{sales_no}, #{forsales_no}, #{localsales_no}, #{storesales_no}, #{online_no}, #{salesresult_achieve}, #{comcode_no})
+	</insert>
+	
+	<update id="update_salesresult" flushCache="true" parameterType="com.lab.erp.vo.c.c4.Erp_SalesresultVO">
+		UPDATE erp_salesresult SET ctgr_no = #{ctgr_no}, salesresult_start = #{salesresult_start}, salesresult_end = #{salesresult_end}, salesresult_goal = #{salesresult_goal}, sales_no = #{sales_no}, forsales_no = #{forsales_no}, localsales_no = #{localsales_no}, storesales_no = #{storesales_no}, online_no = #{online_no}, salesresult_achieve = #{salesresult_achieve}, comcode_no = #{comcode_no}
+		WHERE salesresult_no = #{salesresult_no}
+	</update>
+	
+	<delete id="delete_salesresult" flushCache="true" parameterType="com.lab.erp.vo.c.c4.Erp_SalesresultVO">
+		DELETE FROM erp_salesresult WHERE salesresult_no = #{salesresult_no}
+	</delete>
+	
+	
+	<!-- 부서별매출 -->
+	
+	
+	<!-- 고객관리 -->
+	<select id="findAll_customer" resultType="com.lab.erp.vo.c.c4.Erp_CustomerVO">
+	 	SELECT * FROM erp_customer ORDER BY customer_no DESC
+	</select>
+	
+	<insert id="save_customer" flushCache="true" parameterType="com.lab.erp.vo.c.c4.Erp_CustomerVO" keyProperty="customer_no" useGeneratedKeys="true" keyColumn="customer_no">
+		INSERT INTO erp_customer (csgrade_no, customer_name, customer_addr1, customer_addr2, customer_postal, customer_phone, customer_comment, comcode_no) 
+		VALUES (#{csgrade_no}, #{customer_name}, #{customer_addr1}, #{customer_addr2}, #{customer_postal}, #{customer_phone}, #{customer_comment}, #{comcode_no})
+	</insert>
+	
+	<update id="update_customer" flushCache="true" parameterType="com.lab.erp.vo.c.c4.Erp_CustomerVO">
+		UPDATE erp_customer SET csgrade_no = #{csgrade_no}, customer_name = #{customer_name}, customer_addr1 = #{customer_addr1}, customer_addr2 = #{customer_addr2}, customer_postal = #{customer_postal}, customer_phone = #{customer_phone}, customer_comment = #{customer_comment}, comcode_no = #{comcode_no}
+		WHERE customer_no = #{customer_no}
+	</update>
+	
+	<delete id="delete_customer" flushCache="true" parameterType="com.lab.erp.vo.c.c4.Erp_CustomerVO">
+		DELETE FROM erp_customer WHERE customer_no = #{customer_no}
+	</delete>
+	
+	<!-- 상품조회 -->
+	<select id="findGoodsAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		SELECT * FROM erp_goods
+	</select>
 </mapper>

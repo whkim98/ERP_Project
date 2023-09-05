@@ -61,7 +61,7 @@ public class C3Controller {
 				c3Service.save_warehouse(erp_WarehouseVO);
 			}
 		} 
-		return "redirect:/c/c32/warehouse";
+		return "redirect:/c/c3/c32/warehouse";
 	}
 	
 	
@@ -70,13 +70,13 @@ public class C3Controller {
 		int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
 		erp_WarehouseVO.setComcode_no(comcode_no); 
 		int res = c3Service.update_warehouse(erp_WarehouseVO);
-		return "redirect:/c/c32/warehouse";
+		return "redirect:/c/c3/c32/warehouse";
 	}
 	
 	@PostMapping("/c32/warehouse_delete")
 	public String event_delete (Erp_WarehouseVO erp_WarehouseVO) {
 		int res = c3Service.delete_warehouse(erp_WarehouseVO.getWarehouse_no());
-		return "redirect:/c/c32/warehouse";
+		return "redirect:/c/c3/c32/warehouse";
 	}
 	
 	// ---------행사---------
@@ -102,7 +102,7 @@ public class C3Controller {
 				c3Service.save_event(erp_EventVO);
 			}
 		} 
-		return "redirect:/c/c33/event";
+		return "redirect:/c/c3/c33/event";
 	}
 	
 	
@@ -111,13 +111,13 @@ public class C3Controller {
 		int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
 		erp_EventVO.setComcode_no(comcode_no); 
 		int res = c3Service.update_event(erp_EventVO);
-		return "redirect:/c/c33/event";
+		return "redirect:/c/c3/c33/event";
 	}
 	
 	@PostMapping("/c33/event_delete")
 	public String event_delete (Erp_EventVO erp_EventVO) {
 		int res = c3Service.delete_event(erp_EventVO.getEvent_no());
-		return "redirect:/c/c33/event";
+		return "redirect:/c/c3/c33/event";
 	}
 
 	
@@ -144,7 +144,7 @@ public class C3Controller {
 				c3Service.save_online(erp_OnlineVO);
 			}
 		} 
-		return "redirect:/c/c34/online";
+		return "redirect:/c/c3/c34/online";
 	}
 	
 	
@@ -153,13 +153,13 @@ public class C3Controller {
 		int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
 		erp_OnlineVO.setComcode_no(comcode_no); 
 		int res = c3Service.update_online(erp_OnlineVO);
-		return "redirect:/c/c34/online";
+		return "redirect:/c/c3/c34/online";
 	}
 	
 	@PostMapping("/c34/online_delete")
 	public String online_delete (Erp_OnlineVO erp_OnlineVO) {
 		int res = c3Service.delete_online(erp_OnlineVO.getOnline_no());
-		return "redirect:/c/c34/online";
+		return "redirect:/c/c3/c34/online";
 	}
 	
 	

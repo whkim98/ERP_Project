@@ -1,4 +1,4 @@
-package com.lab.erp.vo.c.c3;
+package com.lab.erp.vo.c.c4;
 
 import lombok.*;
 
