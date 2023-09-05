@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/a")
+@RequestMapping("/a/a1")
 public class A1Controller {
 	
 	private A1Service a1Service;
@@ -37,29 +37,47 @@ public class A1Controller {
 		System.out.println("### LOG: "+ getClass().getName() + "() 생성");
 	}
 	
-	@GetMapping("/a_company")
-	public String a_company(Model model ) {
-		List<Erp_CompanyVO> comp_list = a1Service.list();
-		List<Erp_BusinesstypeVO> bst_list = a1Service.bstlist();
+	@GetMapping("/a11/company")
+	public String company(Model model ) {
+		List<Erp_CompanyVO> comp_list = a1Service.list_company();
 		model.addAttribute("comp_list", comp_list);
-		model.addAttribute("bst_list", bst_list);
-		return "thymeleaf/a/a_company";
+		return "thymeleaf/a/company";
 	}
 	
-	@PostMapping("/a_company")
-	public String a_company(HttpSession httpSession, @Valid @ModelAttribute("erp_CompanyVO") Erp_CompanyVO erp_CompanyVO, BindingResult result, RedirectAttributes redirectAttributes) {
-		// 에러있다면, 적힌 내용들 담고 해당 페이지 redirect 시킴
-		if(result.hasErrors()) {
+	@PostMapping("/a11/company")
+	public String company(HttpSession session, @Valid @ModelAttribute("erp_CompanyVO") Erp_CompanyVO erp_CompanyVO, BindingResult result, RedirectAttributes redirectAttributes) {
+		if(!result.getFieldErrors().get(0).getField().equals("company_no")) {
 			redirectAttributes.addFlashAttribute("erp_CompanyVO", erp_CompanyVO);
 		    redirectAttributes.addFlashAttribute("error", result.getFieldErrors().get(0).getField());
-		} 
+		}
 		// 에러가 없다며 일반적 저장기능 실행
 		else {
-			//TODO : 1 말고 httpSession 값에 있는 comcode_no으로 변경할것
-			erp_CompanyVO.setComcode_no(1); // temporary
-			a1Service.save(erp_CompanyVO);
+			int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+			erp_CompanyVO.setComcode_no(comcode_no); 
+			a1Service.save_company(erp_CompanyVO);
 		}
-		return "redirect:/a/a_company";
+		return "redirect:/a/a1/a11/company";
+	}
+	
+	@PostMapping("/a11/company_update")
+	public String company_update(HttpSession session, Erp_CompanyVO erp_CompanyVO) {
+		int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+		erp_CompanyVO.setComcode_no(comcode_no); 
+		int res = a1Service.update_company(erp_CompanyVO);
+		return "redirect:/a/a1/a11/company";
+	}
+	
+	@PostMapping("/a11/company_delete")
+	public String company_delete(Erp_CompanyVO erp_CompanyVO) {
+		int res = a1Service.delete_company(erp_CompanyVO.getCompany_no());
+		return "redirect:/a/a1/a11/company";
+	}
+	
+	@GetMapping("a11/businesstype_list")
+	public String businesstype_list (Model model) {
+		List<Erp_BusinesstypeVO> bst_list = a1Service.bstlist();
+		model.addAttribute("bst_list", bst_list);
+		return "thymeleaf/a/businesstype_list";
 	}
 	
 	@InitBinder

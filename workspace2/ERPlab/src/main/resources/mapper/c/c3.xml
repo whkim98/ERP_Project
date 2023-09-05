@@ -3,21 +3,76 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.c3.C3Repository">
-	<select id="findAll" resultType="com.lab.erp.vo.c.c3.Erp_EventVO">
-	 	SELECT * FROM erp_event
+	<!-- 매장매출 -->
+	
+	
+	<!-- 창고관리 -->
+	<select id="findAll_warehouse" resultType="com.lab.erp.vo.c.c3.Erp_WarehouseVO">
+	 	SELECT * FROM erp_warehouse ORDER BY warehouse_no DESC
 	</select>
 	
-	<insert id="save" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO" keyProperty="event_no" useGeneratedKeys="true" keyColumn="event_no">
-		INSERT INTO erp_company (comptype_no, company_code, company_name, company_registeredno, company_corporatedno, company_representative, businesstype_no, company_status, company_kind, company_addr1, company_addr2, company_postal, company_opendate, company_use, company_foreign, company_directno, company_fax, company_email, comcode_no) 
-		VALUES (#{comptype_no}, #{company_code}, #{company_name}, #{company_registeredno}, #{company_corporatedno}, #{company_representative}, #{businesstype_no}, #{company_status}, #{company_kind}, #{company_addr1}, #{company_addr2}, #{company_postal}, #{company_opendate}, #{company_use}, #{company_foreign}, #{company_directno}, #{company_fax}, #{company_email}, #{comcode_no})
+	<insert id="save_warehouse" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_WarehouseVO" keyProperty="warehouse_no" useGeneratedKeys="true" keyColumn="warehouse_no">
+		INSERT INTO erp_warehouse (company_no, warehouse_date, goods_no, warehouse_qty, warehouse_release, comcode_no) 
+		VALUES (#{company_no}, #{warehouse_date}, #{good_no}, #{warehouse_qty}, #{warehouse_release}, #{comcode_no})
 	</insert>
 	
-	<update id="update" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
-		UPDATE erp_company SET 
-		WHERE company_no = #{company_no}
+	<update id="update_warehouse" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_WarehouseVO">
+		UPDATE erp_warehouse SET company_no = #{company_no}, warehouse_date #{warehouse_date}, goods_no = #{goods_no}, warehouse_qty = #{warehouse_qty}, warehouse_release = #{warehouse_release}, comcode_no = #{comcode_no}
+		WHERE warehouse_no = #{warehouse_no}
 	</update>
 	
-	<delete id="delete" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO">
+	<delete id="delete_warehouse" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO">
+		DELETE FROM erp_warehouse WHERE warehouse_no = #{warehouse_no}
+	</delete>
+	
+
+	<!-- 행사관리 -->
+	<select id="findAll_event" resultType="com.lab.erp.vo.c.c3.Erp_EventVO">
+	 	SELECT * FROM erp_event ORDER BY event_no DESC
+	</select>
+	
+	<insert id="save_event" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO" keyProperty="event_no" useGeneratedKeys="true" keyColumn="event_no">
+		INSERT INTO erp_event (event_code, event_name, event_start, event_end, event_period, goods_no, event_price, event_qty, event_tax, event_total, event_manager, event_remark, comcode_no) 
+		VALUES (#{event_code}, #{event_name}, #{event_start}, #{event_end}, #{event_period}, #{goods_no}, #{event_price}, #{event_qty}, #{event_tax}, #{event_total}, #{event_manager}, #{event_remark}, #{comcode_no})
+	</insert>
+	
+	<update id="update_event" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO">
+		UPDATE erp_event SET event_code = #{event_code}, event_name = #{event_name}, event_start = #{event_start}, event_end = #{event_end}, event_period = #{event_period}, goods_no = #{goods_no}, event_price = #{event_price}, event_qty = #{event_qty}, event_tax = #{event_tax}, event_total = #{event_total}, event_manager = #{event_manager}, event_remark = #{event_remark}
+		WHERE event_no = #{event_no}
+	</update>
+	
+	<delete id="delete_event" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO">
 		DELETE FROM erp_event WHERE event_no = #{event_no}
 	</delete>
+	
+	
+	<!-- 온라인매출 -->
+	<select id="findAll_online" resultType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
+	 	SELECT * FROM erp_event ORDER BY event_no DESC
+	</select>
+	
+	<insert id="save_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO" keyProperty="online_no" useGeneratedKeys="true" keyColumn="online_no">
+		INSERT INTO erp_event (ctgr_no, online_code, team_no, online_date, customer_no, goods_no, online_qty, online_price, online_tax, online_total, settletype_no, comcodee_no) 
+		VALUES (#{ctgr_no}, #{online_code}, #{team_no}, #{online_date}, #{customer_no}, #{goods_no}, #{online_qty}, #{online_price}, #{online_tax}, #{online_total}, #{settletype_no}, #{comcode_no})
+	</insert>
+	
+	<update id="update_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
+		UPDATE erp_online SET 
+		WHERE online_no = #{online_no}
+	</update>
+	
+	<delete id="delete_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
+		DELETE FROM erp_online WHERE online_no = #{online_no}
+	</delete>
+	
+	
+	<!-- 상품조회 -->
+	<select id="findGoodsAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
+		SELECT * FROM erp_goods
+	</select>	
+	
+	<!-- 회사조회 -->
+	<select id="findCompanyAll" resultType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
+		SELECT * FROM erp_company
+	</select>	
 </mapper>

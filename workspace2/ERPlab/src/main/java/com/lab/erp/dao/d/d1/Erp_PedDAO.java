@@ -42,4 +42,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d1.selectPed", ped_no);
 	}
 	
+	public int getPedNo(Erp_PedVO vo) {
+		return sqlSession.selectOne("d1.getPedNo", vo);
+	}
+	
 }

@@ -23,11 +23,15 @@ private SqlSession sqlSession;
 	}
 	
 	public int updateDefective(Erp_DefectiveVO vo) {
-		return sqlSession.insert("d1.updateDefective", vo);
+		return sqlSession.update("d1.updateDefective", vo);
 	}
 	
 	public int deleteDefective(int defective_no) {
-		return sqlSession.insert("d1.deleteDefective", defective_no);
+		return sqlSession.delete("d1.deleteDefective", defective_no);
+	}
+	
+	public int deleteProAll(int requestproduct_no) {
+		return sqlSession.delete("d1.deleteProAll", requestproduct_no);
 	}
 	
 	public List<Map<String, Object>> defectiveList(Map<String, Object> map){
@@ -36,6 +40,10 @@ private SqlSession sqlSession;
 	
 	public List<Map<String, Object>> defectiveListAll(Map<String, Object> map){
 		return sqlSession.selectList("d1.defectiveListAll", map);
+	}
+	
+	public List<Map<String, Object>> defectivePro(int requestproduct_no){
+		return sqlSession.selectList("d1.defectivePro", requestproduct_no);
 	}
 	
 	public Map<String, Object> selectDefective(int defective_no){

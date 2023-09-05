@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회사목록조회</title>
+    
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/c/warehouse.css" />
+</head>
+<body>
+     <div id="wrapper">
+            <div id="main">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="company_title">
+                                <span>회사조회</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="items">
+                            <td>
+                                <article class="post" th:each="company_item : ${company_list}">
+                                    <header>
+                                        <div class="title">
+                                            <h2>[[${company_item.company_name}]]</h2>
+                                            <p>
+                                        		사업자등록번호 : [[${company_item.company_registeredno}]] <br />
+												법인등록번호 : [[${company_item.company_corporatedno}]] <br />        
+                                                대표자성명 : [[${company_item.company_representative}]]  
+                                            </p>
+                                            <p class="hidden">[[${company_item.company_no}]]</p>
+                                        </div>
+                                    </header>
+                                    <p class="content">
+                                        주소 : [[${company_item.company_addr1}]] [[${company_item.company_addr2}]] [[${company_item.company_postal}]] <br />
+                                        개업일 : [[${company_opendate}]] <br />
+                                       	상세정보 : <br />
+                                        	용도 - [[${company_item.company_use}]] <br />
+                                        	외국인 여부 - [[${company_item.company_foreign}]] <br />
+                                         	대표번호 - [[${company_item.company_directno}]] <br />
+                                         	팩스번호 - [[${company_item.company_fax}]] <br />
+                                         	세금계산서이메일 - [[${company_item.company_email}]] <br />
+                                        <br />
+                                    </p>
+                                    <footer>
+                                        <ul class="actions">
+                                            <li>
+                                                <button class="button large warehouse_type_select_btn">
+													SELECT
+												</button>
+                                            </li>
+                                        </ul>
+                                    </footer>
+                                </article>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/c/c3/company_list.js"></script>
+</body>
+</html>

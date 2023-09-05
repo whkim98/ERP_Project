@@ -65,21 +65,7 @@ public class C2Controller {
 		this.request = request;
 	}
 	
-	public String resultComcode(String comcode_code, Model model) {
-		String msg = null;
-		String url = null;
-		
-		if(comcode_code == null || comcode_code.isEmpty()) {
-			request.getSession().invalidate();
-			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
-			url = "/";
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			return "";
-		}
-	}
+	
 //	거래처
 	@RequestMapping("/c21")
 	public String clientList(Model model, String type, String word, String comcode_code) {
@@ -1102,7 +1088,7 @@ public class C2Controller {
 		return "redirect:/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
 	}
 	
-	@RequestMapping("/c22/getUniqueCIno")
+	@RequestMapping(value="/c22/getUniqueCIno", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getUniqueCIno(String receivable_cino) {
 		try {
@@ -1116,7 +1102,7 @@ public class C2Controller {
 			return "사용 가능한 코드입니다.";
 		}
 	}
-	@RequestMapping("/c22/getUniqueCode")
+	@RequestMapping(value="/c22/getUniqueCode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getUniqueCode(String receivable_code) {
 		try {
@@ -1131,7 +1117,7 @@ public class C2Controller {
 		}
 	}
 	
-	@RequestMapping("/c22/getBondbillsCode")
+	@RequestMapping(value="/c22/getBondbillsCode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getBondbillsCode(String bondbills_code) {
 		try {
@@ -1462,7 +1448,7 @@ public class C2Controller {
 		return list;
 	}
 	
-	@RequestMapping("/c23/returncode")
+	@RequestMapping(value="/c23/returncode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String returncode(String return_code) {
 		try {

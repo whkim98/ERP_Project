@@ -24,11 +24,15 @@ private SqlSession sqlSession;
 	}
 	
 	public int updateEvaluation(Erp_EvaluationVO vo) {
-		return sqlSession.insert("d1.updateEvaluation", vo);
+		return sqlSession.update("d1.updateEvaluation", vo);
+	}
+	
+	public int updateStatus(Erp_EvaluationVO vo) {
+		return sqlSession.update("d1.updateStatus", vo);
 	}
 	
 	public int deleteEvaluation(int evaluation_no) {
-		return sqlSession.insert("d1.deleteEvaluation", evaluation_no);
+		return sqlSession.delete("d1.deleteEvaluation", evaluation_no);
 	}
 	
 	public List<Map<String, Object>> evaluationList(Map<String, Object> map){

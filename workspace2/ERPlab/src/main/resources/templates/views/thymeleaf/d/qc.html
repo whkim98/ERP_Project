@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ERP lab 품질검사</title>
+        <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+        <link rel="stylesheet" href="/css/d/qc.css" />
+    </head>
+    <body>
+        <div class="qc_container">
+            <h2 class="qc_title"><a th:href="@{/d/d41/qc}">품질검사</a></h2>
+            <div class="qc_body">
+                <div class="qc_regist">
+					<table class="qc_search">
+						<tr>
+							<td>
+								<select name="search_type" id="search_type">
+									<option value="all" selected}>전체</option>
+									<option value="qc_no">코드</option>
+									<option value="qc_date">일자</option>
+									<option value="goods_no">상품코드</option>
+									<option value="qc_num">검사번호</option>
+									<option value="qc_clause">검사항목</option>
+									<option value="qc_result">합불여부</option>
+									<option value="qc_revalue">재평가여부</option>
+									<option value="qc_remark">비고</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" id="search_word" name="word" placeholder="검색어를 입력하세요" autocomplete="off">
+								<input type="button" value="전체목록" id="list_reset">
+							</td>
+						</tr>
+					</table>
+					<table id="search_result">
+                    <table class="qc_list">
+                        <tr class="qc_top">
+							<th class="sec1">창고코드</th>
+                            <th class="sec2">상품코드</th>
+                            <th class="sec3">검사항목</th>
+                            <th class="sec4">검사등급</th>
+                            <th class="sec5">합불여부</th>
+                        </tr>
+                        <tr class="qc_items" th:each="qc_item : ${qc_list}">
+							<td>[[${qc_item.qc_no}]]</td>
+                            <td>[[${qc_item.goods_no}]]</td>
+                            <td>[[${qc_item.qc_clause}]]</td>
+                            <td>[[${qc_item.qc_grade}]]</td>
+                            <td>[[${qc_item.qc_result}]]</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <hr class="vertical_line">
+                
+                <div class="regits_form">
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
+                    <form th:action="@{/d/d41/qc}" method="post" id="qc_frm">
+						<input type="hidden" name="qc_no" id="qc_no" th:value="${erp_QcVO?.qc_no}"/>
+						
+						<div class="sec">
+                            <label for="qc_date">일자</label>
+                            <input
+                                type="date"
+                                name="qc_date"
+                                id="qc_date"
+                                th:value="${erp_QcVO?.qc_date}"
+                            />
+                        </div>
+                        
+              			<div class="sec">
+                            <label for="goods_name">상품등록</label>
+                            <div class="goods_regist">
+                                <input
+                                    type="text"
+                                    name="goods_name"
+                                    id="goods_name"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="goodslist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+
+						<input type="hidden" name="goods_no" id="goods_no" th:value="${erp_QcVO?.goods_no}">
+
+                	  	<div class="sec">
+                            <label for="qc_num">검사번호</label>
+                            <input
+                                type="text"
+                                name="qc_num"
+                                id="qc_num"
+                                class="required"
+                                th:value="${erp_QcVO?.qc_num}"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="qc_clause">검사항목</label>
+                            <input
+                                type="text"
+                                name="qc_clause"
+                                id="qc_clause"
+                                class="required"
+                                th:value="${erp_QcVO?.qc_clause}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="qc_grade">검사등급</label>
+                            <input
+                                type="text"
+                                name="qc_grade"
+                                id="qc_grade"
+                                class="required"
+                                th:value="${erp_QcVO?.qc_grade}"
+                            />
+                        </div>
+                        
+                       <div class="sec">
+                            <label for="qc_result">합/불유무</label>
+                            <select name="qc_result" id="qc_result" class="required">
+                                <option value="0" th:selected="${erp_QcVO?.qc_result} == 0">불합격(0)</option>
+                                <option value="1" th:selected="${erp_QcVO?.qc_result} == 1">합격(1)</option>
+                            </select>
+                        </div>
+                       
+                       <div class="sec">
+                            <label for="qc_revalue">재평가등급</label>
+                            <input
+                                type="text"
+                                name="qc_revalue"
+                                id="qc_revalue"
+                                th:value="${erp_QcVO?.qc_revalue}"
+                            />
+                        </div>
+                        
+                        
+                        <div class="sec">
+                            <label for="qc_remark">비고</label>
+                            <input
+                                type="text"
+                                name="qc_remark"
+                                id="qc_remark"
+                                th:value="${erp_QcVO?.qc_remark}"
+                            />
+                        </div>
+                       
+ 						<div class="sec" id="new_btn_sec">
+                            <button type="reset">RESET</button>
+                            <button type="button" id="qc_save_btn">SAVE</button>
+                        </div>
+                        <div class="sec" id="old_btn_sec">
+							<button type="button" id="qc_delete_btn">DELETE</button>
+							<button type="button" id="qc_update_btn">UPDAET</button>
+						</div>
+						
+						<div id="errormsg" th:text="${error}"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/d/d4/qc.js"></script>
+        <script th:inline="javascript">
+			// 창고 리스트 검색 필터링 기능
+			let search_filter = (type,word) => {
+				if(word=="" || word==undefined || word==null) return null;
+				let searched_list = [];
+				let list = [[${qc_list}]];
+				
+				for(let i = 0 ; i < list.length; i++){
+					let json_data = JSON.stringify(list[i]);
+					let key_value = json_data.replace("{", "").replace("}", "").replace(/"/gi, "").split(",");
+					
+					for(let j = 0 ; j < key_value.length; j++) {
+						let key = key_value[j].split(":")[0];
+						let value = key_value[j].split(":")[1];	
+						if (type=="all") {
+							if(value==word) searched_list.push(list[i]);
+						}
+						else {
+							if(key==type && value==word) searched_list.push(list[i]);
+						}
+					}
+				}
+				return searched_list;
+			}
+			
+			// 창고리스트중 창고 클릭시 데이터값 전달 함수
+				let selected_vo = (tag) => {
+				let list = [[${qc_list}]];
+				let vo_no = tag.innerHTML;
+				for(let i = 0 ; i < list.length; i ++){
+					if (list[i].qc_no == vo_no){
+						document.getElementById("qc_no").value=list[i].qc_no;
+						document.getElementById("qc_date").value=list[i].qc_date;
+						document.getElementById("goods_no").value=list[i].goods_no;
+						document.getElementById("qc_num").value=list[i].qc_num;
+						document.getElementById("qc_clause").value=list[i].qc_clause;
+						document.getElementById("qc_grade").value=list[i].qc_grade;
+						document.getElementById("qc_result").value=list[i].qc_result;
+						document.getElementById("qc_revalue").value=list[i].qc_revalue;
+						document.getElementById("qc_remark").value=list[i].qc_remark;
+					}
+				}
+			}
+		</script>
+    </body>
+</html>

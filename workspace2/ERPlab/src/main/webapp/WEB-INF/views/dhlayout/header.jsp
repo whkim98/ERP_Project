@@ -16,6 +16,9 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="${pageContext.request.contextPath }/webdesign/assets/css/main.css" />
+		
+			
+		
 		<c:if test="${login == null }">
 			<script type="text/javascript">
 				alert("세션이 만료되었습니다.");

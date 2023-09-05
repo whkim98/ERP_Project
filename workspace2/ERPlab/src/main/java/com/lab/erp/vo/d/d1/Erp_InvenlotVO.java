@@ -1,5 +1,7 @@
 package com.lab.erp.vo.d.d1;
 
+import java.util.List;
+
 import lombok.*;
 
 @Data
@@ -15,5 +17,8 @@ public class Erp_InvenlotVO {
 	private String invenlot_date;
 	private int goodslot_no;
 	private int proinventory_no;
+	
+	private List<Erp_InvenlotVO> crlist;
+	private List<Erp_InvenlotVO> crlist1;
 	
 }

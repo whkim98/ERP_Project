@@ -17,11 +17,10 @@ public class Erp_PurchaseVO {
 	private int purchase_price;
 	private int purchase_tax;
 	private int purchase_total;
+	private int purchase_type;
 	private int creditor_no;
-	private int admin_no;
+	private int team_no;
 	private int employee2_no;
-	private int goods_no;
-	private int purchase_number;
 	private int comcode_no;
 
 }

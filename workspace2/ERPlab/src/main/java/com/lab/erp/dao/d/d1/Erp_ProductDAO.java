@@ -39,4 +39,12 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d1.selectProduct", product_no);
 	}
 	
+	public List<Map<String, Object>> employee(Map<String, Object> map){
+		return sqlSession.selectList("d1.employee", map);
+	}
+	
+	public int getProductCode(String product_code) {
+		return sqlSession.selectOne("d1.getProductCode", product_code);
+	}
+	
 }

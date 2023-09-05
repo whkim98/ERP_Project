@@ -3,5 +3,581 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="d2">
+	
+	<!-- 책임판매업자 품목 -->
+	<select id="selectClient2Goods" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, c1.client_name client_name1, c2.client_name client_name2 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2  
+		where g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and c2.client_name = #{client_name} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2})
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%'
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+		</if>
+	</select>
+	<select id="selectClient2Goodsd22" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2 
+		from erp_goods g, erp_goodslot gl, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2  
+		where g.goodskind_no = gk.goodskind_no 
+		and gl.goods_no = g.goods_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and c2.client_name = #{client_name} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2})
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' or gl.goodslot_lot like '%${bnword}%'
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodslot_lot'">
+				and gl.goodslot_lot like '%${bnword}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="goodsList" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, gl.* 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_goodslot gl 
+		where g.goodskind_no = gk.goodskind_no 
+		and gl.goods_no = g.goods_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and g.comcode_no = #{comcode_no} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2}) 
+		and c2.client_name = #{client_name} 
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' or gl.goodslot_lot like '%${bnword}%'
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodslot_lot'">
+				and gl.goodslot_lot like '%${bnword}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="searchcl" parameterType="map" resultType="map">
+		select c.*, b.* 
+		from erp_client c, erp_businesstype b 
+		where c.client_name like '%${client_name}%' 
+		and c.comcode_no = #{comcode_no} 
+		and b.businesstype_no = c.businesstype_no
+	</select>
+	
 
+	<!-- 발주관리 -->
+	<insert id="createOrder" parameterType="com.lab.erp.vo.d.d2.Erp_OrderVO">
+		insert into erp_order(ctgr_no,order_code,order_odate,client_no,order_status,team_no,order_schedule,order_approval,order_end,order_price,order_tax,order_total,order_type,company_no,comcode_no) 
+		values(54,#{order_code},sysdate(),#{client_no},#{order_status},#{team_no},#{order_schedule},#{order_approval},#{order_end},#{order_price},#{order_tax},#{order_total},#{order_type},#{company_no},#{comcode_no})
+	</insert>
+	
+	<insert id="createOrderConnect" parameterType="com.lab.erp.vo.d.d2.Erp_OrderconnectVO">
+		insert into erp_orderconnect(goods_no,order_no,orderconnect_qty,orderconnect_price,orderconnect_tax,orderconnect_total) 
+		values(#{goods_no},#{order_no},#{orderconnect_qty},#{orderconnect_price},#{orderconnect_tax},#{orderconnect_total})
+	</insert>
+	
+	<update id="updateOrder" parameterType="com.lab.erp.vo.d.d2.Erp_OrderVO">
+		update erp_order set 
+		client_no = #{client_no},
+		order_status = #{order_status},
+		team_no = #{team_no},
+		order_schedule = #{order_schedule},
+		order_approval = #{order_approval},
+		order_end = #{order_end},
+		order_price = #{order_price}, 
+		order_tax = #{order_tax}, 
+		order_total = #{order_total}, 
+		order_type = #{order_type}, 
+		company_no = #{company_no} 
+		where order_no = #{order_no}
+	</update>
+	
+	<update id="updateOrderPrice" parameterType="com.lab.erp.vo.d.d2.Erp_OrderVO">
+		update erp_order set 
+		order_price = order_price - #{order_price}, order_tax = order_tax - #{order_tax}, order_total = order_total - #{order_total} 
+		where order_no = #{order_no} 
+	</update>
+	
+	<update id="updateOrderConnect" parameterType="com.lab.erp.vo.d.d2.Erp_OrderconnectVO">
+		update erp_orderconnect set 
+		goods_no = #{goods_no},
+		order_no = #{order_no},
+		orderconnect_qty = #{orderconnect_qty}, 
+		orderconnect_price = #{orderconnect_price}, 
+		orderconnect_tax = #{orderconnect_tax}, 
+		orderconnect_total = #{orderconnect_total}  
+		where orderconnect_no = #{orderconnect_no}
+	</update>
+	
+	<delete id="deleteOrder" parameterType="int">
+		delete from erp_order where order_no = #{order_no} 
+	</delete>
+	
+	<delete id="deleteOrderConnect" parameterType="int">
+		delete from erp_orderconnect where orderconnect_no = #{orderconnect_no}
+	</delete>
+	
+	<delete id="deleteOrderConnectAll" parameterType="int">
+		delete from erp_orderconnect where order_no = #{order_no}
+	</delete>
+	
+	<select id="orderList" parameterType="map" resultType="map">
+		select c.*, t.*, co.*, o.*, cl.* 
+		from erp_client c, erp_team t, erp_company co, erp_order o, erp_closing cl 
+		where o.comcode_no = #{comcode_no} 
+		and o.client_no = c.client_no 
+		and o.team_no = t.team_no 
+		and o.company_no = co.company_no 
+		and cl.closing_code = o.order_code 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					c.client_name like '%${word}%' or o.order_code like '%${word}%' 
+					or co.company_name like '%${word}%' or t.team_name like '%${word}%' 
+					)
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'order_code'">
+				and o.order_code like '%${word}%'
+			</if>
+			<if test="type == 'company_name'">
+				and co.company_name like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectOrder" parameterType="int" resultType="map">
+		select c.*, t.*, co.*, o.*, b.* 
+		from erp_client c, erp_team t, erp_company co, erp_order o, erp_businesstype b 
+		where o.order_no = #{order_no} 
+		and o.client_no = c.client_no 
+		and o.team_no = t.team_no 
+		and co.businesstype_no = b.businesstype_no 
+		and o.company_no = co.company_no 
+	</select>
+	
+	<select id="selectOrderGoods" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, c1.client_name client_name1, c2.client_name client_name2, oc.*, o.* 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_orderconnect oc, erp_order o 
+		where g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and oc.order_no = o.order_no 
+		and oc.goods_no = g.goods_no 
+		and o.order_no = #{order_no} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2})
+	</select>
+	
+	<select id="getOrderNo" parameterType="String" resultType="int">
+		select order_no from erp_order where order_code = #{order_code}
+	</select>
+	
+	
+	<!-- 구매 매입 관리 -->
+	<insert id="createPurchase" parameterType="com.lab.erp.vo.d.d2.Erp_PurchaseVO">
+		insert into erp_purchase(purchase_date,ctgr_no,purchase_code,client_no,purchase_content,purchase_price,purchase_tax,purchase_total,purchase_type,creditor_no,team_no,employee2_no,comcode_no) 
+		values(sysdate(),55,#{purchase_code},#{client_no},#{purchase_content},#{purchase_price},#{purchase_tax},#{purchase_total},#{purchase_type},#{creditor_no},#{team_no},#{employee2_no},#{comcode_no})
+	</insert>
+	
+	<insert id="createPurchaseConnect" parameterType="com.lab.erp.vo.d.d2.Erp_PurchaseconnectVO">
+		insert into erp_purchaseconnect(purchase_no,goodslot_no,purchaseconnect_number,purchaseconnect_price,purchaseconnect_tax,purchaseconnect_total) 
+		values(#{purchase_no},#{goodslot_no},#{purchaseconnect_number},#{purchaseconnect_price},#{purchaseconnect_tax},#{purchaseconnect_total})
+	</insert>
+	
+	<update id="updatePurchase" parameterType="com.lab.erp.vo.d.d2.Erp_PurchaseVO">
+		update erp_purchase set 
+		client_no = #{client_no},
+		purchase_content = #{purchase_content},
+		purchase_price = #{purchase_price},
+		purchase_tax = #{purchase_tax},
+		purchase_total = #{purchase_total}, 
+		purchase_type = #{purchase_type}, 
+		creditor_no = #{creditor_no},
+		team_no = #{team_no},
+		employee2_no = #{employee2_no} 
+		where purchase_no = #{purchase_no} 
+	</update>
+	
+	<update id="updatePurchasePrice" parameterType="com.lab.erp.vo.d.d2.Erp_PurchaseVO">
+		update erp_purchase set 
+		purchase_price = purchase_price - #{purchase_price}, purchase_tax = purchase_tax - #{purchase_tax}, purchase_total = purchase_total - #{purchase_total} 
+		where purchase_no = #{purchase_no} 
+	</update>
+	
+	<update id="updatePurchaseConnect" parameterType="com.lab.erp.vo.d.d2.Erp_PurchaseconnectVO">
+		update erp_purchaseconnect set 
+		purchase_no = #{purchase_no},
+		goodslot_no = #{goodslot_no},
+		purchaseconnect_number = #{purchaseconnect_number},
+		purchaseconnect_price = #{purchaseconnect_price},
+		purchaseconnect_tax = #{purchaseconnect_tax},
+		purchaseconnect_total = #{purchaseconnect_total} 
+		where purchaseconnect_no = #{purchaseconnect_no} 
+	</update>
+	
+	<delete id="deletePurchase" parameterType="int">
+		delete from erp_purchase where purchase_no = #{purchase_no} 
+	</delete>
+	
+	<delete id="deletePurchaseConnect" parameterType="int">
+		delete from erp_purchaseconnect where purchaseconnect_no = #{purchaseconnect_no} 
+	</delete>
+	
+	<delete id="deletePurchaseConnectAll" parameterType="int">
+		delete from erp_purchaseconnect where purchase_no = #{purchase_no} 
+	</delete>
+	
+	<select id="purchaseList" parameterType="map" resultType="map">
+		select t.*, c.*, e2.*, p.*, e.*, t1.team_no team_no1, t1.team_name team_name1, cl.* 
+		from erp_team t, erp_client c, erp_employee2 e2, erp_purchase p, erp_employee1 e, erp_team t1, erp_closing cl 
+		where p.team_no = t.team_no 
+		and e2.team_no = t1.team_no 
+		and p.client_no = c.client_no 
+		and p.employee2_no = e2.employee2_no 
+		and e.employee1_no = e2.employee1_no 
+		and cl.closing_code = p.purchase_code 
+		and p.comcode_no = #{comcode_no} 
+	</select>
+	
+	<select id="selectPurchase" parameterType="int" resultType="map">
+		select t.*, c.*, e2.*, p.*, e.*, t1.team_no team_no1, t1.team_name team_name1 
+		from erp_team t, erp_client c, erp_employee2 e2, erp_purchase p, erp_employee1 e, erp_team t1 
+		where p.team_no = t.team_no 
+		and e2.team_no = t1.team_no 
+		and p.client_no = c.client_no 
+		and p.employee2_no = e2.employee2_no 
+		and e.employee1_no = e2.employee1_no 
+		and p.purchase_no = #{purchase_no} 
+	</select>
+	
+	<select id="selectPurchaseGoods" parameterType="map" resultType="map">
+		select pc.*, p.*, g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, cl.* 
+		from erp_goods g, erp_goodslot gl, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_purchase p, erp_purchaseconnect pc, erp_closing cl 
+		where g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goods_no = gl.goods_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and pc.purchase_no = p.purchase_no 
+		and pc.goodslot_no = gl.goodslot_no 
+		and p.purchase_code = cl.closing_code 
+		and pc.purchase_no = #{purchase_no} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2})
+	</select>
+	
+	<select id="purchaseGoods" parameterType="map" resultType="map">
+		select pc.*, p.*, g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, cl.* 
+		from erp_goods g, erp_goodslot gl, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_purchase p, erp_purchaseconnect pc, erp_closing cl 
+		where g.goodskind_no = gk.goodskind_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goods_no = gl.goods_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and pc.purchase_no = p.purchase_no 
+		and pc.goodslot_no = gl.goodslot_no 
+		and p.purchase_code = cl.closing_code 
+		and p.comcode_no = #{comcode_no} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2})
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' or gl.goodslot_lot like '%${bnword}%'
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodslot_lot'">
+				and gl.goodslot_lot like '%${bnword}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="getPurchaseNo" parameterType="String" resultType="int">
+		select purchase_no from erp_purchase where purchase_code = #{purchase_code}
+	</select>
+	
+	
+	<!-- 구매 재고 평가 -->
+	<insert id="createProductTest" parameterType="com.lab.erp.vo.d.d2.Erp_ProducttestVO">
+		insert into erp_producttest(purchase_no,producttest_grade,ptkind_no,producttest_lossrate,producttest_lossprice,producttest_losstax,producttest_losstotal,producttest_lossqty,producttest_date,producttest_content,producttest_lossfull,producttest_pnp,producttest_type,team_no,goodslot_no,comcode_no) 
+		values(#{purchase_no},#{producttest_grade},#{ptkind_no},#{producttest_lossrate},#{producttest_lossprice},#{producttest_losstax},#{producttest_losstotal},#{producttest_lossqty},sysdate(),#{producttest_content},#{producttest_lossfull},#{producttest_pnp},#{producttest_type},#{team_no},#{goodslot_no},#{comcode_no})
+	</insert>
+	
+	<update id="updateProductTest" parameterType="com.lab.erp.vo.d.d2.Erp_ProducttestVO">
+		update erp_producttest set 
+		producttest_grade = #{producttest_grade},
+		ptkind_no = #{ptkind_no},
+		producttest_lossrate = #{producttest_lossrate},
+		producttest_lossprice = #{producttest_lossprice},
+		producttest_losstax = #{producttest_losstax},
+		producttest_losstotal = #{producttest_losstotal},
+		producttest_lossqty = #{producttest_lossqty},
+		producttest_content = #{producttest_content},
+		producttest_lossfull = #{producttest_lossfull},
+		producttest_pnp = #{producttest_pnp}, 
+		producttest_type = #{producttest_type},
+		team_no = #{team_no}, 
+		goodslot_no = #{goodslot_no} 
+		where producttest_no = #{producttest_no}
+	</update>
+	
+	<delete id="deleteProductTest" parameterType="int">
+		delete from erp_producttest where producttest_no = #{producttest_no}
+	</delete>
+	
+	<select id="productTestList" parameterType="map" resultType="map">
+		select p.*, pk.*, pt.*, t.*, pc.*, gl.*, g.*, c.* 
+		from erp_purchase p, erp_ptkind pk, erp_producttest pt, erp_team t, erp_purchaseconnect pc, erp_goodslot gl, erp_goods g, erp_client c 
+		where pt.ptkind_no = pk.ptkind_no 
+		and pt.purchase_no = p.purchase_no 
+		and pt.team_no = t.team_no 
+		and p.purchase_no = pc.purchase_no 
+		and pc.goodslot_no = gl.goodslot_no 
+		and gl.goods_no = g.goods_no 
+		and p.client_no = c.client_no 
+		and pt.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					c.client_name like '%${word}%' or p.purchase_code like '%${word}%'
+					or pt.producttest_grade like '%${word}%' or t.team_name like '%${word}%' 
+					or pt.producttest_date like '%${word}%' or pt.producttest_pnp like if ('불합격' = ${word},0,1)
+					)
+			</if>
+			<if test="type == 'purchase_code'">
+				and p.purchase_code like '%${word}%'
+			</if>
+			<if test="type == 'producttest_grade'">
+				and pt.producttest_grade like '%${word}%'
+			</if>
+			<if test="type == 'producttest_date'">
+				and pt.producttest_date like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'producttest_pnp'">
+				and pt.producttest_pnp like if ('불합격' = ${word},0,1)
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectProductTest" parameterType="int" resultType="map">
+		select p.*, pk.*, pt.*, t.*, pc.*, gl.*, g.*, c.* 
+		from erp_purchase p, erp_ptkind pk, erp_producttest pt, erp_team t, erp_purchaseconnect pc, erp_goodslot gl, erp_goods g, erp_client c 
+		where pt.ptkind_no = pk.ptkind_no 
+		and pt.purchase_no = p.purchase_no 
+		and pt.team_no = t.team_no 
+		and p.purchase_no = pc.purchase_no 
+		and pc.goodslot_no = gl.goodslot_no 
+		and gl.goods_no = g.goods_no 
+		and p.client_no = c.client_no 
+		and pt.producttest_no = #{producttest_no} 
+	</select>
+	
+	<select id="ptList" resultType="com.lab.erp.vo.d.d2.Erp_PtkindVO">
+		select * from erp_ptkind
+	</select>
+	
+	
+	<!-- 구매 재고 관리 -->
+	<insert id="createInventory" parameterType="com.lab.erp.vo.d.d2.Erp_InventoryVO">
+		insert into erp_inventory(inventory_type,company_no,employee2_no,team_no,comcode_no) 
+		values(#{inventory_type},#{company_no},#{employee2_no},#{team_no},#{comcode_no})
+	</insert>
+	
+	<insert id="createInvenConnect" parameterType="com.lab.erp.vo.d.d2.Erp_InvenconnectVO">
+		insert into erp_invenconnect(goodslot_no,inventory_no,invenconnect_qty,invenconnect_usage,invenconnect_availableqty,invenconnect_date) 
+		values(#{goodslot_no},#{inventory_no},#{invenconnect_qty},#{invenconnect_usage},#{invenconnect_availableqty},sysdate())
+	</insert>
+	
+	<update id="updateInventory" parameterType="com.lab.erp.vo.d.d2.Erp_InventoryVO">
+		update erp_inventory set 
+		inventory_type = #{inventory_type}, 
+		company_no = #{company_no},
+		employee2_no = #{employee2_no},
+		team_no = #{team_no},
+		where inventory_no = #{inventory_no}
+	</update>
+	
+	<update id="updateInvenConnect" parameterType="com.lab.erp.vo.d.d2.Erp_InvenconnectVO">
+		update erp_invenconnect set 
+		goodslot_no = #{goodslot_no},
+		invenconnect_qty = #{invenconnect_qty},
+		invenconnect_usage = #{invenconnect_usage},
+		invenconnect_availableqty = #{invenconnect_availableqty} 
+		where invenconnect_no = #{invenconnect_no}
+	</update>
+	
+	<delete id="deleteInventory" parameterType="int">
+		delete from erp_inventory where inventory_no = #{inventory_no}
+	</delete>
+	
+	<delete id="deleteInvenConnect" parameterType="int">
+		delete from erp_invenconnect where invenconnect_no = #{invenconnect_no} 
+	</delete>
+	
+	<delete id="deleteInvenConnectAll" parameterType="int">
+		delete from erp_invenconnect where inventory_no = #{inventory_no}
+	</delete>
+	
+	<select id="inventoryList" parameterType="map" resultType="map">
+		select co.*, t.*, e2.*, e.*, i.*, cp.* 
+		from erp_company co, erp_team t, erp_employee2 e2, erp_employee1 e, erp_inventory i, erp_comptype cp 
+		where i.company_no = co.company_no 
+		and i.team_no = t.team_no 
+		and i.employee2_no = e2.employee2_no 
+		and e2.employee1_no = e.employee1_no 
+		and cp.comptype_no = co.comptype_no 
+		and i.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					c.client_name like '%${word}%' or cp.comptype_code like '%${word}%' 
+					or t.team_name like '%${word}%' 
+					or e.employee1_name like '%${word}%' 
+					)
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'client_name'">
+				and c.client_name like '%${word}%'
+			</if>
+			<if test="type == 'comptype_code'">
+				and cp.comptype_code like '%${word}%'
+			</if>
+			<if test="type == 'employee1_name'">
+				and e.employee1_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectInventory" parameterType="int" resultType="map">
+		select co.*, t.*, e2.*, e.*, i.*, cp.* 
+		from erp_company co, erp_team t, erp_employee2 e2, erp_employee1 e, erp_inventory i, erp_comptype cp 
+		where i.company_no = co.company_no 
+		and i.team_no = t.team_no 
+		and i.employee2_no = e2.employee2_no 
+		and e2.employee1_no = e.employee1_no 
+		and cp.comptype_no = co.comptype_no 
+		and i.inventory_no = #{inventory_no}
+	</select>
+	
+	<select id="selectInventoryGoods" parameterType="map" resultType="map">
+		select i.*, ic.*, g.*, gs.*, gk.*, gt.*, c1.client_name client_name1, c2.client_name client_name2, gl.* 
+		from erp_goods g, erp_goodslot gl, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_inventory i, erp_invenconnect ic  
+		where g.goodskind_no = gk.goodskind_no 
+		and gl.goods_no = g.goods_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2}) 
+		and ic.inventory_no = i.inventory_no 
+		and ic.goodslot_no = gl.goodslot_no 
+		and ic.inventory_no = #{inventory_no} 
+	</select>
+	
+	<select id="getInventoryNo" parameterType="com.lab.erp.vo.d.d2.Erp_InventoryVO" resultType="int">
+		select inventory_no from erp_inventory 
+		where inventory_type = #{inventory_type} 
+		and company_no = #{company_no}
+		and employee2_no = #{employee2_no}
+		and team_no = #{team_no}
+		and comcode_no = #{comcode_no}
+	</select>
+	
 </mapper>

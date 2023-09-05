@@ -43,4 +43,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d1.selectProInven", map);
 	}
 	
+	public List<Map<String, Object>> coList(Map<String, Object> map){
+		return sqlSession.selectList("d1.coList", map);
+	}
+	
 }

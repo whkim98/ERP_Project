@@ -20,6 +20,7 @@ import com.lab.erp.dao.d.d1.Erp_PedworkDAO;
 import com.lab.erp.dao.d.d1.Erp_ProductDAO;
 import com.lab.erp.dao.d.d1.Erp_ProinventoryDAO;
 import com.lab.erp.dao.d.d1.Erp_RequestproductDAO;
+import com.lab.erp.dao.d.d1.Erp_WorktypeDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodsDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodslevDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodslotDAO;
@@ -38,6 +39,7 @@ import com.lab.erp.vo.d.d1.Erp_PedworkVO;
 import com.lab.erp.vo.d.d1.Erp_ProductVO;
 import com.lab.erp.vo.d.d1.Erp_ProinventoryVO;
 import com.lab.erp.vo.d.d1.Erp_RequestproductVO;
+import com.lab.erp.vo.d.d1.Erp_WorktypeVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslevVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
@@ -62,6 +64,7 @@ public class D1Service {
 	private Erp_EvaluemngDAO emdao;
 	private Erp_ProinventoryDAO pidao;
 	private Erp_InvenlotDAO idao;
+	private Erp_WorktypeDAO wdao;
 	
 	
 	private Erp_Bs3DAO bsdao;
@@ -73,7 +76,7 @@ public class D1Service {
 			Erp_GoodssortDAO gsdao, Erp_GoodsstDAO gtdao, Erp_ConnectrequestDAO crdao, Erp_PedworkDAO pwdao,
 			Erp_LotconnevDAO lcdao, Erp_RequestproductDAO rpdao, Erp_PedDAO pdao, Erp_ProductDAO ptdao,
 			Erp_DefectiveDAO ddao, Erp_EvaluationDAO edao, Erp_EvaluemngDAO emdao, Erp_ProinventoryDAO pidao,
-			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao) {
+			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao, Erp_WorktypeDAO wdao) {
 		this.gdao = gdao;
 		this.gvdao = gvdao;
 		this.gldao = gldao;
@@ -92,6 +95,7 @@ public class D1Service {
 		this.idao = idao;
 		this.bsdao = bsdao;
 		this.cldao = cldao;
+		this.wdao = wdao;
 	}
 
 
@@ -231,6 +235,10 @@ public class D1Service {
 		return rpdao.selectRequestProduct(requestproduct_no);
 	}
 	
+	public int getRequestProductNo(String requestproduct_code) {
+		return rpdao.getRequestProductNo(requestproduct_code);
+	}
+	
 	
 //	ped 작업지시서
 	public int createPed(Erp_PedVO vo) {
@@ -257,6 +265,18 @@ public class D1Service {
 		return pdao.selectPed(ped_no);
 	}
 	
+	public int getPedNo(Erp_PedVO vo) {
+		return pdao.getPedNo(vo);
+	}
+	
+	public List<Erp_WorktypeVO> workTypeList(){
+		return wdao.workTypeList();
+	}
+	
+	public Erp_WorktypeVO selectWorkType(int connectrequest_no) {
+		return wdao.selectWorkType(connectrequest_no);
+	}
+	
 	
 //	product 생산 / 제조
 	public int createProduct(Erp_ProductVO vo) {
@@ -279,6 +299,14 @@ public class D1Service {
 		return ptdao.selectProduct(product_no);
 	}
 	
+	public List<Map<String, Object>> employee(Map<String, Object> map){
+		return ptdao.employee(map);
+	}
+	
+	public int getProductCode(String product_code) {
+		return ptdao.getProductCode(product_code);
+	}
+	
 	
 //	defective 불량 관리
 	public int createDefective(Erp_DefectiveVO vo) {
@@ -291,6 +319,10 @@ public class D1Service {
 	
 	public int deleteDefective(int defective_no) {
 		return ddao.deleteDefective(defective_no);
+	}
+	
+	public int deleteProAll(int requestproduct_no) {
+		return ddao.deleteProAll(requestproduct_no);
 	}
 	
 	public List<Map<String, Object>> defectiveList(Map<String, Object> map){
@@ -309,6 +341,10 @@ public class D1Service {
 		return ddao.selectDefectiveAll(defective_no);
 	}
 	
+	public List<Map<String, Object>> defectivePro(int requestproduct_no){
+		return ddao.defectivePro(requestproduct_no);
+	}
+	
 	
 //	evaluation 생산실적평가
 	public int createEvaluation(Erp_EvaluationVO vo) {
@@ -317,6 +353,10 @@ public class D1Service {
 	
 	public int updateEvaluation(Erp_EvaluationVO vo) {
 		return edao.updateEvaluation(vo);
+	}
+	
+	public int updateStatus(Erp_EvaluationVO vo) {
+		return edao.updateStatus(vo);
 	}
 	
 	public int deleteEvaluation(int evaluation_no) {
@@ -347,6 +387,14 @@ public class D1Service {
 	
 	public List<Map<String, Object>> evmngList(Map<String, Object> map){
 		return emdao.evmngList(map);
+	}
+	
+	public List<Integer> getEvaluemng(int evaluation_no){
+		return emdao.getEvaluemng(evaluation_no);
+	}
+	
+	public Map<String, Object> selectEvmng(int evaluemng_no){
+		return emdao.selectEvmng(evaluemng_no);
 	}
 	
 	
@@ -399,6 +447,10 @@ public class D1Service {
 		return idao.selectProinventoryGoods(goodslot_no);
 	}
 	
+	public List<Map<String, Object>> coList(Map<String, Object> map){
+		return pidao.coList(map);
+	}
+	
 	
 //	goods and proinventory > 생산된 재고관리
 	// 상품 규격
@@ -419,6 +471,7 @@ public class D1Service {
 	}
 	
 	// 상품
+	
 	public int createGoods(Erp_GoodsVO vo) {
 		return gdao.createGoods(vo);
 	}
@@ -435,6 +488,10 @@ public class D1Service {
 		return gdao.goodsno(goods_code);
 	}
 	
+	public List<Map<String, Object>> goodsListd17(Map<String, Object> map){
+		return gdao.goodsListd17(map);
+	}
+	
 	// 상품 로트
 	public int createGoodsLot(Erp_GoodslotVO vo) {
 		return gldao.createGoodsLot(vo);
@@ -442,6 +499,10 @@ public class D1Service {
 	
 	public int updateGoodsLot(Erp_GoodslotVO vo) {
 		return gldao.updateGoodsLot(vo);
+	}
+	
+	public int updateLotQty(Erp_GoodslotVO vo) {
+		return gldao.updateLotQty(vo);
 	}
 	
 	public int deleteGoodsLot(int goodslot_no) {
@@ -452,6 +513,18 @@ public class D1Service {
 		return gldao.goodslotno(vo);
 	}
 	
+	public String getLotNo1(String goodslot_lot) {
+		return gdao.getLotNo1(goodslot_lot);
+	}
+	
+	public List<Integer> getLotNo(String goodslot_lot){
+		return gldao.getLotNo(goodslot_lot);
+	}
+	
+	public List<Map<String, Object>> productLot(int product_no){
+		return gldao.productLot(product_no);
+	}
+	
 	// 상품 종류, 분류
 	public List<Map<String, Object>> sortkind(){
 		return gsdao.sortkind();
@@ -460,5 +533,15 @@ public class D1Service {
 	// 상품 등급
 	public List<Erp_GoodslevVO> goodslev(){
 		return gvdao.goodslev();
+	}
+	
+	// 거래처
+	public Map<String, Object> searchcl(Map<String, Object> map){
+		return rpdao.searchcl(map);
+	}
+	
+	// 직원
+	public Map<String, Object> searchecode(String employee1_code){
+		return rpdao.searchecode(employee1_code);
 	}
 }

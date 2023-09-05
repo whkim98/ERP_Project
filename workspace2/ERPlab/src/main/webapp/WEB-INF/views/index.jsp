@@ -66,7 +66,7 @@
 
 <article id="fetchContent14" name="f"></article>	
 
-		<!-- Scripts -->
+	<!-- Scripts -->
 			<script src="${pageContext.request.contextPath }/webdesign/assets/js/jquery.min.js"></script>
 			<script src="${pageContext.request.contextPath }/webdesign/assets/js/browser.min.js"></script>
 			<script src="${pageContext.request.contextPath }/webdesign/assets/js/breakpoints.min.js"></script>

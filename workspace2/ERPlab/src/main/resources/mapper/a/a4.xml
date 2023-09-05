@@ -5,8 +5,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="a4">
 	<!-- 전체 리스트 -->
 	<select id="clientList" parameterType="map" resultType="map">
-		select c.*, ct.country_name from erp_client c, erp_country ct 
+		select c.*, ct.country_name, b.* from erp_client c, erp_country ct, erp_businesstype b  
 		where comcode_no = #{comcode_no} 
+		and c.businesstype_no = b.businesstype_no 
 		and c.country_no = ct.country_no 
 		<if test="type != null">
 			<if test="type == 'country_name'">

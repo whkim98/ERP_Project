@@ -10,8 +10,11 @@ public class ViewPath {
 	
 	public static final String B4 = "b/b4";
 	
+	public static final String B3 = "b/b3";
+	
 	public static final String C2 = "c/c2";
 	
 	public static final String D1 = "d/d1";
+	public static final String D2 = "d/d2";
 	
 }

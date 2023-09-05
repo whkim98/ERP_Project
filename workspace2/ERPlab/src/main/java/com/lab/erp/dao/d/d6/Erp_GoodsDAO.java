@@ -59,12 +59,32 @@ private SqlSession sqlSession;
 		return sqlSession.update("d6.updateGoods", vo);
 	}
 	
+	public int updateGoodsOne(Erp_GoodsVO vo) {
+		return sqlSession.update("d6.updateGoodsOne", vo);
+	}
+	
+	public int updateGoodsSub(Erp_GoodsVO vo) {
+		return sqlSession.update("d6.updateGoodsSub", vo);
+	}
+	
 	public int deleteGoods(int goods_no) {
 		return sqlSession.delete("d6.deleteGoods", goods_no);
 	}
 	
 	public int goodsno(String goods_code) {
 		return sqlSession.selectOne("d6.goodsno", goods_code);
+	}
+	
+	public String getLotNo1(String goodslot_lot) {
+		return sqlSession.selectOne("d6.getLotNo1", goodslot_lot);
+	}
+	
+	public List<Map<String, Object>> goodsListd17(Map<String, Object> map){
+		return sqlSession.selectList("d1.goodsList17", map);
+	}
+	
+	public List<Map<String, Object>> goodsListd2(Map<String, Object> map){
+		return sqlSession.selectList("d2.goodsList", map);
 	}
 	
 }

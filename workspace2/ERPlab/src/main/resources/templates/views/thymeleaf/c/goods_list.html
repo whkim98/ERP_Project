@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품목록조회</title>
+    
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/c/event.css" />
+</head>
+<body>
+     <div id="wrapper">
+            <div id="main">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="goods_title">
+                                <span>상품조회</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="items">
+                            <td>
+                                <article class="post" th:each="goods_item : ${goods_list}">
+                                    <header>
+                                        <div class="title">
+                                            <h2>[[${goods_item.goods_name}]]</h2>
+                                            <p>
+                                        		상품코드 : [[${goods_item.goods_code}]] <br />
+												상품바코드 : [[${goods_item.goods_barcode}]] <br />        
+                                                소비자가 : [[${goods_item.goods_customerprice}]]원  
+                                            </p>
+                                            <p class="hidden">[[${goods_item.goods_no}]]</p>
+                                        </div>
+                                    </header>
+                                    <p class="content">
+                                        재고수량 : [[${goods_item.goods_stockqty}]]<br />
+                                        재고위치 : [[${goods_item.goods_location}]]<br />
+                                        상품설명 : 
+                                        [[${goods_item.goods_description}]]
+                                        <br />
+                                    </p>
+                                    <footer>
+                                        <ul class="actions">
+                                            <li>
+                                                <button class="button large event_type_select_btn">
+													SELECT
+												</button>
+                                            </li>
+                                        </ul>
+                                    </footer>
+                                </article>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/c/c3/goods_list.js"></script>
+</body>
+</html>

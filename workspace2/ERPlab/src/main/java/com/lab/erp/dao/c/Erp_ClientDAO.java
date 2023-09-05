@@ -68,4 +68,18 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("c2.clientGoods", client_no);
 	}
 	
+	
+//	d2
+	public List<Map<String, Object>> selectClient2Goods(Map<String, Object> map){
+		return sqlSession.selectList("d2.selectClient2Goods", map);
+	}
+	
+	public List<Map<String, Object>> selectClient2Goodsd22(Map<String, Object> map){
+		return sqlSession.selectList("d2.selectClient2Goodsd22", map);
+	}
+	
+	public Map<String, Object> searchcld2(Map<String, Object> map) {
+		return sqlSession.selectOne("d2.searchcl", map);
+	}
+	
 }

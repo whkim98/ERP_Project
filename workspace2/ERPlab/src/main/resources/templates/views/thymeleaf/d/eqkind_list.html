@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>설비/장비종류조회</title>
+    
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/d/equipment.css" />
+</head>
+<body>
+     <div id="wrapper">
+            <div id="main">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="equipment_title">
+                                <span>상품조회</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="items">
+                            <td>
+                                <article class="post" th:each="eqkind_item : ${eqkind_list}">
+                                    <header>
+                                        <div class="title">
+                                            <h2>[[${eqkind_item.eqkind_name}]]</h2>
+                                            <p></p>
+                                            <p class="hidden">[[${eqkind_item.eqkind_no}]]</p>
+                                        </div>
+                                    </header>
+                                    <p class="content"></p>
+                                    <footer>
+                                        <ul class="actions">
+                                            <li>
+                                                <button class="button large eqkind_type_select_btn">
+													SELECT
+												</button>
+                                            </li>
+                                        </ul>
+                                    </footer>
+                                </article>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/d/d4/goods_list.js"></script>
+</body>
+</html>

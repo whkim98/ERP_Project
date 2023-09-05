@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ERP lab 고객관리</title>
+        <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+        <link rel="stylesheet" href="/css/c/customer.css" />
+    </head>
+    <body>
+        <div class="customer_container">
+            <h2 class="customer_title"><a th:href="@{/c/c43/customer}">고객관리</a></h2>
+            <div class="customer_body">
+                <div class="customer_regist">
+					<table class="customer_search">
+						<tr>
+							<td>
+								<select name="search_type" id="search_type">
+									<option value="all" selected>전체</option>
+									<option value="customer_no">코드</option>
+                                    <option value="csgrade_no">고객등급코드</option>
+									<option value="customer_name">고객명</option>
+									<option value="customer_addr1">도로명주소</option>
+									<option value="customer_addr2">상세주소</option>
+									<option value="customer_postal">우편번호</option>
+									<option value="customer_phone">전화번호</option>
+                                    <option value="customer_comment">비고</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" id="search_word" name="word" placeholder="검색어를 입력하세요" autocomplete="off">
+								<input type="button" value="전체목록" id="list_reset">
+							</td>
+						</tr>
+					</table>
+					<table id="search_result">
+                    <table class="customer_list">
+                        <tr class="customer_top">
+							<th class="sec1">코드</th>
+                            <th class="sec2">고객명</th>
+                            <th class="sec3">전화번호</th>
+                        </tr>
+                        <tr class="customer_items" th:each="customer_item : ${customer_list}">
+							<td>[[${customer_item.customer_no}]]</td>
+                            <td>[[${customer_item.customer_name}]]</td>
+                            <td>[[${customer_item.customer_phone}]]</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <hr class="vertical_line">
+                
+                <div class="regits_form">
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
+                    <form th:action="@{/d/d52/customer}" method="post" id="customer_frm">
+						<input type="hidden" name="customer_no" id="customer_no" th:value="${erp_CustomerVO?.customer_no}"/>
+						
+                        <div class="sec">
+                            <label for="csgrade_name">고객등급</label>
+                            <div class="csgrade_regist">
+                                <input
+                                    type="text"
+                                    name="csgrade_name"
+                                    id="csgrade_name"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="csgradelist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+                        
+						<input type="hidden" name="csgrade_no" id="csgrade_no" th:value="${erp_CustomerVO?.csgrade_no}"/>
+
+                        <div class="sec">
+                            <label for="customer_name">고객명</label>
+                            <input
+                                type="date"
+                                name="customer_name"
+                                id="customer_name"
+                                th:value="${erp_CustomerVO?.customer_name}"
+                            />
+                        </div>
+                      
+                	  	<div class="sec">
+                            <label for="customer_addr1">도로명주소</label>
+                            <input
+                                type="number"
+                                name="customer_addr1"
+                                id="customer_addr1"
+                                class="required"
+                                th:value="${erp_CustomerVO?.customer_addr1}"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="customer_addr2">상세주소</label>
+                            <input
+                                type="date"
+                                name="customer_addr2"
+                                id="customer_addr2"
+                                th:value="${erp_CustomerVO?.customer_addr2}"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="customer_postal">우편번호</label>
+                            <input
+                                type="date"
+                                name="customer_postal"
+                                id="customer_postal"
+                                th:value="${erp_CustomerVO?.customer_postal}"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="customer_phone">전화번호</label>
+                            <input
+                                type="date"
+                                name="customer_phone"
+                                id="customer_phone"
+                                th:value="${erp_CustomerVO?.customer_phone}"
+                            />
+                        </div>
+
+                        <div class="sec">
+                            <label for="customer_comment">비고</label>
+                            <input
+                                type="date"
+                                name="customer_comment"
+                                id="customer_comment"
+                                th:value="${erp_CustomerVO?.customer_comment}"
+                            />
+                        </div>
+                       
+ 						<div class="sec" id="new_btn_sec">
+                            <button type="reset">RESET</button>
+                            <button type="button" id="customer_save_btn">SAVE</button>
+                        </div>
+                        <div class="sec" id="old_btn_sec">
+							<button type="button" id="customer_delete_btn">DELETE</button>
+							<button type="button" id="customer_update_btn">UPDAET</button>
+						</div>
+						
+						<div id="errormsg" th:text="${error}"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/c/c4/customer.js"></script>
+        <script th:inline="javascript">
+			// 창고 리스트 검색 필터링 기능
+			let search_filter = (type,word) => {
+				if(word=="" || word==undefined || word==null) return null;
+				let searched_list = [];
+				let list = [[${customer_list}]];
+				
+				for(let i = 0 ; i < list.length; i++){
+					let json_data = JSON.stringify(list[i]);
+					let key_value = json_data.replace("{", "").replace("}", "").replace(/"/gi, "").split(",");
+					
+					for(let j = 0 ; j < key_value.length; j++) {
+						let key = key_value[j].split(":")[0];
+						let value = key_value[j].split(":")[1];	
+						if (type=="all") {
+							if(value==word) searched_list.push(list[i]);
+						}
+						else {
+							if(key==type && value==word) searched_list.push(list[i]);
+						}
+					}
+				}
+				return searched_list;
+			}
+			
+			// 창고리스트중 창고 클릭시 데이터값 전달 함수
+				let selected_vo = (tag) => {
+				let list = [[${customer_list}]];
+				let vo_no = tag.innerHTML;
+				for(let i = 0 ; i < list.length; i ++){
+					if (list[i].customer_no == vo_no){
+						document.getElementById("customer_no").value=list[i].customer_no;
+						document.getElementById("csgrade_name").value=list[i].csgrade_name;
+                        document.getElementById("csgrade_no").value=list[i].csgrade_no;
+						document.getElementById("customer_name").value=list[i].customer_name;
+						document.getElementById("customer_addr1").value=list[i].customer_addr1;
+						document.getElementById("customer_addr2").value=list[i].customer_addr2;
+						document.getElementById("customer_postal").value=list[i].customer_postal;
+                        document.getElementById("customer_phone").value=list[i].customer_phone;
+                        document.getElementById("customer_comment").value=list[i].customer_comment;
+					}
+				}
+			}
+		</script>
+    </body>
+</html>

@@ -24,11 +24,11 @@ private SqlSession sqlSession;
 	}
 	
 	public int updateRequestProduct(Erp_RequestproductVO vo) {
-		return sqlSession.insert("d1.updateRequestProduct", vo);
+		return sqlSession.update("d1.updateRequestProduct", vo);
 	}
 	
 	public int deleteRequestProduct(int requestproduct_no) {
-		return sqlSession.insert("d1.deleteRequestProduct", requestproduct_no);
+		return sqlSession.delete("d1.deleteRequestProduct", requestproduct_no);
 	}
 	
 	public List<Map<String, Object>> requestProductList(Map<String, Object> map){
@@ -37,6 +37,18 @@ private SqlSession sqlSession;
 	
 	public Map<String, Object> selectRequestProduct(int requestproduct_no){
 		return sqlSession.selectOne("d1.selectRequestProduct", requestproduct_no);
+	}
+	
+	public Map<String, Object> searchcl(Map<String, Object> map){
+		return sqlSession.selectOne("d1.searchcl", map);
+	}
+	
+	public Map<String, Object> searchecode(String employee1_code){
+		return sqlSession.selectOne("d1.searchecode", employee1_code);
+	}
+	
+	public int getRequestProductNo(String requestproduct_code) {
+		return sqlSession.selectOne("d1.getRequestProductNo",requestproduct_code);
 	}
 	
 }
