@@ -96,7 +96,7 @@ border: 0;
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="taxinvoice-container">
-    <h1>공정 재고 관리</h1>
+    <h1>발주 등록(원부자재)</h1>
     
     <div class="taxinvoice-lower">
         <c:if test="${inmap != null }">
@@ -106,7 +106,7 @@ border: 0;
         	<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
         	<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
         	<input type="hidden" name="order_no" id="order_no" value="${inmap.order_no }">
-        	<input type="hidden" name="order_type" id="order_type" value="${inmap.order_type }">
+        	<input type="hidden" name="order_type" id="order_type" value="1">
         	<input type="hidden" name="bs3_no11" id="bs3_no11" value="${cmap.bs3_no1 }">
         	<input type="hidden" name="bs3_no21" id="bs3_no21" value="${cmap.bs3_no2 }">
         	<input type="hidden" name="bs3_no12" id="bs3_no12">
@@ -121,17 +121,17 @@ border: 0;
         	</tr>
         	<tr>
         		<th>발주코드</th>
-        		<td><input type="text" name="order_code" id="order_code" value="${inmap.order_code }" readonly="readonly"></td>
+        		<td><input type="text" name="order_code" id="order_code" value="${inmap.order_code }" readonly="readonly" class="required"></td>
         		<th>입고 요청일</th>
         		<td><input type="text" name="order_schedule" id="order_schedule" value="${inmap.order_schedule }"></td>
         		<th>거래처</th>
-        		<td><input type="text" name="client_name" id="client_name" value="${cl.client_name }" onkeyup="searchcl(event, '${comcode_code}')"></td>
+        		<td><input type="text" name="client_name" id="client_name" value="${cl.client_name }" onkeyup="searchcl(event, '${comcode_code}')" class="required"></td>
         		<th>사업자등록번호</th>
         		<td><input type="text" name="client_registeredno" id="client_registeredno" value="${cl.client_registeredno }" readonly="readonly"></td>
         		<th>사업자등록번호</th>
         		<td><input type="text" name="company_registeredno" id="company_registeredno" value="${inmap.company_registeredno }" readonly="readonly" onclick="coList('${comcode_code}')"></td>
         		<th>지점명</th>
-        		<td><input type="text" name="company_name" id="company_name" value="${inmap.company_name }" readonly="readonly"></td>
+        		<td><input type="text" name="company_name" id="company_name" value="${inmap.company_name }" readonly="readonly" class="required"></td>
         	</tr>
         	<tr>
         		<th>발주상태</th>
@@ -156,7 +156,7 @@ border: 0;
         		<th>신청일</th>
         		<td><input type="date" name="order_odate" id="order_odate" value="${inmap.order_odate }"></td>
         		<th>마감일</th>
-        		<td><input type="date" name="order_end" id="order_end" value="${inmap.order_end }"></td>
+        		<td><input type="date" name="order_end" id="order_end" value="${inmap.order_end }" class="required"></td>
         		<th>업태</th>
         		<td><input type="text" name="businesstype_name" id="businesstype_name1" value="${cl.businesstype_name }" readonly="readonly"></td>
         		<th>업종</th>
@@ -203,7 +203,7 @@ border: 0;
         	<tr>
         		<th colspan="2">차변</th>
         		<td colspan="2">
-        			<select name="debtor_no" id="debtor_no" onchange="check12()">
+        			<select name="debtor_no" id="debtor_no" onchange="check12()" class="required">
         				<c:forEach var="vo1" items="${dlist }">
         					<option value="${vo1.debtor_no }" id="${vo1.bs3_no }" ${vo1.bs3_no == cmap.bs3_no1 ? 'selected' : '' }>${vo1.bs3_ctgr }</option>
         				</c:forEach>
@@ -211,7 +211,7 @@ border: 0;
         		</td>
         		<th colspan="2">대변</th>
         		<td colspan="2">
-        			<select name="creditor_no" id="creditor_no" onchange="check22()">
+        			<select name="creditor_no" id="creditor_no" onchange="check22()" class="required">
         				<c:forEach var="vo2" items="${clist }">
         					<option value="${vo2.creditor_no }" id="${vo2.bs3_no }" ${vo2.bs3_no == cmap.bs3_no2 ? 'selected' : '' }>${vo2.bs3_ctgr }</option>
         				</c:forEach>
@@ -222,8 +222,8 @@ border: 0;
          
          <div class="taxinvoice-contentItem">
          	<p>
-               <input type="button" id="addRow" value="품목추가">
-               <input type="button" id="deleteRow" value="품목삭제">
+               <input type="button" id="addRow" value="행추가">
+               <input type="button" id="deleteRow" value="행삭제">
          	</p>
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
@@ -265,8 +265,8 @@ border: 0;
 								<input type="text" name="crlist1[${status.index }].client_name2" id="crlist1[${status.index }].client_name2" value="${i.client_name2}" readonly="readonly">
 							</td>
 							<td><input type="text" name="crlist1[${status.index }].goodsst_ea" id="crlist1[${status.index }].goodsst_ea" value="${i.goodsst_ea }" readonly="readonly"></td>
-							<td><input type="text" min="0" name="oclist1[${status.index }].orderconnect_qty" id="oclist1[${status.index }].orderconnect_qty" value="${i.orderconnect_qty }" maxlength="4"></td>
-							<td><input type="text" min="0" name="oclist1[${status.index }].orderconnect_price" id="oclist1[${status.index }].orderconnect_price" value="${i.orderconnect_price }" onblur="conculator12(${status.index },this.value)" onkeyup="conculator22(${status.index },event, this.value)"></td>
+							<td><input type="text" min="0" name="oclist1[${status.index }].orderconnect_qty" id="oclist1[${status.index }].orderconnect_qty" value="${i.orderconnect_qty }" maxlength="4" class="required"></td>
+							<td><input type="text" min="0" name="oclist1[${status.index }].orderconnect_price" id="oclist1[${status.index }].orderconnect_price" value="${i.orderconnect_price }" onblur="conculator12(${status.index },this.value)" onkeyup="conculator22(${status.index },event, this.value)" class="required"></td>
 							<td><input type="text" name="oclist1[${status.index }].orderconnect_tax" id="oclist1[${status.index }].orderconnect_tax" value="${i.orderconnect_tax }" readonly="readonly"></td>
 							<td>
 								<input type="text" name="oclist1[${status.index }].orderconnect_total" id="oclist1[${status.index }].orderconnect_total" value="${i.orderconnect_total }" readonly="readonly">
@@ -297,8 +297,8 @@ border: 0;
         <form action="${pageContext.request.contextPath}/d/d2/d21/createOrder">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
         	<input type="hidden" name="company_no" id="company_no" value="1">
-        	<input type="hidden" name="team_no" id="team_no" value="1">
-        	<input type="hidden" name="client_no" id="client_no" value="17">
+        	<input type="hidden" name="team_no" id="team_no" value="17">
+        	<input type="hidden" name="client_no" id="client_no" value="1">
         	<input type="hidden" name="order_type" id="order_type" value="1">
         	<input type="hidden" name="bs3_no1" id="bs3_no1">
         	<input type="hidden" name="bs3_no2" id="bs3_no2">
@@ -314,19 +314,19 @@ border: 0;
         	<tr>
         		<th>발주코드</th>
         		<td>
-	        		<input type="text" name="order_code" id="order_code" onblur="code(this.value)">
+	        		<input type="text" name="order_code" id="order_code" onblur="code(this.value)" class="required">
 	        		<h6 id="ocode" style="color:red;"></h6>
         		</td>
         		<th>입고 요청일</th>
         		<td><input type="date" name="order_schedule" id="order_schedule"></td>
         		<th>거래처</th>
-        		<td><input type="text" name="client_name" id="client_name" onkeyup="searchcl(event, '${comcode_code}')"></td>
+        		<td><input type="text" name="client_name" id="client_name" onkeyup="searchcl(event, '${comcode_code}')" class="required"></td>
         		<th>사업자등록번호</th>
         		<td><input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly"></td>
         		<th>사업자등록번호</th>
         		<td><input type="text" name="company_registeredno" id="company_registeredno" onclick="coList('${comcode_code}')"></td>
         		<th>지점명</th>
-        		<td><input type="text" name="company_name" id="company_name" readonly="readonly"></td>
+        		<td><input type="text" name="company_name" id="company_name" readonly="readonly" class="required"></td>
         	</tr>
         	<tr>
         		<th>발주상태</th>
@@ -349,7 +349,7 @@ border: 0;
         	</tr>
         	<tr>
         		<th colspan="2">마감일</th>
-        		<td colspan="2"><input type="date" name="order_end" id="order_end"></td>
+        		<td colspan="2"><input type="date" name="order_end" id="order_end" class="required"></td>
         		<th>업태</th>
         		<td><input type="text" name="businesstype_name" id="businesstype_name1" readonly="readonly"></td>
         		<th>업종</th>
@@ -394,7 +394,7 @@ border: 0;
         	<tr>
         		<th colspan="3">차변</th>
         		<td colspan="3">
-        			<select name="debtor_no" id="debtor_no" onchange="check1()">
+        			<select name="debtor_no" id="debtor_no" onchange="check1()" class="required">
         				<option value="0">선택</option>
         				<c:forEach var="vo1" items="${dlist }">
         					<option value="${vo1.debtor_no }" id="${vo1.bs3_no }">${vo1.bs3_ctgr }</option>
@@ -403,7 +403,7 @@ border: 0;
         		</td>
         		<th colspan="3">대변</th>
         		<td colspan="3">
-        			<select name="creditor_no" id="creditor_no" onchange="check2()">
+        			<select name="creditor_no" id="creditor_no" onchange="check2()" class="required">
         				<option value="0">선택</option>
         				<c:forEach var="vo2" items="${clist }">
         					<option value="${vo2.creditor_no }" id="${vo2.bs3_no }">${vo2.bs3_ctgr }</option>
@@ -416,8 +416,8 @@ border: 0;
            
         <div class="taxinvoice-contentItem">
             <p>
-               <input type="button" id="addRow" value="품목추가">
-               <input type="button" id="deleteRow" value="품목삭제">
+               <input type="button" id="addRow" value="행추가">
+               <input type="button" id="deleteRow" value="행삭제">
             </p>
     
             <table class="taxinvoice-contentsBody" id="itemTable">
@@ -438,7 +438,7 @@ border: 0;
                     <th>총액</th>
                     <th>품목삭제</th>
                 </tr>
-               	<tr id="procode">
+               	<tr id="procode" class="plist">
 					<td><input type="button" onclick="goodsList1('${comcode_code}',0)" value="search"></td>
 					<td>
 						<input type="text" name="crlist[0].goods_name" id="crlist[0].goods_name" readonly="readonly">
@@ -452,8 +452,8 @@ border: 0;
 					<td><input type="text" name="crlist[0].client_name1" id="crlist[0].client_name1" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].client_name2" id="crlist[0].client_name2" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].goodsst_ea" id="crlist[0].goodsst_ea" readonly="readonly"></td>
-					<td><input type="text" min="0" name="oclist[0].orderconnect_qty" id="oclist[0].orderconnect_qty" maxlength="4"></td>
-					<td><input type="text" min="0" name="oclist[0].orderconnect_price" id="oclist[0].orderconnect_price" onblur="conculator11(0,this.value)" onkeyup="conculator21(0,event, this.value)"></td>
+					<td><input type="text" min="0" name="oclist[0].orderconnect_qty" id="oclist[0].orderconnect_qty" maxlength="4" class="required"></td>
+					<td><input type="text" min="0" name="oclist[0].orderconnect_price" id="oclist[0].orderconnect_price" onblur="conculator11(0,this.value)" onkeyup="conculator21(0,event, this.value)" class="required"></td>
 					<td><input type="text" name="oclist[0].orderconnect_tax" id="oclist[0].orderconnect_tax" readonly="readonly"></td>
 					<td><input type="text" name="oclist[0].orderconnect_total" id="oclist[0].orderconnect_total" readonly="readonly"></td>
 					<td>
@@ -488,29 +488,35 @@ var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
 document.getElementById("order_schedule").setAttribute("max", end+"-12-31");
 document.getElementById("order_end").setAttribute("max", end+"-12-31");
 
+var pat = /^[0-9]{0,8}$/;
+
 function sub(f){
-	var pat = /^[0-9]{0,8}$/;
 	var list = document.getElementById("itemTable");
-	var arr = list.getElementsByTagName('input');
-	for(var b = 0; b < arr.length; b++){
-		if(arr[b].value == ""){
-			console.log(arr.item(11).value);
+	var arr = null;
+	let tr = list.getElementsByClassName("plist");
+	for(let d = 0; d < tr.length; d++){
+		arr = tr[d].getElementsByTagName("input");
+		for(var b = 0; b < arr.length; b++){
+			if(arr[b].value == ""){
+				arr[b].focus();
+				return;
+			}
 			if(!pat.test(arr.item(12).value)){
 				arr.item(12).value = 0;
 				alert("금액은 100,000,000미만, 숫자만 입력 가능합니다.");
 				return;
-			}else if((arr.item(11).value * arr.item(12).value) > 99999999){
+			}
+			if(Number(arr.item(11).value * arr.item(12).value) > 99999999){
 				arr.item(12).value = 0;
 				arr.item(11).value = 0;
 				alert("한도가 초과됩니다.");
 				return;
-			}else if(!pat.test(arr.item(11).value)){
+			}
+			if(!pat.test(arr.item(11).value)){
 				arr.item(11).value = 0;
 				alert("숫자만 입력 가능합니다.");
 				return;
 			}
-			arr[b].focus();
-			return;
 		}
 	}
 	
@@ -619,7 +625,7 @@ const deleteRowButton = document.getElementById('deleteRow');
 
 var j = 0;
 addRowButton.addEventListener('click', function() {
-    if (itemTable.rows.length <= 16) {
+    if (itemTable.rows.length <= 100) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
         if(document.getElementById("crlist[0].goods_name")){
@@ -648,9 +654,9 @@ addRowButton.addEventListener('click', function() {
             } else if (i === 9){
                 cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_ea" id="crlist['+j+'].goodsst_ea" readonly="readonly"></td>';
             } else if (i === 10){
-                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_qty" id="oclist['+j+'].orderconnect_qty" maxlength="4"></td>';
+                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_qty" id="oclist['+j+'].orderconnect_qty" maxlength="4" class="required"></td>';
             } else if (i === 11){
-                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_price" id="oclist['+j+'].orderconnect_price" onblur="conculator11('+j+',this.value)" onkeyup="conculator21('+j+',event, this.value)"></td>';
+                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_price" id="oclist['+j+'].orderconnect_price" onblur="conculator11('+j+',this.value)" onkeyup="conculator21('+j+',event, this.value)" class="required"></td>';
             } else if (i === 12){
                 cells[i].innerHTML = '<td><input type="text" name="oclist['+j+'].orderconnect_tax" id="oclist['+j+'].orderconnect_tax" readonly="readonly"></td>';
             } else if (i === 13){
@@ -659,8 +665,13 @@ addRowButton.addEventListener('click', function() {
                 cells[i].innerHTML = '<td><input type="button" onclick="clearRow(this)" value="delete"></td>';
             }
         }
+        
+        for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
+            itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
+        }
+        
     } else {
-        alert('품목은 최대 16개까지 추가할 수 있습니다.');
+        alert('품목은 최대 100개까지 추가할 수 있습니다.');
     }
     
 });
@@ -670,11 +681,15 @@ deleteRowButton.addEventListener('click', function() {
     const rows = itemTable.getElementsByTagName('tr');
     
     if (itemTable.rows.length > 2) {
-    	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-1){
+    	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-2){
     		return;
     	}else{
-	    	j -= 1;
-	        itemTable.deleteRow(itemTable.rows.length-1);
+    		if(document.getElementById("crlist1["+(itemTable.rows.length-2)+"].goods_name")){
+    			return;
+    		}else{
+		    	j -= 1;
+		        itemTable.deleteRow(itemTable.rows.length-1);
+    		}
     	}
     } else {
         alert('품목은 1개 이하로 삭제할 수 없습니다.');
@@ -753,10 +768,10 @@ function deleteGoodscheck(){
 				newTd.innerHTML = '<input type="text" value="'+map.goodsst_ea+'" name="crlist1['+t+'].goodsst_ea" id="crlist1['+t+'].goodsst_ea">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" min="0" name="oclist1['+t+'].orderconnect_qty" id="oclist1['+t+'].orderconnect_qty" value="'+map.orderconnect_qty+'" maxlength="4">';
+				newTd.innerHTML = '<input type="text" min="0" name="oclist1['+t+'].orderconnect_qty" id="oclist1['+t+'].orderconnect_qty" value="'+map.orderconnect_qty+'" maxlength="4" class="required">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" min="0" name="oclist1['+t+'].orderconnect_price" id="oclist1['+t+'].orderconnect_price" value="'+map.orderconnect_price+'" onblur="conculator11('+t+',this.value)" onkeyup="conculator21('+t+',event, this.value)">';
+				newTd.innerHTML = '<input type="text" min="0" name="oclist1['+t+'].orderconnect_price" id="oclist1['+t+'].orderconnect_price" value="'+map.orderconnect_price+'" onblur="conculator11('+t+',this.value)" onkeyup="conculator21('+t+',event, this.value)" class="required">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="text" name="oclist1['+t+'].orderconnect_tax" id="oclist1['+t+'].orderconnect_tax" value="'+map.orderconnect_tax+'" readonly="readonly">';
@@ -871,28 +886,28 @@ function clName(){
 }
 
 function conculator11(k,v){
-	document.getElementById("oclist["+k+"].orderconnect_tax").value = Number(v) * 0.1;
+	document.getElementById("oclist["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
 	let tax = document.getElementById("oclist["+k+"].orderconnect_tax").value; 
-	document.getElementById("oclist["+k+"].orderconnect_total").value = Number(v) + Number(tax);
+	document.getElementById("oclist["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
 }
 function conculator21(k, e, v){
 	if(e.keyCode == 13){
-		document.getElementById("oclist["+k+"].orderconnect_tax").value = Number(v) * 0.1;
+		document.getElementById("oclist["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
 		let tax = document.getElementById("oclist["+k+"].orderconnect_tax").value; 
-		document.getElementById("oclist["+k+"].orderconnect_total").value = Number(v) + Number(tax);
+		document.getElementById("oclist["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
 	}
 }
 
 function conculator12(k,v){
-	document.getElementById("oclist1["+k+"].orderconnect_tax").value = Number(v) * 0.1;
+	document.getElementById("oclist1["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
 	let tax = document.getElementById("oclist1["+k+"].orderconnect_tax").value; 
-	document.getElementById("oclist1["+k+"].orderconnect_total").value = Number(v) + Number(tax);
+	document.getElementById("oclist1["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
 }
 function conculator22(k, e, v){
 	if(e.keyCode == 13){
-		document.getElementById("oclist1["+k+"].orderconnect_tax").value = Number(v) * 0.1;
+		document.getElementById("oclist1["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
 		let tax = document.getElementById("oclist1["+k+"].orderconnect_tax").value; 
-		document.getElementById("oclist1["+k+"].orderconnect_total").value = Number(v) + Number(tax);
+		document.getElementById("oclist1["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
 	}
 }
 

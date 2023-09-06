@@ -196,9 +196,9 @@ function getlist(){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.receivable_no}, ${map.bondbills_no }, ${map.bs3_no1}, ${map.bs3_no2 })" class="filter">
-						<td class="code">${map.receivable_cino }</td>
-						<td class="price">${map.bondbills_total }</td>
-						<td class="cont">${map.bondbills_date}</td>
+						<td>${map.receivable_cino }</td>
+						<td>${map.bondbills_total }</td>
+						<td>${map.bondbills_date}</td>
 						<td>${map.receivable_total}</td>
 					</tr>
 					</c:forEach>
@@ -255,18 +255,18 @@ function getlist(){
 						</div>
 						
 						<div>
-							<label>기간 </label>
-							<input type="date" name="receivable_expiry" id="receivable_expiry" value="${inmap.receivable_expiry }">
+							<label>만기도래일 </label>
+							<input type="date" name="receivable_expiry" id="receivable_expiry" value="${inmap.receivable_expiry }" readonly="readonly">
 						</div>
 						
 						<div>
 							<label>채권 총액 </label>
-							<input type="text" name="receivable_total" id="receivable_total" value="${inmap.receivable_total }">
+							<input type="text" name="receivable_total" id="receivable_total" value="${inmap.receivable_total }" readonly="readonly">
 						</div>
 						
 						<div>
 							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }">
+							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }" readonly="readonly">
 						</div>	
 						
 						<div>
@@ -281,7 +281,12 @@ function getlist(){
 						
 						<div>
 							<label>수금 총액 </label>
-							<td><input type="text" name="bondbills_total" id="bondbills_total" value="${inmap.bondbills_total }" readonly="readonly">
+							<input type="text" name="bondbills_total" id="bondbills_total" value="${inmap.bondbills_total }" readonly="readonly">
+						</div>
+						
+						<div>
+							<label>수금일자 </label>
+							<input type="date" name="bondbills_date" id="bondbills_date" class="required" value="${inmap.bondbills_date }">
 						</div>
 						
 						<div>
@@ -364,7 +369,8 @@ function getlist(){
 						
 						<div>
 							<label>수금액 </label>
-							<input type="text" name="bondbills_price" id="bondbills_price" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)" class="required">
+							<input type="text" name="bondbills_price" id="bondbills_price" onkeyup="conculator(event, this.value, ${rmap.receivable_no })" onblur="conculator1(this.value, ${rmap.receivable_no })" class="required">
+							<h6 id="billsprice" style="color:red;"></h6>
 						</div>
 						
 						<div>
@@ -379,7 +385,7 @@ function getlist(){
 						
 						<div>
 							<label>수금일자 </label>
-							<input type="text" name="bondbills_date" id="bondbills_date" class="required">
+							<input type="date" name="bondbills_date" id="bondbills_date" class="required">
 						</div>
 						
 						<div>
@@ -415,24 +421,56 @@ function getlist(){
 </div>
 <script type="text/javascript">
 
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+let expiry = document.getElementById("receivable_expiry").value;
+document.getElementById("bondbills_date").setAttribute("min", end+"-01-01");
+document.getElementById("bondbills_date").setAttribute("max", expiry);
+
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no1, no2, ino, code, rcode){
 	location.href='${pageContext.request.contextPath }/c/c2/c22/deleteBondbills?bondbills_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code+"&receivable_cino="+rcode;
 }
 
-function conculator(e, v){
+function conculator(e, v, no){
 	if(e.keyCode == 13){
-		document.getElementById("bondbills_tax").value = Number(v) * 0.1;
-		let tax = document.getElementById("bondbills_tax").value; 
-		document.getElementById("bondbills_total").value = Number(v) + Number(tax);
+		var url = "${pageContext.request.contextPath }/c/c2/c22/billsTotalCheck";
+		var param = "total="+encodeURIComponent(v)+"&receivable_no="+encodeURIComponent(no);
+		
+		sendRequest(url,param,billsCheck,"POST");
+	}
+}
+function conculator1(v, no){
+	var url = "${pageContext.request.contextPath }/c/c2/c22/billsTotalCheck";
+	var param = "total="+encodeURIComponent(v)+"&receivable_no="+encodeURIComponent(no);
+	
+	sendRequest(url,param,billsCheck,"POST");
+}
+
+function billsCheck(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.responseText;
+		if(data == ""){	
+			document.getElementById("billsprice").innerText = '';
+			let price = document.getElementById("bondbills_price").value;
+			document.getElementById("bondbills_tax").value = Math.round(Number(price) * 0.1);
+			let tax = document.getElementById("bondbills_tax").value; 
+			document.getElementById("bondbills_total").value = Math.round(Number(price) + Number(tax));
+			document.getElementById("register").disabled = false;
+		}else {
+			document.getElementById("bondbills_price").value = '';
+			document.getElementById("bondbills_total").value = '';
+			document.getElementById("bondbills_tax").value = '';
+			document.getElementById("register").disabled = true;
+			document.getElementById("billsprice").innerText = data;
+		}
 	}
 }
 
-function conculator1(v){
-	document.getElementById("bondbills_tax").value = Number(v) * 0.1;
-	let tax = document.getElementById("bondbills_tax").value; 
-	document.getElementById("bondbills_total").value = Number(v) + Number(tax);
-}
 
 
 //	bs3_no 세팅
@@ -485,12 +523,6 @@ function sub(f, total){
 	if(f.bondbills_price.value == ""){
 		f.bondbills_price.focus();
 		return;
-	}else if(f.bondbills_tax.value == ""){
-		f.bondbills_tax.focus();
-		return;
-	}else if(f.bondbills_total.value == ""){
-		f.bondbills_total.focus();
-		return;
 	}else if(f.debtor_no.value == 0){
 		f.debtor_no.focus();
 		return;
@@ -504,18 +536,20 @@ function sub(f, total){
 	}else if(f.bondbills_date.value == ""){
 		f.bondbills_date.focus();
 		return;
-	}else if(!pat.test(f.bondbills_price.value)){
-		alert("채권 금액인 "+total+"원 미만, 숫자만 입력 가능합니다.");
+	}
+	if(!pat.test(f.bondbills_price.value)){
+		alert("숫자만 입력 가능합니다.");
 		f.bondbills_price.focus();
 		return;
-	}else {
-		var ch = confirm("등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			return;
-		}
 	}
+	
+	var ch = confirm("등록하시겠습니까?");
+	if(ch){
+		f.submit();
+	}else {
+		return;
+	}
+	
 }
 
 //코드 UNIQUE 검사 AJAX

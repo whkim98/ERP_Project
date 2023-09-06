@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,6 +35,7 @@ import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c2.Erp_ReturnVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
 
 import jakarta.servlet.AsyncContext;
 import jakarta.servlet.DispatcherType;
@@ -143,17 +145,9 @@ public class C2Controller {
 		
 		vo.setComcode_no(comcode_no);
 		
-		int insert = c2.createClient(vo);
-		if(insert == 0) {
-			msg = "추가 실패";
-			url = "redirect:/c/c2/c21?comcode_code="+comcode_code;
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			return "redirect:/c/c2/c21?comcode_code="+comcode_code;
-		}
+		c2.createClient(vo);
+		
+		return "redirect:/c/c2/c21?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/c21/updateForm")
@@ -213,18 +207,9 @@ public class C2Controller {
 		
 		vo.setComcode_no(comcode_no);
 		
-		int update = c2.updateClient(vo);
+		c2.updateClient(vo);
 		
-		if(update == 0) {
-			msg = "수정 실패";
-			url = "redirect:/c/c2/c21/updateForm?comcode_code="+comcode_code+"&client_no="+vo.getClient_no();
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			return "redirect:/c/c2/c21/updateForm?comcode_code="+comcode_code+"&client_no="+vo.getClient_no();
-		}
+		return "redirect:/c/c2/c21/updateForm?comcode_code="+comcode_code+"&client_no="+vo.getClient_no();
 	}
 	
 	@RequestMapping("/c21/delete")
@@ -242,18 +227,9 @@ public class C2Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		int delete = c2.deleteClient(vo.getClient_no());
+		c2.deleteClient(vo.getClient_no());
 		
-		if(delete == 0) {
-			msg = "삭제 실패";
-			url = "redirect:/c/c2/c21/updateForm?comcode_code="+comcode_code+"&client_no="+vo.getClient_no();
-			
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			return "redirect:/c/c2/c21?comcode_code="+comcode_code;
-		}
+		return "redirect:/c/c2/c21?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping(value = "/c21/registeredno", produces = "application/text;charset=utf8")
@@ -772,7 +748,6 @@ public class C2Controller {
 	@Transactional
 	public String createBondbills(String comcode_code, String bs3_no1, String bs3_no2, Model model, 
 			Erp_BondbillsVO vo, String receivable_cino, String debtor_no, String creditor_no) {
-		Map<String, Object> inmap = c2.selectReceivable(vo.getReceivable_no());
 		
 		String msg = null;
 		String url = null;
@@ -815,14 +790,6 @@ public class C2Controller {
 		
 		c2.inputBills(vo);
 		
-		Erp_BondbillsVO getbills = c2.getBillsTotal(vo.getReceivable_no());
-		if(getbills.getBondbills_total() > (int)inmap.get("receivable_total")) {
-			msg = "총 채권금액에 초과합니다. 다시 확인해주세요.";
-			url = "/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
-			
-			return ViewPath.RESULT + "loginresult";
-		}
-		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		cvo.setClosing_code(receivable_cino);
 		cvo.setCtgr_no(36);
@@ -858,6 +825,18 @@ public class C2Controller {
 		c2.updateBs1Amount(map);
 		
 		return "redirect:/c/c2/c22/inputBondbills?comcode_code="+comcode_code+"&receivable_no="+vo.getReceivable_no();
+	}
+	
+	@RequestMapping(value="/c22/billsTotalCheck",produces = "application/text;charset=utf8")
+	@ResponseBody
+	public String billsTotalCheck(Erp_ReceivableVO vo, String total) {
+		Map<String, Object> inmap = c2.selectReceivable(vo.getReceivable_no());
+		if(Integer.parseInt(total) > (int)inmap.get("receivable_total")) {
+			
+			return "총 채권 금액을 초과합니다. 다시 입력해주세요.";
+		}else {
+			return "";
+		}
 	}
 	
 	@RequestMapping("/c22/updateFormB")
@@ -1190,8 +1169,7 @@ public class C2Controller {
 	
 	@RequestMapping("/c23/createReturn")
 	@Transactional
-	public String createReturn(Erp_ReturnVO vo, String comcode_code, Model model, 
-			String bs3_no1, String bs3_no2) {
+	public String createReturn(Erp_ReturnVO vo, String comcode_code, Model model) {
 		String msg = null;
 		String url = null;
 		
@@ -1523,8 +1501,7 @@ public class C2Controller {
 	@Transactional
 	public String createLocalSales(Erp_LocalsalesVO vo, String comcode_code, Model model, 
 			String bs3_no1, String bs3_no2, String debtor_no, String creditor_no, 
-			String[] goods_no, String[] salesgoods_qty, String[] salesgoods_price, 
-			String[] salesgoods_tax, String[] salesgoods_total) {
+			Erp_SalesgoodsVO svo, String[] goods_no) {
 		String msg = null;
 		String url = null;
 		
@@ -1564,40 +1541,40 @@ public class C2Controller {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
-		for(int i = 0; i < goods_no.length; i++) {
-			int gno = 0;
-			int qty = 0;
-			int price = 0;
-			int tax = 0;
-			int total = 0;
-			Erp_SalesgoodsVO svo = new Erp_SalesgoodsVO();
-			if(goods_no[i] == "") {
-				gno = 31;
-			}else {
-				gno = Integer.parseInt(goods_no[i]);
-			}
-			if(salesgoods_qty[i] != "") {
-				qty = Integer.parseInt(salesgoods_qty[i]);
-			}
-			if(salesgoods_price[i] != "") {
-				price = Integer.parseInt(salesgoods_price[i]);
-			}
-			if(salesgoods_tax[i] != "") {
-				tax = Integer.parseInt(salesgoods_tax[i]);
-			}
-			if(salesgoods_total[i] != "") {
-				total = Integer.parseInt(salesgoods_total[i]);
-			}
-			svo.setSalesgoods_price(price);
-			svo.setSalesgoods_tax(tax);
-			svo.setSalesgoods_total(total);
-			svo.setSalesgoods_code(vo.getLocalsales_cino());
-			svo.setGoods_no(gno);
-			svo.setSalesgoods_qty(qty);
+		int sum = 0;
+		int qty = 0;
+		
+		int i = 0;
+		
+		List<Erp_SalesgoodsVO> sglist = svo.getSglist();
+		for(Erp_SalesgoodsVO sgvo : sglist) {
+			sgvo.setSalesgoods_code(vo.getLocalsales_cino());
+			sum += sgvo.getSalesgoods_price() * sgvo.getSalesgoods_qty();
 			c2.inputSalesGoods(svo);
+			
+			Erp_GoodslotVO glvo = new Erp_GoodslotVO();
+			glvo.setGoodslot_no(sgvo.getGoodslot_no());
+			glvo.setGoodslot_qty(sgvo.getSalesgoods_qty());
+			c2.updateLotQtySub(glvo);
+			
+			Erp_GoodsVO gvo = new Erp_GoodsVO();
+			gvo.setGoods_no(Integer.parseInt(goods_no[i]));
+			gvo.setGoods_stockqty(sgvo.getSalesgoods_qty());
+			c2.updateGoodsSub(gvo);
+			
+			qty += sgvo.getSalesgoods_qty();
+			
+			i += 1;
 		}
 		
+		double tax = sum * 0.1;
+		int total = (int)tax + sum;
+		
+		vo.setLocalsales_qty(qty);
 		vo.setComcode_no(comcode_no);
+		vo.setLocalsales_price(sum);
+		vo.setLocalsales_tax((int)tax);
+		vo.setLocalsales_total(total);
 		
 		c2.inputLocalSales(vo);
 		
@@ -1681,8 +1658,7 @@ public class C2Controller {
 	public String updateLocalSales(Model model, String comcode_code, Erp_LocalsalesVO vo, 
 			String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, 
 			String debtor_no, String creditor_no, 
-			String[] goods_no, String[] salesgoods_qty, String[] salesgoods_price, 
-			String[] salesgoods_tax, String[] salesgoods_total) {
+			Erp_SalesgoodsVO svo) {
 		String msg = null;
 		String url = null;
 		
@@ -1733,40 +1709,75 @@ public class C2Controller {
 		
 		int cno = c2.getClosingNo(vo.getLocalsales_cino());
 		
-		c2.updateLocalSales(vo);
+		List<Erp_SalesgoodsVO> sglist = svo.getSglist();
+		List<Erp_SalesgoodsVO> sglist1 = svo.getSglist1();
+		List<Map<String, Object>> sgmap = c2.getSalesGoods(vo.getLocalsales_cino());
 		
-		for(int i = 0; i < goods_no.length; i++) {
-			int gno = 0;
-			int qty = 0;
-			int price = 0;
-			int tax = 0;
-			int total = 0;
-			Erp_SalesgoodsVO svo = new Erp_SalesgoodsVO();
-			if(goods_no[i] == "") {
-				gno = 31;
-			}else {
-				gno = Integer.parseInt(goods_no[i]);
+		int qty = 0;
+		int sum = 0;
+		int i = 0;
+		
+		if(sglist1 != null) {
+			for(Erp_SalesgoodsVO sgvo : sglist1) {
+				Erp_GoodsVO gvo = new Erp_GoodsVO();
+				Erp_GoodslotVO glvo = new Erp_GoodslotVO();
+				
+				gvo.setGoods_no((int)sgmap.get(i).get("goods_no"));
+				gvo.setGoods_stockqty((int)sgmap.get(i).get("salesgoods_qty"));
+				c2.updateGoodsOne(gvo);
+				gvo.setGoods_no((int)sgmap.get(i).get("goods_no"));
+				gvo.setGoods_stockqty(sgvo.getSalesgoods_qty());
+				c2.updateGoodsSub(gvo);
+				
+				glvo.setGoodslot_qty((int)sgmap.get(i).get("salesgoods_qty"));
+				glvo.setGoodslot_no(sgvo.getGoodslot_no());
+				c2.updateLotQtyOne(glvo);
+				glvo.setGoodslot_qty(sgvo.getSalesgoods_qty());
+				glvo.setGoodslot_no(sgvo.getGoodslot_no());
+				c2.updateLotQtySub(glvo);
+				
+				sum += sgvo.getSalesgoods_price() * sgvo.getSalesgoods_qty();
+				qty += sgvo.getSalesgoods_qty();
+				
+				sgvo.setSalesgoods_code(vo.getLocalsales_cino());
+				c2.updateSGNo(svo);
+				
+				i += 1;
 			}
-			if(salesgoods_qty[i] != "") {
-				qty = Integer.parseInt(salesgoods_qty[i]);
-			}
-			if(salesgoods_price[i] != "") {
-				price = Integer.parseInt(salesgoods_price[i]);
-			}
-			if(salesgoods_tax[i] != "") {
-				tax = Integer.parseInt(salesgoods_tax[i]);
-			}
-			if(salesgoods_total[i] != "") {
-				total = Integer.parseInt(salesgoods_total[i]);
-			}
-			svo.setSalesgoods_price(price);
-			svo.setSalesgoods_tax(tax);
-			svo.setSalesgoods_total(total);
-			svo.setSalesgoods_code(vo.getLocalsales_cino());
-			svo.setGoods_no(gno);
-			svo.setSalesgoods_qty(qty);
-			c2.updateSGNo(svo);
 		}
+		
+		if(sglist != null) {
+			for(Erp_SalesgoodsVO sgvo : sglist) {
+				Erp_GoodsVO gvo = new Erp_GoodsVO();
+				Erp_GoodslotVO glvo = new Erp_GoodslotVO();
+				
+				sgvo.setSalesgoods_code(vo.getLocalsales_cino());
+				sum += sgvo.getSalesgoods_price() * sgvo.getSalesgoods_qty();
+				c2.inputSalesGoods(sgvo);
+				
+				glvo.setGoodslot_no(sgvo.getGoodslot_no());
+				glvo.setGoodslot_qty(sgvo.getSalesgoods_qty());
+				c2.updateLotQtySub(glvo);
+				
+				gvo.setGoods_no((int)sgmap.get(i).get("goods_no"));
+				gvo.setGoods_stockqty(sgvo.getSalesgoods_qty());
+				c2.updateGoodsSub(gvo);
+				
+				qty += sgvo.getSalesgoods_qty();
+				
+				i += 1;
+			}
+		}
+		
+		double tax = sum * 0.1;
+		int total = (int)tax + sum;
+		
+		vo.setLocalsales_tax((int)tax);
+		vo.setLocalsales_total(total);
+		vo.setLocalsales_price(sum);
+		vo.setLocalsales_qty(qty);
+		
+		c2.updateLocalSales(vo);
 		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		cvo.setClosing_code(vo.getLocalsales_cino());

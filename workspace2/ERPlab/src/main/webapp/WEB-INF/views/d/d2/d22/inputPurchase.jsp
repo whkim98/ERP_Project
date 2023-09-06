@@ -63,14 +63,14 @@ border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
-function surf(v, code, no){
+function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
 	if(v == ''){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type+"&receivable_no="+no;
+	var url = "${pageContext.request.contextPath}/d/d2/d22/inputPurchaseAjax";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
 }
@@ -81,28 +81,34 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
+		procode.innerHTML += '<tr><td>매입코드</td><td>담당자</td><td>담당팀</td><td>차변</td><td>대변</td><td>매입일자</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				newTr.setAttribute("onclick", "selectForm("+map.purchase_no+",'"+map.purchase_code+"')");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
+				newTd.innerHTML = map.purchase_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
+				newTd.innerHTML = map.employee1_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
+				newTd.innerHTML = map.team_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
+				newTd.innerHTML = map.closing_debtor;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.closing_creditor;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.purchase_date;
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="6">목록이 없습니다.</td></tr>';
 		}
 	}
 }
@@ -126,8 +132,8 @@ function getlist(){
 							</select>
 						</td>
 						<td>
-							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}', ${rmap.receivable_no })">
-							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}', ${rmap.receivable_no })">
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
+							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
 						</td>
 					</tr>
 				</table>
@@ -137,7 +143,7 @@ function getlist(){
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
-						<td>생산코드</td>
+						<td>매입코드</td>
 						<td>담당자</td>
 						<td>담당팀</td>
 						<td>차변</td>
@@ -146,12 +152,12 @@ function getlist(){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.purchase_no}, '${map.purchase_code }')" class="filter">
-						<td class="code">${map.purchase_code }</td>
-						<td class="cont">${map.employee1_name}</td>
+						<td>${map.purchase_code }</td>
+						<td>${map.employee1_name}</td>
 						<td>${map.team_name}</td>
 						<td>${map.closing_debtor}</td>
 						<td>${map.closing_creditor}</td>
-						<td class="price">${map.purchase_date }</td>
+						<td>${map.purchase_date }</td>
 					</tr>
 					</c:forEach>
 				</c:if>

@@ -195,10 +195,6 @@ function clList(code){
 						<input type="hidden" name="return_no" value="${inmap.return_no }">
 						<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
 						<input type="hidden" name="goodslot_no" id="goodslot_no" value="${inmap.goodslot_no }">
-						<input type="hidden" name="bs3_no11" id="bs3_no11" value="${bs3_no1 }">
-						<input type="hidden" name="bs3_no21" id="bs3_no21" value="${bs3_no2 }">
-						<input type="hidden" name="bs3_no12" id="bs3_no12">
-						<input type="hidden" name="bs3_no22" id="bs3_no22">
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -238,32 +234,32 @@ function clList(code){
 						
 						<div>
 							<label>날짜 </label>
-							<input type="date" name="return_date" id="return_date" value="${inmap.return_date }" max="2023-01-01">
+							<input type="date" name="return_date" id="return_date" value="${inmap.return_date }">
 						</div>
 						
 						<div>
 							<label>수량 </label>
-							<input type="text" name="return_qty" id="return_qty" value="${inmap.return_qty }" class="required">
+							<input type="text" name="return_qty" id="return_qty" value="${inmap.return_qty }" class="required" onkeypress="conculator(event, this.value)" onblur="conculator1(this.value)">
 						</div>				
 						
 						<div>
 							<label>제조사 </label>
-							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }" class="required">
+							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }" class="required" readonly="readonly">
 						</div>	
 						
 						<div>
 							<label>금액</label>
-							<input type="text" name="return_price" id="return_price" value="${inmap.return_price }" onkeypress="conculator(event, this.value)" onblur="conculator1(this.value)" class="required">
+							<input type="text" name="return_price" id="return_price" value="${inmap.return_price }" class="required">
 						</div>
 						
 						<div>
 							<label>세액</label>
-							<input type="text" name="return_tax" id="return_tax" value="${inmap.return_tax }" class="required">
+							<input type="text" name="return_tax" id="return_tax" value="${inmap.return_tax }" class="required" readonly="readonly">
 						</div>
 						
 						<div>
 							<label>반품 총액</label>
-							<input type="text" name="return_total" id="return_total" value="${inmap.return_total }" class="required">
+							<input type="text" name="return_total" id="return_total" value="${inmap.return_total }" class="required" readonly="readonly">
 						</div>
 						
 						<div align="right">
@@ -277,8 +273,6 @@ function clList(code){
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="client_no" id="client_no" value="17">
 						<input type="hidden" name="goodslot_no" id="goodslot_no" value="1">
-						<input type="hidden" name="bs3_no1" id="bs3_no1">
-						<input type="hidden" name="bs3_no2" id="bs3_no2">
 							<h3>반품 등록 사항</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
@@ -315,7 +309,7 @@ function clList(code){
 						
 						<div>
 							<label>제조사 </label>
-							<input type="text" name="client_name" id="client_name" class="required">
+							<input type="text" name="client_name" id="client_name" class="required" readonly="readonly">
 						</div>	
 						
 						<div>
@@ -340,12 +334,12 @@ function clList(code){
 						
 						<div>
 							<label>세액</label>
-							<input type="text" name="return_tax" id="return_tax" class="required">
+							<input type="text" name="return_tax" id="return_tax" class="required" readonly="readonly">
 						</div>
 						
 						<div>
 							<label>반품 총액</label>
-							<input type="text" name="return_total" id="return_total" class="required">
+							<input type="text" name="return_total" id="return_total" class="required" readonly="readonly">
 						</div>
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
@@ -359,6 +353,44 @@ function clList(code){
 	
 </div>
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+document.getElementById("return_date").setAttribute("min", end+"-01-01");
+document.getElementById("return_date").setAttribute("max", end+"-12-31");
+
+
+function conculator(e, v){
+	if(e.keyCode == 13){
+		let lot = document.getElementById("goodslot_total").value;
+		if(lot == ""){
+			alert("제품을 먼저 선택해주세요.");
+			return;
+		}
+		document.getElementById("return_price").value = Math.round(Number(v) * Number(lot));
+		document.getElementById("return_tax").value = Math.round(Number(v) * 0.1);
+		let tax = document.getElementById("return_tax").value; 
+		let price = document.getElementById("return_price").value; 
+		document.getElementById("return_total").value = Math.round(Number(price) + Number(tax));
+	}
+}
+
+function conculator1(v){
+	let lot = document.getElementById("goodslot_total").value;
+	if(lot == ""){
+		alert("제품을 먼저 선택해주세요.");
+		return;
+	}
+	document.getElementById("return_price").value = Math.round(Number(v) * Number(lot));
+	document.getElementById("return_tax").value = Math.round(Number(v) * 0.1);
+	let tax = document.getElementById("return_tax").value; 
+	let price = document.getElementById("return_price").value; 
+	document.getElementById("return_total").value = Math.round(Number(price) + Number(tax));
+}
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(recode, ino, code){
@@ -389,50 +421,6 @@ function returncodecheck(){
 		}
 	}
 }
-
-
-//	bs3_no 세팅
-	function check1(){
-		let t = document.getElementById("debtor_no");
-		let arr = document.querySelectorAll("#debtor_no > option");
-		let bs3_no1 = document.getElementById("bs3_no1");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){	
-				bs3_no1.value = e.id;
-			}
-		});
-	}
-	function check2(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no2");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
-	
-	function check12(){
-		let t = document.getElementById("debtor_no");
-		let arr = document.querySelectorAll("#debtor_no > option");
-		let bs3_no1 = document.getElementById("bs3_no12");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no1.value = e.id;
-			}
-		});
-	}
-	function check22(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no22");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
 
 	
 // submit 유효성 검사

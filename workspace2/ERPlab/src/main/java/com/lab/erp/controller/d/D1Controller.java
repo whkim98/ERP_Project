@@ -638,9 +638,11 @@ public class D1Controller {
 	@RequestMapping("/d11/createProduct")
 	@Transactional
 	public String createProduct(Erp_ProductVO vo, String bs3_no1, String bs3_no2, String debtor_no, String creditor_no,
-			String comcode_code, Model model, String[] qty) {
+			String comcode_code, Model model) {
 		String msg = null;
 		String url = null;
+		
+		System.out.println(comcode_code);
 		
 		if(comcode_code == null || comcode_code.isEmpty()) {
 			request.getSession().invalidate();
@@ -652,18 +654,6 @@ public class D1Controller {
 		}
 		
 		int comcode_no = ls.comNo(comcode_code);
-		
-		int sum = 0;
-		
-		for(int i = 0; i < qty.length; i++) {
-			if(qty[i] != null) {
-				sum += Integer.parseInt(qty[i]);
-			}else {
-				sum += 0;
-			}
-		}
-		
-		vo.setProduct_qty(sum);
 		
 		vo.setComcode_no(comcode_no);
 		
@@ -729,36 +719,6 @@ public class D1Controller {
 		d1.updateBs2Amount(map);
 		d1.updateBs3Amount(map);
 		
-		int pno = d1.getProductCode(vo.getProduct_code());
-		List<Map<String, Object>> list = d1.selectRequestGoods(vo.getRequestproduct_no());
-		map = d1.selectProduct(pno);
-		
-		int lotqty = 0;
-		
-		for(int i = 0; i < list.size(); i++) {
-			Erp_GoodslotVO lvo = new Erp_GoodslotVO();
-			
-			int goodsno = d1.goodsno((String)list.get(i).get("goods_code"));
-			int lotprice = (int)list.get(i).get("goodslot_price");
-			double tax = lotprice * 0.1;
-			int total = lotprice + (int)tax;
-			if(qty[i] != null) {
-				lotqty = Integer.parseInt(qty[i]);
-			}else {
-				lotqty = 0;
-			}
-			
-			lvo.setGoodslot_qty(lotqty);
-			lvo.setGoodslot_lot((String)map.get("product_lot"));
-			lvo.setGoods_no(goodsno);
-			lvo.setGoodslot_price(lotprice);
-			lvo.setGoodslot_tax((int)tax);
-			lvo.setGoodslot_total(total);
-			lvo.setGoodslot_expiry("9999-01-01");
-			
-			d1.createGoodsLot(lvo);
-		}
-		
 		
 		return "redirect:/d/d1/d11/inputProduct?comcode_code"+comcode_code;
 	}
@@ -766,7 +726,7 @@ public class D1Controller {
 	@RequestMapping(value="/d11/update", produces = "application/text;charset=utf8")
 	@Transactional
 	public String updateProduct(String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, 
-			String debtor_no, String creditor_no, Model model, String comcode_code, Erp_ProductVO vo, String[] qty) {
+			String debtor_no, String creditor_no, Model model, String comcode_code, Erp_ProductVO vo) {
 		String msg = null;
 		String url = null;
 		
@@ -818,18 +778,6 @@ public class D1Controller {
 		}else {
 			b22 = Integer.parseInt(bs3_no22);
 		}
-		
-		int sum = 0;
-		
-		for(int i = 0; i < qty.length; i++) {
-			if(qty[i] != null) {
-				sum += Integer.parseInt(qty[i]);
-			}else {
-				sum += 0;
-			}
-		}
-		
-		vo.setProduct_qty(sum);
 		
 		d1.updateProduct(vo);
 		
@@ -890,26 +838,6 @@ public class D1Controller {
 		d1.updateBs1Amount(map);
 		d1.updateBs2Amount(map);
 		d1.updateBs3Amount(map);
-		
-		List<Map<String, Object>> list = d1.selectRequestGoods(vo.getRequestproduct_no());
-		
-		int lotqty = 0;
-		List<Integer> glno = d1.getLotNo((String)imap.get("product_lot"));
-		for(int i = 0; i < list.size(); i++) {
-			Erp_GoodslotVO lvo = new Erp_GoodslotVO();
-			
-			if(qty[i] != null) {
-				lotqty = Integer.parseInt(qty[i]);
-			}else {
-				lotqty = 0;
-			}
-			
-			lvo.setGoodslot_no(glno.get(i));
-			lvo.setGoodslot_qty(lotqty);
-			lvo.setGoodslot_lot(vo.getProduct_lot());
-			
-			d1.updateLotQty(lvo);
-		}
 		
 		String code = URLEncoder.encode(vo.getProduct_code());
 		
@@ -1071,6 +999,9 @@ public class D1Controller {
 			}
 			
 			String no = d1.getLotNo1(goodslot_lot);
+			if(no == null) {
+				throw new Exception();
+			}
 			
 			return "이미 존재하는 코드입니다.";
 		}catch(Exception e) {
@@ -1178,7 +1109,7 @@ public class D1Controller {
 	@RequestMapping("/d14/goodsAjax")
 	@ResponseBody
 	public List<Map<String, Object>> lotAjax(Erp_ProductVO vo){
-		List<Map<String, Object>> list = d1.productLot(vo.getProduct_no());
+		List<Map<String, Object>> list = d1.selectRequestGoods(vo.getRequestproduct_no());
 		
 		if(list.isEmpty()) {
 			list = null;
@@ -1224,7 +1155,8 @@ public class D1Controller {
 	@RequestMapping("/d14/createEvaluation")
 	@Transactional
 	public String createEvaluation(Erp_EvaluationVO vo, String comcode_code, Model model, 
-			String[] defective_comment, String[] defective_number, String product_lot) {
+			String[] defective_comment, String[] defective_number, Erp_ProductVO pvo, 
+			String[] lotconnev_qty) {
 		String msg = null;
 		String url = null;
 		
@@ -1241,7 +1173,37 @@ public class D1Controller {
 		
 		d1.createEvaluation(vo);
 		
-		List<Integer> glno = d1.getLotNo(product_lot);
+		List<Map<String, Object>> list = d1.selectRequestGoods(vo.getRequestproduct_no());
+		Map<String, Object> map = d1.selectProduct(pvo.getProduct_no());
+		
+		int lotqty = 0;
+		
+		
+		for(int i = 0; i < list.size(); i++) {
+			Erp_GoodslotVO lvo = new Erp_GoodslotVO();
+			
+			int goodsno = d1.goodsno((String)list.get(i).get("goods_code"));
+			int lotprice = (int)list.get(i).get("goodslot_price");
+			double tax = lotprice * 0.1;
+			int total = lotprice + (int)tax;
+			if(lotconnev_qty[i] != null) {
+				lotqty = Integer.parseInt(lotconnev_qty[i]);
+			}else {
+				lotqty = 0;
+			}
+			
+			lvo.setGoodslot_qty(lotqty);
+			lvo.setGoodslot_lot(pvo.getProduct_lot());
+			lvo.setGoods_no(goodsno);
+			lvo.setGoodslot_price(lotprice);
+			lvo.setGoodslot_tax((int)tax);
+			lvo.setGoodslot_total(total);
+			lvo.setGoodslot_expiry("9999-01-01");
+			
+			d1.createGoodsLot(lvo);
+		}
+		
+		List<Integer> glno = d1.getLotNo(pvo.getProduct_lot());
 		for(int i = 0; i < defective_comment.length; i++) {
 			Erp_DefectiveVO dvo = new Erp_DefectiveVO();
 			
@@ -1253,6 +1215,17 @@ public class D1Controller {
 			
 			d1.createDefective(dvo);
 			
+			if(lotconnev_qty[i] != null) {
+				lotqty = Integer.parseInt(lotconnev_qty[i]);
+			}else {
+				lotqty = 0;
+			}
+			Erp_LotconnevVO lcvo = new Erp_LotconnevVO();
+			lcvo.setEvaluation_no(d1.getEvalueationNo());
+			lcvo.setGoodslot_no(glno.get(i));
+			lcvo.setLotconnev_qty(lotqty);
+			
+			d1.createLotEv(lcvo);
 		}
 		
 		return "redirect:/d/d1/d14/inputEvaluation?comcode_code="+comcode_code;
@@ -1261,7 +1234,10 @@ public class D1Controller {
 	@RequestMapping("/d14/update")
 	@Transactional
 	public String updateEvaluation(Erp_EvaluationVO vo, String comcode_code, Model model, 
-			String[] defective_comment, String[] defective_number) {
+			String[] defective_comment, String[] defective_number, String[] lotconnev_qty, 
+			Erp_ProductVO pvo) {
+		Map<String, Object> imap = d1.selectProduct(pvo.getProduct_no());
+		
 		String msg = null;
 		String url = null;
 		
@@ -1290,7 +1266,35 @@ public class D1Controller {
 			}
 			
 			d1.updateDefective(dvo);
+		}
+		
+		List<Map<String, Object>> list = d1.selectRequestGoods(vo.getRequestproduct_no());
+		
+		List<Map<String, Object>> lclist = d1.selectEvGoods(vo.getEvaluation_no());
+		
+		System.out.println(vo.getEvaluation_no());
+		
+		int lotqty = 0;
+		List<Integer> glno = d1.getLotNo((String)imap.get("product_lot"));
+		for(int i = 0; i < list.size(); i++) {
+			Erp_GoodslotVO lvo = new Erp_GoodslotVO();
 			
+			if(lotconnev_qty[i] != null) {
+				lotqty = Integer.parseInt(lotconnev_qty[i]);
+			}else {
+				lotqty = 0;
+			}
+			
+			lvo.setGoodslot_no(glno.get(i));
+			lvo.setGoodslot_qty(lotqty);
+			
+			d1.updateLotQty(lvo);
+			
+			Erp_LotconnevVO lcvo = new Erp_LotconnevVO();
+			lcvo.setLotconnev_no((int)lclist.get(i).get("lotconnev_no"));
+			lcvo.setLotconnev_qty(lotqty);
+			
+			d1.updateLotEv(lcvo);
 		}
 		
 		return "redirect:/d/d1/d14/updateForm?comcode_code="+comcode_code+"&evaluation_no="+vo.getEvaluation_no()+"&requestproduct_no="+vo.getRequestproduct_no();
@@ -1311,11 +1315,11 @@ public class D1Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		d1.deleteEvaluation(vo.getEvaluation_no());
-		
 		d1.deleteProAll(vo.getRequestproduct_no());
 		
 		d1.deleteLotEvNo(vo.getEvaluation_no());
+		
+		d1.deleteEvaluation(vo.getEvaluation_no());
 		
 		return "redirect:/d/d1/d14/inputEvaluation?comcode_code="+comcode_code;
 	}
@@ -1554,6 +1558,61 @@ public class D1Controller {
 		if(list.isEmpty()) {
 			list = d1.evaluationList(map);
 		}
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.D1 + "/d15/inputEvaluemng";
+	}
+	
+	@RequestMapping("/d15/inputEvAjax")
+	@ResponseBody
+	public List<Map<String, Object>> inputEvAjax(String comcode_code, String type, String word){
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);	
+		
+		List<Map<String, Object>> list = d1.evmngList(map);
+		
+		return list;
+	}
+	
+	@RequestMapping("/d15/add")
+	public String addForm15(String comcode_code, String type, String word, Model model) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);	
+		
+		List<Map<String, Object>> list = d1.evaluationList(map);
 		
 		model.addAttribute("list", list);
 		
@@ -1841,6 +1900,7 @@ public class D1Controller {
 	}
 	
 	@RequestMapping("/d17/createProinventory")
+	@Transactional
 	public String createProinventory(Erp_ProinventoryVO vo, String comcode_code, Model model, Erp_InvenlotVO ivo) {
 		String msg = null;
 		String url = null;
@@ -1870,6 +1930,7 @@ public class D1Controller {
 	}
 	
 	@RequestMapping("/d17/update")
+	@Transactional
 	public String updateProinventory(Erp_ProinventoryVO vo, String comcode_code, Model model, Erp_InvenlotVO ivo) {
 		String msg = null;
 		String url = null;
@@ -1888,16 +1949,18 @@ public class D1Controller {
 		List<Erp_InvenlotVO> crlist = ivo.getCrlist();
 		List<Erp_InvenlotVO> crlist1 = ivo.getCrlist1();
 		
-		if(!crlist.isEmpty()) {
+		if(crlist != null) {
 			for(Erp_InvenlotVO ilvo : crlist) {
 				ilvo.setProinventory_no(vo.getProinventory_no());
 				d1.createInvenLot(ilvo);
 			}
 		}
 		
-		for(Erp_InvenlotVO ilvo : crlist1) {
-			ilvo.setProinventory_no(vo.getProinventory_no());
-			d1.updateInvenLot(ilvo);
+		if(crlist1 != null) {
+			for(Erp_InvenlotVO ilvo : crlist1) {
+				ilvo.setProinventory_no(vo.getProinventory_no());
+				d1.updateInvenLot(ilvo);
+			}
 		}
 		
 		return "redirect:/d/d1/d17/updateForm?comcode_code="+comcode_code+"&proinventory_no="+vo.getProinventory_no();

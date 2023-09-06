@@ -427,16 +427,16 @@ function deletei(no1, no2, ino, code, rcode){
 
 function conculator(e, v){
 	if(e.keyCode == 13){
-		document.getElementById("product_tax").value = Number(v) * 0.1;
+		document.getElementById("product_tax").value = Math.round(Number(v) * 0.1);
 		let tax = document.getElementById("product_tax").value; 
-		document.getElementById("product_totalbudget").value = Number(v) + Number(tax);
+		document.getElementById("product_totalbudget").value = Math.round(Number(v) + Number(tax));
 	}
 }
 
 function conculator1(v){
-	document.getElementById("product_tax").value = Number(v) * 0.1;
+	document.getElementById("product_tax").value = Math.round(Number(v) * 0.1);
 	let tax = document.getElementById("product_tax").value; 
-	document.getElementById("product_totalbudget").value = Number(v) + Number(tax);
+	document.getElementById("product_totalbudget").value = Math.round(Number(v) + Number(tax));
 }
 
 
@@ -534,8 +534,8 @@ function codecheck(){
 				document.getElementById("register").disabled = false;
 			}else {
 				document.getElementById("productcode").innerText = data;
+				document.getElementById("productcode").style.color = "red";
 				document.getElementById("register").disabled = true;
-				document.getElementById("product_code").focus();	
 			}
 		}
 	}
@@ -557,8 +557,8 @@ function lotcheck(){
 				document.getElementById("register").disabled = false;
 			}else {
 				document.getElementById("lot").innerText = data;
+				document.getElementById("lot").style.color = "red";
 				document.getElementById("register").disabled = true;
-				document.getElementById("product_lot").focus();	
 			}
 		}
 	}
@@ -605,9 +605,6 @@ function goodsCheck(){
 		newTd = document.createElement("td");
 		newTd.innerHTML = '의뢰 수량';
 		newTr.appendChild(newTd);
-		newTd = document.createElement("td");
-		newTd.innerHTML = '실 생산 수량';
-		newTr.appendChild(newTd);
 		if(data != ""){	
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
@@ -624,9 +621,6 @@ function goodsCheck(){
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.connectrequest_qty;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" name="qty">';
 				newTr.appendChild(newTd);
 			});
 		}else {

@@ -33,4 +33,7 @@ private SqlSession sqlSession;
 	public List<Erp_SalesgoodsVO> getSGNo(String salesgoods_code){
 		return sqlSession.selectList("c2.getSGNo", salesgoods_code);
 	}
+	public List<Map<String, Object>> getSalesGoods(String salesgoods_code){
+		return sqlSession.selectList("c2.getSalesGoods", salesgoods_code);
+	}
 }

@@ -194,7 +194,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산실적 select된 상품 불러오기 및 CUD -->
 	<select id="selectEvGoods" parameterType="int" resultType="map">
-		select g.*, gl.goodslot_lot, gl.goodslot_qty, c.client_name 
+		select g.*, gl.goodslot_lot, gl.goodslot_qty, c.client_name, ev.*
 		from erp_goods g, erp_goodslot gl, erp_client c, erp_lotconnev ev  
 		where g.client_no1 = c.client_no 
 		and g.goods_no = gl.goods_no 
@@ -203,16 +203,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="createLotEv" parameterType="com.lab.erp.vo.d.d1.Erp_LotconnevVO">
-		insert into erp_lotconnev(lotconnev_qty,lotconnev_rest,goodslot_no,evaluation_no) 
-		values(#{lotconnev_qty},#{lotconnev_rest},#{goodslot_no},#{evaluation_no})
+		insert into erp_lotconnev(lotconnev_qty,goodslot_no,evaluation_no) 
+		values(#{lotconnev_qty},#{goodslot_no},#{evaluation_no})
 	</insert>
 	
 	<update id="updateLotEv" parameterType="com.lab.erp.vo.d.d1.Erp_LotconnevVO">
 		update erp_lotconnev set 
-		lotconnev_qty = #{lotconnev_qty},
-		lotconnev_rest = #{lotconnev_rest},
-		goodslot_no = #{goodslot_no},
-		evaluation_no = #{evaluation_no} 
+		lotconnev_qty = #{lotconnev_qty}
 		where lotconnev_no = #{lotconnev_no}
 	</update>
 	
@@ -247,12 +244,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="requestProductList" parameterType="map" resultType="map">
-		select r.*, e.employee1_name, cl.client_name, cl.client_manager, cl.client_contact 
+		select r.*, e.*, cl.* 
 		from erp_requestproduct r, erp_client cl, erp_employee1 e 
 		where r.client_no = cl.client_no 
 		and r.employee1_no = e.employee1_no 
 		and r.comcode_no = #{comcode_no} 
 		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+						r.requestproduct_code like '%${word}%' or cl.client_name like '%${word}%' 
+						or e.employee1_name like '%${word}%' or r.requestproduct_name like '%${word}%' 
+						or date_format(r.requestproduct_end, '%m월 %d일') like '%${word}%' or r.requestproduct_content like '%${word}%'
+					)
+			</if>
 			<if test="type == 'requestproduct_code'">
 				and r.requestproduct_code like '%${word}%' 
 			</if>
@@ -416,13 +420,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="productList" parameterType="map" resultType="map">
-		select p.*, c.client_name, t.team_name, e.employee1_name, r.requestproduct_name 
-		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_employee2 e2  
+		select p.*, c.*, t.*, e.*, r.*, cl.*, e2.* 
+		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_employee2 e2, erp_closing cl 
 		where p.employee1_no = e.employee1_no 
 		and e2.team_no = t.team_no 
 		and r.client_no = c.client_no 
 		and p.requestproduct_no = r.requestproduct_no 
 		and e.employee1_no = e2.employee1_no 
+		and p.product_code = cl.closing_code 
 		and p.comcode_no = #{comcode_no} 
 		<if test="type != null">
 			<if test="type == 'employee1_name'">
@@ -485,9 +490,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="defectivePro" parameterType="int" resultType="map">
-		select d.*, gl.*, g.*  
-		from erp_defective d, erp_goods g, erp_goodslot gl 
-		where requestproduct_no = #{requestproduct_no} 
+		select d.*, gl.*, g.*, lc.* 
+		from erp_defective d, erp_goods g, erp_goodslot gl, erp_lotconnev lc, erp_evaluation ev 
+		where d.requestproduct_no = #{requestproduct_no} 
+		and lc.evaluation_no = ev.evaluation_no 
+		and lc.goodslot_no = d.goodslot_no 
+		and d.requestproduct_no = ev.requestproduct_no 
 		and d.goodslot_no = gl.goodslot_no 
 		and g.goods_no = gl.goods_no 
 		order by defective_no
@@ -508,8 +516,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산 실적 관리 -->
 	<insert id="createEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
-		insert into erp_evaluation(evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,evaluation_rate,requestproduct_no,evaluation_date,employee2_no) 
-		values(#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{evaluation_rate},#{requestproduct_no},sysdate(),#{employee2_no})
+		insert into erp_evaluation(evaluation_paperend,evaluation_actualend,evaluation_content,evaluation_status,requestproduct_no,evaluation_date,employee2_no) 
+		values(#{evaluation_paperend},#{evaluation_actualend},#{evaluation_content},#{evaluation_status},#{requestproduct_no},sysdate(),#{employee2_no})
 	</insert>
 	
 	<update id="updateEvaluation" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluationVO">
@@ -518,7 +526,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		evaluation_actualend = #{evaluation_actualend},
 		evaluation_content = #{evaluation_content},
 		evaluation_status = #{evaluation_status},
-		evaluation_rate = #{evaluation_rate}, 
 		evaluation_date = #{evaluation_date},
 		employee2_no = #{employee2_no} 
 		where evaluation_no = #{evaluation_no}
@@ -571,6 +578,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and e.employee1_no = e2.employee1_no 
 		and ev.requestproduct_no = p.requestproduct_no 
 		and ev.evaluation_no = #{evaluation_no} 
+	</select>
+	
+	<select id="getEvalueationNo" resultType="int">
+		select max(evaluation_no) from erp_evaluation
 	</select>
 	
 	

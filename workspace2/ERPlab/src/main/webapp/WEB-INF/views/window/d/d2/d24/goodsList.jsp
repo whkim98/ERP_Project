@@ -11,6 +11,7 @@
 </head>
 <body>
 <div>
+	<p>목록에 없는 제품은 물류팀에 문의해서 추가해주세요.</p>
 	<table id="procode">
 		<tr>
 			<td>로트</td>
@@ -27,7 +28,7 @@
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.goodslot_no}, '${vo.goodslot_lot }', '${vo.goods_barcode }', '${vo.goods_name }', ${vo.purchaseconnect_price }, ${vo.purchaseconnect_number })">
+				<tr onclick="setParentText(${vo.goodslot_no}, '${vo.goodslot_lot }', '${vo.goods_barcode }', '${vo.goods_name }', ${vo.purchaseconnect_price }, ${vo.purchaseconnect_number }, ${vo.purchaseconnect_no })">
 					<td>${vo.goodslot_lot}</td>
 					<td>${vo.goods_barcode}</td>
 					<td>${vo.goods_name}</td>
@@ -41,13 +42,19 @@
 </div>
 
 <script type="text/javascript">
-	function setParentText(no, lot, barcode, name, price, qty){
+	function setParentText(no, lot, barcode, name, price, qty, pno){
     	opener.document.getElementById("goodslot_no").value = no;
     	opener.document.getElementById("goodslot_lot").value = lot;
     	opener.document.getElementById("goods_barcode").value = barcode;
     	opener.document.getElementById("goods_name").value = name;
     	opener.document.getElementById("purchaseconnect_price").value = price;
     	opener.document.getElementById("purchaseconnect_number").value = qty;
+    	opener.document.getElementById("purchaseconnect_no").value = pno;
+    	opener.document.getElementById("producttest_lossrate").value = '';
+    	opener.document.getElementById("producttest_lossprice").value = '';
+    	opener.document.getElementById("producttest_losstax").value = '';
+    	opener.document.getElementById("producttest_losstotal").value = '';
+    	opener.document.getElementById("producttest_lossqty").value = '';
     	window.close();
     }
 	

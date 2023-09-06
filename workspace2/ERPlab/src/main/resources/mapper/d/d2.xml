@@ -197,8 +197,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-					c.client_name like '%${word}%' or o.order_code like '%${word}%' 
-					or co.company_name like '%${word}%' or t.team_name like '%${word}%' 
+						c.client_name like '%${word}%' or o.order_code like '%${word}%' 
+						or co.company_name like '%${word}%' or t.team_name like '%${word}%' 
+						or date_format(o.order_odate, '%m월 %d일') like '%${word}%' 
+						or date_format(o.order_end, '%m월 %d일') like '%${word}%'
 					)
 			</if>
 			<if test="type == 'client_name'">
@@ -212,6 +214,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="type == 'team_name'">
 				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'order_odate'">
+				and date_format(o.order_odate, '%m월 %d일') like '%${word}%'
+			</if>
+			<if test="type == 'order_end'">
+				and date_format(o.order_end, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
 	</select>
@@ -309,6 +317,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and e.employee1_no = e2.employee1_no 
 		and cl.closing_code = p.purchase_code 
 		and p.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+						p.purchase_code like '%${word}%' or t.team_name like '%${word}%' 
+						or e.employee1_name like '%${word}%' or date_format(p.purchase_date, '%m월 %d일') like '%${word}%' 
+					)
+			</if>
+			<if test="type == 'purchase_code'">
+				and p.purchase_code like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'employee1_name'">
+				and e.employee1_name like '%${word}%'
+			</if>
+			<if test="type == 'purchase_date'">
+				and date_format(p.purchase_date, '%m월 %d일') like '%${word}%'
+			</if>
+		</if>
 	</select>
 	
 	<select id="selectPurchase" parameterType="int" resultType="map">
@@ -388,12 +416,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 구매 재고 평가 -->
 	<insert id="createProductTest" parameterType="com.lab.erp.vo.d.d2.Erp_ProducttestVO">
-		insert into erp_producttest(purchase_no,producttest_grade,ptkind_no,producttest_lossrate,producttest_lossprice,producttest_losstax,producttest_losstotal,producttest_lossqty,producttest_date,producttest_content,producttest_lossfull,producttest_pnp,producttest_type,team_no,goodslot_no,comcode_no) 
-		values(#{purchase_no},#{producttest_grade},#{ptkind_no},#{producttest_lossrate},#{producttest_lossprice},#{producttest_losstax},#{producttest_losstotal},#{producttest_lossqty},sysdate(),#{producttest_content},#{producttest_lossfull},#{producttest_pnp},#{producttest_type},#{team_no},#{goodslot_no},#{comcode_no})
+		insert into erp_producttest(purchaseconnect_no,producttest_grade,ptkind_no,producttest_lossrate,producttest_lossprice,producttest_losstax,producttest_losstotal,producttest_lossqty,producttest_date,producttest_content,producttest_lossfull,producttest_pnp,producttest_type,team_no,goodslot_no,comcode_no) 
+		values(#{purchaseconnect_no},#{producttest_grade},#{ptkind_no},#{producttest_lossrate},#{producttest_lossprice},#{producttest_losstax},#{producttest_losstotal},#{producttest_lossqty},sysdate(),#{producttest_content},#{producttest_lossfull},#{producttest_pnp},#{producttest_type},#{team_no},#{goodslot_no},#{comcode_no})
 	</insert>
 	
 	<update id="updateProductTest" parameterType="com.lab.erp.vo.d.d2.Erp_ProducttestVO">
 		update erp_producttest set 
+		purchaseconnect_no = #{purchaseconnect_no}, 
 		producttest_grade = #{producttest_grade},
 		ptkind_no = #{ptkind_no},
 		producttest_lossrate = #{producttest_lossrate},
@@ -415,22 +444,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="productTestList" parameterType="map" resultType="map">
-		select p.*, pk.*, pt.*, t.*, pc.*, gl.*, g.*, c.* 
-		from erp_purchase p, erp_ptkind pk, erp_producttest pt, erp_team t, erp_purchaseconnect pc, erp_goodslot gl, erp_goods g, erp_client c 
+		select p.*, pk.*, pt.*, t.*, gl.*, g.*, c.*, pc.*  
+		from erp_purchase p, erp_ptkind pk, erp_producttest pt, erp_team t, erp_goodslot gl, erp_goods g, erp_client c, erp_purchaseconnect pc 
 		where pt.ptkind_no = pk.ptkind_no 
-		and pt.purchase_no = p.purchase_no 
 		and pt.team_no = t.team_no 
-		and p.purchase_no = pc.purchase_no 
-		and pc.goodslot_no = gl.goodslot_no 
 		and gl.goods_no = g.goods_no 
+		and gl.goodslot_no = pt.goodslot_no 
 		and p.client_no = c.client_no 
+		and pt.purchaseconnect_no = pc.purchaseconnect_no 
+		and pc.purchase_no = p.purchase_no 
 		and pt.comcode_no = #{comcode_no} 
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-					c.client_name like '%${word}%' or p.purchase_code like '%${word}%'
-					or pt.producttest_grade like '%${word}%' or t.team_name like '%${word}%' 
-					or pt.producttest_date like '%${word}%' or pt.producttest_pnp like if ('불합격' = ${word},0,1)
+						c.client_name like '%${word}%' or p.purchase_code like '%${word}%'
+						or pt.producttest_grade like '%${word}%' or t.team_name like '%${word}%' 
+						or date_format(pt.producttest_date, '%m월 %d일') like '%${word}%' or pt.producttest_pnp like if ('불합격' = ${word},0,1)
 					)
 			</if>
 			<if test="type == 'purchase_code'">
@@ -440,7 +469,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and pt.producttest_grade like '%${word}%'
 			</if>
 			<if test="type == 'producttest_date'">
-				and pt.producttest_date like '%${word}%'
+				and date_format(pt.producttest_date, '%m월 %d일') like '%${word}%'
 			</if>
 			<if test="type == 'team_name'">
 				and t.team_name like '%${word}%'
@@ -455,21 +484,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectProductTest" parameterType="int" resultType="map">
-		select p.*, pk.*, pt.*, t.*, pc.*, gl.*, g.*, c.* 
-		from erp_purchase p, erp_ptkind pk, erp_producttest pt, erp_team t, erp_purchaseconnect pc, erp_goodslot gl, erp_goods g, erp_client c 
+		select p.*, pk.*, pt.*, t.*, gl.*, g.*, c.*, pc.*  
+		from erp_purchase p, erp_ptkind pk, erp_producttest pt, erp_team t, erp_goodslot gl, erp_goods g, erp_client c, erp_purchaseconnect pc 
 		where pt.ptkind_no = pk.ptkind_no 
-		and pt.purchase_no = p.purchase_no 
 		and pt.team_no = t.team_no 
-		and p.purchase_no = pc.purchase_no 
-		and pc.goodslot_no = gl.goodslot_no 
 		and gl.goods_no = g.goods_no 
+		and gl.goodslot_no = pt.goodslot_no 
 		and p.client_no = c.client_no 
+		and pt.purchaseconnect_no = pc.purchaseconnect_no 
+		and pc.purchase_no = p.purchase_no 
 		and pt.producttest_no = #{producttest_no} 
 	</select>
 	
 	<select id="ptList" resultType="com.lab.erp.vo.d.d2.Erp_PtkindVO">
 		select * from erp_ptkind
 	</select>
+	
 	
 	
 	<!-- 구매 재고 관리 -->
@@ -525,9 +555,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-					c.client_name like '%${word}%' or cp.comptype_code like '%${word}%' 
-					or t.team_name like '%${word}%' 
-					or e.employee1_name like '%${word}%' 
+						c.client_name like '%${word}%' or cp.comptype_code like '%${word}%' 
+						or t.team_name like '%${word}%' 
+						or e.employee1_name like '%${word}%' 
 					)
 			</if>
 			<if test="type == 'team_name'">

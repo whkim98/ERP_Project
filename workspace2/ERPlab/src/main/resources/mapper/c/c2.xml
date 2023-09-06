@@ -274,6 +274,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getUniqueCode" parameterType="String" resultType="int">
 		select receivable_no from erp_receivable where receivable_code = #{receivable_code}
 	</select>
+	
+	<select id="getReceivableTotal" parameterType="int" resultType="int">
+		select receivable_total from erp_receivable where receivable_no = #{receivable_no}
+	</select>
 <!-- 수금 -->
 	<insert id="inputBills" parameterType="com.lab.erp.vo.c.Erp_BondbillsVO">
 		insert into erp_bondbills(bondbills_code, receivable_no,bondbills_date,bondbills_price,bondbills_tax,bondbills_total) 
@@ -472,7 +476,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="goodsReturn" resultType="map" parameterType="map">
-		select g.*, gs.goodssort_name, gk.goodskind_name, gt.goodsst_spec, gl.goodslot_lot, gl.goodslot_no, gl.goodslot_total, c.client_name 
+		select g.*, gs.*, gk.*, gt.*, gl.*, c.*
 		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_goodslot gl, erp_client c 
 		where g.goodskind_no = gk.goodskind_no 
 		and g.client_no1 = c.client_no 
@@ -583,7 +587,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectLocalSales" parameterType="int" resultType="map">
-		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type, gl.goodslot_lot, g.goods_name
+		select l.*, t.*, c.*, s.* 
 		from erp_localsales l, erp_client c, erp_team t, erp_settletype s 
 		where l.team_no = t.team_no 
 		and l.client_no = c.client_no 
@@ -592,20 +596,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getSalesGoods" parameterType="String" resultType="map">
-		select g.*, s.salesgoods_no, s.salesgoods_qty from erp_goods g, erp_salesgoods s 
+		select g.*, gl.*, s.* from erp_goods g, erp_goodslot gl, erp_salesgoods s 
 		where s.salesgoods_code = #{salesgoods_code} 
-		and g.goods_no = s.goods_no 
+		and gl.goodslot_no = s.goodslot_no 
+		and g.goods_no = gl.goods_no
 	</select>
 	
 	<insert id="inputSalesGoods" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
-		insert into erp_salesgoods(salesgoods_code, goods_no, salesgoods_qty,salesgoods_price,salesgoods_tax,salesgoods_total) 
-		values(#{salesgoods_code}, #{goods_no}, #{salesgoods_qty},#{salesgoods_price},#{salesgoods_tax},#{salesgoods_total})
+		insert into erp_salesgoods(salesgoods_code, goodslot_no, salesgoods_qty,salesgoods_price,salesgoods_tax,salesgoods_total) 
+		values(#{salesgoods_code}, #{goodslot_no}, #{salesgoods_qty},#{salesgoods_price},#{salesgoods_tax},#{salesgoods_total})
 	</insert>
 	
 	<update id="updateSGNo" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
 		update erp_salesgoods set 
 		salesgoods_code = #{salesgoods_code}, 
-		goods_no = #{goods_no}, 
+		goodslot_no = #{goodslot_no}, 
 		salesgoods_qty = #{salesgoods_qty}, 
 		salesgoods_price = #{salesgoods_price}, 
 		salesgoods_tax = #{salesgoods_tax}, 

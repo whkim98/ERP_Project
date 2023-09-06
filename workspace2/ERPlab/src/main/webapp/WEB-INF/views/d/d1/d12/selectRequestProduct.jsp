@@ -3,8 +3,7 @@
     
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
+
 
 <style>
    /* input type="number"일 떄 위/아래 화살표 버튼 제거*/
@@ -18,6 +17,9 @@
     }
     
 </style>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <div class="taxinvoice-container">
     <h1>생산 의뢰서</h1>
@@ -36,7 +38,7 @@
         		<th>의뢰명</th>
         		<td><input type="text" name="requestproduct_name" id="requestproduct_name" value="${inmap.requestproduct_name }" class="required"></td>
         		<th>기간</th>
-        		<td><input type="date" name="requestproduct_start" id="requestproduct_start" value="${inmap.requestproduct_start }"> - <input type="date" name="requestproduct_end" id="requestproduct_end" value="${inmap.requestproduct_end }"></td>
+        		<td><input type="date" name="requestproduct_start" id="requestproduct_start" value="${inmap.requestproduct_start }" onchange="startcheck(this.value)"> - <input type="date" name="requestproduct_end" id="requestproduct_end" value="${inmap.requestproduct_end }"></td>
         	</tr>
         	<tr>
         		<th colspan="6" align="center">내용</th>
@@ -93,11 +95,12 @@
          
          <div class="taxinvoice-contentItem">
          	<p>
-               <input type="button" id="addRow" value="품목추가">
+               <input type="button" id="addRow" value="행추가">
+               <input type="button" id="deleteRow" value="행삭제">
          	</p>
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
-                    <th>의뢰수량</th>
+                    <th>제품조회</th>
                     <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
@@ -111,51 +114,40 @@
                     <th>책임판매업자</th>
                     <th>사입량</th>
                     <th>설명</th>
+                    <th>의뢰수량</th>
                 </tr>
                 <c:forEach var="i" items="${glist }" varStatus="status">
-                	<tr>
+                	<tr class="plist">
 	                	<td>
 		                	<input type="button" onclick="goodsList1('${comcode_code}',${status.index })" value="search">
-		                	<input type="text" name="crlist[${status.index }].connectrequest_qty" id="crlist[${status.index }].connectrequest_qty" value="${i.connectrequest_qty }">
 		                </td>
-						<td><input type="text" name="crlist[${status.index }].goods_name" id="crlist[${status.index }].goods_name" value="${i.goods_name }"></td>
-						<td><input type="text" name="crlist[${status.index }].goods_code" id="crlist[${status.index }].goods_code" value="${i.goods_code }"></td>
-						<td><input type="text" name="crlist[${status.index }].goods_barcode" id="crlist[${status.index }].goods_barcode" value="${i.goods_barcode }"></td>
+						<td><input type="text" name="crlist[${status.index }].goods_name" id="crlist[${status.index }].goods_name" value="${i.goods_name }" readonly="readonly"></td>
+						<td><input type="text" name="crlist[${status.index }].goods_code" id="crlist[${status.index }].goods_code" value="${i.goods_code }" readonly="readonly"></td>
+						<td><input type="text" name="crlist[${status.index }].goods_barcode" id="crlist[${status.index }].goods_barcode" value="${i.goods_barcode }" readonly="readonly"></td>
 						<td>
-							<select name="crlist[${status.index }].goodskind_no" id="crlist[${status.index }].goodskind_no">
-								<c:forEach var="sk" items="${sortkind }">
-								<c:choose>
-									<c:when test="${sk.goodskind_no == i.goodskind_no }">
-										<option value="${sk.goodskind_no }" selected="selected">${sk.goodssort_name } - ${sk.goodskind_name }</option>
-									</c:when>
-									<c:otherwise>
-										<option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option>
-									</c:otherwise>
-								</c:choose>
-								</c:forEach>
-							</select>
+							<input type="text" name="crlist[${status.index }].goodssort_name" id="crlist[${status.index }].goodssort_name" value="${i.goodssort_name } ${i.goodskind_name}" readonly="readonly">
+							<input type="hidden" name="crlist[${status.index }].goodskind_no" id="crlist[${status.index }].goodskind_no" value="${i.goodskind_no }" readonly="readonly">
 						</td>
-						<td><input type="text" name="crlist[${status.index }].goodslot_price" id="crlist[${status.index }].goodslot_price" value="${i.goodslot_price }"></td>
-						<td><input type="text" name="crlist[${status.index }].goodsst_unit" id="crlist[${status.index }].goodsst_unit" value="${i.goodsst_unit }"></td>
-						<td><input type="text" name="crlist[${status.index }].goodsst_spec" id="crlist[${status.index }].goodsst_spec" value="${i.goodsst_spec }"></td>
-						<td><input type="text" name="crlist[${status.index }].goodsst_size" id="crlist[${status.index }].goodsst_size" value="${i.goodsst_size }"></td>
-						<td><input type="text" name="crlist[${status.index }].goodsst_package" id="crlist[${status.index }].goodsst_package" value="${i.goodsst_package }"></td>
+						<td><input type="text" name="crlist[${status.index }].goodslot_price" id="crlist[${status.index }].goodslot_price" value="${i.goodslot_price }" readonly="readonly"></td>
+						<td><input type="text" name="crlist[${status.index }].goodsst_unit" id="crlist[${status.index }].goodsst_unit" value="${i.goodsst_unit }" readonly="readonly"></td>
+						<td><input type="text" name="crlist[${status.index }].goodsst_spec" id="crlist[${status.index }].goodsst_spec" value="${i.goodsst_spec }" readonly="readonly"></td>
+						<td><input type="text" name="crlist[${status.index }].goodsst_size" id="crlist[${status.index }].goodsst_size" value="${i.goodsst_size }" readonly="readonly"></td>
+						<td><input type="text" name="crlist[${status.index }].goodsst_package" id="crlist[${status.index }].goodsst_package" value="${i.goodsst_package }" readonly="readonly"></td>
 						<td>
-							<input type="text" name="crlist[${status.index }].client_name1" id="crlist[${status.index }].client_name1" value="${i.client_name1}" onkeypress="searchcl1(event, '${comcode_code}',${status.index })">
-							<input type="button" onclick="clList1('${comcode_code}',${status.index })" value="search">
+							<input type="text" name="crlist[${status.index }].client_name1" id="crlist[${status.index }].client_name1" value="${i.client_name1}" readonly="readonly">
 						</td>
 						<td>
-							<input type="text" name="crlist[${status.index }].client_name2" id="crlist[${status.index }].client_name2" value="${i.client_name2}" onkeypress="searchcl2(event, '${comcode_code}',${status.index })">
-							<input type="button" onclick="clList2('${comcode_code}',${status.index })" value="search">
+							<input type="text" name="crlist[${status.index }].client_name2" id="crlist[${status.index }].client_name2" value="${i.client_name2}" readonly="readonly">
 						</td>
-						<td><input type="text" name="crlist[${status.index }].goodsst_ea" id="crlist[${status.index }].goodsst_ea" value="${i.goodsst_ea }"></td>
+						<td><input type="text" name="crlist[${status.index }].goodsst_ea" id="crlist[${status.index }].goodsst_ea" value="${i.goodsst_ea }" readonly="readonly"></td>
 						<td>
-							<input type="text" name="crlist[${status.index }].goods_description" id="crlist[${status.index }].goods_description" value="${i.goods_description }">
+							<input type="text" name="crlist[${status.index }].goods_description" id="crlist[${status.index }].goods_description" value="${i.goods_description }" readonly="readonly">
 							<input type="hidden" name="crlist[${status.index }].client_no1" id="crlist[${status.index }].client_no1" value="${i.client_no1 }">
 	        				<input type="hidden" name="crlist[${status.index }].client_no2" id="crlist[${status.index }].client_no2" value="${i.client_no2 }">
 	        				<input type="hidden" name="crlist[${status.index }].connectrequest_no" id="crlist[${status.index }].connectrequest_no" value="${i.connectrequest_no }">
 	        				<input type="hidden" name="crlist[${status.index }].requestproduct_no" id="crlist[${status.index }].requestproduct_no" value="${i.requestproduct_no }">
 						</td>
+						<td><input type="text" name="crlist[${status.index }].connectrequest_qty" id="crlist[${status.index }].connectrequest_qty" value="${i.connectrequest_qty }"></td>
 						<td><input type="button" onclick="deleteGoods(${i.requestproduct_no}, ${i.connectrequest_no })" value="delete"></td>
 					</tr>
                 </c:forEach>
@@ -185,7 +177,7 @@
         		<th>의뢰명</th>
         		<td><input type="text" name="requestproduct_name" id="requestproduct_name" class="required"></td>
         		<th>기간</th>
-        		<td><input type="date" name="requestproduct_start" id="requestproduct_start"> - <input type="date" name="requestproduct_end" id="requestproduct_end"></td>
+        		<td><input type="date" name="requestproduct_start" id="requestproduct_start" onchange="startcheck(this.value)"> - <input type="date" name="requestproduct_end" id="requestproduct_end"></td>
         	</tr>
         	<tr>
         		<th colspan="6" align="center">내용</th>
@@ -245,13 +237,13 @@
            
         <div class="taxinvoice-contentItem">
             <p>
-               <input type="button" id="addRow" value="품목추가">
-               <input type="button" id="deleteRow" value="품목삭제"> 품목은 최대 16개까지 추가, 삭제 가능
+               <input type="button" id="addRow" value="행추가">
+               <input type="button" id="deleteRow" value="행삭제">
             </p>
     
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
-                    <th>의뢰수량</th>
+                    <th>제품조회</th>
                     <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
@@ -265,42 +257,38 @@
                     <th>책임판매업자</th>
                     <th>사입량</th>
                     <th>설명</th>
+                    <th>의뢰수량</th>
                 </tr>
-               	<tr id="procode">
+               	<tr id="procode" class="plist">
 					<td>
-						<input type="text" name="crlist1[0].connectrequest_qty" id="crlist1[0].connectrequest_qty">
 						<input type="button" onclick="goodsList('${comcode_code}',0)" value="search">
 					</td>
-					<td><input type="text" name="crlist1[0].goods_name" id="crlist1[0].goods_name"></td>
-					<td><input type="text" name="crlist1[0].goods_code" id="crlist1[0].goods_code"></td>
-					<td><input type="text" name="crlist1[0].goods_barcode" id="crlist1[0].goods_barcode"></td>
+					<td><input type="text" name="crlist1[0].goods_name" id="crlist1[0].goods_name" readonly="readonly"></td>
+					<td><input type="text" name="crlist1[0].goods_code" id="crlist1[0].goods_code" readonly="readonly"></td>
+					<td><input type="text" name="crlist1[0].goods_barcode" id="crlist1[0].goods_barcode" readonly="readonly"></td>
 					<td>
-						<select name="crlist1[0].goodskind_no" id="crlist1[0].goodskind_no">
-							<c:forEach var="sk" items="${sortkind }">
-								<option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option>
-							</c:forEach>
-						</select>
+						<input type="text" name="crlist1[0].goodssort_name" id="crlist1[0].goodssort_name" readonly="readonly">
+						<input type="hidden" name="crlist1[0].goodskind_no" id="crlist1[0].goodskind_no">
 					</td>
-					<td><input type="text" name="crlist1[0].goodslot_price" id="crlist1[0].goodslot_price"></td>
-					<td><input type="text" name="crlist1[0].goodsst_unit" id="crlist1[0].goodsst_unit"></td>
-					<td><input type="text" name="crlist1[0].goodsst_spec" id="crlist1[0].goodsst_spec"></td>
-					<td><input type="text" name="crlist1[0].goodsst_size" id="crlist1[0].goodsst_size"></td>
-					<td><input type="text" name="crlist1[0].goodsst_package" id="crlist1[0].goodsst_package"></td>
+					<td><input type="text" name="crlist1[0].goodslot_price" id="crlist1[0].goodslot_price" readonly="readonly"></td>
+					<td><input type="text" name="crlist1[0].goodsst_unit" id="crlist1[0].goodsst_unit" readonly="readonly"></td>
+					<td><input type="text" name="crlist1[0].goodsst_spec" id="crlist1[0].goodsst_spec" readonly="readonly"></td>
+					<td><input type="text" name="crlist1[0].goodsst_size" id="crlist1[0].goodsst_size" readonly="readonly"></td>
+					<td><input type="text" name="crlist1[0].goodsst_package" id="crlist1[0].goodsst_package" readonly="readonly"></td>
 					<td>
-						<input type="text" name="crlist1[0].client_name1" id="crlist1[0].client_name1" onkeypress="searchcl3(event, '${comcode_code}',0)">
-						<input type="button" onclick="clList3('${comcode_code}',0)" value="search">
+						<input type="text" name="crlist1[0].client_name1" id="crlist1[0].client_name1" readonly="readonly">
 					</td>
 					<td>
-						<input type="text" name="crlist1[0].client_name2" id="crlist1[0].client_name2" onkeypress="searchcl4(event, '${comcode_code}',0)">
-						<input type="button" onclick="clList4('${comcode_code}',0)" value="search">
+						<input type="text" name="crlist1[0].client_name2" id="crlist1[0].client_name2" readonly="readonly">
 					</td>
-					<td><input type="text" name="crlist1[0].goodsst_ea" id="crlist1[0].goodsst_ea"></td>
+					<td><input type="text" name="crlist1[0].goodsst_ea" id="crlist1[0].goodsst_ea" readonly="readonly"></td>
 					<td>
-						<input type="text" name="crlist1[0].goods_description" id="crlist1[0].goods_description">
+						<input type="text" name="crlist1[0].goods_description" id="crlist1[0].goods_description" readonly="readonly">
 						<input type="hidden" name="crlist1[0].client_no1" id="crlist1[0].client_no1" value="17">
         				<input type="hidden" name="crlist1[0].client_no2" id="crlist1[0].client_no2" value="17">
 					</td>
-					<td name="b32-clearRow"><input type="button" onclick="clearRow(this)" value="delete"></td>
+					<td><input type="text" name="crlist1[0].connectrequest_qty" id="crlist1[0].connectrequest_qty"></td>
+					<td><input type="button" onclick="clearRow(this)" value="delete"></td>
 				</tr>
             </table>
             
@@ -318,18 +306,43 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+document.getElementById("requestproduct_start").setAttribute("min", end+"-01-01");
+document.getElementById("requestproduct_start").setAttribute("max", end+"-12-31");
+
+function startcheck(v){
+	document.getElementById("requestproduct_end").setAttribute("min", v);
+	document.getElementById("requestproduct_end").setAttribute("max", end+"-12-31");
+}
+
+var pat = /^[0-9]{0,8}$/;
+
 function sub(f){
 	
 	var list = document.getElementById("itemTable");
-	var arr = list.getElementsByTagName('input');
-	for(var b = 0; b < arr.length; b++){
-		if(arr[b].value == ""){
-			arr[b].focus();
-			return;
+	var arr = null;
+	let tr = list.getElementsByClassName("plist");
+	for(let d = 0; d < tr.length; d++){
+		arr = tr[d].getElementsByTagName("input");
+		for(var b = 0; b < arr.length; b++){
+			if(arr[b].value == ""){
+				arr[b].focus();
+				return;
+			}
+			if(!pat.test(arr.item(14).value)){
+				arr.item(14).value = 0;
+				alert("숫자만 입력 가능합니다.");
+				return;
+			}
 		}
 	}
 	
-	var pat = /^[0-9]{0,8}$/;
 	if(f.requestproduct_name.value == ""){
 		f.requestproduct_name.focus();
 		return;
@@ -426,48 +439,57 @@ const deleteRowButton = document.getElementById('deleteRow');
 
 var j = 0;
 addRowButton.addEventListener('click', function() {
-    if (itemTable.rows.length <= 16) {
+    if (itemTable.rows.length <= 100) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
+        if(document.getElementById("crlist1[0].goods_name")){
+       		j += 1;
+        }
         
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 16; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
-                cells[i].innerHTML = '<td><input type="button" onclick="goodsList(`${comcode_code}`,'+j+')" value="search"><input type="text" name="crlist1['+j+'].connectrequest_qty" id="crlist1['+j+'].connectrequest_qty"></td>';
+                cells[i].innerHTML = '<td><input type="button" onclick="goodsList(`${comcode_code}`,'+j+')" value="search"></td>';
             } else if (i === 1) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_name" id="crlist1['+j+'].goods_name"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_name" id="crlist1['+j+'].goods_name" readonly="readonly"></td>';
             } else if (i === 2) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_code" id="crlist1['+j+'].goods_code"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_code" id="crlist1['+j+'].goods_code" readonly="readonly"></td>';
             } else if (i === 3){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_barcode" id="crlist1['+j+'].goods_barcode"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_barcode" id="crlist1['+j+'].goods_barcode" readonly="readonly"></td>';
             } else if (i === 4){
-                cells[i].innerHTML = '<td><select name="crlist1['+j+'].goodskind_no" id="crlist1['+j+'].goodskind_no"><c:forEach var="sk" items="${sortkind }"><option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:forEach></select></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodssort_name" id="crlist1['+j+'].goodssort_name" readonly="readonly"><input type="hidden" name="crlist1['+j+'].goodskind_no" id="crlist1['+j+'].goodskind_no"></td>';
             } else if (i === 5){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodslot_price" id="crlist1['+j+'].goodslot_price"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodslot_price" id="crlist1['+j+'].goodslot_price" readonly="readonly"></td>';
             } else if (i === 6){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_unit" id="crlist1['+j+'].goodsst_unit"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_unit" id="crlist1['+j+'].goodsst_unit" readonly="readonly"></td>';
             } else if (i === 7){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_spec" id="crlist1['+j+'].goodsst_spec"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_spec" id="crlist1['+j+'].goodsst_spec" readonly="readonly"></td>';
             } else if (i === 8){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_size" id="crlist1['+j+'].goodsst_size"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_size" id="crlist1['+j+'].goodsst_size" readonly="readonly"></td>';
             } else if (i === 9){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_package" id="crlist1['+j+'].goodsst_package"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_package" id="crlist1['+j+'].goodsst_package" readonly="readonly"></td>';
             }  else if (i === 10){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name1" id="crlist1['+j+'].client_name1" onkeypress="searchcl3(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList3(`${comcode_code}`,'+j+')" value="search"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name1" id="crlist1['+j+'].client_name1" readonly="readonly"></td>';
             }  else if (i === 11){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name2" id="crlist1['+j+'].client_name2" onkeypress="searchcl4(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList4(`${comcode_code}`,'+j+')" value="search"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].client_name2" id="crlist1['+j+'].client_name2" readonly="readonly"></td>';
             } else if (i === 12){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_ea" id="crlist1['+j+'].goodsst_ea"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goodsst_ea" id="crlist1['+j+'].goodsst_ea" readonly="readonly"></td>';
             } else if (i === 13){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_description" id="crlist1['+j+'].goods_description"></td><input type="hidden" name="crlist1['+j+'].client_no1" id="crlist1['+j+'].client_no1" value="17"><input type="hidden" name="crlist1['+j+'].client_no2" id="crlist1['+j+'].client_no2" value="17">';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_description" id="crlist1['+j+'].goods_description" readonly="readonly"></td><input type="hidden" name="crlist1['+j+'].client_no1" id="crlist1['+j+'].client_no1" value="17"><input type="hidden" name="crlist1['+j+'].client_no2" id="crlist1['+j+'].client_no2" value="17"></td>';
+            } else if (i === 14){
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].connectrequest_qty" id="crlist1['+j+'].connectrequest_qty"></td>';
             } else {
                 cells[i].innerHTML = '<td name="b32-clearRow"><input type="button" onclick="clearRow(this)" value="delete"></td>';
             }
         }
+        
+        for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
+            itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
+        }
+        
     } else {
-        alert('품목은 최대 16개까지 추가할 수 있습니다.');
+        alert('품목은 최대 100개까지 추가할 수 있습니다.');
     }
-    j += 1;
 });
 
 
@@ -475,8 +497,16 @@ deleteRowButton.addEventListener('click', function() {
     const rows = itemTable.getElementsByTagName('tr');
     
     if (itemTable.rows.length > 2) {
-    	j -= 1;
-        itemTable.deleteRow(itemTable.rows.length-1);
+    	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-2){
+    		return;
+    	}else{
+    		if(document.getElementById("crlist["+(itemTable.rows.length-2)+"].goods_name")){
+    			return;
+    		}else{
+		    	j -= 1;
+		        itemTable.deleteRow(itemTable.rows.length-1);
+    		}
+    	}
     } else {
         alert('품목은 1개 이하로 삭제할 수 없습니다.');
     }
@@ -498,7 +528,6 @@ function searchcl(e, code){
 			document.getElementById("client_name").focus();
 			return;
 		}
-		console.log(clname);
 		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcl";
 		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
@@ -508,10 +537,8 @@ function searchcl(e, code){
 function clName(){
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.response;
-		console.log(data);
 		if(data != null){
 			var data2 = JSON.parse(data);	// ajax로 받아온 데이터를 json으로 변형
-		console.log(data2);
 			document.getElementById("client_no").value = data2.client_no;
 			document.getElementById("client_name").value = data2.client_name;
 			document.getElementById("client_registeredno").innerText = data2.client_registeredno;
@@ -534,125 +561,6 @@ function clName(){
 	}
 }
 
-var p = 0;
-
-function searchcl1(e, code, n){
-	if(e.keyCode == 13){
-		var clname = document.getElementById("crlist["+n+"].client_name1").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("crlist["+n+"].client_name1").focus();
-			return;
-		}
-		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
-		
-		sendRequest(url, param, clName1, "POST");
-	}
-}
-function clName1(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			document.getElementById("crlist["+p+"].client_no1").value = data2.client_no;
-			document.getElementById("crlist["+p+"].client_name1").value = data2.client_name;
-		}else {
-			document.getElementById("crlist["+p+"].client_no1").value = 17;
-			document.getElementById("crlist["+p+"].client_name1").value = '';
-			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
-		}
-	}
-}
-
-function searchcl2(e, code, n){
-	if(e.keyCode == 13){
-		var clname = document.getElementById("crlist["+n+"].client_name2").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("crlist["+n+"].client_name2").focus();
-			return;
-		}
-		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
-		
-		sendRequest(url, param, clName2, "POST");
-	}
-}
-function clName2(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			document.getElementById("crlist["+p+"].client_no2").value = data2.client_no;
-			document.getElementById("crlist["+p+"].client_name2").value = data2.client_name;
-		}else {
-			document.getElementById("crlist["+p+"].client_no2").value = 17;
-			document.getElementById("crlist["+p+"].client_name2").value = '';
-			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
-		}
-	}
-}
-function searchcl3(e, code, n){
-	if(e.keyCode == 13){
-		var clname = document.getElementById("crlist1["+n+"].client_name1").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("crlist1["+n+"].client_name1").focus();
-			return;
-		}
-		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
-		
-		sendRequest(url, param, clName3, "POST");
-	}
-}
-function clName3(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			document.getElementById("crlist1["+p+"].client_no1").value = data2.client_no;
-			document.getElementById("crlist1["+p+"].client_name1").value = data2.client_name;
-		}else {
-			document.getElementById("crlist1["+p+"].client_no1").value = 17;
-			document.getElementById("crlist1["+p+"].client_name1").value = '';
-			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
-		}
-	}
-}
-function searchcl4(e, code, n){
-	if(e.keyCode == 13){
-		var clname = document.getElementById("crlist1["+n+"].client_name2").value;
-		if(clname == ""){
-			alert("조회할 거래처명을 입력해주세요.");
-			document.getElementById("crlist1["+n+"].client_name2").focus();
-			return;
-		}
-		p = n;
-		var url = "${pageContext.request.contextPath}/d/d1/d12/searchcli";
-		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname)+"&i="+n;
-		
-		sendRequest(url, param, clName4, "POST");
-	}
-}
-function clName4(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			document.getElementById("crlist1["+p+"].client_no2").value = data2.client_no;
-			document.getElementById("crlist1["+p+"].client_name2").value = data2.client_name;
-		}else {
-			document.getElementById("crlist1["+p+"].client_no2").value = 17;
-			document.getElementById("crlist1["+p+"].client_name2").value = '';
-			alert("조회된 거래처가 없거나 중복된 이름입니다. 조회 버튼을 클릭하여 거래처를 선택해주세요.");
-		}
-	}
-}
 
 function searchecode(e, code){
 	if(e.keyCode == 13){
@@ -698,18 +606,6 @@ function ecode(){
 function clList(code){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
 }
-function clList1(code, h){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/clList1?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
-}
-function clList2(code, h){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/clList2?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
-}
-function clList3(code, h){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/clList3?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
-}
-function clList4(code, h){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/clList4?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
-}
 
 function goodsList(code, h){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d1/d12/goodsList?comcode_code="+code+"&i="+h, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
@@ -734,18 +630,19 @@ function codecheck(){
 				document.getElementById("register").disabled = false;
 			}else {
 				document.getElementById("requestcode").innerText = data;
+				document.getElementById("requestcode").style.color = "red";
 				document.getElementById("register").disabled = true;
-				document.getElementById("requestproduct_code").focus();	
 			}
 		}
 	}
 }
 
 var t = 0;
+console.log(t);
 function deleteGoods(rno, cno){
 	var list = document.getElementById("itemTable");
 	var arr = list.getElementsByTagName('input');
-	if(arr.length == 0){
+	if(list.getElementsByTagName("tr").length < 3){
 		alert("상품은 반드시 1개 이상이어야 합니다.");
 		return;
 	}
@@ -762,56 +659,62 @@ function deleteGoodscheck(){
 		let newTd = document.createElement("td");
 		if(data != ""){
 			procode.innerHTML = '';
-			procode.innerHTML += '<tr><th>의뢰수량</th><th>상품코드</th><th>바코드</th><th>종류</th><th>소비자가</th><th>단위</th><th>사양</th><th>규격</th><th>포장</th><th>제조사</th><th>책임판매업자</th><th>사입량</th><th>설명</th></tr>';
+			procode.innerHTML += '<tr><th>제품조회</th><th>상품명</th><th>상품코드</th><th>바코드</th><th>종류</th><th>원가</th><th>단위</th><th>사양</th><th>규격</th><th>포장</th><th>제조사</th><th>책임판매업자</th><th>사입량</th><th>설명</th><th>의뢰수량</th></tr>';
 			var data2 = JSON.parse(data);
-			console.log(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.connectrequest_qty+'" name="crlist['+t+'].connectrequest_qty" id="crlist['+t+'].connectrequest_qty">';
+				newTd.innerHTML = '<td><input type="button" onclick="goodsList1(`${comcode_code}`,'+t+')" value="search"></td>';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goods_code+'" name="crlist['+t+'].goods_code" id="crlist['+t+'].goods_code">';
+				newTd.innerHTML = '<input type="text" value="'+map.goods_name+'" name="crlist1['+t+'].goods_name" id="crlist1['+t+'].goods_name" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goods_barcode+'" name="crlist['+t+'].goods_barcode" id="crlist['+t+'].goods_barcode">';
+				newTd.innerHTML = '<input type="text" value="'+map.goods_code+'" name="crlist['+t+'].goods_code" id="crlist['+t+'].goods_code" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<select name="crlist['+t+'].goodskind_no" id="crlist['+t+'].goodskind_no"><c:forEach var="sk" items="${param.sortkind }"><c:choose><c:when test="${sk.goodskind_no == '+map.goodskind_no+' }"><option value="${sk.goodskind_no }" selected="selected">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:when><c:otherwise><option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:otherwise></c:choose></c:forEach></select>';
+				newTd.innerHTML = '<input type="text" value="'+map.goods_barcode+'" name="crlist['+t+'].goods_barcode" id="crlist['+t+'].goods_barcode" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goods_customerprice+'" name="crlist['+t+'].goods_customerprice" id="crlist['+t+'].goods_customerprice">';
+				newTd.innerHTML = '<input type="text" name="crlist['+t+'].goodssort_name" id="crlist['+t+'].goodssort_name" value="'+map.goodssort_name+' '+map.goodskind_name+'" readonly="readonly"><input type="hidden" name="crlist['+t+'].goodskind_no" id="crlist['+t+'].goodskind_no" value="'+map.goodskind_no+'" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_unit+'" name="crlist['+t+'].goodsst_unit" id="crlist['+t+'].goodsst_unit">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodslot_price+'" name="crlist['+t+'].goodslot_price" id="crlist['+t+'].goodslot_price" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_spec+'" name="crlist['+t+'].goodsst_spec" id="crlist['+t+'].goodsst_spec">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_unit+'" name="crlist['+t+'].goodsst_unit" id="crlist['+t+'].goodsst_unit" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_size+'" name="crlist['+t+'].goodsst_size" id="crlist['+t+'].goodsst_size">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_spec+'" name="crlist['+t+'].goodsst_spec" id="crlist['+t+'].goodsst_spec" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_package+'" name="crlist['+t+'].goodsst_package" id="crlist['+t+'].goodsst_package">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_size+'" name="crlist['+t+'].goodsst_size" id="crlist['+t+'].goodsst_size" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.client_name1+'" name="crlist['+t+'].client_name1" id="crlist['+t+'].client_name1" onkeypress="searchcl1(event, `${comcode_code}`, '+t+')"><input type="button" onclick="clList1(`${comcode_code}`,'+t+')" value="search">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_package+'" name="crlist['+t+'].goodsst_package" id="crlist['+t+'].goodsst_package" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.client_name2+'" name="crlist['+t+'].client_name2" id="crlist['+t+'].client_name2" onkeypress="searchcl2(event, `${comcode_code}`, '+t+')"><input type="button" onclick="clList2(`${comcode_code}`,'+t+')" value="search">';
+				newTd.innerHTML = '<input type="text" value="'+map.client_name1+'" name="crlist['+t+'].client_name1" id="crlist['+t+'].client_name1" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_ea+'" name="crlist['+t+'].goodsst_ea" id="crlist['+t+'].goodsst_ea">';
+				newTd.innerHTML = '<input type="text" value="'+map.client_name2+'" name="crlist['+t+'].client_name2" id="crlist['+t+'].client_name2" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<td><input type="text" value="'+map.goods_description+'" name="crlist['+t+'].goods_description" id="crlist['+t+'].goods_description"></td><input type="hidden" name="crlist['+t+'].client_no1" id="crlist['+t+'].client_no1" value="'+map.client_no1+'"><input type="hidden" name="crlist['+t+'].client_no2" id="crlist['+t+'].client_no2" value="'+map.client_no2+'"><input type="hidden" name="crlist['+t+'].connectrequest_no" id="crlist['+t+'].connectrequest_no" value="'+map.connectrequest_no+'"><input type="hidden" name="crlist['+t+'].requestproduct_no" id="crlist['+t+'].requestproduct_no" value="'+map.requestproduct_no+'">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_ea+'" name="crlist['+t+'].goodsst_ea" id="crlist['+t+'].goodsst_ea" readonly="readonly">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<td><input type="text" value="'+map.goods_description+'" name="crlist['+t+'].goods_description" id="crlist['+t+'].goods_description" readonly="readonly"></td><input type="hidden" name="crlist['+t+'].client_no1" id="crlist['+t+'].client_no1" value="'+map.client_no1+'"><input type="hidden" name="crlist['+t+'].client_no2" id="crlist['+t+'].client_no2" value="'+map.client_no2+'"><input type="hidden" name="crlist['+t+'].connectrequest_no" id="crlist['+t+'].connectrequest_no" value="'+map.connectrequest_no+'"><input type="hidden" name="crlist['+t+'].requestproduct_no" id="crlist['+t+'].requestproduct_no" value="'+map.requestproduct_no+'">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<td><input type="text" value="'+map.connectrequest_qty+'" name="crlist['+t+'].connectrequest_qty" id="crlist['+t+'].connectrequest_qty">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="button" onclick="deleteGoods('+map.requestproduct_no+', '+map.connectrequest_no+')" value="delete">';
 				newTr.appendChild(newTd);
 				t = Number(t) + 1;
 			});
+			
 		}else {
 			procode.innerHTML = '';
 			procode.innerHTML += '<tr><td colspan="13">목록이 없습니다.</td></tr>';

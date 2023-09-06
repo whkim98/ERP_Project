@@ -6,7 +6,7 @@
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<!--  <link rel="stylesheet" href="/css/a/a_company.css" />-->
+  <link rel="stylesheet" href="/css/a/a_company.css" />
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -43,35 +43,35 @@ border: 0;
         <table>
         	<tr>
         		<th>회사명</th>
-        		<td id="company_name">${inmap.company_name }</td>
+        		<td><input type="text" name="company_name" id="company_name" value="${inmap.company_name }" readonly="readonly" class="required"></td>
         		<th>대표</th>
-        		<td id="company_representative">${inmap.company_representative }</td>
+        		<td><input type="text" name="company_representative" id="company_representative" value="${inmap.company_representative }" readonly="readonly"></td>
         		<th>형태</th>
-        		<td id="company_businesstype">${inmap.company_businesstype }</td>
+        		<td><input type="text" name="company_businesstype" id="company_businesstype" value="${inmap.company_businesstype }" readonly="readonly"></td>
         	</tr>
         	<tr>
         		<th>주소</th>
-        		<td id="company_addr1">${inmap.company_addr1 }</td>
+        		<td><input type="text" name="company_addr1" id="company_addr1" value="${inmap.company_addr1 }" readonly="readonly"></td>
         		<th>상세주소</th>
-        		<td id="company_addr2">${inmap.company_addr2 }</td>
+        		<td><input type="text" name="company_addr2" id="company_addr2" value="${inmap.company_addr2 }" readonly="readonly"></td>
         		<th>용도</th>
-        		<td id="company_use">${inmap.company_use }</td>
+        		<td><input type="text" name="company_use" id="company_use" value="${inmap.company_use }" readonly="readonly"></td>
         	</tr>
         	<tr>
         		<th>사업자등록번호</th>
-        		<td id="company_registeredno">${inmap.company_registeredno }</td>
+        		<td><input type="text" name="company_registeredno" id="company_registeredno" value="${inmap.company_registeredno }" readonly="readonly"></td>
         		<th>업태</th>
-        		<td id="businesstype_name">${inmap.businesstype_name }</td>
+        		<td><input type="text" name="businesstype_name" id="businesstype_name" value="${inmap.businesstype_name }" readonly="readonly"></td>
         		<th>업종</th>
-        		<td id="businesstype_subctgr">${inmap.businesstype_subctgr }</td>
+        		<td><input type="text" name="businesstype_subctgr" id="businesstype_subctgr" value="${inmap.businesstype_subctgr }" readonly="readonly"></td>
         	</tr>
         	<tr>
         		<th>개업일</th>
-        		<td id="company_opendate">${inmap.company_opendate }</td>
+        		<td><input type="text" name="company_opendate" id="company_opendate" value="${inmap.company_opendate }" readonly="readonly"></td>
         		<th>지점코드</th>
-        		<td id="comptype_code">${inmap.comptype_code }</td>
+        		<td><input type="text" name="comptype_code" id="comptype_code" value="${inmap.comptype_code }" readonly="readonly"></td>
         		<th>구분</th>
-        		<td id="comptype_name">${inmap.comptype_name }</td>
+        		<td><input type="text" name="comptype_name" id="comptype_name" value="${inmap.comptype_name }" readonly="readonly"></td>
         	</tr>
         	<tr align="center">
         		<td colspan="6"><input type="button" value="회사조회" onclick="coList('${comcode_code}')"></td>
@@ -80,12 +80,12 @@ border: 0;
          
          <div class="taxinvoice-contentItem">
          	<p>
-               <input type="button" id="addRow" value="품목추가">
-               <input type="button" id="deleteRow" value="품목삭제">
+               <input type="button" id="addRow" value="행추가">
+               <input type="button" id="deleteRow" value="행삭제">
          	</p>
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
-                    <th>수량</th>
+                    <th>제품조회</th>
                     <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
@@ -95,8 +95,8 @@ border: 0;
                     <th>규격</th>
                     <th>제조사</th>
                     <th>책임판매업자</th>
-                    <th>사입량</th>
-                    <th>재고</th>
+                    <th>현재고</th>
+                    <th>입고재고</th>
                     <th>실재고</th>
                     <th>사용여부</th>
                     <th>입고일</th>
@@ -105,7 +105,6 @@ border: 0;
                 	<tr class="plist">
 	                	<td>
 		                	<input type="button" onclick="goodsList('${comcode_code}',${status.index })" value="search">
-		                	<input type="text" name="crlist1[${status.index }].goodslot_qty" id="crlist1[${status.index }].goodslot_qty" value="${i.goodslot_qty }" readonly="readonly">
 		                </td>
 						<td>
 							<input type="text" name="crlist1[${status.index }].goods_name" id="crlist1[${status.index }].goods_name" value="${i.goods_name }" readonly="readonly">
@@ -115,30 +114,26 @@ border: 0;
 						<td><input type="text" name="crlist1[${status.index }].goods_barcode" id="crlist1[${status.index }].goods_barcode" value="${i.goods_barcode }" readonly="readonly"></td>
 						<td>
 							<input type="text" name="crlist1[${status.index }].goodssort_name" id="crlist1[${status.index }].goodssort_name" value="${i.goodssort_name } - ${i.goodskind_name}" readonly="readonly">
-							<input type="hidden" name="crlist1[${status.index }].goodskind_no" id="crlist1[${status.index }].goodskind_no" value="${i.goodskind_no }">
 						</td>
 						<td><input type="text" name="crlist1[${status.index }].goodslot_price" id="crlist1[${status.index }].goodslot_price" value="${i.goodslot_price }" readonly="readonly"></td>
 						<td><input type="text" name="crlist1[${status.index }].goodsst_unit" id="crlist1[${status.index }].goodsst_unit" value="${i.goodsst_unit }" readonly="readonly"></td>
 						<td><input type="text" name="crlist1[${status.index }].goodsst_size" id="crlist1[${status.index }].goodsst_size" value="${i.goodsst_size }" readonly="readonly"></td>
 						<td>
 							<input type="text" name="crlist1[${status.index }].client_name1" id="crlist1[${status.index }].client_name1" value="${i.client_name1}" readonly="readonly">
-							<input type="button" onclick="clList1('${comcode_code}',${status.index })" value="search">
 						</td>
 						<td>
 							<input type="text" name="crlist1[${status.index }].client_name2" id="crlist1[${status.index }].client_name2" value="${i.client_name2}" readonly="readonly">
-							<input type="button" onclick="clList2('${comcode_code}',${status.index })" value="search">
 						</td>
-						<td><input type="text" name="crlist1[${status.index }].goodsst_ea" id="crlist1[${status.index }].goodsst_ea" value="${i.goodsst_ea }" readonly="readonly"></td>
-						<td><input type="text" name="crlist1[${status.index }].invenlot_qty" id="crlist1[${status.index }].invenlot_qty" value="${i.invenlot_qty }" readonly="readonly"></td>
-						<td><input type="text" name="crlist1[${status.index }].invenlot_recode" id="crlist1[${status.index }].invenlot_recode" value="${i.invenlot_recode }" readonly="readonly"></td>
+						<td><input type="text" name="crlist1[${status.index }].goodslot_qty" id="crlist1[${status.index }].goodslot_qty" value="${i.goodslot_qty }" readonly="readonly"></td>
+						<td><input type="text" name="crlist1[${status.index }].invenlot_qty" id="crlist1[${status.index }].invenlot_qty" value="${i.invenlot_qty }" class="required"></td>
+						<td><input type="text" name="crlist1[${status.index }].invenlot_recode" id="crlist1[${status.index }].invenlot_recode" value="${i.invenlot_recode }" class="required"></td>
 						<td>
-							<select name="crlist1[${status.index }].invenlot_availability" id="crlist1[${status.index }].invenlot_availability">
-								<option value="">선택</option>
+							<select name="crlist1[${status.index }].invenlot_availability" id="crlist1[${status.index }].invenlot_availability" class="required">
 								<option value="0" ${i.invenlot_availability == 0 ? 'selected' : '' }>사용</option>
 								<option value="1" ${i.invenlot_availability == 1 ? 'selected' : '' }>미사용</option>
 							</select>
 						</td>
-						<td><input type="date" name="crlist1[${status.index }].invenlot_date" id="crlist1[${status.index }].invenlot_date" value="${i.invenlot_date }" readonly="readonly"></td>
+						<td><input type="date" name="crlist1[${status.index }].invenlot_date" id="crlist1[${status.index }].invenlot_date" value="${i.invenlot_date }" class="required"></td>
 						<td>
 							<input type="button" onclick="deleteGoods(${i.invenlot_no},${i.proinventory_no})" value="delete">
 							<input type="hidden" name="crlist1[${status.index }].client_no1" id="crlist1[${status.index }].client_no1" value="${i.client_no1 }">
@@ -166,35 +161,35 @@ border: 0;
 		        <table>
 		        	<tr>
 		        		<th>회사명</th>
-		        		<td id="company_name"></td>
+		        		<td><input type="text" name="company_name" id="company_name" readonly="readonly" class="required"></td>
 		        		<th>대표</th>
-		        		<td id="company_representative"></td>
+		        		<td><input type="text" name="company_representative" id="company_representative" readonly="readonly"></td>
 		        		<th>형태</th>
-		        		<td id="company_businesstype"></td>
+		        		<td><input type="text" name="company_businesstype" id="company_businesstype" readonly="readonly"></td>
 		        	</tr>
 		        	<tr>
 		        		<th>주소</th>
-		        		<td id="company_addr1"></td>
+		        		<td><input type="text" name="company_addr1" id="company_addr1" readonly="readonly"></td>
 		        		<th>상세주소</th>
-		        		<td id="company_addr2"></td>
+		        		<td><input type="text" name="company_addr2" id="company_addr2" readonly="readonly"></td>
 		        		<th>용도</th>
-		        		<td id="company_use"></td>
+		        		<td><input type="text" name="company_use" id="company_use" readonly="readonly"></td>
 		        	</tr>
 		        	<tr>
 		        		<th>사업자등록번호</th>
-		        		<td id="company_registeredno"></td>
+		        		<td><input type="text" name="company_registeredno" id="company_registeredno" readonly="readonly"></td>
 		        		<th>업태</th>
-		        		<td id="businesstype_name"></td>
+		        		<td><input type="text" name="businesstype_name" id="businesstype_name" readonly="readonly"></td>
 		        		<th>업종</th>
-		        		<td id="businesstype_subctgr"></td>
+		        		<td><input type="text" name="businesstype_subctgr" id="businesstype_subctgr" readonly="readonly"></td>
 		        	</tr>
 		        	<tr>
 		        		<th>개업일</th>
-		        		<td id="company_opendate"></td>
+		        		<td><input type="text" name="company_opendate" id="company_opendate" readonly="readonly"></td>
 		        		<th>지점코드</th>
-		        		<td id="comptype_code"></td>
+		        		<td><input type="text" name="comptype_code" id="comptype_code" readonly="readonly"></td>
 		        		<th>구분</th>
-		        		<td id="comptype_name"></td>
+		        		<td><input type="text" name="comptype_name" id="comptype_name" readonly="readonly"></td>
 		        	</tr>
 		        	<tr align="center">
 		        		<td colspan="6"><input type="button" value="회사조회" onclick="coList('${comcode_code}')"></td>
@@ -204,13 +199,13 @@ border: 0;
            
         <div class="taxinvoice-contentItem">
             <p>
-               <input type="button" id="addRow" value="품목추가">
-               <input type="button" id="deleteRow" value="품목삭제">
+               <input type="button" id="addRow" value="행추가">
+               <input type="button" id="deleteRow" value="행삭제">
             </p>
     
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
-                    <th>수량</th>
+                    <th>제품조회</th>
                     <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
@@ -220,49 +215,44 @@ border: 0;
                     <th>규격</th>
                     <th>제조사</th>
                     <th>책임판매업자</th>
-                    <th>사입량</th>
-                    <th>재고</th>
+                    <th>현재고</th>
+                    <th>입고재고</th>
                     <th>실재고</th>
                     <th>사용여부</th>
                     <th>입고일</th>
                 </tr>
-               	<tr id="procode">
+               	<tr id="procode" class="plist">
 					<td>
-						<input type="text" name="crlist[0].goodslot_qty" id="crlist[0].goodslot_qty">
 						<input type="button" onclick="goodsList1('${comcode_code}',0)" value="search">
 					</td>
 					<td>
-						<input type="text" name="crlist[0].goods_name" id="crlist[0].goods_name">
+						<input type="text" name="crlist[0].goods_name" id="crlist[0].goods_name" readonly="readonly">
 						<input type="hidden" name="crlist[0].goodslot_no" id="crlist[0].goodslot_no">
 					</td>
-					<td><input type="text" name="crlist[0].goods_code" id="crlist[0].goods_code"></td>
-					<td><input type="text" name="crlist[0].goods_barcode" id="crlist[0].goods_barcode"></td>
+					<td><input type="text" name="crlist[0].goods_code" id="crlist[0].goods_code" readonly="readonly"></td>
+					<td><input type="text" name="crlist[0].goods_barcode" id="crlist[0].goods_barcode" readonly="readonly"></td>
 					<td>
 						<input type="text" name="crlist[0].goodssort_name" id="crlist[0].goodssort_name" readonly="readonly">
-						<input type="hidden" name="crlist[0].goodskind_no" id="crlist[0].goodskind_no">
 					</td>
-					<td><input type="text" name="crlist[0].goodslot_price" id="crlist[0].goodslot_price"></td>
-					<td><input type="text" name="crlist[0].goodsst_unit" id="crlist[0].goodsst_unit"></td>
-					<td><input type="text" name="crlist[0].goodsst_size" id="crlist[0].goodsst_size"></td>
+					<td><input type="text" name="crlist[0].goodslot_price" id="crlist[0].goodslot_price" readonly="readonly"></td>
+					<td><input type="text" name="crlist[0].goodsst_unit" id="crlist[0].goodsst_unit" readonly="readonly"></td>
+					<td><input type="text" name="crlist[0].goodsst_size" id="crlist[0].goodsst_size" readonly="readonly"></td>
 					<td>
-						<input type="text" name="crlist[0].client_name1" id="crlist[0].client_name1" onkeypress="searchcl3(event, '${comcode_code}',0)">
-						<input type="button" onclick="clList3('${comcode_code}',0)" value="search">
+						<input type="text" name="crlist[0].client_name1" id="crlist[0].client_name1" readonly="readonly">
 					</td>
 					<td>
-						<input type="text" name="crlist[0].client_name2" id="crlist[0].client_name2" onkeypress="searchcl4(event, '${comcode_code}',0)">
-						<input type="button" onclick="clList4('${comcode_code}',0)" value="search">
+						<input type="text" name="crlist[0].client_name2" id="crlist[0].client_name2" readonly="readonly">
 					</td>
-					<td><input type="text" name="crlist[0].goodsst_ea" id="crlist[0].goodsst_ea"></td>
-					<td><input type="text" name="crlist[0].invenlot_qty" id="crlist[0].invenlot_qty"></td>
-					<td><input type="text" name="crlist[0].invenlot_recode" id="crlist[0].invenlot_recode"></td>
+					<td><input type="text" name="crlist[0].goodslot_qty" id="crlist[0].goodslot_qty" readonly="readonly"></td>
+					<td><input type="text" name="crlist[0].invenlot_qty" id="crlist[0].invenlot_qty" class="required"></td>
+					<td><input type="text" name="crlist[0].invenlot_recode" id="crlist[0].invenlot_recode" class="required"></td>
 					<td>
-						<select name="crlist[0].invenlot_availability" id="crlist[0].invenlot_availability">
-							<option value="">선택</option>
-							<option value="0">사용</option>
+						<select name="crlist[0].invenlot_availability" id="crlist[0].invenlot_availability" class="required">
+							<option value="0" selected="selected">사용</option>
 							<option value="1">미사용</option>
 						</select>
 					</td>
-					<td><input type="date" name="crlist[0].invenlot_date" id="crlist[0].invenlot_date"></td>
+					<td><input type="date" name="crlist[0].invenlot_date" id="crlist[0].invenlot_date" class="required"></td>
 					<td>
 						<input type="button" onclick="clearRow(this)" value="delete">
 						<input type="hidden" name="crlist[0].client_no1" id="crlist[0].client_no1" value="17">
@@ -285,19 +275,66 @@ border: 0;
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+
+const itemTable = document.getElementById('itemTable');
+var pat = /^[0-9]{0,8}$/;
+
+for(let i = 0; i < itemTable.rows.length; i++){
+	if(document.getElementById("crlist["+i+"].invenlot_date")){
+		document.getElementById("crlist["+i+"].invenlot_date").setAttribute("min", end+"-01-01");
+		document.getElementById("crlist["+i+"].invenlot_date").setAttribute("max", end+"-12-31");
+	}
+	if(document.getElementById("crlist1["+i+"].invenlot_date")){
+		document.getElementById("crlist1["+i+"].invenlot_date").setAttribute("min", end+"-01-01");
+		document.getElementById("crlist1["+i+"].invenlot_date").setAttribute("max", end+"-12-31");
+	}
+}
+
 function sub(f){
 	
 	var list = document.getElementById("itemTable");
-	var arr = list.getElementsByTagName('input');
-	for(var b = 0; b < arr.length; b++){
-		if(arr[b].value == ""){
-			arr[b].focus();
-			return;
+	let tr = list.getElementsByClassName("plist");
+	var arr = null;
+	for(let d = 0; d < tr.length; d++){
+		arr = tr[d].getElementsByTagName("input");
+		for(var b = 0; b < arr.length; b++){
+			if(arr[b].value == ""){
+				arr[b].focus();
+				return;
+			}
+			if(!pat.test(arr.item(13).value)){
+				arr.item(13).value = 0;
+				alert("숫자만 입력 가능합니다.");
+				return;
+			}
+			if(Number(arr.item(11).value) < Number(arr.item(12).value)){
+				arr.item(12).value = 0;
+				arr.item(12).focus();
+				alert("입고재고는 현재고을 초과할 수 없습니다.");
+				return;
+			}
+			if(Number(arr.item(11).value) < Number(arr.item(13).value)){
+				arr.item(13).value = 0;
+				arr.item(13).focus();
+				alert("실재고는 현재고을 초과할 수 없습니다.");
+				return;
+			}
+			if(!pat.test(arr.item(12).value)){
+				arr.item(12).value = 0;
+				alert("숫자만 입력 가능합니다.");
+				return;
+			}
 		}
 	}
 	
-	var pat = /^[0-9]{0,8}$/;
-	if(document.getElementById("company_name").innerText == ""){
+	if(document.getElementById("company_name").value == ""){
 		f.company_name.focus();
 		return;
 	}else {
@@ -362,55 +399,65 @@ function searchAddr() {
 }
 
 
-const itemTable = document.getElementById('itemTable');
-
 const addRowButton = document.getElementById('addRow');
 const deleteRowButton = document.getElementById('deleteRow');
 
 var j = 0;
 addRowButton.addEventListener('click', function() {
-    if (itemTable.rows.length <= 16) {
+    if (itemTable.rows.length <= 100) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
-        
+       
         for (let i = 0; i < 16; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodslot_qty" id="crlist['+j+'].goodslot_qty"><input type="button" onclick="goodsList1(`${comcode_code}`,'+j+')" value="search"></td>';
+                cells[i].innerHTML = '<td><input type="button" onclick="goodsList1(`${comcode_code}`,'+j+')" value="search"></td>';
             } else if (i === 1) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_name" id="crlist['+j+'].goods_name"><input type="hidden" name="crlist['+j+'].goodslot_no" id="crlist['+j+'].goodslot_no"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_name" id="crlist['+j+'].goods_name" readonly="readonly"><input type="hidden" name="crlist['+j+'].goodslot_no" id="crlist['+j+'].goodslot_no"></td>';
             } else if (i === 2) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_code" id="crlist['+j+'].goods_code"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_code" id="crlist['+j+'].goods_code" readonly="readonly"></td>';
             } else if (i === 3){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_barcode" id="crlist['+j+'].goods_barcode"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_barcode" id="crlist['+j+'].goods_barcode" readonly="readonly"></td>';
             } else if (i === 4){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodssort_name" id="crlist['+j+'].goodssort_name" readonly="readonly"><input type="hidden" name="crlist['+j+'].goodskind_no" id="crlist['+j+'].goodskind_no"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodssort_name" id="crlist['+j+'].goodssort_name" readonly="readonly"></td>';
             } else if (i === 5){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodslot_price" id="crlist['+j+'].goodslot_price"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodslot_price" id="crlist['+j+'].goodslot_price" readonly="readonly"></td>';
             } else if (i === 6){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_unit" id="crlist['+j+'].goodsst_unit"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_unit" id="crlist['+j+'].goodsst_unit" readonly="readonly"></td>';
             } else if (i === 7){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_size" id="crlist['+j+'].goodsst_size"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_size" id="crlist['+j+'].goodsst_size" readonly="readonly"></td>';
             } else if (i === 8){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].client_name1" id="crlist['+j+'].client_name1" onkeypress="searchcl3(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList3(`${comcode_code}`,'+j+')" value="search"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].client_name1" id="crlist['+j+'].client_name1" readonly="readonly"></td>';
             }  else if (i === 9){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].client_name2" id="crlist['+j+'].client_name2" onkeypress="searchcl4(event, `${comcode_code}`, '+j+')"><input type="button" onclick="clList4(`${comcode_code}`,'+j+')" value="search"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].client_name2" id="crlist['+j+'].client_name2" readonly="readonly"></td>';
             } else if (i === 10){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_ea" id="crlist['+j+'].goodsst_ea"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodslot_qty" id="crlist['+j+'].goodslot_qty" readonly="readonly"></td>';
             } else if (i === 11){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].invenlot_qty" id="crlist['+j+'].invenlot_qty"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].invenlot_qty" id="crlist['+j+'].invenlot_qty" class="required"></td>';
             } else if (i === 12){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].invenlot_recode" id="crlist['+j+'].invenlot_recode"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].invenlot_recode" id="crlist['+j+'].invenlot_recode" class="required"></td>';
             } else if (i === 13){
-                cells[i].innerHTML = '<td><select name="crlist['+j+'].invenlot_availability" id="crlist['+j+'].invenlot_availability"><option value="">선택</option><option value="0">사용</option><option value="1">미사용</option></select></td>';
+                cells[i].innerHTML = '<td><select name="crlist['+j+'].invenlot_availability" id="crlist['+j+'].invenlot_availability" class="required"><option value="0" selected="selected">사용</option><option value="1">미사용</option></select></td>';
             } else if (i === 14){
-                cells[i].innerHTML = '<td><input type="date" name="crlist['+j+'].invenlot_date" id="crlist['+j+'].invenlot_date"></td>';
+                cells[i].innerHTML = '<td><input type="date" name="crlist['+j+'].invenlot_date" id="crlist['+j+'].invenlot_date" class="required"></td>';
             } else {
                 cells[i].innerHTML = '<td name="b32-clearRow"><input type="button" onclick="clearRow(this)" value="delete"></td></td><input type="hidden" name="crlist['+j+'].client_no1" id="crlist['+j+'].client_no1" value="17"><input type="hidden" name="crlist['+j+'].client_no2" id="crlist['+j+'].client_no2" value="17">';
             }
         }
+        
+        for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
+            itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
+        }
+        
+        for(let i = 0; i < itemTable.rows.length; i++){
+        	if(document.getElementById("crlist["+i+"].invenlot_date")){
+        		document.getElementById("crlist["+i+"].invenlot_date").setAttribute("min", end+"-01-01");
+        		document.getElementById("crlist["+i+"].invenlot_date").setAttribute("max", end+"-12-31");
+        	}
+        }
+        
     } else {
-        alert('품목은 최대 16개까지 추가할 수 있습니다.');
+        alert('품목은 최대 100개까지 추가할 수 있습니다.');
     }
     j += 1;
 });
@@ -420,11 +467,15 @@ deleteRowButton.addEventListener('click', function() {
     const rows = itemTable.getElementsByTagName('tr');
     
     if (itemTable.rows.length > 2) {
-    	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-1){
+    	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-2){
     		return;
     	}else{
-	    	j -= 1;
-	        itemTable.deleteRow(itemTable.rows.length-1);
+    		if(document.getElementById("crlist1["+(itemTable.rows.length-2)+"].goods_name")){
+    			return;
+    		}else{
+		    	j -= 1;
+		        itemTable.deleteRow(itemTable.rows.length-1);
+    		}
     	}
     } else {
         alert('품목은 1개 이하로 삭제할 수 없습니다.');
@@ -466,50 +517,71 @@ function deleteGoodscheck(){
 		let newTd = document.createElement("td");
 		if(data != ""){
 			procode.innerHTML = '';
-			procode.innerHTML += '<tr><th>의뢰수량</th><th>상품코드</th><th>바코드</th><th>종류</th><th>소비자가</th><th>단위</th><th>사양</th><th>규격</th><th>포장</th><th>제조사</th><th>책임판매업자</th><th>사입량</th><th>설명</th></tr>';
+			procode.innerHTML += '<tr><th>제품조회</th><th>품명</th><th>상품코드</th><th>바코드</th><th>종류</th><th>원가</th><th>단위</th><th>규격</th><th>제조사</th><th>책임판매업자</th><th>현재고</th><th>재고</th><th>실재고</th><th>사용여부</th><th>입고일</th></tr>';
 			var data2 = JSON.parse(data);
 			console.log(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
+				newTr.setAttribute("class", "plist");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodslot_qty+'" name="crlist['+t+'].goodslot_qty" id="crlist['+t+'].goodslot_qty">';
+				newTd.innerHTML = '<input type="button" onclick="goodsList(`${comcode_code}`,'+t+')" value="search">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goods_name+'" name="crlist['+t+'].goods_name" id="crlist['+t+'].goods_name"><input type="hidden" value="'+map.goodslot_no+'" name="crlist['+t+'].goodslot_no" id="crlist['+t+'].goodslot_no">';
+				newTd.innerHTML = '<input type="text" value="'+map.goods_name+'" name="crlist1['+t+'].goods_name" id="crlist1['+t+'].goods_name" readonly="readonly"><input type="hidden" value="'+map.goodslot_no+'" name="crlist1['+t+'].goodslot_no" id="crlist1['+t+'].goodslot_no">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goods_code+'" name="crlist['+t+'].goods_code" id="crlist['+t+'].goods_code">';
+				newTd.innerHTML = '<input type="text" value="'+map.goods_code+'" name="crlist1['+t+'].goods_code" id="crlist1['+t+'].goods_code" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goods_barcode+'" name="crlist['+t+'].goods_barcode" id="crlist['+t+'].goods_barcode">';
+				newTd.innerHTML = '<input type="text" value="'+map.goods_barcode+'" name="crlist1['+t+'].goods_barcode" id="crlist1['+t+'].goods_barcode" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<select name="crlist['+t+'].goodskind_no" id="crlist['+t+'].goodskind_no"><c:forEach var="sk" items="${param.sortkind }"><c:choose><c:when test="${sk.goodskind_no == '+map.goodskind_no+' }"><option value="${sk.goodskind_no }" selected="selected">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:when><c:otherwise><option value="${sk.goodskind_no }">${sk.goodssort_name } - ${sk.goodskind_name }</option></c:otherwise></c:choose></c:forEach></select>';
+				newTd.innerHTML = '<input type="text" value="'+map.goodssort_name+' '+map.goodskind_name+'" name="crlist1['+t+'].goodssort_name" id="crlist1['+t+'].goodssort_name" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodslot_price+'" name="crlist['+t+'].goodslot_price" id="crlist['+t+'].goodslot_price">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodslot_price+'" name="crlist1['+t+'].goodslot_price" id="crlist1['+t+'].goodslot_price" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_unit+'" name="crlist['+t+'].goodsst_unit" id="crlist['+t+'].goodsst_unit">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_unit+'" name="crlist1['+t+'].goodsst_unit" id="crlist1['+t+'].goodsst_unit" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_size+'" name="crlist['+t+'].goodsst_size" id="crlist['+t+'].goodsst_size">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodsst_size+'" name="crlist1['+t+'].goodsst_size" id="crlist1['+t+'].goodsst_size" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.client_name1+'" name="crlist['+t+'].client_name1" id="crlist['+t+'].client_name1" onkeypress="searchcl1(event, `${comcode_code}`, '+t+')"><input type="button" onclick="clList1(`${comcode_code}`,'+t+')" value="search">';
+				newTd.innerHTML = '<input type="text" value="'+map.client_name1+'" name="crlist1['+t+'].client_name1" id="crlist1['+t+'].client_name1" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.client_name2+'" name="crlist['+t+'].client_name2" id="crlist['+t+'].client_name2" onkeypress="searchcl2(event, `${comcode_code}`, '+t+')"><input type="button" onclick="clList2(`${comcode_code}`,'+t+')" value="search">';
+				newTd.innerHTML = '<input type="text" value="'+map.client_name2+'" name="crlist1['+t+'].client_name2" id="crlist1['+t+'].client_name2" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodsst_ea+'" name="crlist['+t+'].goodsst_ea" id="crlist['+t+'].goodsst_ea">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodslot_qty+'" name="crlist1['+t+'].goodslot_qty" id="crlist1['+t+'].goodslot_qty" readonly="readonly">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="text" name="crlist1['+t+'].invenlot_qty" id="crlist1['+t+'].invenlot_qty" value="'+map.invenlot_qty+'" class="required">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="text" name="crlist1['+t+'].invenlot_recode" id="crlist1['+t+'].invenlot_recode" value="'+map.invenlot_recode+'" class="required">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<select name="crlist1['+t+'].invenlot_availability" id="crlist1['+t+'].invenlot_availability" class="required"><option value="0" ${'+map.invenlot_availability==0?"selected":""+'}>사용</option><option value="1" ${'+map.invenlot_availability==1?"selected":""+'}>미사용</option></select>';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="date" name="crlist1['+t+'].invenlot_date" id="crlist1['+t+'].invenlot_date" value="'+map.invenlot_date+'" class="required">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="button" onclick="deleteGoods('+map.invenlot_no+', '+map.proinventory_no+')" value="delete">';
 				newTr.appendChild(newTd);
 				t = Number(t) + 1;
 			});
+			
+			for(let i = 0; i < itemTable.rows.length; i++){
+				if(document.getElementById("crlist1["+i+"].invenlot_date")){
+					document.getElementById("crlist1["+i+"].invenlot_date").setAttribute("min", end+"-01-01");
+					document.getElementById("crlist1["+i+"].invenlot_date").setAttribute("max", end+"-12-31");
+				}
+			}
+			
 		}else {
 			procode.innerHTML = '';
 			procode.innerHTML += '<tr><td colspan="13">목록이 없습니다.</td></tr>';

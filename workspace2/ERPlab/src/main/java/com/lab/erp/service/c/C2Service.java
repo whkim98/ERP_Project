@@ -2,6 +2,7 @@ package com.lab.erp.service.c;
 
 import java.util.List;
 
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.lab.erp.dao.c.Erp_SalesgoodsDAO;
 import com.lab.erp.dao.c.c2.Erp_LocalsalesDAO;
 import com.lab.erp.dao.c.c2.Erp_ReturnDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodsDAO;
+import com.lab.erp.dao.d.d6.Erp_GoodslotDAO;
 import com.lab.erp.vo.a.a1.Erp_BusinesstypeVO;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
@@ -33,12 +35,14 @@ import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c2.Erp_ReturnVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
 
 @Service
 public class C2Service {
 	private Erp_Bs3DAO bsdao;
 	private Erp_ClosingDAO cldao;
 	private Erp_GoodsDAO gsdao;
+	private Erp_GoodslotDAO gldao;
 	
 	private Erp_SalesgoodsDAO sgdao;
 	
@@ -57,10 +61,12 @@ public class C2Service {
 	public C2Service(Erp_ClientDAO cdao, Erp_GoodsconnectDAO gcdao, Erp_ClientsortDAO csdao, 
 			Erp_BusinesstypeDAO bdao, Erp_CountryDAO ctdao, Erp_ReceivableDAO rdao, 
 			Erp_BondbillsDAO bbdao, Erp_ReturnDAO redao, Erp_LocalsalesDAO ldao, 
-			Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao, Erp_GoodsDAO gsdao, Erp_SalesgoodsDAO sgdao) {
+			Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao, Erp_GoodsDAO gsdao, Erp_SalesgoodsDAO sgdao, 
+			Erp_GoodslotDAO gldao) {
 		this.bsdao = bsdao;
 		this.cldao = cldao;
 		this.gsdao = gsdao;
+		this.gldao = gldao;
 		
 		this.sgdao = sgdao;
 		
@@ -215,6 +221,10 @@ public class C2Service {
 		return rdao.getUniqueCode(receivable_code);
 	}
 	
+	public int getReceivableTotal(int receivable_no) {
+		return rdao.getReceivableTotal(receivable_no);
+	}
+	
 	public int inputBills(Erp_BondbillsVO vo) {
 		return bbdao.inputBills(vo);
 	}
@@ -304,15 +314,30 @@ public class C2Service {
 	}
 	
 //	goods
-	public List<Erp_GoodsVO> getSalesGoods(int goods_no){
-		return gsdao.getSalesGoods(goods_no);
-	}
 	public List<Map<String, Object>> goodsList(Map<String, Object> map){
 		return gsdao.goodsList(map);
 	}
 	public  List<Map<String, Object>> goodsReturn(Map<String, Object> map){
 		return gsdao.goodsReturn(map);
 	}
+	public int updateGoodsOne(Erp_GoodsVO vo) {
+		return gsdao.updateGoodsOne(vo);
+	}
+	public int updateGoodsSub(Erp_GoodsVO vo) {
+		return gsdao.updateGoodsSub(vo);
+	}
+	
+	
+//	goodslot
+	public int updateLotQtyOne(Erp_GoodslotVO vo) {
+		return gldao.updateLotQtyOne(vo);
+	}
+	
+	public int updateLotQtySub(Erp_GoodslotVO vo) {
+		return gldao.updateLotQtySub(vo);
+	}
+	
+	
 	
 //	salesgoods
 	public int inputSalesGoods(Erp_SalesgoodsVO vo) {
@@ -329,5 +354,8 @@ public class C2Service {
 	}
 	public List<Erp_SalesgoodsVO> getSGNo(String salesgoods_code){
 		return sgdao.getSGNo(salesgoods_code);
+	}
+	public List<Map<String, Object>> getSalesGoods(String salesgoods_code){
+		return sgdao.getSalesGoods(salesgoods_code);
 	}
 }

@@ -11,6 +11,7 @@
 </head>
 <body>
 <div>
+	<p>목록에 없는 제품은 물류팀에 문의해서 추가해주세요.</p>
 	<select name="btype">
 		<option value="all">전체검색</option>
 		<option value="goodslot_lot">로트번호</option>
@@ -35,11 +36,11 @@
 		</tr>
 		<c:if test="${list == null }">
 			<tr>
-				<td>정보가 존재하지 않습니다.</td>
+				<td colspan="7">상품이 존재하지 않습니다. <br>물류관리에서 상품을 추가해주세요.</td>
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText('${i}',${vo.goodslot_no },'${vo.goods_code}', '${vo.goods_barcode }', '${vo.goods_name }', ${vo.goodskind_no }, ${vo.goodslot_price }, ${vo.client_no1 }, ${vo.client_no2 }, '${vo.goodsst_unit }', '${vo.goodsst_size }', ${vo.goodsst_ea }, '${vo.client_name1 }', '${vo.client_name2 }', '${vo.goodssort_name }', '${vo.goodskind_name }', ${vo.goodslot_qty })">
+				<tr onclick="setParentText('${i}','${vo.goods_code}', '${vo.goods_barcode }', '${vo.goods_name }', ${vo.goodskind_no }, ${vo.goodslot_price }, '${vo.goods_description }', ${vo.client_no1 }, ${vo.client_no2 }, '${vo.goodsst_unit }', '${vo.goodsst_spec }', '${vo.goodsst_size }', '${vo.goodsst_package }', ${vo.goodsst_ea }, '${vo.client_name1 }', '${vo.client_name2 }', '${vo.goodssort_name }', '${vo.goodskind_name }')">
 					<td>${vo.goodslot_lot}</td>
 					<td>${vo.goods_barcode}</td>
 					<td>${vo.goods_name}</td>
@@ -53,22 +54,23 @@
 </div>
 
 <script type="text/javascript">
-	function setParentText(h, lot, code, barcode, name, gkno, cprice, cno1, cno2, unit, size, ea, cname1, cname2, sname, kname, qty){
-		opener.document.getElementById("crlist["+h+"].goodslot_qty").value = qty;
-    	opener.document.getElementById("crlist["+h+"].goods_code").value = code;
-    	opener.document.getElementById("crlist["+h+"].goods_barcode").value = barcode;
-    	opener.document.getElementById("crlist["+h+"].goods_name").value = name;
-    	opener.document.getElementById("crlist["+h+"].goodslot_no").value = lot;
-    	opener.document.getElementById("crlist["+h+"].goodskind_no").value = gkno;
-    	opener.document.getElementById("crlist["+h+"].goodssort_name").value = sname + " - " + kname;
-    	opener.document.getElementById("crlist["+h+"].goodslot_price").value = cprice;
-    	opener.document.getElementById("crlist["+h+"].client_no1").value = cno1;
-    	opener.document.getElementById("crlist["+h+"].client_no2").value = cno2;
-    	opener.document.getElementById("crlist["+h+"].goodsst_unit").value = unit;
-    	opener.document.getElementById("crlist["+h+"].goodsst_size").value = size;
-    	opener.document.getElementById("crlist["+h+"].goodsst_ea").value = ea;
-    	opener.document.getElementById("crlist["+h+"].client_name1").value = cname1;
-    	opener.document.getElementById("crlist["+h+"].client_name2").value = cname2;
+	function setParentText(h, code, barcode, name, gkno, cprice, dcp, cno1, cno2, unit, spec, size, pcg, ea, cname1, cname2, sname, kname){
+		opener.document.getElementById("crlist["+h+"].goods_code").value = code;
+		opener.document.getElementById("crlist["+h+"].goods_barcode").value = barcode;
+		opener.document.getElementById("crlist["+h+"].goods_name").value = name;
+		opener.document.getElementById("crlist["+h+"].goodskind_no").value = gkno;
+		opener.document.getElementById("crlist1["+h+"].goodssort_name").value = sname + ' ' + kname;
+		opener.document.getElementById("crlist["+h+"].goodslot_price").value = cprice;
+		opener.document.getElementById("crlist["+h+"].goods_description").value = dcp;
+		opener.document.getElementById("crlist["+h+"].client_no1").value = cno1;
+		opener.document.getElementById("crlist["+h+"].client_no2").value = cno2;
+		opener.document.getElementById("crlist["+h+"].goodsst_unit").value = unit;
+		opener.document.getElementById("crlist["+h+"].goodsst_spec").value = spec;
+		opener.document.getElementById("crlist["+h+"].goodsst_size").value = size;
+		opener.document.getElementById("crlist["+h+"].goodsst_package").value = pcg;
+		opener.document.getElementById("crlist["+h+"].goodsst_ea").value = ea;
+		opener.document.getElementById("crlist["+h+"].client_name1").value = cname1;
+		opener.document.getElementById("crlist["+h+"].client_name2").value = cname2;
     	window.close();
     }
 	

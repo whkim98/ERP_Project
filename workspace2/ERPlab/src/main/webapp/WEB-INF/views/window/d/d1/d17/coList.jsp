@@ -60,18 +60,18 @@
 <script type="text/javascript">
 function setParentText(no,name, rep, bt, addr1, addr2, use, rno, bname, bsub, code, cname, date){
 	opener.document.getElementById("company_no").value = no;
-	opener.document.getElementById("company_name").innerText = name;
-	opener.document.getElementById("company_representative").innerText = rep;
-	opener.document.getElementById("company_businesstype").innerText = bt;
-	opener.document.getElementById("company_addr1").innerText = addr1;
-	opener.document.getElementById("company_addr2").innerText = addr2;
-	opener.document.getElementById("company_use").innerText = use;
-	opener.document.getElementById("company_registeredno").innerText = rno;
-	opener.document.getElementById("businesstype_name").innerText = bname;
-	opener.document.getElementById("businesstype_subctgr").innerText = bsub;
-	opener.document.getElementById("comptype_code").innerText = code;
-	opener.document.getElementById("comptype_name").innerText = cname;
-	opener.document.getElementById("company_opendate").innerText = date;
+	opener.document.getElementById("company_name").value = name;
+	opener.document.getElementById("company_representative").value = rep;
+	opener.document.getElementById("company_businesstype").value = bt;
+	opener.document.getElementById("company_addr1").value = addr1;
+	opener.document.getElementById("company_addr2").value = addr2;
+	opener.document.getElementById("company_use").value = use;
+	opener.document.getElementById("company_registeredno").value = rno;
+	opener.document.getElementById("businesstype_name").value = bname;
+	opener.document.getElementById("businesstype_subctgr").value = bsub;
+	opener.document.getElementById("comptype_code").value = code;
+	opener.document.getElementById("comptype_name").value = cname;
+	opener.document.getElementById("company_opendate").value = date;
 	window.close();
 }
 	

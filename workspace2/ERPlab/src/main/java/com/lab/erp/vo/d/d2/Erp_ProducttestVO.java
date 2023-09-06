@@ -9,7 +9,7 @@ import lombok.*;
 public class Erp_ProducttestVO {
 
 	private int producttest_no;
-	private int purchase_no;
+	private int purchaseconnect_no;
 	private String producttest_grade;
 	private int ptkind_no;
 	private int producttest_lossrate;

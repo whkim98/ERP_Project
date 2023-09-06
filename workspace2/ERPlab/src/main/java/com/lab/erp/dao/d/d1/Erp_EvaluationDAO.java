@@ -43,4 +43,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d1.selectEvaluation", evaluation_no);
 	}
 	
+	public int getEvalueationNo() {
+		return sqlSession.selectOne("d1.getEvalueationNo");
+	}
+	
 }
