@@ -101,9 +101,15 @@ function getlist(){
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.employee1_name;
 				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.requestproduct_start;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.requestproduct_end;
+				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="6">목록이 없습니다.</td></tr>';
 		}
 	}
 }
@@ -126,7 +132,7 @@ function getlist(){
 								<option value="requestproduct_name" ${param.type == 'requestproduct_name' ? 'selected' : '' }>의뢰명</option>
 								<option value="requestproduct_end" ${param.type == 'requestproduct_end' ? 'selected' : '' }>만기일</option>
 								<option value="requestproduct_content" ${param.type == 'requestproduct_content' ? 'selected' : '' }>내용</option>
-								<option value="closing_date" ${param.type == 'closing_date' ? 'selected' : '' }>작성일</option>
+								<option value="employee1_name" ${param.type == 'closing_date' ? 'selected' : '' }>담당자</option>
 							</select>
 						</td>
 						<td>
@@ -150,16 +156,17 @@ function getlist(){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.requestproduct_no})" class="filter">
-						<td class="code">${map.requestproduct_code }</td>
-						<td class="price">${map.requestproduct_name }</td>
-						<td class="cont">${map.client_name}</td>
+						<td>${map.requestproduct_code }</td>
+						<td>${map.requestproduct_name }</td>
+						<td>${map.client_name}</td>
+						<td>${map.employee1_name}</td>
 						<td>${map.requestproduct_start}</td>
 						<td>${map.requestproduct_end}</td>
 					</tr>
 					</c:forEach>
 				</c:if>
 				<c:if test="${list == null }">
-					<tr><td>목록이 비어있습니다</td></tr>
+					<tr><td colspan="6">목록이 비어있습니다</td></tr>
 				</c:if>
 				</table>
 			</div>

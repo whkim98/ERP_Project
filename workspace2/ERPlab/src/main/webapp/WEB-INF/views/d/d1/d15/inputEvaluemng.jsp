@@ -63,14 +63,14 @@ border: 0;
 }
 </style>
 <script type="text/javascript" charset="UTF-8">
-function surf(v, code, no){
+function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
 	if(v == ''){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type+"&receivable_no="+no;
+	var url = "${pageContext.request.contextPath}/d/d1/d15/inputEvAjax";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
 }
@@ -81,28 +81,31 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
+		procode.innerHTML += '<tr><td>생산코드</td><td>생산명</td><td>담당자</td><td>평가일자</td><td>평가상태</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				newTr.setAttribute("onclick", "selectForm("+map.evaluation_no+","+map.requestproduct_no+","+(map.evaluemng_no == 0 ? 0 : map.evaluemng_no)+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
+				newTd.innerHTML = map.product_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
+				newTd.innerHTML = map.product_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
+				newTd.innerHTML = map.employee1_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
+				newTd.innerHTML = map.evaluation_date;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.evaluation_status == 0 ? '미완' : '완료';
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
 		}
 	}
 }
@@ -173,15 +176,15 @@ function teamname(){
 						<td>생산코드</td>
 						<td>생산명</td>
 						<td>담당자</td>
-						<td>작성일</td>
+						<td>평가일자</td>
 						<td>평가상태</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.evaluation_no}, ${map.requestproduct_no }, ${map.evaluemng_no == 0 ? 0 : map.evaluemng_no })" class="filter">
-						<td class="price">${map.product_code }</td>
-						<td class="cont">${map.product_name}</td>
+						<td>${map.product_code }</td>
+						<td >${map.product_name}</td>
 						<td>${map.employee1_name}</td>
-						<td class="code">${map.evaluation_date }</td>
+						<td>${map.evaluation_date }</td>
 						<td>${map.evaluation_status == 0 ? '미완' : '완료'}</td>
 					</tr>
 					</c:forEach>
@@ -190,6 +193,9 @@ function teamname(){
 					<tr><td>목록이 비어있습니다</td></tr>
 				</c:if>
 				</table>
+				<div align="right">
+					<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d15/add?comcode_code=${comcode_code }'" value="add">
+				</div>
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -232,56 +238,50 @@ function teamname(){
 						
 						<div>
 							<label>서류상 종료 날짜 </label>
-							<input type="date" name="evaluation_paperend" id="evaluation_paperend" value="${inmap.evaluation_paperend }" class="required">
+							<input type="date" name="evaluation_paperend" id="evaluation_paperend" value="${inmap.evaluation_paperend }" class="required" readonly="readonly">
 						</div>
 							
 						<div>
 							<label>실제 종료 날짜 </label>
-							<input type="date" name="evaluation_actualend" id="evaluation_actualend" value="${inmap.evaluation_actualend }" class="required">
+							<input type="date" name="evaluation_actualend" id="evaluation_actualend" value="${inmap.evaluation_actualend }" class="required" readonly="readonly">
 						</div>
 						
 						<div>
 							<label>평가 내용 </label>
-							<input type="text" name="evaluation_content" id="evaluation_content" value="${inmap.evaluation_content }">
+							<input type="text" name="evaluation_content" id="evaluation_content" value="${inmap.evaluation_content }" readonly="readonly">
 						</div>
 						
 						<div>
 							<label>상태 </label>
-							<select name="evaluation_status" id="evaluation_status">
-								<option value="0" ${inmap.evaluation_status == 0 ? 'selected' : ''}>미완료</option>
-								<option value="1" ${inmap.evaluation_status == 1 ? 'selected' : ''}>정상 완료</option>
-							</select>
-						</div>
+							<input type="text" name="evaluation_status" id="evaluation_status" value="${inmap.evaluation_status == 1 ? '정상' : '미완' }" readonly="readonly">
+						</div><br>
 						
 						<div>
-							<label>불량률 </label>
-							<input type="text" name="evaluation_rate" id="evaluation_rate" value="${inmap.evaluation_rate }">
+							<table id="goodsList">
+								<tr>
+									<td>상품 코드</td>
+									<td>바코드</td>
+									<td>품명</td>
+									<td>재고</td>
+									<td>불량 사유</td>
+									<td>불량 수량</td>
+								</tr>
+								<c:forEach var="vo" items="${dlist }">
+									<tr>
+										<td>${vo.goods_code }</td>
+										<td>${vo.goods_barcode }</td>
+										<td>${vo.goods_name }</td>
+										<td>${vo.goodslot_qty }</td>
+										<td>${vo.defective_comment }</td>
+										<td>${vo.defective_number }</td>
+									</tr>
+								</c:forEach>
+							</table>
 						</div>
-						
-						<table id="goodsList">
-							<tr>
-								<td>상품 코드</td>
-								<td>바코드</td>
-								<td>품명</td>
-								<td>생산 수량</td>
-								<td>불량 사유</td>
-								<td>불량 수량</td>
-							</tr>
-						<c:forEach var="vo" items="${dlist }">
-							<tr>
-								<td>${vo.goods_code }</td>
-								<td>${vo.goods_barcode }</td>
-								<td>${vo.goods_name }</td>
-								<td>${vo.goodslot_qty }</td>
-								<td>${vo.defective_comment }</td>
-								<td>${vo.defective_number }</td>
-							</tr>
-						</c:forEach>
-						</table>
 						
 						<div>
 							<label>담당자 </label>
-							<input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="employee('${comcode_code}')">
+							<input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="employee('${comcode_code}')" readonly="readonly">
 						</div>	
 						
 						<div>
@@ -354,37 +354,31 @@ function teamname(){
 						
 						<div>
 							<label>상태 </label>
-							<select name="evaluation_status" id="evaluation_status" readonly="readonly">
-								<option value="0" ${inmap.evaluation_status == 0 ? 'selected' : '' }>미완료</option>
-								<option value="1" ${inmap.evaluation_status == 1 ? 'selected' : '' }>정상 완료</option>
-							</select>
-						</div>
+							<input type="text" name="evaluation_status" id="evaluation_status" value="${imap.evaluation_status == 1 ? '정상' : '미완' }" readonly="readonly">
+						</div><br>
 						
 						<div>
-							<label>불량률 </label>
-							<input type="text" name="evaluation_rate" id="evaluation_rate" value="${imap.evaluation_rate }" readonly="readonly">
+							<table id="goodsList">
+								<tr>
+									<td>상품 코드</td>
+									<td>바코드</td>
+									<td>품명</td>
+									<td>재고</td>
+									<td>불량 사유</td>
+									<td>불량 수량</td>
+								</tr>
+								<c:forEach var="vo" items="${dlist }">
+									<tr>
+										<td>${vo.goods_code }</td>
+										<td>${vo.goods_barcode }</td>
+										<td>${vo.goods_name }</td>
+										<td>${vo.goodslot_qty }</td>
+										<td>${vo.defective_comment }</td>
+										<td>${vo.defective_number }</td>
+									</tr>
+								</c:forEach>
+							</table>
 						</div>
-						
-						<table id="goodsList">
-							<tr>
-								<td>상품 코드</td>
-								<td>바코드</td>
-								<td>품명</td>
-								<td>생산 수량</td>
-								<td>불량 사유</td>
-								<td>불량 수량</td>
-							</tr>
-						<c:forEach var="vo" items="${dlist }">
-							<tr>
-								<td>${vo.goods_code }</td>
-								<td>${vo.goods_barcode }</td>
-								<td>${vo.goods_name }</td>
-								<td>${vo.goodslot_qty }</td>
-								<td>${vo.defective_comment }</td>
-								<td>${vo.defective_number }</td>
-							</tr>
-						</c:forEach>
-						</table>
 						
 						<div>
 							<label>담당자 </label>
@@ -399,9 +393,8 @@ function teamname(){
 						<div>
 							<label>출고 상태 </label>
 							<select name="evaluemng_outstatus" id="evaluemng_outstatus">
-								<option value="">선택</option>
 								<option value="0">출고</option>
-								<option value="1">미출고</option>
+								<option value="1" selected="selected">미출고</option>
 								<option value="2">보류</option>
 							</select>
 						</div>
@@ -429,65 +422,7 @@ function deletei(no, code){
 	location.href='${pageContext.request.contextPath }/d/d1/d15/delete?evaluemng_no='+no+'&comcode_code='+code;
 }
 
-function conculator(e, v){
-	if(e.keyCode == 13){
-		document.getElementById("bondbills_tax").value = Number(v) * 0.1;
-		let tax = document.getElementById("bondbills_tax").value; 
-		document.getElementById("bondbills_total").value = Number(v) + Number(tax);
-	}
-}
 
-function conculator1(v){
-	document.getElementById("bondbills_tax").value = Number(v) * 0.1;
-	let tax = document.getElementById("bondbills_tax").value; 
-	document.getElementById("bondbills_total").value = Number(v) + Number(tax);
-}
-
-
-//	bs3_no 세팅
-	function check1(){
-		let t = document.getElementById("debtor_no");	// debtor_no 불러옴
-		let arr = document.querySelectorAll("#debtor_no > option");	// debtor_no의 옵션 태그들 nodelist로 불러옴
-		let bs3_no1 = document.getElementById("bs3_no1");	// bs3_no1 불러옴
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){		// 위에서 선언한 debtor_no를 불러온 값과 option태그들의 value값을 for문으로 전부 검사
-				bs3_no1.value = e.id;	// value가 같으면 해당 옵션태그의 id를 bs3_no1에 저장
-			}					// check 메소드 전부 동일
-		});
-	}
-	function check2(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no2");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
-	
-	function check12(){
-		let t = document.getElementById("debtor_no");
-		let arr = document.querySelectorAll("#debtor_no > option");
-		let bs3_no1 = document.getElementById("bs3_no12");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no1.value = e.id;
-			}
-		});
-	}
-	function check22(){
-		let t = document.getElementById("creditor_no");
-		let arr = document.querySelectorAll("#creditor_no > option");
-		let bs3_no2 = document.getElementById("bs3_no22");
-		arr.forEach(function(e, i, array) {
-			if(t.value == e.value){
-				bs3_no2.value = e.id;
-			}
-		});
-	}
-
-	
 // submit 유효성 검사
 function sub(f){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
@@ -500,30 +435,6 @@ function sub(f){
 			f.submit();
 		}else {
 			return;
-		}
-	}
-}
-
-//코드 UNIQUE 검사 AJAX
-function code(v){
-	var url = "${pageContext.request.contextPath }/c/c2/c22/getBondbillsCode";
-	var param = "bondbills_code="+encodeURIComponent(v);
-	
-	sendRequest(url,param,codecheck,"POST");
-}
-function codecheck(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.responseText;
-		if(data != ""){	
-			if(data == "사용 가능한 코드입니다."){
-				document.getElementById("billscode").innerText = data;
-				document.getElementById("billscode").style.color = "blue";
-				document.getElementById("register").disabled = false;
-			}else {
-				document.getElementById("billscode").innerText = data;
-				document.getElementById("register").disabled = true;
-				document.getElementById("bondbills_code").focus();	
-			}
 		}
 	}
 }

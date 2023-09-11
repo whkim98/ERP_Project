@@ -11,6 +11,7 @@
 </head>
 <body>
 <div>
+	<p>목록에 없는 제품은 물류팀에 문의해서 추가해주세요.</p>
 	<select name="btype">
 		<option value="all">전체검색</option>
 		<option value="goods_name">상품명</option>

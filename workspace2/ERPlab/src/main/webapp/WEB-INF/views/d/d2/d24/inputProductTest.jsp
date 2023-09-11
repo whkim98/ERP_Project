@@ -154,11 +154,11 @@ function getlist(){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.producttest_no})" class="filter">
-						<td class="code">${map.purchase_code }</td>
-						<td class="price">${map.producttest_date }</td>
-						<td class="price">${map.producttest_grade }</td>
-						<td class="price">${map.producttest_pnp == 0 ? '불합격' : '합격' }</td>
-						<td class="cont">${map.team_name}</td>
+						<td>${map.purchase_code }</td>
+						<td>${map.producttest_date }</td>
+						<td>${map.producttest_grade }</td>
+						<td>${map.producttest_pnp == 0 ? '불합격' : '합격' }</td>
+						<td>${map.team_name}</td>
 						<td>${map.client_name}</td>
 					</tr>
 					</c:forEach>
@@ -195,6 +195,9 @@ function getlist(){
 						<input type="hidden" name="goodslot_no" id="goodslot_no" value="${inmap.goodslot_no }">
 						<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
 						<input type="hidden" name="producttest_type" id="producttest_type" value="${inmap.producttest_type }">
+						<input type="hidden" name="purchaseconnect_price" id="purchaseconnect_price" value="${inmap.purchaseconnect_price }">
+						<input type="hidden" name="purchaseconnect_number" id="purchaseconnect_number" value="${inmap.purchaseconnect_number }">
+						<input type="hidden" name="purchaseconnect_no" id="purchaseconnect_no" value="${inmap.purchaseconnect_no }">
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -202,27 +205,27 @@ function getlist(){
 						</div>
 						<div>
 							<label>구매 코드 </label>
-							<input type="text" name="purchase_code" id="purchase_code" maxlength="30" readonly="readonly" value="${inmap.purchase_code }" onclick="purchase('${comcode_code}')">
+							<input type="text" name="purchase_code" id="purchase_code" maxlength="30" readonly="readonly" value="${inmap.purchase_code }" onclick="purchase('${comcode_code}')" class="required">
 						</div>
 						
 						<div>
 							<label>로트번호 </label>
-							<input type="text" name="goodslot_lot" id="goodslot_lot" maxlength="30" readonly="readonly" value="${inmap.goodslot_lot }">
+							<input type="text" name="goodslot_lot" id="goodslot_lot" maxlength="30" readonly="readonly" value="${inmap.goodslot_lot }" onclick="purchasegoods()" class="required">
 						</div>
 						
 						<div>
 							<label>바코드 </label>
-							<input type="text" name="goods_barcode" id="goods_barcode" maxlength="30" readonly="readonly" value="${inmap.goods_barcode }">
+							<input type="text" name="goods_barcode" id="goods_barcode" maxlength="30" readonly="readonly" value="${inmap.goods_barcode }" class="required">
 						</div>
 						
 						<div>
 							<label>품명 </label>
-							<input type="text" name="goods_name" id="goods_name" value="${inmap.goods_name }" readonly="readonly">
+							<input type="text" name="goods_name" id="goods_name" value="${inmap.goods_name }" readonly="readonly" class="required">
 						</div>
 						
 						<div>
 							<label>평가 종류 </label>
-							<select name="ptkind_no" id="ptkind_no">
+							<select name="ptkind_no" id="ptkind_no" class="required">
 								<option value="0">선택</option>
 								<c:forEach var="plist" items="${ptlist }">
 									<option value="${plist.ptkind_no }" ${inmap.ptkind_no == plist.ptkind_no ? 'selected' : '' }>${plist.ptkind_type }</option>
@@ -232,12 +235,12 @@ function getlist(){
 						
 						<div>
 							<label>손실률 </label>
-							<input type="text" name="producttest_lossrate" id="producttest_lossrate" value="${inmap.producttest_lossrate }">
+							<input type="text" name="producttest_lossrate" id="producttest_lossrate" value="${inmap.producttest_lossrate }" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)" class="required">
 						</div>
 						
 						<div>
 							<label>손실 금액 </label>
-							<input type="text" name="producttest_lossprice" id="producttest_lossprice" value="${inmap.producttest_lossprice }" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)">
+							<input type="text" name="producttest_lossprice" id="producttest_lossprice" value="${inmap.producttest_lossprice }">
 						</div>
 						<div>
 							<label>세액 </label>
@@ -273,7 +276,7 @@ function getlist(){
 						
 						<div>
 							<label>최종 평가 등급 </label>
-							<input type="text" name="producttest_grade" id="producttest_grade" value="${inmap.producttest_grade }">
+							<input type="text" name="producttest_grade" id="producttest_grade" value="${inmap.producttest_grade }" class="required">
 						</div>
 						
 						<div>
@@ -291,11 +294,12 @@ function getlist(){
 					<form action="${pageContext.request.contextPath }/d/d2/d24/createProductTest" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="goodslot_no" id="goodslot_no">
-						<input type="hidden" name="team_no" id="team_no" value="">
 						<input type="hidden" name="purchase_no" id="purchase_no">
+						<input type="hidden" name="team_no" id="team_no" value="17">
 						<input type="hidden" name="producttest_type" id="producttest_type" value="1">
 						<input type="hidden" name="purchaseconnect_price" id="purchaseconnect_price">
 						<input type="hidden" name="purchaseconnect_number" id="purchaseconnect_number">
+						<input type="hidden" name="purchaseconnect_no" id="purchaseconnect_no">
 						<h3>재고 평가 등록 사항</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
@@ -335,7 +339,7 @@ function getlist(){
 						
 						<div>
 							<label>손실률 </label>
-							<input type="text" name="producttest_lossrate" id="producttest_lossrate" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)">
+							<input type="text" name="producttest_lossrate" id="producttest_lossrate" onkeyup="conculator(event, this.value)" onblur="conculator1(this.value)" class="required">
 						</div>
 						
 						<div>
@@ -358,7 +362,7 @@ function getlist(){
 						
 						<div>
 							<label>평가 내용 </label>
-							<input type="text" name="producttest_content" id="producttest_content">
+							<input type="text" name="producttest_content" id="producttest_content" class="required">
 						</div>
 						
 						<div>
@@ -408,28 +412,44 @@ function conculator(e, v){
 		if(!pat.test(document.getElementById("producttest_lossrate").value)){
 			alert("숫자만 입력 가능합니다.");
 			document.getElementById("producttest_lossrate").value = '';
+			document.getElementById("producttest_lossprice").value = '';
+			document.getElementById("producttest_losstax").value = '';
+			document.getElementById("producttest_losstotal").value = '';
+			document.getElementById("producttest_lossqty").value = '';
+			
 			document.getElementById("producttest_lossrate").focus();
 			return;
 		}
 		if(document.getElementById("producttest_lossrate").value > 99){
 			alert("손실률은 100% 미만이어야 합니다.");
+			document.getElementById("producttest_lossrate").value = '';
+			document.getElementById("producttest_lossprice").value = '';
+			document.getElementById("producttest_losstax").value = '';
+			document.getElementById("producttest_losstotal").value = '';
+			document.getElementById("producttest_lossqty").value = '';
+			
 			document.getElementById("producttest_lossrate").focus();
 			return;
 		}
-		if(document.getElementById("purchaseconnect_price").value == ""){
+		if(document.getElementById("goodslot_no").value == ""){
 			alert("제품을 먼저 선택해주세요.");
 			document.getElementById("producttest_lossrate").value = '';
+			document.getElementById("producttest_lossprice").value = '';
+			document.getElementById("producttest_losstax").value = '';
+			document.getElementById("producttest_losstotal").value = '';
+			document.getElementById("producttest_lossqty").value = '';
+			
 			document.getElementById("goodslot_lot").focus();
 			return;
 		}
 		let pcp = document.getElementById("purchaseconnect_price").value;
 		let pcq = document.getElementById("purchaseconnect_number").value;
 		let pp = Number(pcp) * Number(pcq);
-		document.getElementById("producttest_lossprice").value = Number(pp) * (Number(v) * 0.01);
-		document.getElementById("producttest_losstax").value = Number(pp) * (Number(v) * 0.01) * 0.1;
+		document.getElementById("producttest_lossprice").value = Math.round(Number(pp) * (Number(v) * 0.01));
+		document.getElementById("producttest_losstax").value = Math.round(Number(pp) * (Number(v) * 0.01) * 0.1);
 		let tax = document.getElementById("producttest_losstax").value; 
-		document.getElementById("producttest_losstotal").value = Number(pp) * (Number(v) * 0.01) + Number(tax);
-		document.getElementById("producttest_lossqty").value = Number(pcq) * (Number(v) * 0.01); 
+		document.getElementById("producttest_losstotal").value = Math.round(Number(pp) * (Number(v) * 0.01) + Number(tax));
+		document.getElementById("producttest_lossqty").value = Math.round(Number(pcq) * (Number(v) * 0.01));
 	}
 }
 
@@ -437,28 +457,44 @@ function conculator1(v){
 	if(!pat.test(document.getElementById("producttest_lossrate").value)){
 		alert("숫자만 입력 가능합니다.");
 		document.getElementById("producttest_lossrate").value = '';
+		document.getElementById("producttest_lossprice").value = '';
+		document.getElementById("producttest_losstax").value = '';
+		document.getElementById("producttest_losstotal").value = '';
+		document.getElementById("producttest_lossqty").value = '';
+		
 		document.getElementById("producttest_lossrate").focus();
 		return;
 	}
 	if(document.getElementById("producttest_lossrate").value > 99){
 		alert("손실률은 100% 미만이어야 합니다.");
+		document.getElementById("producttest_lossrate").value = '';
+		document.getElementById("producttest_lossprice").value = '';
+		document.getElementById("producttest_losstax").value = '';
+		document.getElementById("producttest_losstotal").value = '';
+		document.getElementById("producttest_lossqty").value = '';
+		
 		document.getElementById("producttest_lossrate").focus();
 		return;
 	}
-	if(document.getElementById("purchaseconnect_price").value == ""){
+	if(document.getElementById("goodslot_no").value == ""){
 		alert("제품을 먼저 선택해주세요.");
 		document.getElementById("producttest_lossrate").value = '';
+		document.getElementById("producttest_lossprice").value = '';
+		document.getElementById("producttest_losstax").value = '';
+		document.getElementById("producttest_losstotal").value = '';
+		document.getElementById("producttest_lossqty").value = '';
+		
 		document.getElementById("goodslot_lot").focus();
 		return;
 	}
 	let pcp = document.getElementById("purchaseconnect_price").value;
 	let pcq = document.getElementById("purchaseconnect_number").value;
 	let pp = Number(pcp) * Number(pcq);
-	document.getElementById("producttest_lossprice").value = Number(pp) * (Number(v) * 0.01);
-	document.getElementById("producttest_losstax").value = Number(pp) * (Number(v) * 0.01) * 0.1;
+	document.getElementById("producttest_lossprice").value = Math.round(Number(pp) * (Number(v) * 0.01));
+	document.getElementById("producttest_losstax").value = Math.round(Number(pp) * (Number(v) * 0.01) * 0.1);
 	let tax = document.getElementById("producttest_losstax").value; 
-	document.getElementById("producttest_losstotal").value = Number(pp) * (Number(v) * 0.01) + Number(tax);
-	document.getElementById("producttest_lossqty").value = Number(pcq) * (Number(v) * 0.01);
+	document.getElementById("producttest_losstotal").value = Math.round(Number(pp) * (Number(v) * 0.01) + Number(tax));
+	document.getElementById("producttest_lossqty").value = Math.round(Number(pcq) * (Number(v) * 0.01));
 }
 
 
@@ -512,6 +548,13 @@ function sub(f){
 	}
 	if(!pat.test(f.producttest_lossfull.value)){
 		alert("숫자만 입력 가능합니다.");
+		f.producttest_lossfull.focus();
+		return;
+	}
+	
+	if(f.producttest_lossfull.value > f.producttest_losstotal.value){
+		alert("충당 금액은 손실 총액을 초과할 수 없습니다.");
+		f.producttest_lossfull.value = 0;
 		f.producttest_lossfull.focus();
 		return;
 	}

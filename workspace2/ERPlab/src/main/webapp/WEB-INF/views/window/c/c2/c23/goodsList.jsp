@@ -39,7 +39,7 @@
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText('${i}',${vo.connectrequest_qty}, '${vo.goods_code}', '${vo.goods_barcode }', '${vo.goods_name }', ${vo.goodskind_no }, ${vo.goods_customerprice }, '${vo.goods_description }', ${vo.client_no1 }, ${vo.client_no2 }, '${vo.goodsst_unit }', '${vo.goodsst_spec }', '${vo.goodsst_size }', '${vo.goodsst_package }', ${vo.goodsst_ea }, '${vo.client_name1 }', '${vo.client_name2 }')">
+				<tr onclick="setParentText(${vo.goodslot_no}, '${vo.goods_name }', '${vo.goodslot_lot }', '${vo.goods_barcode }', ${vo.goodslot_total })">
 					<td>${vo.goodslot_lot}</td>
 					<td>${vo.goods_barcode}</td>
 					<td>${vo.goods_name}</td>
@@ -53,23 +53,12 @@
 </div>
 
 <script type="text/javascript">
-	function setParentText(h, no, code, barcode, name, gkno, cprice, dcp, cno1, cno2, unit, spec, size, pcg, ea, cname1, cname2){
-    	opener.document.getElementById("crlist1["+h+"].connectrequest_qty").value = no;
-    	opener.document.getElementById("crlist1["+h+"].goods_code").value = code;
-    	opener.document.getElementById("crlist1["+h+"].goods_barcode").value = barcode;
-    	opener.document.getElementById("crlist1["+h+"].goods_name").value = name;
-    	opener.document.getElementById("crlist1["+h+"].goodskind_no").value = gkno;
-    	opener.document.getElementById("crlist1["+h+"].goods_customerprice").value = cprice;
-    	opener.document.getElementById("crlist1["+h+"].goods_description").value = dcp;
-    	opener.document.getElementById("crlist1["+h+"].client_no1").value = cno1;
-    	opener.document.getElementById("crlist1["+h+"].client_no2").value = cno2;
-    	opener.document.getElementById("crlist1["+h+"].goodsst_unit").value = unit;
-    	opener.document.getElementById("crlist1["+h+"].goodsst_spec").value = spec;
-    	opener.document.getElementById("crlist1["+h+"].goodsst_size").value = size;
-    	opener.document.getElementById("crlist1["+h+"].goodsst_package").value = pcg;
-    	opener.document.getElementById("crlist1["+h+"].goodsst_ea").value = ea;
-    	opener.document.getElementById("crlist1["+h+"].client_name1").value = cname1;
-    	opener.document.getElementById("crlist1["+h+"].client_name2").value = cname2;
+	function setParentText(no, name, lot, barcode, total){
+    	opener.document.getElementById("goodslot_no").value = no;
+    	opener.document.getElementById("goodslot_total").value = total;
+    	opener.document.getElementById("goods_barcode").value = barcode;
+    	opener.document.getElementById("goods_name").value = name;
+    	opener.document.getElementById("goodslot_lot").value = lot;
     	window.close();
     }
 	
@@ -80,7 +69,7 @@
 			type = null;
 			v = null;
 		}
-		var url = "${pageContext.request.contextPath}/d/d1/d12/goodsListajax";
+		var url = "${pageContext.request.contextPath}/c/c2/c23/goodsreturnajax";
 		var param = "bnword="+v+"&btype="+type+"&comcode_code="+code;
 		
 		sendRequest(url,param,getlist,"POST");
@@ -97,7 +86,7 @@
 				var data2 = JSON.parse(data);
 				data2.forEach(function(map){
 					newTr = document.createElement("tr");
-					newTr.setAttribute("onclick", "setParentText(`${i}`,"+map.connectrequest_qty+",'"+map.goods_code+"','"+map.goods_barcode+"','"+map.goods_name+"',"+map.goodskind_no+","+map.goods_customerprice+",'"+map.goods_description+"',"+map.client_no1+","+map.client_no2+",'"+map.goodsst_unit+"','"+map.goodsst_spec+"','"+map.goodsst_size+"','"+map.goodsst_package+"',"+map.goodsst_ea+",'"+map.client_name1+"','"+map.client_name2+"')");
+					newTr.setAttribute("onclick", "setParentText("+map.goodslot_no+",'"+map.goods_name+"','"+map.goodslot_lot+"','"+map.goods_barcode+"',"+map.goodslot_total+")");
 					procode.appendChild(newTr);
 					newTd = document.createElement("td");
 					newTd.innerHTML = map.goodslot_lot;

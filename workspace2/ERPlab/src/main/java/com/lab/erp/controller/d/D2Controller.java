@@ -1003,6 +1003,7 @@ public class D2Controller {
 		if(plist1 != null) {
 			for(Erp_PurchaseconnectVO pcvo : plist1) {
 				sum += pcvo.getPurchaseconnect_price() * pcvo.getPurchaseconnect_number();
+				pcvo.setPurchase_no(vo.getPurchase_no());
 				d2.updatePurchaseConnect(pcvo);
 				Erp_GoodslotVO gl = new Erp_GoodslotVO();
 				gl.setGoodslot_qty(pcvo.getPurchaseconnect_number());
@@ -1575,6 +1576,7 @@ public class D2Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
+		System.out.println(vo);
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -1833,7 +1835,7 @@ public class D2Controller {
 			d2.createInvenConnect(icvo);
 		}
 		
-		return "redirect:/d/d2/d23/updateForm?inventory_no="+ino;
+		return "redirect:/d/d2/d23/updateForm?inventory_no="+ino+"&comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/d23/update")
@@ -1865,7 +1867,7 @@ public class D2Controller {
 			}
 		}
 		
-		return "redirect:/d/d2/d23/updateForm?inventory_no="+vo.getInventory_no();
+		return "redirect:/d/d2/d23/updateForm?inventory_no="+vo.getInventory_no()+"&comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/d23/delete")

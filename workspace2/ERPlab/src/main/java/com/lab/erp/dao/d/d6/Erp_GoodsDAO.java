@@ -21,9 +21,6 @@ private SqlSession sqlSession;
 	public List<Erp_GoodsVO> selectGoods(){
 		return sqlSession.selectList("c1.selectGoods");
 	}
-	public List<Erp_GoodsVO> getSalesGoods(int goods_no) {
-		return sqlSession.selectList("c2.getSalesGoods", goods_no);
-	}
 	
 	public List<Map<String, Object>> goodsList(Map<String, Object> map){
 		return sqlSession.selectList("c2.goodsList", map);

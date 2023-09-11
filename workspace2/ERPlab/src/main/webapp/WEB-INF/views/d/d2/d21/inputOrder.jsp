@@ -83,7 +83,7 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>발주코드</td><td>신청일</td><td>상태</td><td>승인여부</td><td>담당팀</td><td>거래처</td></tr>';
+		procode.innerHTML += '<tr><td>발주코드</td><td>신청일</td><td>상태</td><td>승인여부</td><td>담당팀</td><td>거래처</td>td>마감일</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
@@ -107,6 +107,9 @@ function getlist(){
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.client_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.order_end;
 				newTr.appendChild(newTd);
 			});
 		}else {
@@ -132,6 +135,8 @@ function getlist(){
 								<option value="order_code" ${param.type == 'order_code' ? 'selected' : '' }>생산명</option>
 								<option value="company_name" ${param.type == 'company_name' ? 'selected' : '' }>의뢰명</option>
 								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당자</option>
+								<option value="order_odate" ${param.type == 'order_odate' ? 'selected' : '' }>신청일</option>
+								<option value="order_end" ${param.type == 'order_end' ? 'selected' : '' }>마감일</option>
 							</select>
 						</td>
 						<td>
@@ -152,15 +157,17 @@ function getlist(){
 						<td>승인여부</td>
 						<td>담당팀</td>
 						<td>거래처</td>
+						<td>마감일</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
 						<tr onclick="selectForm(${map.order_no}, '${map.order_code }')" class="filter">
-							<td class="code">${map.order_code }</td>
-							<td class="price">${map.order_odate }</td>
-							<td class="cont">${map.order_status}</td>
+							<td>${map.order_code }</td>
+							<td>${map.order_odate }</td>
+							<td>${map.order_status}</td>
 							<td>${map.order_approval}</td>
 							<td>${map.team_name}</td>
 							<td>${map.client_name}</td>
+							<td>${map.order_end}</td>
 						</tr>
 					</c:forEach>
 				</c:if>

@@ -154,10 +154,10 @@ function bills(no, code){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.receivable_no})" class="filter">
-						<td class="code">${map.receivable_cino }</td>
-						<td class="price">${map.receivable_total }</td>
-						<td class="cont">${map.receivable_collected == 0 ? '미수금' : '수금' }</td>
-						<td class="cont">${map.receivable_expiry}</td>
+						<td>${map.receivable_cino }</td>
+						<td>${map.receivable_total }</td>
+						<td>${map.receivable_collected == 0 ? '미수금' : '수금' }</td>
+						<td>${map.receivable_expiry}</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -208,12 +208,12 @@ function bills(no, code){
 						
 						<div>
 							<label>금액 </label>
-							<input type="text" name="receivable_price" id="receivable_price" value="${inmap.receivable_price }">
+							<input type="text" name="receivable_price" id="receivable_price" value="${inmap.receivable_price }" class="required">
 						</div>				
 						
 						<div>
 							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" value="${inmap.client_name }">
+							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" value="${inmap.client_name }" class="required">
 							<input type="button" onclick="clList('${comcode_code}')" value="조회">
 						</div>	
 							
@@ -248,7 +248,7 @@ function bills(no, code){
 						
 						<div>
 							<label>수금완료일자 </label>
-							<input type="text" name="receivable_collect" id="receivable_collect" value="${inmap.receivable_collect}">
+							<input type="date" name="receivable_collect" id="receivable_collect" value="${inmap.receivable_collect}">
 						</div>
 						
 						<div align="right">
@@ -283,12 +283,12 @@ function bills(no, code){
 						
 						<div>
 							<label>금액 </label>
-							<input type="text" name="receivable_price" id="receivable_price">
+							<input type="text" name="receivable_price" id="receivable_price" class="required">
 						</div>
 						
 						<div>
 							<label>거래처 </label>
-							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')">
+							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" class="required">
 							<input type="button" onclick="clList('${comcode_code}')" value="조회">
 						</div>
 							
@@ -317,7 +317,7 @@ function bills(no, code){
 						
 						<div>
 							<label>수금완료일자 </label>
-							<input type="text" name="receivable_collect" id="receivable_collect">
+							<input type="date" name="receivable_collect" id="receivable_collect">
 						</div>
 						
 						<div>
@@ -332,6 +332,17 @@ function bills(no, code){
 	
 </div>
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+document.getElementById("receivable_expiry").setAttribute("min", end+"-01-01");
+document.getElementById("receivable_collect").setAttribute("min", end+"-01-01");
+document.getElementById("receivable_expiry").setAttribute("max", end+"-12-31");
+document.getElementById("receivable_collect").setAttribute("max", today);
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(ino, recode, code){
@@ -356,8 +367,8 @@ function cinocheck(){
 				document.getElementById("register").disabled = false;
 			}else {
 				document.getElementById("receivecino").innerText = data;
+				document.getElementById("receivecino").style.color = "red";
 				document.getElementById("register").disabled = true;
-				document.getElementById("receivable_cino").focus();	
 			}
 		}
 	}
@@ -378,8 +389,8 @@ function codecheck(){
 				document.getElementById("register").disabled = false;
 			}else {
 				document.getElementById("receivecode").innerText = data;
+				document.getElementById("receivecode").style.color = "red";
 				document.getElementById("register").disabled = true;
-				document.getElementById("receivable_code").focus();	
 			}
 		}
 	}
@@ -401,6 +412,9 @@ function sub(f){
 	}else if(f.receivable_collected.value == ""){
 		f.receivable_collected.focus();
 		return;
+	}else if(f.client_name.value == ""){
+		f.client_name.focus();
+		return;
 	}else if(f.receivable_price.value == ""){
 		var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");	// 확인 true, 취소 false
 		if(ch){
@@ -414,30 +428,24 @@ function sub(f){
 		alert("100,000,000미만, 숫자만 입력 가능합니다.");
 		f.receivable_price.focus();
 		return;
-	}else if(f.client_name.value == ""){
-		var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
+	}
+	if(f.receivable_collect.value == ""){
+		var ch = confirm("수금완료일자가 입력되지 않았습니다. 계속하시겠습니까?");
 		if(ch){
-			f.submit();
-		}else {
-			f.client_name.focus();
-			return;
-		}
-	}else if(f.receivable_collect.value == ""){
-		var ch = confirm("수금완료일자가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
+			f.receivable_collect.value = today;
 		}else {
 			f.receivable_collect.focus();
 			return;
 		}
-	}else {
-		var ch = confirm("등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			return;
-		}
 	}
+	
+	var ch = confirm("등록하시겠습니까?");
+	if(ch){
+		f.submit();
+	}else {
+		return;
+	}
+	
 }
 
 
@@ -466,6 +474,7 @@ function clName(){
 			document.getElementById("client_registeredno").value = data2.client_registeredno;
 			document.getElementById("client_manager").value = data2.client_manager;
 		}else {
+			document.getElementById("client_no").value = '';
 			document.getElementById("client_name").value = '';
 			document.getElementById("client_registeredno").value = '';
 			document.getElementById("client_manager").value = '';

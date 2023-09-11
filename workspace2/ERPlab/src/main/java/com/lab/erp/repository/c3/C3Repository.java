@@ -15,9 +15,7 @@ public interface C3Repository {
 	List<Erp_WarehouseVO> findAll_warehouse();
 	
 	int save_warehouse(Erp_WarehouseVO erp_WarehouseVO);
-	
-	int delete_warehouse(Erp_WarehouseVO erp_WarehouseVO);
-	
+		
 	int update_warehouse(Erp_WarehouseVO erp_WarehouseVO);
 	
 	int delete_warehouse(int warehouse_no);

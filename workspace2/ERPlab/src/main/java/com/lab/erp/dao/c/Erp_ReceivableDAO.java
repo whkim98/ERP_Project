@@ -53,4 +53,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("c2.getUniqueCode", receivable_code);
 	}
 	
+	public int getReceivableTotal(int receivable_no) {
+		return sqlSession.selectOne("c2.getReceivableTotal", receivable_no);
+	}
+	
 }

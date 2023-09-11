@@ -114,7 +114,7 @@ function getlist(){
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="8">목록이 없습니다.</td></tr>';
 		}
 	}
 }

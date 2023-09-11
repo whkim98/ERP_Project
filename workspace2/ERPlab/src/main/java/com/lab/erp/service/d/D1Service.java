@@ -371,6 +371,10 @@ public class D1Service {
 		return edao.selectEvaluation(evaluation_no);
 	}
 	
+	public int getEvalueationNo() {
+		return edao.getEvalueationNo();
+	}
+	
 	
 //	evaluemng 실적 관리
 	public int createEvaluemng(Erp_EvaluemngVO vo) {

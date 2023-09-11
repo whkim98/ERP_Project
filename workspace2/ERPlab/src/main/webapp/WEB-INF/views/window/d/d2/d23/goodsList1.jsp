@@ -11,6 +11,7 @@
 </head>
 <body>
 <div>
+	<p>목록에 없는 제품은 물류팀에 문의해서 추가해주세요.</p>
 	<select name="btype">
 		<option value="all">전체검색</option>
 		<option value="goodslot_lot">로트번호</option>
@@ -39,7 +40,7 @@
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText('${i}', ${vo.goodslot_no}, '${vo.goods_code}', '${vo.goods_barcode }', '${vo.goods_name }', '${vo.goodsst_unit }', '${vo.goodsst_size }', ${vo.goodsst_ea }, '${vo.client_name1 }', '${vo.client_name2 }', '${vo.goodssort_name }', '${vo.goodskind_name }', ${vo.goodslot_price })">
+				<tr onclick="setParentText('${i}', ${vo.goodslot_no}, '${vo.goods_code}', '${vo.goods_barcode }', '${vo.goods_name }', '${vo.goodsst_unit }', '${vo.goodsst_size }', ${vo.goodslot_qty }, '${vo.client_name1 }', '${vo.client_name2 }', '${vo.goodssort_name }', '${vo.goodskind_name }', ${vo.goodslot_price })">
 					<td>${vo.goodslot_lot}</td>
 					<td>${vo.goods_barcode}</td>
 					<td>${vo.goods_name}</td>
@@ -61,7 +62,7 @@
     	opener.document.getElementById("crlist["+h+"].goods_name").value = name;
     	opener.document.getElementById("crlist["+h+"].goodsst_unit").value = unit;
     	opener.document.getElementById("crlist["+h+"].goodsst_size").value = size;
-    	opener.document.getElementById("crlist["+h+"].goodsst_ea").value = ea;
+    	opener.document.getElementById("crlist["+h+"].goodslot_qty").value = ea;
     	opener.document.getElementById("crlist["+h+"].goodssort_name").value = sname + " " + kname;
     	opener.document.getElementById("crlist["+h+"].client_name1").value = cname1;
     	opener.document.getElementById("crlist["+h+"].client_name2").value = cname2;

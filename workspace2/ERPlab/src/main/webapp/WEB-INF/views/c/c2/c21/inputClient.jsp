@@ -275,7 +275,7 @@ function clientsortname(){
 						
 						<div>
 							<label>사업자 등록번호 </label>
-							<input type="text" name="client_registeredno" id="client_registeredno" value="${inmap.client_registeredno }" maxlength="30" class="required">
+							<input type="text" name="client_registeredno" id="client_registeredno" value="${inmap.client_registeredno }" maxlength="30" class="required" onkeyup="registeredno1(event, this.value)" onblur="registeredno(this.value)">
 							<h6 id="registeredno" style="color:red;"></h6>
 						</div>
 						
@@ -303,17 +303,17 @@ function clientsortname(){
 						
 						<div>
 							<label>사업장 </label>
-							<input type="text" name="client_addr1" id="client_addr1" value="${inmap.client_addr1 }" class="required">
+							<input type="text" name="client_addr1" id="client_addr1" value="${inmap.client_addr1 }" class="required" onclick="searchAddr()">
 						</div>
 						
 						<div>
 							<label>상세 주소</label>
-							<input type="text" name="client_addr2" id="client_addr2" value="${inmap.client_addr2 }" class="required">
+							<input type="text" name="client_addr2" id="client_addr2" value="${inmap.client_addr2 }" class="required" onclick="searchAddr()">
 						</div>
 						
 						<div>
 							<label>우편 번호 </label>
-							<input type="text" name="client_postal" id="client_postal" value="${inmap.client_postal }" class="required">
+							<input type="text" name="client_postal" id="client_postal" value="${inmap.client_postal }" class="required" onclick="searchAddr()">
 						</div>
 						
 						<div>
@@ -378,7 +378,7 @@ function clientsortname(){
 						
 						<div>
 							<label>사업자 등록번호 </label>
-							<input type="text" name="client_registeredno" id="client_registeredno" maxlength="30" class="required">
+							<input type="text" name="client_registeredno" id="client_registeredno" maxlength="30" class="required" onkeyup="registeredno1(event, this.value)" onblur="registeredno(this.value)">
 							<h6 id="registeredno" style="color:red;"></h6>
 						</div>
 						
@@ -406,17 +406,17 @@ function clientsortname(){
 						
 						<div>
 							<label>사업장 </label>
-							<input type="text" name="client_addr1" id="client_addr1" class="required">
+							<input type="text" name="client_addr1" id="client_addr1" class="required" onclick="searchAddr()">
 						</div>
 						
 						<div>
 							<label>상세 주소</label>
-							<input type="text" name="client_addr2" id="client_addr2" class="required">
+							<input type="text" name="client_addr2" id="client_addr2" class="required" onclick="searchAddr()">
 						</div>
 						
 						<div>
 							<label>우편 번호 </label>
-							<input type="text" name="client_postal" id="client_postal" class="required">
+							<input type="text" name="client_postal" id="client_postal" class="required" onclick="searchAddr()">
 						</div>
 						
 						<div>
@@ -454,11 +454,12 @@ function clientsortname(){
 		</div>
 	
 </div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 
 // 삭제버튼 경로 및 넘길 parameter 설정
-function deletei(no1, no2, ino, code){
-	location.href='${pageContext.request.contextPath }/a/a4/a41/delete?investment_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code;
+function deletei(no, code){
+	location.href='${pageContext.request.contextPath }/c/c2/c21/delete?client_no='+no+'&comcode_code='+code;
 }
 
 
@@ -479,8 +480,33 @@ function registerednocheck(){
 				document.getElementById("register").disabled = false;		
 			}else {
 				document.getElementById("registeredno").innerText = data;
+				document.getElementById("registeredno").style.color = "red";
 				document.getElementById("register").disabled = true;		
-				document.getElementById("client_registeredno").focus();			
+			}
+		}
+	}
+}
+
+function registeredno1(e,v){
+	if(e.keyCode == 13){
+		var url = "${pageContext.request.contextPath }/c/c2/c21/registeredno";
+		var param = "client_registeredno="+encodeURIComponent(v);			
+		
+		sendRequest(url,param,registerednocheck1,"POST");	
+	}
+}
+function registerednocheck1(){	
+	if(xhr.readyState==4 && xhr.status==200) {		
+		var data = xhr.responseText;	
+		if(data != ""){		
+			if(data == "사용 가능한 코드입니다."){		
+				document.getElementById("registeredno").innerText = data;
+				document.getElementById("registeredno").style.color = "blue";
+				document.getElementById("register").disabled = false;		
+			}else {
+				document.getElementById("registeredno").innerText = data;
+				document.getElementById("registeredno").style.color = "red";
+				document.getElementById("register").disabled = true;		
 			}
 		}
 	}
@@ -489,7 +515,10 @@ function registerednocheck(){
 
 // submit 유효성 검사
 function sub(f){
+	var regRno =  /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
+	var regExp = /^\d{2,3}-\d{3,4}-\d{4}$/;
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
+	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
 	if(f.client_registeredno.value == ""){
 		f.client_registeredno.focus();
 		return;
@@ -526,54 +555,31 @@ function sub(f){
 	}else if(f.client_email.value == ""){
 		f.client_email.focus();
 		return;
-	}else if(f.client_corporatedno.value == ""){
-		var ch = confirm("법인등록번호가 입력되지 않았습니다. 등록하시겠습니까?");	// 확인 true, 취소 false
-		if(ch){
-			f.submit();
-		}else{
-			f.client_corporatedno.focus();
-			return;
-		}
-	}else if(f.client_businesstype.value == ""){
-		var ch = confirm("사업형태가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_businesstype.focus();
-			return;
-		}
-	}else if(f.client_contact.value == ""){
-		var ch = confirm("담당자 번호가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_contact.focus();
-			return;
-		}
-	}else if(f.client_manager.value == ""){
-		var ch = confirm("담당자가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_manager.focus();
-			return;
-		}
-	}else if(f.client_fax.value == ""){
-		var ch = confirm("fax가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_fax.focus();
-			return;
-		}
-	}else {
-		var ch = confirm("등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			return;
-		}
 	}
+	
+	if(!regRno.test(f.client_registeredno.value)){
+		alert("알맞은 사업자등록번호 형식이 아닙니다.");
+		f.client_registeredno.focus();
+		return;
+	}
+	if(!regex.test(f.client_email.value)){
+		alert("알맞은 E-Mail 형식이 아닙니다.");
+		f.client_email.focus();
+		return;
+	}
+	if(!regExp.test(f.client_directno.value)){
+		alert("알맞은 전화번호 형식이 아닙니다.");
+		f.client_directno.focus();
+		return;
+	}
+	
+	var ch = confirm("등록하시겠습니까?");
+	if(ch){
+		f.submit();
+	}else {
+		return;
+	}
+	
 }
 
 // 리스트에서 글 선택 시 넘어가는 form
@@ -581,6 +587,56 @@ function selectForm(no){
 	document.getElementsByName("client_no")[0].value = no;
 	
 	document.getElementById("content").submit(); // content라는 id의 form태그 submit
+}
+
+//<주소 api>
+function searchAddr() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+                // 조합된 참고항목을 해당 필드에 넣는다.
+                document.getElementById("client_addr2").value = extraAddr;
+            
+            } else {
+                document.getElementById("client_addr2").value = '';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('client_postal').value = data.zonecode;
+            document.getElementById("client_addr1").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("client_addr2").focus();
+        }
+    }).open();
+        customInput.style.display = "none";
 }
 
 </script>

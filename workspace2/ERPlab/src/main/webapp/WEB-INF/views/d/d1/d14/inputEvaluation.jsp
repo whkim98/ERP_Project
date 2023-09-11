@@ -150,10 +150,10 @@ function getlist(){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.evaluation_no}, ${map.requestproduct_no })" class="filter">
-						<td class="price">${map.product_code }</td>
-						<td class="cont">${map.product_name}</td>
+						<td>${map.product_code }</td>
+						<td>${map.product_name}</td>
 						<td>${map.employee1_name}</td>
-						<td class="code">${map.evaluation_date }</td>
+						<td>${map.evaluation_date }</td>
 						<td>${map.evaluation_status == 0 ? '미완' : '완료'}</td>
 					</tr>
 					</c:forEach>
@@ -229,11 +229,6 @@ function getlist(){
 							</select>
 						</div>
 						
-						<div>
-							<label>불량률 </label>
-							<input type="text" name="evaluation_rate" id="evaluation_rate" value="${inmap.evaluation_rate }">
-						</div>
-						
 						<table id="goodsList">
 							<tr>
 								<td>상품 코드</td>
@@ -242,6 +237,7 @@ function getlist(){
 								<td>생산 수량</td>
 								<td>불량 사유</td>
 								<td>불량 수량</td>
+								<td>실적 수량</td>
 							</tr>
 						<c:forEach var="vo" items="${dlist }">
 							<tr>
@@ -251,6 +247,7 @@ function getlist(){
 								<td>${vo.goodslot_qty }</td>
 								<td><input type="text" value="${vo.defective_comment }" name="defective_comment"></td>
 								<td><input type="text" value="${vo.defective_number }" name="defective_number"></td>
+								<td><input type="text" value="${vo.lotconnev_qty }" name="lotconnev_qty"></td>
 							</tr>
 						</c:forEach>
 						</table>
@@ -319,8 +316,6 @@ function getlist(){
 						</div>
 						
 						<div>
-							<label>불량률 </label>
-							<input type="text" name="evaluation_rate" id="evaluation_rate">
 							<input type="button" onclick="goodsList()" value="목록보기">
 						</div>
 						
@@ -349,6 +344,18 @@ function getlist(){
 	
 </div>
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+document.getElementById("evaluation_paperend").setAttribute("min", end+"-01-01");
+document.getElementById("evaluation_paperend").setAttribute("max", end+"-12-31");
+document.getElementById("evaluation_actualend").setAttribute("min", end+"-01-01");
+document.getElementById("evaluation_actualend").setAttribute("max", end+"-12-31");
+
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no, code, rno){
@@ -433,14 +440,14 @@ function defective(code){
 
 
 function goodsList(){
-	var no = document.getElementById("product_no").value;
+	var no = document.getElementById("requestproduct_no").value;
 	if(no == ""){
 		alert("생산코드를 선택하여 주십시오.");
 		document.getElementById("product_code").focus();
 		return;
 	}
 	var url = "${pageContext.request.contextPath }/d/d1/d14/goodsAjax";
-	var param = "product_no="+encodeURIComponent(no);
+	var param = "requestproduct_no="+encodeURIComponent(no);
 	
 	sendRequest(url,param,goodsCheck,"POST");
 }
@@ -462,13 +469,13 @@ function goodsCheck(){
 		newTd.innerHTML = '품명';
 		newTr.appendChild(newTd);
 		newTd = document.createElement("td");
-		newTd.innerHTML = '생산 수량';
-		newTr.appendChild(newTd);
-		newTd = document.createElement("td");
 		newTd.innerHTML = '불량 사유';
 		newTr.appendChild(newTd);
 		newTd = document.createElement("td");
 		newTd.innerHTML = '불량 수량';
+		newTr.appendChild(newTd);
+		newTd = document.createElement("td");
+		newTd.innerHTML = '실적 수량';
 		newTr.appendChild(newTd);
 		if(data != ""){	
 			var data2 = JSON.parse(data);
@@ -485,13 +492,13 @@ function goodsCheck(){
 				newTd.innerHTML = map.goods_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.goodslot_qty;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="text" name="defective_comment">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="text" name="defective_number">';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="text" name="lotconnev_qty">';
 				newTr.appendChild(newTd);
 			});
 		}else {

@@ -86,7 +86,7 @@ function getlist(){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				newTr.setAttribute("onclick", "selectForm("+map.proinventory_no+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.company_name;
@@ -137,7 +137,7 @@ function getlist(){
 		<div align="center">
 			<div>
 				<select name="type">
-					<option value="all">전체검색</option>
+					<option value="all">전체</option>
 					<option value="company_name">상호</option>
 					<option value="company_businesstype">형태</option>
 					<option value="company_use">용도</option>

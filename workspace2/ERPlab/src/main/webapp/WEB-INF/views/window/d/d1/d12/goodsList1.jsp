@@ -11,6 +11,7 @@
 </head>
 <body>
 <div>
+	<p>목록에 없는 제품은 물류팀에 문의해서 추가해주세요.</p>
 	<select name="btype">
 		<option value="all">전체검색</option>
 		<option value="goodslot_lot">로트번호</option>
@@ -35,7 +36,7 @@
 		</tr>
 		<c:if test="${list == null }">
 			<tr>
-				<td>정보가 존재하지 않습니다.</td>
+				<td colspan="7">상품이 존재하지 않습니다. <br>물류관리에서 상품을 추가해주세요.</td>
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">

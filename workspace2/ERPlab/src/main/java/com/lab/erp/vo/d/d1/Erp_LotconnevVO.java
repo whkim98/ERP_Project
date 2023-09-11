@@ -9,7 +9,6 @@ import lombok.*;
 public class Erp_LotconnevVO {
 	private int lotconnev_no;
 	private int lotconnev_qty;
-	private int lotconnev_rest;
 	private int goodslot_no;
 	private int evaluation_no;
 }

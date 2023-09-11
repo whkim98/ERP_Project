@@ -15,7 +15,7 @@ public class Erp_SalesresultVO {
 	 private int salesresult_goal;
 	 private int sales_no;
 	 private int forsales_no;
-	 private int lcoalsales_no;
+	 private int localsales_no;
 	 private int storesales_no;
 	 private int online_no;
 	 private int salesresult_achieve;
