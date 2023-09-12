@@ -10,12 +10,16 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
+
 <html>
 	<head>
 		<title>ERPLAB</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="${pageContext.request.contextPath }/webdesign/assets/css/main.css" />
+		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+		
+		<!-- 로그인 세션 -->
 		<c:if test="${login == null }">
 			<script type="text/javascript">
 				alert("세션이 만료되었습니다.");
@@ -28,6 +32,7 @@
 				location.href="${pageContext.request.contextPath }/";
 			</script>
 		</c:if>
+			
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
@@ -39,35 +44,34 @@
 						<nav class="links">
 						<!-- 인트라넷 애들은 로그인을 따로 할 수 있도록 나중에 수정 -->
 							<ul>
-								<li><a href="#">주소록</a></li>
-								<li><a href="#">메신저</a></li>
 								<li><a href="#">조직도</a></li>
-								<li><a href="#">이메일</a></li>
 								<li><a href="#">일정</a></li>
-								<li><a href="#">연차</a></li>
-								
+								<li><a href="#">주소록</a></li>
+								<li><a href="${pageContext.request.contextPath}/erpchat?comcode_code=${comcode_code}" target="_blank">메신저</a></li>
+								<li><a href="#">이메일</a></li>
+								<li><a href="#">연차</a></li>								
 							</ul>
 							<ul>
 								<li><a href="#">재고</a></li>
 								<li><a href="#">물류</a></li>
-								<li><a href="#">재무제표</a></li>
 								<li><a href="#">발주</a></li>
+								<li><a href="#">부서별매출</a></li>
 								<li><a href="#">프로젝트</a></li>
-								<li><a href="#">거래처</a></li>
-								<li><a href="#">부서별 매출</a></li>
+								<li><a href="#">회사정보</a></li>
+								<li><a href="${pageContext.request.contextPath}/b11main?comcode_code=${comcode_code}">재무제표</a></li>
 							</ul>
-							
 							
 						</nav>
 						
+						<nav class="loginSessionOutput">
+						    <div class="loginSessionView">
+				        		Remaining Session Time: <span id="sessionTime">Calculating...</span>					        				        
+						    </div>
+						</nav>
+						
+						
 						<nav class="main">
 							<ul>
-								<li class="search">
-									<a class="fa-search" href="#search">Search</a>
-									<form id="search" method="get" action="#">
-										<input type="text" name="query" placeholder="Search" />
-									</form>
-								</li>
 								<li class="menu">
 									<a class="fa-bars" href="#menu">Menu</a>
 								</li>
@@ -78,13 +82,6 @@
 				<!-- Menu -->
 					<section id="menu">
 
-						<!-- Search -->
-							<section>
-								<form class="search" method="get" action="#">
-									<input type="text" name="query" placeholder="Search" />
-								</form>
-							</section>
-
 						<!-- Links -->
 							<section>
 								<ul class="links">
@@ -94,7 +91,7 @@
 											<p>회사정보</p>
 										</a>
 										<a href="#">
-											<p>사업자정</p>
+											<p>사업자정보</p>
 										</a>
 										<a href="#">
 											<p>지점관리</p>
@@ -114,13 +111,13 @@
 									</li>
 									<li>
 											<h3>회계팀</h3>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/b11main?comcode_code=${comcode_code}">
 											<p>재무상태표</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/b12main?comcode_code=${comcode_code}">
 											<p>손익계산서</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/b13main?comcode_code=${comcode_code}">
 											<p>현금흐름표</p>
 										</a>
 									</li>
@@ -135,14 +132,14 @@
 										<a href="#">
 											<p>예산관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/b31main?comcode_code=${comcode_code}">
 											<p>전표입력</p>
 										</a>
-										<a href="#">
-											<p>외화관리</p>
-										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/b32main?comcode_code=${comcode_code}">
 											<p>전자세금계산서</p>
+										</a>
+										<a href="${pageContext.request.contextPath }/b33main">
+											<p>외화관리</p>
 										</a>
 										<a href="#">
 											<p>마감 / 결산</p>
@@ -181,25 +178,16 @@
 									<li>
 										<h3>해외영업팀</h3>
 											<a href="#">
-												<p>국가별분류</p>
-											</a>
-											<a href="#">
 												<p>해외거래처관리</p>
 											</a>
 											<a href="#">
 												<p>수출관리</p>
 											</a>
 											<a href="#">
-												<p>수출채권</p>
-											</a>
-											<a href="#">
-												<p>수입 / 매입</p>
+												<p>수입(매입)</p>
 											</a>
 											<a href="#">
 												<p>수입발주관리</p>
-											</a>
-											<a href="#">
-												<p>수입채무관리</p>
 											</a>
 									</li>
 									<li>
@@ -334,7 +322,7 @@
 						<!-- Actions -->
 							<section>
 								<ul class="actions stacked">
-									<li><a href="#" class="button large fit">LogOut</a></li>
+									<li><input type="button" onclick="logout()" value="LOGOUT" /></li>
 								</ul>
 							</section>
 
@@ -342,5 +330,44 @@
 
 </div>
 
-<div cl>
+<script type="text/javascript">
+
+// 로그아웃까지 남은 시간을 가져오는 함수
+function updateSessionTime() {
+    const sessionStartTime = new Date(${pageContext.session.creationTime});
+    const sessionTimeout = ${pageContext.session.maxInactiveInterval} * 1000;
+    const currentTime = new Date();
+
+    // 세션의 남은 시간 계산
+    const remainingTime = new Date(sessionStartTime.getTime() + sessionTimeout - currentTime.getTime());
+
+    const minutes = remainingTime.getMinutes();
+    const seconds = remainingTime.getSeconds();
+    let min = minutes < 10 ? '0' : '';
+    let sec = seconds < 10 ? '0' : '';
+    const formattedTime = min+minutes+'분'+sec+seconds+'초';
+    
+    document.getElementById('sessionTime').textContent = formattedTime; 
+}
+
+updateSessionTime();
+setInterval(updateSessionTime, 1000);
+
+// logout
+function logout() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "${pageContext.request.contextPath}/logout", true);
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            alert("로그아웃되었습니다.");
+            location.href = "${pageContext.request.contextPath}/";
+        }
+    };
+    xhr.send();
+}
+
+</script>
+
+<div>
 

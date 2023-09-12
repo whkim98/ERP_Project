@@ -127,5 +127,13 @@ public class HomeController {
 		out.println("<script>alert('알 수 없는 에러가 발생했습니다. 이전 페이지로 이동합니다.'); history.go(-1);</script>");
 		out.flush();
 	}
+	
+	
+	// 개인정보처리방침
+	@RequestMapping("/privacyPolicy")
+	public String privacyPolicy() {
+
+		return "/layout/privacyPolicy";
+	}
 
 }

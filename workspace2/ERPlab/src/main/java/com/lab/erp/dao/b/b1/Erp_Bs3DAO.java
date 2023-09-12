@@ -18,9 +18,29 @@ private SqlSession sqlSession;
 		this.sqlSession = sqlSession;
 	}
 
+	public List<Erp_Bs3VO> bsList(){
+		return sqlSession.selectList("b1.bsList");
+	}
+	public List<Erp_Bs3VO> bs2ctgrList(){
+		return sqlSession.selectList("b1.bs2ctgrList");
+	}
+
+	public List<Erp_Bs3VO> bs3ctgr(int bs2_no){
+		return sqlSession.selectList("b1.bs3ctgr", bs2_no);
+	}
+	public List<Erp_Bs3VO> bs2ctgr(int bs1_no){
+		return sqlSession.selectList("b1.bs2ctgr", bs1_no);
+	}
+	public List<Erp_Bs3VO> bs1ctgr(int bs1_no){
+		return sqlSession.selectList("b1.bs1ctgr", bs1_no);
+	}
+	
+	
+	
 	public List<Erp_Bs3VO> bs3List(){
 		return sqlSession.selectList("b1.bs3List");
 	}
+	
 	
 	public List<Erp_Bs3VO> ctgrDebtor(int ctgr_no){
 		return sqlSession.selectList("b1.ctgrDebtor", ctgr_no);

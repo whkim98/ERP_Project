@@ -4,10 +4,10 @@ body {
 
 .footer {
     width: 100vw;
-    height: 180px;
-    padding: 0px 50px;
+    height: 80px;
+    padding: 0px 20px;
     border: none;
-    margin-top: 150px;
+    margin-top: 100px;
 }
 
 .footer a {
@@ -19,31 +19,31 @@ body {
     display: flex;
 }
 .footer > .footer_box > .footer_info {
-    width: 40%;
+    width: 35%;
 }
 .footer > .footer_box > .footer_info > .main {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 .footer > .footer_box > .footer_info > .main > .sns_text {
     font-size: 1.0rem;
     font-weight: bold;
 }
 .footer > .footer_box > .footer_info > .main > .sns_text_tel {
-    font-size: 0.7rem;
+    font-size: 0.4rem;
 }
 .footer > .footer_box > .footer_info > .in_footer {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 .footer > .footer_box > .developer {
-    width: 40%;
+    width: 45%;
     height: 100%;
 }
 .footer > .footer_box > .developer .swiper-slide {
     display: flex;
 }
 .footer > .footer_box > .developer .profile_img {
-    height: 120px;
+    height: 100px;
     width: 100px;
     margin-right: 5%;
 }
@@ -67,9 +67,10 @@ body {
 }
 .footer > .footer_box > .developer .profile_info .introduce_box {
     width: 400px;
-    height: 120px;
+    height: 80px;
     overflow: hidden;
     margin-top: 10px;
+    margin-right: 10%;
     font-size: 0.8rem;
     font-weight: bold;
 }
@@ -80,7 +81,7 @@ body {
 .footer > .footer_box > .sns > .title {
     font-size: 1.0rem;
     font-weight: bold;
-    margin-bottom: 15%;
+    margin-bottom: 5%;
 }
 .footer > .footer_box > .sns > .sns_box {
     display: flex;
@@ -90,3 +91,15 @@ body {
     width: 40px;
     height: 40px;
 }
+
+
+/* 개인정보처리방침 */
+
+.erpPrivacyPolicy-Introduction {
+	padding: 50px;
+}
+
+
+
+
+

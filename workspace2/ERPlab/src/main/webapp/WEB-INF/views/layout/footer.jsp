@@ -11,16 +11,13 @@
            <div class="footer_info">
                <div class="main in_footer">
                    <div class="sns_text title">ERP LAB</div>
-                   <div class="sns_text_tel"><a href="https://drive.google.com/file/d/1094UOq5la1a3jfvHu8lRueNP3-JYVgaF/view?usp=sharing" target="_blanck">
-                   		ERP 데모 시연 참고 영상</a></div>
+                   <div class="fax"><a href="https://drive.google.com/drive/folders/1_bvbG9coXFvbRY1kygB5Ibjy4dEiFD_m?usp=sharing" target="_blanck">
+                   		Reference Portfolio</a></div>
                </div>
-
-               <div class="info in_footer">
-                   <div class="ceo">팀 개발네발</div>
-                   <div class="copyright">
-                       COPYRIGHT ⓒ 2023 TEAM 개발네발. ALL RIGHTS RESERVED
-                   </div>
-                   <div class="fax"><a href="https://drive.google.com/drive/folders/1_bvbG9coXFvbRY1kygB5Ibjy4dEiFD_m?usp=sharing" target="_blanck">Reference Page</a></div>
+               <div class="main in_footer">
+                   <div class="copyright">팀 개발네발</div>
+                   <div class="sns_text_tel">
+                   		COPYRIGHT ⓒ 2023 TEAM 개발네발. ALL RIGHTS RESERVED</div>
                </div>
            </div>
 
@@ -48,11 +45,11 @@
                                    <span class="profile_subject"
                                        >이메일</span
                                    >
-                                   : sora.a.jang@gmail.com<br />
+                                   : <a href="mailto: sora.a.jang@gmail.com">sora.a.jang@gmail.com <i class="uil uil-envelope-edit"></i></a><br />
                                    <span class="profile_subject"
                                        >깃헙</span
                                    >
-                                   : SoraJang1<br />
+                                   : <a href="https://github.com/SoraJang1" target="_blank">SoraJang1 <i class="uil uil-github"></i></a><br />
                                </div>
                                <div class="introduce_box">
                                    "중요한 것은 꺾이지 않는 마음"
@@ -65,7 +62,7 @@
                        >
                            <div class="profile_img">
                                <img
-                                   src="/image/bonobono4.png"
+                                   src="/image/bonobono2.jpg"
                                    alt="신동현 프로필 사진"
                                />
                            </div>
@@ -78,11 +75,11 @@
                                    <span class="profile_subject"
                                        >이메일</span
                                    >
-                                   : tlsehdgus007@gmail.com<br />
+                                   : <a href="mailto: tlsehdgus007@gmail.com">tlsehdgus007@gmail.com <i class="uil uil-envelope-edit"></i></a><br />
                                    <span class="profile_subject"
                                        >깃헙</span
                                    >
-                                   : MichealnotJackson<br />
+                                   : <a href="https://github.com/MichealnotJackson" target="_blank">MichealnotJackson <i class="uil uil-github"></i></a><br />
                                </div>
                                <div class="introduce_box">
                                    "Simple is the best"
@@ -92,7 +89,7 @@
                        <div class="swiper-slide" style="width: 150px">
                            <div class="profile_img">
                                <img
-                                   src="/image/bonobono1.png"
+                                   src="/image/bonobono2.jpg"
                                    alt="김우형 프로필 사진"
                                />
                            </div>
@@ -105,11 +102,11 @@
                                    <span class="profile_subject"
                                        >이메일</span
                                    >
-                                   : ehdrhkd3838@gmail.com<br />
+                                   : <a href="mailto: ehdrhkd3838@gmail.com">ehdrhkd3838@gmail.com <i class="uil uil-envelope-edit"></i></a><br />
                                    <span class="profile_subject"
                                        >깃헙</span
                                    >
-                                   : whkim98<br />
+                                   : <a href="https://github.com/whkim98" target="_blank">whkim98 <i class="uil uil-github"></i></a><br />
                                </div>
                                <div class="introduce_box">
                                    "심장을 바쳐라"
@@ -119,7 +116,7 @@
                        <div class="swiper-slide" style="width: 150px">
                            <div class="profile_img">
                                <img
-                                   src="/image/bonobono3.jpg"
+                                   src="/image/bonobono2.jpg"
                                    alt="정준홍 프로필 사진"
                                />
                            </div>
@@ -132,11 +129,11 @@
                                    <span class="profile_subject"
                                        >이메일</span
                                    >
-                                   : wnsghd0902@gmail.com<br />
+                                   : <a href="mailto: wnsghd0902@gmail.com">wnsghd0902@gmail.com <i class="uil uil-envelope-edit"></i></a><br />
                                    <span class="profile_subject"
                                        >깃헙</span
                                    >
-                                   : JNjeong<br />
+                                   : <a href="https://github.com/JNjeong" target="_blank">JNjeong <i class="uil uil-github"></i></a><br />
                                </div>
                                <div class="introduce_box">
                                    "Lorem ipsum dolor sit amet, consectetur
@@ -159,28 +156,17 @@
            </div>
 
            <div class="sns in_footer">
-               <div class="title">Follow Us</div>
+               <div class="title">REFERENCES</div>
                <div class="sns_box">
-                   <a
-                       href="https://www.instagram.com/bonobono_official_kr/?hl=hr" target="_blanck"
-                       ><img
-                           src="/image/sns_instagram.png"
-                           alt="Instagram Icon"
-                   /></a>
-                   <a href="https://www.facebook.com/foretellz" target="_blanck"
-                       ><img
-                           src="/image/sns_facebook.png"
-                           alt="Facebook Icon"
-                   /></a>
-                   <a
-                       href="https://www.youtube.com/shorts/bDaCsV8KxrI?feature=share" target="_blanck"
-                       ><img
-                           src="/image/sns_youtube.png"
-                           alt="Youtube Icon"
-                   /></a>
-                   <a href="https://m.blog.naver.com/nate1198/221653878642" target="_blanck"
-                       ><img src="/image/sns_twitter.png" alt="Blog Icon"
-                   /></a>
+               	 <div class="main in_footer">
+               		<div class="sns_text_tel"><a href="${pageContext.request.contextPath}/privacyPolicy" target="_blank">
+                   		개인정보처리방침</a></div>
+                	<div class="sns_text_tel"><a href="https://drive.google.com/file/d/1094UOq5la1a3jfvHu8lRueNP3-JYVgaF/view?usp=sharing" target="_blanck">
+                   		ERP LAB 데모 시연 영상</a></div>
+                  	<div class="sns_text_tel"><a href="https://drive.google.com/drive/folders/12brrdV00hDKNTcr6ekwE55OA8DWd_-jQ?usp=drive_link" target="_blanck">
+                   		ERP LAB 사용가이드</a></div>
+               </div>
+               
                </div>
            </div>
        </div>
@@ -189,7 +175,8 @@
 </div>
 
 
-
+		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+		
         <link
             rel="stylesheet"
             href="https://unpkg.com/swiper/swiper-bundle.min.css"
@@ -200,10 +187,10 @@
         <script>
             var swiper = new Swiper(".swiper-container", {
                 spaceBetween: 1000,
-                // autoplay: {
-                //     delay: 3000,
-                //     disableOnInteraction: false,
-                // },
+                autoplay: {
+                     delay: 2000,
+                     disableOnInteraction: false,
+                },
                 loop: true,
                 loopAdditionalSlides: 1,
                 pagination: {

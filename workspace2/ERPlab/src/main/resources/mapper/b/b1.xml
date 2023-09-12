@@ -3,10 +3,37 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b1">
-	<!-- 동현 -->
+
+	<!-- bs -->
 	<select id="bs3List" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
 		select * from erp_bs3
+	</select>	
+		
+	<select id="bsList" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		select bs3.*, bs2.bs2_ctgr, bs1.bs1_ctgr 
+		from erp_bs3 bs3, erp_bs2 bs2, erp_bs1 bs1 
+		where bs3.bs2_no = bs2.bs2_no and bs2.bs1_no = bs1.bs1_no
+	</select>	
+	
+	<select id="bs2ctgr" resultType="map">
+		select bs3.*, bs2.bs2_ctgr, bs1.bs1_ctgr 
+		from erp_bs3 bs3, erp_bs2 bs2, erp_bs1 bs1 
+		where bs3.bs2_no = bs2.bs2_no and bs2.bs1_no = bs1.bs1_no 
 	</select>
+	
+	<select id="bs3ctgrList" parameterType="int" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		select bs3.*, bs2.bs2_ctgr, bs1.bs1_ctgr 
+		from erp_bs3 bs3, erp_bs2 bs2, erp_bs1 bs1 
+		where bs3.bs2_no = bs2.bs2_no and bs2.bs1_no = bs1.bs1_no and bs2.bs2_no = #{bs2_no}
+	</select>
+	
+	<select id="bs2ctgrList" parameterType="int" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		select bs3.*, bs2.bs2_ctgr, bs1.bs1_ctgr 
+		from erp_bs3 bs3, erp_bs2 bs2, erp_bs1 bs1 
+		where bs3.bs2_no = bs2.bs2_no and bs2.bs1_no = bs1.bs1_no and bs2.bs2_no = #{bs2_no}
+	</select>
+
+
 	
 	<select id="ctgrDebtor" parameterType="int" resultType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
 		select b.*, d.debtor_no from erp_bs3 b, erp_debtor d where d.ctgr_no = #{ctgr_no} and b.bs3_no = d.bs3_no

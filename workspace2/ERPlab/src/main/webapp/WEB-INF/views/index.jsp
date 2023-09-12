@@ -16,9 +16,6 @@
         <a href="javascript:void(0)" onclick="toggleFetchContent('fetchContent5', 'test/greeting')" class="button small">인사팀</a>
         <a href="javascript:void(0)" onclick="toggleFetchContent('fetchContent6', 'test/gunradish')" class="button small">총무팀</a>
     </div>
-</div> 
-
-<div class="button-container">
 	<div class="button-group" align="center">
     <h2>영업본부</h2>
         <a href="javascript:void(0)" onclick="toggleFetchContent('fetchContent7', 'test/internationalsales')" class="button small">해외영업팀</a>

@@ -4,4 +4,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b3">
 
+<!-- 매출전표 -->
+
+<insert id="insertStatement" parameterType="com.lab.erp.vo.b.b3.Erp_StatementVO">
+	insert into erp_statement(statement_no, ctgr_no, statement_code, statement_date, client_no, team_no, debtor_no, creditor_no, statement_type, statement_abstract, statement_debtor, statement_creditor, comcode_no)
+	values(16, #{statement_no}, #{ctgr_no}, #{statement_code}, #{statement_date}, #{client_no}, #{team_no}, #{debtor_no}, #{creditor_no}, #{statement_type}, #{statement_abstract}, #{statement_debtor}, #{statement_creditor}, #{comcode_no})
+</insert>
+
+<update id="updateStatement" parameterType="com.lab.erp.vo.b.b3.Erp_StatementVO">
+	update erp_statement set 
+	statement_no = #{statement_no}, ctgr_no = #{ctgr_no}, statement_code = #{statement_code}, statement_date = #{statement_date}, client_no = #{client_no}, team_no = #{team_no}, debtor_no = #{debtor_no}, creditor_no = #{creditor_no}, statement_type = #{statement_type}, statement_abstract = #{statement_abstract}, statement_debtor = #{statement_debtor}, statement_creditor = #{statement_creditor}, comcode_no = #{comcode_no}
+	where statement_no = #{statement_no}
+</update>
+
+<delete id="deleteStatement" parameterType="int">
+	delete from erp_statement where statement_no = #{statement_no}
+</delete>
+
+<select id="statementList" parameterType="map" resultType="map">
+	select s.*, c.client_name, t.team_name, cl.closing_debtor, cl.closing_creditor, date_format(cl.closing_date, '%Y') closing_yy, date_format(cl.closing_date, '%m') closing_mm, date_format(cl.closing_date, '%d') closing_dd, de.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+	from erp_statement s, erp_client c, erp_team t, erp_debtor de, erp_creditor cr, erp_closing cl
+	where s.client_no = c.client_no and s.team_no = t.team_no and s.debtor_no = de.debtor_no and s.creditor_no = cr.creditor_no and s.statement_code = cl.closing_code and s.ctgr_no = #{ctgr_no}
+</select>
+
+<select id="selectStatement" parameterType="map" resultType="map">
+	select s.*, c.client_name, t.team_name, cl.closing_no, cl.closing_debtor, cl.closing_creditor, date_format(cl.closing date, '%Y %m %d') closing_date, (select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no1}) bs3_ctgr1, (select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no2}) bs3_ctgr2 
+	from erp_statement s, erp_client_name c, erp_team t, erp_closing cl 
+	where s.statement_no = #{statement_no} and s.client_no = c.client_no and s.team_no = t.team_no
+</select>
+
+<select id="getStatementCode" parameterType="String" resultType="int">
+	select statement_no 
+	from erp_statement 
+	where statement_code = #{statement_code}
+</select>
+
+
 </mapper>
