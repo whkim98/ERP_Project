@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ERP lab 영업실적관리</title>
+        <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+        <link rel="stylesheet" href="/css/d/claim.css" />
+    </head>
+    <body>
+        <div class="salesresult_container">
+            <h2 class="salesresult_title"><a th:href="@{/d/d51/claim}">클레임(기업)</a></h2>
+            <div class="salesresult_body">
+                <div class="salesresult_regist">
+					<table class="salesresult_search">
+						<tr>
+							<td>
+								<select name="search_type" id="search_type">
+									<option value="all" selected}>전체</option>
+									<option value="ctgr_no">카테고리코드</option>
+									<option value="salesresult_start">시작일</option>
+									<option value="salesresult_end">종료일</option>
+									<option value="salesresult_goal">매출목표</option>
+									<option value="forsales_no">해외영업매출코드</option>
+									<option value="localsales_no">국내영업매출코드</option>
+									<option value="storesales_no">매장매출코드</option>
+									<option value="online_no">온라인매출코드</option>
+									<option value="salesresult_achieve">실적달성률</option>
+									
+									
+								</select>
+							</td>
+							<td>
+								<input type="text" id="search_word" name="word" placeholder="검색어를 입력하세요" autocomplete="off">
+								<input type="button" value="전체목록" id="list_reset">
+							</td>
+						</tr>
+					</table>
+					<table id="search_result">
+                    <table class="salesresult_list">
+                        <tr class="salesresult_top">
+							<th class="sec1">코드</th>
+                            <th class="sec2">시작일</th>
+                            <th class="sec3">종료일</th>
+                            <th class="sec4">달성률</th>
+                        </tr>
+                        <tr class="salesresult_items" th:each="salesresult_item : ${salesresult_list}">
+							<td>[[${salesresult_item.salesresult_no}]]</td>
+                            <td>[[${salesresult_item.salesresult_start}]]</td>
+                            <td>[[${salesresult_item.salesresult_end}]]</td>
+                            <td>[[${salesresult_item.salesresult_achieve}]]</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <hr class="vertical_line">
+                
+                <div class="regits_form">
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
+                    <form th:action="@{/c/c41/claim}" method="post" id="salesresult_frm">
+						<input type="hidden" name="salesresult_no" id="salesresult_no" th:value="${erp_Salesresult?.salesresult_no}"/>
+						
+						<input type="hidden" name="ctgr_no" id="ctgr_no" th:value="${erp_Salesresult?.ctgr_no}"/>
+						
+						<div class="sec">
+                            <label for="salesresult_start">시작일</label>
+                            <input
+                                type="date"
+                                name="salesresult_start"
+                                id="salesresult_start"
+                                th:value="${erp_Salesresult?.salesresult_start}"
+                            />
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="salesresult_end">종료일</label>
+                            <input
+                                type="date"
+                                name="salesresult_end"
+                                id="salesresult_end"
+                                th:value="${erp_Salesresult?.salesresult_end}"
+                            />
+                        </div>
+                        
+        	  			<div class="sec">
+                            <label for="salesresult_goal">매출목표</label>
+                            <input
+                                type="text"
+                                name="salesresult_goal"
+                                id="salesresult_goal"
+                                class="required"
+                                th:value="${erp_Salesresult?.salesresult_goal}"
+                            />
+                        </div>
+                        
+              			<div class="sec">
+                            <label for="forsales_regist">해외영업매출</label>
+                            <div class="forsales_regist">
+                                <input
+                                    type="text"
+                                    name="forsales_no"
+                                    id="forsales_no"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="forsaleslist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+
+       		 			<div class="sec">
+                            <label for="localsales_regist">국내영업매출</label>
+                            <div class="localsales_regist">
+                                <input
+                                    type="text"
+                                    name="localsales_no"
+                                    id="localsales_no"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="localsaleslist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+
+						<div class="sec">
+                            <label for="storesales_regist">매장매출</label>
+                            <div class="storesales_regist">
+                                <input
+                                    type="text"
+                                    name="storesales_no"
+                                    id="storesales_no"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="storesaleslist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+                        
+                        <div class="sec">
+                            <label for="online_regist">국내영업매출</label>
+                            <div class="online_regist">
+                                <input
+                                    type="text"
+                                    name="online_no"
+                                    id="online_no"
+                                    placeholder=" 우측 조회버튼으로 확인해주세요."
+                                    class="required"
+                                    readonly
+                                    disabled
+                                />
+                               <button type="button" id="localsaleslist_search">                        
+									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
+								</button>
+                            </div>
+                        </div>
+
+               
+                        <div class="sec">
+                            <label for="salesresult_achieve">실적달성률</label>
+                            <input
+                                type="text"
+                                name="salesresult_achieve"
+                                id="salesresult_achieve"
+                                class="required"
+                                th:value="${erp_Salesresult?.salesresult_achieve}"
+                            />
+                        </div>
+                       
+ 						<div class="sec" id="new_btn_sec">
+                            <button type="reset">RESET</button>
+                            <button type="button" id="salesresult_save_btn">SAVE</button>
+                        </div>
+                        <div class="sec" id="old_btn_sec">
+							<button type="button" id="salesresult_delete_btn">DELETE</button>
+							<button type="button" id="salesresult_update_btn">UPDAET</button>
+						</div>
+						
+						<div id="errormsg" th:text="${error}"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/c/c4/salesresult.js"></script>
+        <script th:inline="javascript">
+			// 검색 필터링 기능
+			let search_filter = (type,word) => {
+				if(word=="" || word==undefined || word==null) return null;
+				let searched_list = [];
+				let list = [[${salesresult_list}]];
+				
+				for(let i = 0 ; i < list.length; i++){
+					let json_data = JSON.stringify(list[i]);
+					let key_value = json_data.replace("{", "").replace("}", "").replace(/"/gi, "").split(",");
+					
+					for(let j = 0 ; j < key_value.length; j++) {
+						let key = key_value[j].split(":")[0];
+						let value = key_value[j].split(":")[1];	
+						if (type=="all") {
+							if(value==word) searched_list.push(list[i]);
+						}
+						else {
+							if(key==type && value==word) searched_list.push(list[i]);
+						}
+					}
+				}
+				return searched_list;
+			}
+			
+			// 설비/장비리스트중 창고 클릭시 데이터값 전달 함수
+				let selected_vo = (tag) => {
+				let list = [[${salesresult_list}]];
+				let vo_no = tag.innerHTML;
+				for(let i = 0 ; i < list.length; i ++){
+					if (list[i].salesresult_no == vo_no){
+						document.getElementById("salesresult_no").value=list[i].salesresult_no;
+						document.getElementById("ctgr_no").value=list[i].ctgr_no;
+						document.getElementById("salesresult_start").value=list[i].salesresult_start;
+						document.getElementById("salesresult_end").value=list[i].salesresult_end;
+						document.getElementById("salesresult_goal").value=list[i].salesresult_goal;
+						document.getElementById("forsales_no").value=list[i].forsales_no;
+						document.getElementById("localsales_no").value=list[i].localsales_no;
+						document.getElementById("storesales_no").value=list[i].storesales_no;
+						document.getElementById("online_no").value=list[i].online_no;
+						document.getElementById("salesresult_achieve").value=list[i].salesresult_achieve;					
+					}
+				}
+			}
+		</script>
+    </body>
+</html>

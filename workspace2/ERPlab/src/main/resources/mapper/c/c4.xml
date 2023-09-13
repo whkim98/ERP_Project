@@ -45,8 +45,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM erp_customer WHERE customer_no = #{customer_no}
 	</delete>
 	
-	<!-- 상품조회 -->
-	<select id="findGoodsAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodsVO">
-		SELECT * FROM erp_goods
+	
+	<!-- 해외영업매출조회 -->
+	<select id="findForsalesAll" resultType="com.lab.erp.vo.c.c1.Erp_ForsalesVO">
+		SELECT * FROM erp_forsales
 	</select>
+	
+	<!-- 국내영업매출조회 -->
+	<select id="findLocalsalesAll" resultType="com.lab.erp.vo.c.c2.Erp_LocalsalesVO">
+		SELECT * FROM erp_localsales
+	</select>
+	
+	<!-- 매장영업매출조회 -->
+	<select id="findStoresalesAll" resultType="com.lab.erp.vo.c.c3.Erp_StoresalesVO">
+		SELECT * FROM erp_storesales
+	</select>
+	
+	<!-- 온라인영업매출조회 -->
+	<select id="findOnlineAll" resultType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
+		SELECT * FROM erp_online
+	</select>
+	
+	
 </mapper>

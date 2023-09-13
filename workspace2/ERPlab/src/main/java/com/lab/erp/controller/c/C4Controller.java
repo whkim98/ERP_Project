@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lab.erp.service.c.C4Service;
+import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
+import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
+import com.lab.erp.vo.c.c3.Erp_OnlineVO;
+import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
 import com.lab.erp.vo.c.c4.Erp_SalesresultVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -64,14 +68,43 @@ public class C4Controller {
 		return "redirect:/c/c4/c41/salesresult";
 	}
 	
-	@PostMapping("/c32/salesresult_delete")
+	@PostMapping("/c41/salesresult_delete")
 	public String event_delete (Erp_SalesresultVO erp_salesresultVO) {
 		int res = c4Service.delete_salesresult(erp_salesresultVO.getSalesresult_no());
 		return "redirect:/c/c32/salesresult";
 	}
 	
-	// ---------부서별매출---------
-
+	// ---------해외영업매출조회---------
+	@GetMapping("/c4/forsales_list")
+	public String forsales_list (Model model) {
+		List<Erp_ForsalesVO> list_res = c4Service.findForsalesAll();
+		model.addAttribute("forsales_list", list_res);
+		return "thymeleaf/c/forsales_list";
+	}
+	
+	// ---------국내영업매출조회---------
+	@GetMapping("/c4/localsales_list")
+	public String localsales_list (Model model) {
+		List<Erp_LocalsalesVO> list_res = c4Service.findLocalsalesAll();
+		model.addAttribute("localsales_list", list_res);
+		return "thymeleaf/c/forsales_list";
+	}
+	
+	// ---------매장영업매출조회---------
+	@GetMapping("/c4/storesales_list")
+	public String storesales_list (Model model) {
+		List<Erp_StoresalesVO> list_res = c4Service.findStoresalesAll();
+		model.addAttribute("storesales_list", list_res);
+		return "thymeleaf/c/storesales_list";
+	}
+	
+	// ---------온라인영업매출조회---------
+	@GetMapping("/c4/online_list")
+	public String online_list (Model model) {
+		List<Erp_OnlineVO> list_res = c4Service.findOnlineAll();
+		model.addAttribute("online_list", list_res);
+		return "thymeleaf/c/online_list";
+	}
 	
 	// ---------고객관리---------
 

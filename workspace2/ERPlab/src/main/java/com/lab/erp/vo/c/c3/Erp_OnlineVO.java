@@ -14,12 +14,6 @@ public class Erp_OnlineVO {
 	private int team_no;
 	private String online_date;
 	private int customer_no;
-	private int goods_no;
-	private int online_qty;
-	private int online_price;
-	private int online_tax;
-	private int online_total;
 	private int settletype_no;
 	private int comcode_no;
-
 }

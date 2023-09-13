@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>항목조회</title>
+    
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/d/claim.css" />
+</head>
+<body>
+     <div id="wrapper">
+            <div id="main">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="cvalue_title">
+                                <span>항목조회</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="items">
+                            <td>
+                                <article class="post" th:each="cvalue_item : ${cvalue_list}">
+                                    <header>
+                                        <div class="title">
+                                            <h2>[[${cvalue_item.cvalue_name}]]</h2>
+                                            <p>[[${cvalue_item.cvalue_ctgr}]]</p>
+                                            <p class="hidden">[[${cvalue_item.cvalue_no}]]</p>
+                                        </div>
+                                    </header>
+                                    <p class="content"></p>
+                                    <footer>
+                                        <ul class="actions">
+                                            <li>
+                                                <button class="button large cvalue_type_select_btn">
+													SELECT
+												</button>
+                                            </li>
+                                        </ul>
+                                    </footer>
+                                </article>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/d/d5/cvalue_list.js"></script>
+</body>
+</html>

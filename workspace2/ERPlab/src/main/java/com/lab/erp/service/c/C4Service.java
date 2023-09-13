@@ -6,6 +6,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import com.lab.erp.repository.c4.C4Repository;
+import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
+import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
+import com.lab.erp.vo.c.c3.Erp_OnlineVO;
+import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
 import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.c.c4.Erp_SalesresultVO;
 
@@ -40,4 +44,17 @@ public class C4Service {
 	public int update_customer(Erp_CustomerVO erp_customerVO) {return c4Repository.update_customer(erp_customerVO);}
 	
 	public int delete_customer(int customer_no) {return c4Repository.delete_customer(customer_no);}
+	
+	// ---------해외영업매출조회---------
+	public List<Erp_ForsalesVO> findForsalesAll() {return c4Repository.findForsalesAll();}
+	
+	// ---------국내영업매출조회---------
+	public List<Erp_LocalsalesVO> findLocalsalesAll() {return c4Repository.findLocalsalesAll();}
+
+	// ---------매장영업매출조회---------
+	public List<Erp_StoresalesVO> findStoresalesAll() {return c4Repository.findStoresalesAll();}
+
+	// ---------온라인영업매출조회---------
+	public List<Erp_OnlineVO> findOnlineAll() {return c4Repository.findOnlineAll();}
+
 }

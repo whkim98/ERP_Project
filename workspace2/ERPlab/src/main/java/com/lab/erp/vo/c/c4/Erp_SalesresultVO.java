@@ -13,7 +13,6 @@ public class Erp_SalesresultVO {
 	 private String salesresult_start;
 	 private String salesresult_end;
 	 private int salesresult_goal;
-	 private int sales_no;
 	 private int forsales_no;
 	 private int localsales_no;
 	 private int storesales_no;

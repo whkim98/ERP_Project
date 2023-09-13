@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lab.erp.repository.d5.D5Repository;
 import com.lab.erp.vo.c.Erp_ClientVO;
+import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.d.d5.Erp_ClaimVO;
 import com.lab.erp.vo.d.d5.Erp_CsVO;
 import com.lab.erp.vo.d.d5.Erp_CvalueVO;
@@ -46,4 +47,5 @@ public class D5Service {
 	// ---------클레임/CS 항목 조회---------
 	public List<Erp_CvalueVO> findCvalueAll() {return d5Repository.findCvalueAll();}
 
+	public List<Erp_CustomerVO> findCustomerAll() {return d5Repository.findCustomerAll();}
 }
