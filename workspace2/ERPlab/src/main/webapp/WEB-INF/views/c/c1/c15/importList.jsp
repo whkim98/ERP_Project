@@ -268,9 +268,8 @@ function teamname(){
                   <td>
                      <select name="type">
                         <option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
-                        <option value="country_name" ${param.type == 'country_name' ? 'selected' : '' }>국가명</option>
-                        <option value="clientsort_name" ${param.type == 'clientsort_name' ? 'selected' : '' }>거래처종류</option>
-                        <option value="businesstype_name" ${param.type == 'businesstype_name' ? 'selected' : '' }>업태명</option>
+                        <option value="import_cino" ${param.type == 'import_cino' ? 'selected' : '' }>CINO</option>
+                        <option value="import_blno" ${param.type == 'import_blno' ? 'selected' : '' }>BLNO</option>
                      </select>
                   </td>
                   <td>
@@ -285,27 +284,15 @@ function teamname(){
             <table id="procode">
             	<c:if test="${list != null }">
                		<tr>
-						<th>국가명</th>
-						<th>거래처명</th>
-						<th>거래처종류</th>
-						<th>대표자명</th>
-						<th>사업형태</th>
-						<th>업태명</th>
-						<th>대표번호</th>
-						<th>담당자명</th>
-						<th>담당자연락처</th>
+						<th>CINO</th>
+						<th>BLNO</th>
+						<th>매출일자</th>
 					</tr>
                <c:forEach var="vo" items="${list }">
-			     <tr onclick="selectForm(${vo.client_no})" class="filter" id="filter">
-			   		<td>${vo.country_name }</td>
-					<td>${vo.client_name }</td>
-					<td>${vo.clientsort_name }</td>
-					<td>${vo.client_representative }</td>
-					<td>${vo.client_businesstype }</td>
-					<td>${vo.businesstype_name }</td>
-					<td>${vo.client_directno }</td>
-					<td>${vo.client_manager }</td>
-					<td>${vo.client_contact }</td>
+			     <tr onclick="selectForm(${vo.import_no})" class="filter" id="filter">
+			   		<td>${vo.import_cino }</td>
+					<td>${vo.import_blno }</td>
+					<td>${vo.import_date }</td>
 				</tr>
 				</c:forEach>
             </c:if>
@@ -320,8 +307,8 @@ function teamname(){
          </div> --%>
    
    <!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->   
-         <form action="${pageContext.request.contextPath }/internationalsales/bond/updateForm" id="content" method="post">
-            <input type="hidden" name="client_no">
+         <form action="${pageContext.request.contextPath }/internationsales/import/updateForm" id="content" method="post">
+            <input type="hidden" name="import_no">
             <input type="hidden" name="comcode_code" value="${comcode_code }">
          </form>
       
@@ -334,11 +321,9 @@ function teamname(){
       <div id="add" class="divform3">
          <c:choose>
             <c:when test="${map != null }">
-               <form action="${pageContext.request.contextPath }/internationalsales/bond/update" method="POST" id="update">
+               <form action="${pageContext.request.contextPath }/internationsales/import/update" method="POST" id="update">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
-                  <input type="hidden" name="client_no" value="${map.client_no }">
-                  <input type="hidden" name="country_no" id="country_no" value="${map.country_no }">
-                  <input type="hidden" name="businesstype_no" id="businesstype_no" value="${map.businesstype_no }">
+                  <input type="hidden" name="import_no" value="${map.import_no }">
                   <div class="warning_box">
                      <span class="red bigger">* </span>
                      <div class="yellow_box"></div>
@@ -346,113 +331,39 @@ function teamname(){
                   </div>
                      
                   <div>
-                     <label>국가명 </label>
-                     
-                     <select name="country_no">
-			  		<option value="1">미국</option>
-			  		<option value="2">캐나다</option>
-			  		<option value="3">버진아일랜드(미)</option>
-			  		<option value="4">북마리아나제도</option>
-			  		<option value="5">괌</option>
-			  		<option value="6">아메리칸사모아</option>
-			  		<option value="7">푸에르토리코</option>
-			  		<option value="8">버뮤다</option>
-			  		<option value="9">바하마</option>
-			  		<option value="10">바베이도스</option>
-			  		<option value="11">앵귈라</option>
-			  		<option value="12">바부다</option>
-			  		<option value="13">버진아일랜드</option>
-			  		<option value="14">케이맨 제도</option>
-			  		<option value="15">그레나다</option>
-			  		<option value="16">케이커스제도</option>
-			  		<option value="17">몬트세렛</option>
-			  		<option value="18">신트마르턴</option>
-			  		<option value="19">세인트루시아</option>
-			  		<option value="20">도미니카 연방</option>
-			  		<option value="21">세인트빈센트 그레나딘</option>
-			  		<option value="22">도미니카 공화국</option>
-			  		<option value="23">트리니다드 토바고</option>
-			  		<option value="24">세인트키츠 네비스</option>
-			  		<option value="25">일본</option>
-			  		<option value="26">대한민국</option>
-			  		<option value="27">베트남</option>
-			  		<option value="28">조선민주주의인민공화국</option>
-			  		<option value="29">홍콩</option>
-			  		<option value="30">마카오</option>
-			  		<option value="31">캄보디아</option>
-			  		<option value="32">라오스</option>
-			  		<option value="33">중화인민공화국</option>
-			  		<option value="34">방글라데시</option>
-			  		<option value="35">중화민국</option>
-				</select>
+                     <label>CINO </label>
+                     <input type="text" name="import_cino" id="import_cino" value="${map.import_cino }">
+                  </div>
+                  <div>
+                     <label>BLNO </label>
+                     <input type="text" name="import_blno" id="import_blno" value="${map.import_blno }">
                   </div>
                   
                   <div>
-                     <label>거래처명 </label>
-                     <input type="text" name="client_name" id="client_name" value="${map.client_name }">
-                  </div>
+                     <label>차변 </label>
+                     <select name="bs3_no">
+						  <c:forEach var="vo" items="${listd}">
+						    <option value="${vo.bs3_no}" ${vo.bs3_no == map.bs3_no ? 'selected' : ''}>
+						      ${vo.bs3_ctgr}
+						    </option>
+						  </c:forEach>
+						</select>
+
+                  </div>   
                   
                   <div>
-                     <label>거래처종류 </label>
-                     <c:if test="${map.clientsort_no == 2 }">
-                     <select name="clientsort_no">
-					<option value="2" selected>매출</option>
-					<option value="1">매입</option>
-				</select>
-				</c:if>
-                     <c:if test="${map.clientsort_no == 1 }">
-                     <select name="clientsort_no">
-					<option value="2">매출</option>
-					<option value="1" selected>매입</option>
-				</select>
-				</c:if>
+                     <label>대변</label> 
+                     <select name="dbs3_no">
+						  <c:forEach var="vo" items="${listc}">
+						    <option value="${vo.bs3_no}" ${vo.bs3_no == map2.bs3_no ? 'selected' : ''}>
+						      ${vo.bs3_ctgr}
+						    </option>
+						  </c:forEach>
+						</select>
                   </div>
-                  
-                  <div>
-                     <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno" value="${map.client_registeredno }">
-                  </div>   
-                     
-                  <div>
-                     <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno" value="${map.client_corporatedno }">
-                  </div> 
-                    
-                  <div>
-                     <label>대표자명 </label>
-                     <input type="text" name="client_representative" id="client_representative" value="${map.client_representative }">
-                  </div>   
-                  <div>
-                     <label>사업형태 </label>
-                     <input type="text" name="client_businesstype" id="client_businesstype" value="${map.client_businesstype }">
-                  </div>   
-                  <div>
-                     <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1" value="${map.client_addr1 }"><input type="text" name="client_addr2" id="client_addr2" value="${map.client_addr2 }"><input type="text" name="client_postal" id="client_postal" value="${map.client_postal } ">
-                  </div>   
-                  <div>
-                     <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno" value="${map.client_directno }">
-                  </div>   
-                  <div>
-                     <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax" value="${map.client_fax }">
-                  </div>   
-                  <div>
-                     <label>세금계산서이메일 </label>
-                     <input type="text" name="client_email" id="client_email" value="${map.client_email }">
-                  </div>   
-                  <div>
-                     <label>담당자명 </label>
-                     <input type="text" name="client_manager" id="client_manager" value="${map.client_manager }">
-                  </div>   
-                  <div>
-                     <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact" value="${map.client_contact }">
-                  </div>   
-                                    
+                                                      
                   <div align="right">
-                     <input type="button" value="update" onclick="sub(this.form)">
+                     <input type="button" value="update" onclick="submitt(this.form)">
                      <input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
                   </div>
                </form>
@@ -460,115 +371,10 @@ function teamname(){
             
             
             <c:otherwise>
-               <form action="${pageContext.request.contextPath }/internationalsales/bond/insert" method="POST" id="create">
-                  <input type="hidden" name="comcode_code" value="${comcode_code }">
-                     <h3>거래처 등록 사항</h3>
-                  <div>
-                     <label>국가명 </label>
-                     <select name="country_no">
-			  		<option value="1">미국</option>
-			  		<option value="2">캐나다</option>
-			  		<option value="3">버진아일랜드(미)</option>
-			  		<option value="4">북마리아나제도</option>
-			  		<option value="5">괌</option>
-			  		<option value="6">아메리칸사모아</option>
-			  		<option value="7">푸에르토리코</option>
-			  		<option value="8">버뮤다</option>
-			  		<option value="9">바하마</option>
-			  		<option value="10">바베이도스</option>
-			  		<option value="11">앵귈라</option>
-			  		<option value="12">바부다</option>
-			  		<option value="13">버진아일랜드</option>
-			  		<option value="14">케이맨 제도</option>
-			  		<option value="15">그레나다</option>
-			  		<option value="16">케이커스제도</option>
-			  		<option value="17">몬트세렛</option>
-			  		<option value="18">신트마르턴</option>
-			  		<option value="19">세인트루시아</option>
-			  		<option value="20">도미니카 연방</option>
-			  		<option value="21">세인트빈센트 그레나딘</option>
-			  		<option value="22">도미니카 공화국</option>
-			  		<option value="23">트리니다드 토바고</option>
-			  		<option value="24">세인트키츠 네비스</option>
-			  		<option value="25">일본</option>
-			  		<option value="26">대한민국</option>
-			  		<option value="27">베트남</option>
-			  		<option value="28">조선민주주의인민공화국</option>
-			  		<option value="29">홍콩</option>
-			  		<option value="30">마카오</option>
-			  		<option value="31">캄보디아</option>
-			  		<option value="32">라오스</option>
-			  		<option value="33">중화인민공화국</option>
-			  		<option value="34">방글라데시</option>
-			  		<option value="35">중화민국</option>
-				</select>
-                  </div>
-                  
-                  <div>
-                     <label>거래처명 </label>
-                     <input type="text" name="client_name" id="client_name">
-                  </div>
-                  
-                  <div>
-                     <label>거래처종류 </label>
-                     <select name="clientsort_no">
-					<option value="2">매출</option>
-					<option value="1">매입</option>
-				</select>
-                  </div>
-                  
-                  <div>
-                     <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno">
-                  </div>   
-                     
-                  <div>
-                     <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno">
-                  </div> 
-                    
-                  <div>
-                     <label>대표자명 </label>
-                     <input type="text" name="client_representative" id="client_representative">
-                  </div>   
-                  <div>
-                     <label>사업형태 </label>
-                     <input type="text" name="client_businesstype" id="client_businesstype" value="법인">
-                  </div>   
-                  <div>
-                     <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1"><input type="text" name="client_addr2" id="client_addr2"><input type="text" name="client_postal" id="client_postal">
-                  </div>   
-                  <div>
-                     <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno">
-                  </div>   
-                  <div>
-                     <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax">
-                  </div>   
-                  <div>
-                     <label>세금계산서이메일 </label>
-                     <input type="text" name="client_email" id="client_email">
-                  </div>   
-                  <div>
-                     <label>담당자명 </label>
-                     <input type="text" name="client_manager" id="client_manager">
-                  </div>   
-                  <div>
-                     <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact">
-                  </div>   
-                  
-                  
+               
                   
                  
-                  
-                  <div>
-                     <input type="button" id="register" value="save" onclick="submitt(this.form)">
-                     <input type="reset" value="reset">
-                  </div>
-               </form>
+                 
             </c:otherwise>
          </c:choose>
          
@@ -653,67 +459,17 @@ function imcodecheck(){      // imcode의 sendRequest에서 지정한 콜벡함�
 
    function submitt(f) {
 	   
-	   var client_name = document.getElementById("client_name").value;
-	   var client_registeredno = document.getElementById("client_registeredno").value;
-	   var client_corporatedno = document.getElementById("client_corporatedno").value;
-	   var client_representative = document.getElementById("client_representative").value;
-	   var client_businesstype = document.getElementById("client_businesstype").value;
-	   var client_addr1 = document.getElementById("client_addr1").value;
-	   var client_addr2 = document.getElementById("client_addr2").value;
-	   var client_postal = document.getElementById("client_postal").value;
-	   var client_directno = document.getElementById("client_directno").value;
-	   var client_fax = document.getElementById("client_fax").value;
-	   var client_email = document.getElementById("client_email").value;
-	   var client_manager = document.getElementById("client_manager").value;
-	   var client_contact = document.getElementById("client_contact").value;
+	   var import_cino = document.getElementById("import_cino").value;
+	   var import_blno = document.getElementById("import_blno").value;
 	   
-	   console.log(client_name);
-	   console.log(client_registeredno);
-	   
-	   if(client_name == ""){
-		   alert('거래쳐명을 입력해 주세요');
-		   document.getElementById('client_name').focus();
+	   if(import_cino == ""){
+		   alert('CINO를 입력해 주세요');
+		   document.getElementById('import_cino').focus();
 		   return false;
-	   }else if (client_registeredno == "") {
-	     alert("사업자등록번호를 입력해 주세요");
-	     document.getElementById("client_registeredno").focus();
+	   }else if (import_blno == "") {
+	     alert("BLNO를 입력해 주세요");
+	     document.getElementById("import_blno").focus();
 	     return false; // 폼 제출 방지
-	   }else if(client_corporatedno == ""){
-		  alert("법인등록번호를 입력해 주세요");
-		  document.getElementById("client_corporatedno").focus();
-		  return false;
-	   }else if(client_representative == ""){
-		   alert("대표자명을 입력해 주세요");
-		   document.getElementById("client_representative").focus();
-		   return false;
-	   }else if(client_businesstype == ""){
-		   alert("사업형태를 입력해 주세요");
-		   document.getElementById("client_businesstype").focus();
-		   return false;
-	   }else if(client_addr1 == "" || client_addr2 == "" || client_postal == ""){
-		   alert("사업장 및 주소를 입력해 주세요");
-		   document.getElementById("client_addr1").focus();
-		   return false;
-	   }else if(client_directno == ""){
-		   alert("대표번호를 입력해 주세요");
-		   document.getElementById("client_directno").focus();
-		   return false;
-	   }else if(client_fax == ""){
-		   alert("팩스번호를 입력해 주세요");
-		   document.getElementById("client_fax").focus();
-		   return false;
-	   }else if(client_email == ""){
-		   alert("이메일을 입력해 주세요");
-		   document.getElementById("client_email").focus();
-		   return false;
-	   }else if(client_manager == ""){
-		   alert("담당자명을 입력해 주세요");
-		   document.getElementById("client_manager").focus();
-		   return false;
-	   }else if(client_contact == ""){
-		   alert("담당자번호를 입력해 주세요");
-		   document.getElementById("client_contact").focus();
-		   return false;
 	   }else {
 		      var ch = confirm("등록하시겠습니까?");
 		      if(ch){
@@ -766,7 +522,7 @@ function clName(){
 
 // 리스트에서 글 선택 시 넘어가는 form
 function selectForm(no){
-   document.getElementsByName("client_no")[0].value = no;
+   document.getElementsByName("import_no")[0].value = no;
    document.getElementById("content").submit(); // content라는 id의 form태그 submit
 }
 

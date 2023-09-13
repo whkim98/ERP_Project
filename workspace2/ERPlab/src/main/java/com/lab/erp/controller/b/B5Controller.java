@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lab.erp.service.b.B5Service;
+import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.b.b5.Erp_AttendanceVO;
+import com.lab.erp.vo.login.Erp_EmphistoryVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 import com.lab.erp.vo.login.Erp_Employee2VO;
 
@@ -25,10 +27,12 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class B5Controller {
 	private B5Service b5;
+	private LoginService ls;
 	
 	@Autowired
-	public B5Controller(B5Service b5) {
+	public B5Controller(B5Service b5, LoginService ls) {
 		this.b5 = b5;
+		this.ls = ls;
 	}
 	
 	@GetMapping("/greeting")
@@ -69,7 +73,10 @@ public class B5Controller {
 	}
 	
 	@RequestMapping("/greeting/employee/insert")
-	public String insert(Erp_Employee1VO vo1, Erp_Employee2VO vo2, String employee1_code, String employee1_name, String employee1_addr1, String employee1_addr2, String employee1_postal, String employee1_residentno, String employee1_phone, String employee1_email, String employee1_id, String employee1_pw, int employee1_disability, int employee1_merit, int team_no, String employee2_extension, String employee2_position, int employee2_salary, Double employee2_holiday, int employee2_four, String employee2_worktype) {
+	public String insert(Erp_EmphistoryVO vo, String comcode_code, Erp_Employee1VO vo1, Erp_Employee2VO vo2, String employee1_code, String employee1_name, String employee1_addr1, String employee1_addr2, String employee1_postal, String employee1_residentno, String employee1_phone, String employee1_email, String employee1_id, String employee1_pw, int employee1_disability, int employee1_merit, int team_no, String employee2_extension, String employee2_position, int employee2_salary, Double employee2_holiday, int employee2_four, String employee2_worktype) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
 		vo1.setEmployee1_code(employee1_code);
 		vo1.setEmployee1_name(employee1_name);
 		vo1.setEmployee1_addr1(employee1_addr1);
@@ -97,25 +104,35 @@ public class B5Controller {
 		vo2.setEmployee2_worktype(employee2_worktype);
 		
 		int su2 = b5.insertEmployee2(vo2);
-	
+		
+		vo.setComcode_no(comcode_no);
+		vo.setEmployee1_no(employee1_no);
+		vo.setTeam_no(team_no);
+		
+		b5.insertEmphistory(vo);
+		
 		return "redirect:/greeting";
 	}
 	
 	@RequestMapping("/greeting/attendance")
 	public String attendance(Model model) {
-		List<Erp_Employee1VO> list = b5.selectAttendance();
+		List<Erp_Employee1VO> list = b5.selectEmployee();
 		model.addAttribute("list", list);
 		return "/b/b5/b53/attendancelist";
 	}
 	
 	@RequestMapping("/greeting/attendance/insertForm")
 	public String insertForm(Model model, int employee2_no) {
+		List<Erp_Employee1VO> list = b5.selectAttendance(employee2_no);
 		model.addAttribute("employee2_no", employee2_no);
+		model.addAttribute("list", list);
 		return "/b/b5/b53/attendanceInsertForm";
 	}
 	
 	@RequestMapping("/greeting/attendance/insert")
 	public String insert(int employee2_no, int hdkind_no, String attendance_start, String attendance_end, Erp_AttendanceVO vo, Erp_Employee2VO evo) {
+		
+		
 		vo.setEmployee2_no(employee2_no);
 		vo.setHdkind_no(hdkind_no);
 		vo.setAttendance_start(attendance_start);

@@ -12,7 +12,7 @@ public class Erp_ImportpayVO {
 	private int ctgr_no;
 	private String importpay_code;
 	private int client_no;
-	private int import_no;
+	private int importorder_no;
 	private String importpay_expiry;
 	private int importpay_payable;
 	private String importpay_paid;

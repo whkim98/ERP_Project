@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.b.b5.Erp_AttendanceDAO;
 import com.lab.erp.dao.b.b5.Erp_HdkindDAO;
+import com.lab.erp.dao.login.Erp_EmphistoryDAO;
 import com.lab.erp.dao.login.Erp_EmployeeDAO;
 import com.lab.erp.vo.b.b5.Erp_AttendanceVO;
+import com.lab.erp.vo.login.Erp_EmphistoryVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 import com.lab.erp.vo.login.Erp_Employee2VO;
 
@@ -19,12 +21,14 @@ public class B5Service {
 	private Erp_EmployeeDAO edao;
 	private Erp_AttendanceDAO adao;
 	private Erp_HdkindDAO hdao;
+	private Erp_EmphistoryDAO emdao;
 	
 	@Autowired
-	public B5Service(Erp_EmployeeDAO edao, Erp_AttendanceDAO adao, Erp_HdkindDAO hdao) {
+	public B5Service(Erp_EmployeeDAO edao, Erp_AttendanceDAO adao, Erp_HdkindDAO hdao, Erp_EmphistoryDAO emdao) {
 		this.edao = edao;
 		this.adao = adao;
 		this.hdao = hdao;
+		this.emdao = emdao;
 	}
 	
 	public List<Erp_Employee1VO> selectEmployee(){
@@ -43,8 +47,8 @@ public class B5Service {
 		return edao.selectEmployeeno(employee1_code);
 	}
 	
-	public List<Erp_Employee1VO> selectAttendance(){
-		return edao.selectAttendance();
+	public List<Erp_Employee1VO> selectAttendance(int employee2_no){
+		return edao.selectAttendance(employee2_no);
 	}
 	
 	public int insertAttendance(Erp_AttendanceVO vo) {
@@ -59,5 +63,8 @@ public class B5Service {
 		return adao.updateHoliday(vo);
 	}
 	
+	public int insertEmphistory(Erp_EmphistoryVO vo) {
+		return emdao.insetEmphistory(vo);
+	}
 	
 }

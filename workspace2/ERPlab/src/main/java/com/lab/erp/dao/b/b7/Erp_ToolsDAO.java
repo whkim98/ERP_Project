@@ -1,8 +1,13 @@
 package com.lab.erp.dao.b.b7;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.lab.erp.vo.b.b7.Erp_ToolsVO;
 
 @Component
 public class Erp_ToolsDAO {
@@ -13,6 +18,12 @@ private SqlSession sqlSession;
 		this.sqlSession = sqlSession;
 	}
 
+	public List<Map<String, Object>> selectTools(Map<String, Object> map){
+		return sqlSession.selectList("b7.selectTools", map);
+	}
 	
+	public int insertTools(Erp_ToolsVO vo) {
+		return sqlSession.insert("b7.insertTools", vo);
+	}
 	
 }

@@ -4,4 +4,74 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b7">
 
+<select id="selectTools" parameterType="map" resultType="map">
+	select * from erp_tools et
+	left join erp_toolstype ett
+	on et.toolstype_no = ett.toolstype_no
+	where comcode_no = #{comcode_no}
+	<if test="type != null">
+            <if test="type == 'team_no'">
+               and team_no like '%${word}%' 
+            </if>
+            <if test="type == 'tools_name'">
+            	and tools_name like '%${word}%'
+            </if>
+    </if>
+</select>
+
+<insert id="insertTools" parameterType="com.lab.erp.vo.b.b7.Erp_ToolsVO">
+	insert into erp_tools(ctgr_no, team_no, tools_code, tools_name, toolstype_no, tools_usage, tools_date, tools_price, tools_tax, tools_total, tools_expiry, comcode_no) 
+	values(26, #{team_no}, #{tools_code}, #{tools_name}, #{toolstype_no}, #{tools_usage}, #{tools_date}, #{tools_price}, #{tools_tax}, #{tools_total}, #{tools_expiry}, #{comcode_no})
+</insert>
+
+<select id="selectSupplies" parameterType="map" resultType="map">
+	select * from erp_supplies es
+	left join erp_suppliestype est
+	on es.suppliestype_no = est.suppliestype_no
+	where comcode_no = #{comcode_no}
+	<if test="type != null">
+            <if test="type == 'team_no'">
+               and team_no like '%${word}%' 
+            </if>
+            <if test="type == 'supplies_name'">
+            	and supplies_name like '%${word}%'
+            </if>
+    </if>
+</select>
+
+<insert id="insertSupplies" parameterType="com.lab.erp.vo.b.b7.Erp_SuppliesVO">
+	insert into erp_supplies(ctgr_no, supplies_code, team_no, supplies_name, suppliestype_no, supplies_usage, supplies_date, supplies_price, supplies_tax, supplies_total, comcode_no)
+	values(27, #{supplies_code}, #{team_no}, #{supplies_name}, #{suppliestype_no}, #{supplies_usage}, #{supplies_date}, #{supplies_price}, #{supplies_tax}, #{supplies_total}, #{comcode_no})
+</insert>
+
+<select id="selectBsno" parameterType="int" resultType="int">
+	select eb.bs1_no from erp_bs1 eb
+	left join erp_bs2 eb2 on eb.bs1_no = eb2.bs1_no
+	left join erp_bs3 eb3 on eb3.bs2_no = eb2.bs2_no
+	where eb3.bs3_no = #{bs3_no}
+</select>
+
+<select id="selectBsno2" parameterType="int" resultType="int">
+	select eb2.bs2_no from erp_bs1 eb
+	left join erp_bs2 eb2 on eb.bs1_no = eb2.bs1_no
+	left join erp_bs3 eb3 on eb3.bs2_no = eb2.bs2_no
+	where eb3.bs3_no = #{bs3_no}
+</select>
+
+<update id="updateBs3" parameterType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+	update erp_bs3 set bs3_amount = bs3_amount - #{bs3_amount} where bs3_no = #{bs3_no}
+</update>
+
+<update id="updateBs2" parameterType="com.lab.erp.vo.b.b1.Erp_Bs2VO">
+	update erp_bs2 set bs2_amount = bs2_amount - #{bs2_amount} where bs2_no = #{bs2_no}
+</update>
+
+<update id="updateBs" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+	update erp_bs1 set bs1_amount = bs1_amount - #{bs1_amount} where bs1_no = #{bs1_no}
+</update>
+
+<select id="selectSumqty" parameterType="int" resultType="int">
+	select es.salesgoods_qty * es.salesgoods_price as total from erp_salesgoods es where es.salesgoods_no = #{salesgoods_no};
+</select>
+
 </mapper>

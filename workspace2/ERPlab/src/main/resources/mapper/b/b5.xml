@@ -30,11 +30,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select employee1_no from erp_employee1 where employee1_code = #{employee1_code}
 </select>
 
-<select id="selectAttendance" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
+<select id="selectAttendance" parameterType="int" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
 	select * from erp_employee1 e1 
 	left join erp_employee2 e2 on e1.employee1_no = e2.employee1_no 
 	left join erp_attendance ea on e2.employee2_no = ea.employee2_no
-	left join erp_hdkind eh on ea.hdkind_no = eh.hdkind_no;
+	left join erp_hdkind eh on ea.hdkind_no = eh.hdkind_no
+	where e2.employee2_no = #{employee2_no}
 </select>
 
 <insert id="insertAttendance" parameterType="com.lab.erp.vo.b.b5.Erp_AttendanceVO">
@@ -62,5 +63,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <update id="updateHoliday" parameterType="com.lab.erp.vo.login.Erp_Employee2VO">
 	update erp_employee2 set employee2_holiday = #{employee2_holiday} where employee2_no = #{employee2_no}
 </update>
+
+<insert id="insertEmphistory" parameterType="com.lab.erp.vo.login.Erp_EmphistoryVO">
+	insert into erp_emphistory(employee1_no, team_no, emphistory_employeed, comcode_no) 
+	values(#{employee1_no}, #{team_no}, now(), #{comcode_no})
+</insert>
 
 </mapper>

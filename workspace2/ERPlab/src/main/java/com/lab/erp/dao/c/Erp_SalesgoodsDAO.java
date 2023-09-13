@@ -36,4 +36,28 @@ private SqlSession sqlSession;
 	public List<Map<String, Object>> getSalesGoods(String salesgoods_code){
 		return sqlSession.selectList("c2.getSalesGoods", salesgoods_code);
 	}
+	
+	public int insertSalesgoods(Erp_SalesgoodsVO vo) {
+		return sqlSession.insert("c1.insertSalesgoods", vo);
+	}
+	
+	public int selectSumqty(int salesgoods_no) {
+		return sqlSession.selectOne("c1.selectSumqty", salesgoods_no);
+	}
+	
+	public int salesgoodsUpdate(Map<String, Object> map) {
+		return sqlSession.update("c1.salesgoodsUpdate", map);
+	}
+	
+	public int selectSumprice(int goods_no) {
+		return sqlSession.selectOne("c1.selectSumprice", goods_no);
+	}
+	
+	public int selectTax(int goods_no) {
+		return sqlSession.selectOne("c1.selectTax", goods_no);
+	}
+	
+	public int selectPrice(int goods_no) {
+		return sqlSession.selectOne("c1.selectPrice", goods_no);
+	}
 }

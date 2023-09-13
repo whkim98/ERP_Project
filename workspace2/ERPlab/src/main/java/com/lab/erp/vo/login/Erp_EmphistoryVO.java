@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Erp_Emphistory {
+public class Erp_EmphistoryVO {
 	
 	private int emphistory_no;
 	private int employee1_no;

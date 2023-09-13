@@ -82,4 +82,34 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d2.searchcl", map);
 	}
 	
+	
+	//========
+	
+	public List<Erp_ClientVO> selectClient(int country_no){
+		return sqlSession.selectList("c2.selectClient", country_no);
+	}
+	
+	public int insertClient(Erp_ClientVO vo) {
+		return sqlSession.insert("c1.insertClient", vo);
+	}
+	
+	public List<Map<String, Object>> internationList(Map<String, Object> map){
+		return sqlSession.selectList("c1.internationList", map);
+	}
+	
+	public Map<String, Object> internationList2(Map<String, Object> map){
+		return sqlSession.selectOne("c1.internationList2", map);
+	}
+	
+	public int changeClient(Map<String, Object> map) {
+		return sqlSession.update("c1.changeClient", map);
+	}
+	
+	public List<Erp_ClientVO> selectClientlist(){
+		return sqlSession.selectList("c1.selectClientlist");
+	}
+	
 }
+
+	
+

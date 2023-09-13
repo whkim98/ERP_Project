@@ -19,4 +19,16 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("b1.autoDebtor", map);
 	}
 	
+	public int selectDebtor(int bs3_no) {
+		return sqlSession.selectOne("c1.selectDebtor", bs3_no);
+	}
+	
+	public int selectDebtorforsales(int bs3_no) {
+		return sqlSession.selectOne("c1.selectDebtorforsales", bs3_no);
+	}
+	
+	public int selectDebtorno(int bs3_no) {
+		return sqlSession.selectOne("c1.selectDebtorno", bs3_no);
+	}
+	
 }

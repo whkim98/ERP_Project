@@ -26,13 +26,13 @@
 		<tr>
 			<td>휴가시작일</td>
 			<td>
-				<input type="text" name="attendance_start" id="attendance_start">
+				<input type="date" name="attendance_start" id="attendance_start">
 			</td>
 		</tr>
 		<tr>
 			<td>휴가종료일</td>
 			<td>
-				<input type="text" name="attendance_end" id="attendance_end">
+				<input type="date" name="attendance_end" id="attendance_end">
 			</td>
 		</tr>
 		<tr>
@@ -42,4 +42,33 @@
 		</tr>
 	</table>
 	</form>
+	<table>
+		<tr>
+			<th>직원코드</th>
+			<th>이름</th>
+			<th>전화번호</th>
+			<th>이메일</th>
+			<th>내선번호</th>
+			<th>잔여휴가</th>
+			<th>근로형태</th>
+			<th>휴가시작일</th>
+			<th>휴가종료일</th>
+			<th>휴가종류</th>
+		</tr>
+			<c:forEach var="vo" items="${list }">
+		<tr>
+				<td>${vo.employee1_code }</td>
+				<td>${vo.employee1_name }</td>
+				<td>${vo.employee1_phone }</td>
+				<td>${vo.employee1_email }</td>
+				<td>${vo.employee2_extension }</td>
+				<td>${vo.employee2_holiday }</td>
+				<td>${vo.employee2_worktype }</td>
+				<td>${vo.attendance_start }</td>
+				<td>${vo.attendance_end }</td>
+				<td>${vo.hdkind_name }</td>
+		</tr>
+			</c:forEach>
+			
+	</table>
 </div>

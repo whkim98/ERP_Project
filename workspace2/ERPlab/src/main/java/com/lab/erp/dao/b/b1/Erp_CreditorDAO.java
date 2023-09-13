@@ -19,4 +19,16 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("b1.autoCreditor", map);
 	}
 	
+	public int selectCreditor(int bs3_no) {
+		return sqlSession.selectOne("c1.selectCreditor", bs3_no);
+	}
+	
+	public int selectCreditorforsales(int bs3_no) {
+		return sqlSession.selectOne("c1.selectCreditorforsales", bs3_no);
+	}
+	
+	public int selectCreditorno(int bs3_no) {
+		return sqlSession.selectOne("c1.selectCreditorno", bs3_no);
+	}
+	
 }

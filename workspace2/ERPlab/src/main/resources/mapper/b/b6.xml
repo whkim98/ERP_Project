@@ -12,27 +12,123 @@ select year(#{salary_date})
 <select id="selectSalary" parameterType="int" resultType="int">
 select employee2_salary from erp_employee2 where employee2_no = #{employee2_no}
 </select>
-<select id="privacy" parameterType="String" resultType="com.lab.erp.vo.b.b6.Erp_SalaryVO">
-select s.* from erp_salary s, erp_employee1 e1, erp_employee2 e2 where e2.employee1_no = e1.employee1_no and e1.employee1_code = #{employee1_code}
+
+<select id="privacy" parameterType="map" resultType="map">
+SELECT s.*, ec.ctgr_ctgr, ec.ctgr_no, ec.ctgr_name, e1.*, e2.*, es.*
+FROM erp_salary s
+LEFT JOIN erp_employee2 e2 ON s.employee2_no = e2.employee2_no
+LEFT JOIN erp_employee1 e1 ON e1.employee1_no = e2.employee1_no
+LEFT JOIN erp_salarytype es ON s.salarytype_no = es.salarytype_no 
+LEFT JOIN erp_ctgr ec ON s.ctgr_no = ec.ctgr_no
+WHERE e1.employee1_code = #{employee1_code}
+AND s.comcode_no = #{comcode_no}
+ <if test="type != null">
+ 	<if test="type == 'salary_code'">
+    	and s.salary_code like '%${word}%' 
+    </if>
+    <if test="type == 'salary_date'">
+        and s.salary_date like '%${word}%' 
+    </if>
+</if>
 </select>
+ 
+<select id="selectSalaryUpdate1" parameterType="map" resultType="map">
+	select s.*, e1.*, e2.*, es.*, ec.*, ed.*, eb.*, eb2.*, eb3.* from erp_salary s
+	left join erp_employee2 e2 on s.employee2_no = e2.employee2_no
+	left join erp_employee1 e1 on e2.employee1_no = e1.employee1_no
+	left join erp_salarytype es on s.salarytype_no = es.salarytype_no
+	left join erp_closing ec on ec.closing_code = s.salary_code
+	left join erp_debtor ed on ed.debtor_no = ec.debtor_no
+	left join erp_bs3 eb on ed.bs3_no = eb.bs3_no
+	left join erp_bs2 eb2 on eb.bs2_no = eb2.bs2_no
+	left join erp_bs1 eb3 on eb2.bs1_no = eb3.bs1_no
+	WHERE e1.employee1_code = #{employee1_code}
+	AND s.comcode_no = #{comcode_no}
+	and s.salary_no = #{salary_no}
+</select>
+
+<select id="selectSalaryUpdate2" parameterType="map" resultType="map">
+	select s.*, e1.*, e2.*, es.*, ec.*, ec2.*, eb.*, eb2.*, eb3.* from erp_salary s
+	left join erp_employee2 e2 on s.employee2_no = e2.employee2_no
+	left join erp_employee1 e1 on e2.employee1_no = e1.employee1_no
+	left join erp_salarytype es on s.salarytype_no = es.salarytype_no
+	left join erp_closing ec on ec.closing_code = s.salary_code
+	left join erp_creditor ec2 on ec2.creditor_no = ec.creditor_no 
+	left join erp_bs3 eb on eb.bs3_no = ec2.bs3_no 
+	left join erp_bs2 eb2 on eb.bs2_no = eb2.bs2_no 
+	left join erp_bs1 eb3 on eb2.bs1_no = eb3.bs1_no
+	WHERE e1.employee1_code = #{employee1_code}
+	AND s.comcode_no = #{comcode_no}
+	and s.salary_no = #{salary_no}
+</select>
+
+
+<update id="salaryUpdate" parameterType="map">
+	update erp_salary set salary_date = #{salary_date}, salarytype_no = #{salarytype_no}, 
+	salary_start = #{salary_start}, salary_end = #{salary_end}, salary_cash = #{salary_cash} where salary_no = #{salary_no}
+</update>
+ 
+ <!-- 
+ <select id="privacy" parameterType="map" resultType="map">
+ 	select s.*, e1.employee1_name, es.salarytype_name, 
+ 	d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+    from erp_salary s, erp_employee1 e1, erp_employee2 e2, erp_salarytype es,
+    erp_debtor d, erp_creditor cr
+    where 
+ </select> -->
+ 
+<select id="selectBs" resultType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+select eb3.*, eb.bs1_no from erp_bs1 eb
+left join erp_bs2 eb2 on eb.bs1_no = eb2.bs1_no
+left join erp_bs3 eb3 on eb3.bs2_no = eb2.bs2_no
+</select>
+ 
+ 
 <select id="selectEmployee" parameterType="String" resultType="int">
 select e2.employee2_no from erp_employee2 e2, erp_employee1 e1 where e1.employee1_code = #{employee1_code} and e1.employee1_no = e2.employee1_no
 </select>
+
+
+
 <insert id="insertSalary" parameterType="com.lab.erp.vo.b.b6.Erp_SalaryVO">
-insert into erp_salary(salary_code, employee2_no, salarytype_no, salary_date, salary_start, salary_end, salary_cash) values(#{salary_code}, #{employee2_no}, #{salarytype_no}, #{salary_date}, #{salary_start}, #{salary_end}, #{salary_cash})
+insert into erp_salary(ctgr_no, comcode_no, salary_code, employee2_no, salarytype_no, salary_date, salary_start, salary_end, salary_cash) values(24, #{comcode_no}, #{salary_code}, #{employee2_no}, #{salarytype_no}, #{salary_date}, #{salary_start}, #{salary_end}, #{salary_cash})
 </insert>
+
+<insert id="insertClosing" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+	insert into erp_closing(closing_code, ctgr_no, closing_date, debtor_no, closing_debtor, creditor_no, closing_creditor, comcode_no) values(#{closing_code}, 24, now(), 115, #{closing_debtor}, 183, #{closing_creditor}, #{comcode_no})
+</insert>
+
+<update id="updateBs3" parameterType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+	update erp_bs3 set bs3_amount = bs3_amount - #{bs3_amount} where bs3_no = #{bs3_no}
+</update>
+
+<update id="updateBs2" parameterType="com.lab.erp.vo.b.b1.Erp_Bs2VO">
+	update erp_bs2 set bs2_amount = bs2_amount - #{bs2_amount} where bs2_no = #{bs2_no}
+</update>
+
+<update id="updateBs" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+	update erp_bs1 set bs1_amount = bs1_amount - #{bs1_amount} where bs1_no = #{bs1_no}
+</update>
+
 <select id="salaryType" parameterType="String" resultType="int">
 select salarytype_no from erp_salarytype where salarytype_name = #{salarytype_name}
 </select>
 <select id="magnification" parameterType="int" resultType="double">
 select salarytype_magnification from erp_salarytype where salarytype_no = #{salarytype_no}
 </select>
+
 <select id="resignList" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
 SELECT * FROM erp_employee1 e1 
 LEFT JOIN erp_employee2 e2 
 ON e1.employee1_no = e2.employee1_no 
 LEFT JOIN erp_resign er 
-ON e2.employee2_no = er.employee2_no;
+ON e2.employee2_no = er.employee2_no
+left join erp_emphistory ee 
+on ee.employee1_no = e1.employee1_no
+</select>
+
+<select id="getSalarycode" parameterType="String" resultType="int">
+	select salary_no from erp_salary where salary_code = #{salary_code}
 </select>
 
 <select id="employeeList" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
@@ -40,11 +136,29 @@ ON e2.employee2_no = er.employee2_no;
 </select>
 
 <insert id="resignInsert" parameterType="com.lab.erp.vo.b.b6.Erp_ResignVO">
-	insert into erp_resign(resign_code, employee2_no, resign_date, resign_cost) values(#{resign_code}, #{employee2_no}, #{resign_date}, #{resign_cost})
+	insert into erp_resign(resign_code, employee2_no, resign_date, resign_cost, comcode_no) values(#{resign_code}, #{employee2_no}, #{resign_date}, #{resign_cost}, #{comcode_no})
 </insert>
 
 <select id="selectExp" parameterType="int" resultType="int">
 	select employee2_exp from erp_employee2 where employee2_no = #{employee2_no}
 </select>
+
+<select id="selectBsno" parameterType="int" resultType="int">
+	select eb.bs1_no from erp_bs1 eb
+	left join erp_bs2 eb2 on eb.bs1_no = eb2.bs1_no
+	left join erp_bs3 eb3 on eb3.bs2_no = eb2.bs2_no
+	where eb3.bs3_no = #{bs3_no}
+</select>
+
+<select id="selectBsno2" parameterType="int" resultType="int">
+	select eb2.bs2_no from erp_bs1 eb
+	left join erp_bs2 eb2 on eb.bs1_no = eb2.bs1_no
+	left join erp_bs3 eb3 on eb3.bs2_no = eb2.bs2_no
+	where eb3.bs3_no = #{bs3_no}
+</select>
+
+<update id="updateResign" parameterType="map">
+	update erp_emphistory set emphistory_resign = #{emphistory_resign} where employee1_no = #{employee1_no}
+</update>
 
 </mapper>

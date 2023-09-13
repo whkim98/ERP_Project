@@ -84,4 +84,16 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d2.goodsList", map);
 	}
 	
+	public int insertGoods(Erp_GoodsVO vo) {
+		return sqlSession.insert("c1.insertGoods", vo);
+	}
+	
+	public List<Erp_GoodsVO> selectGoodslist(int client_no2){
+		return sqlSession.selectList("c1.selectGoodslist", client_no2);
+	}
+	
+	public Map<String, Object> selectGoodslist2(Map<String, Object> map){
+		return sqlSession.selectOne("c1.selectGoodslist2", map);
+	}
+	
 }

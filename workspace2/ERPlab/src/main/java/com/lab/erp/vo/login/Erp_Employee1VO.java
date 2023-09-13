@@ -56,4 +56,9 @@ public class Erp_Employee1VO {
 	private double hdkind_days;
 	private double hdkind_approved;
 	
+//	emphistory ====================================
+	private int emphistory_no;
+	private String emphistory_employeed;
+	private String emphistory_resign;
+	
 }

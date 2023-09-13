@@ -23,4 +23,7 @@ public class Erp_ToolsVO {
 	private String tools_expiry;
 	private int comcode_no;
 
+	//toolstype
+	private String toolstype_name;
+	
 }

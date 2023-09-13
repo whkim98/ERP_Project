@@ -18,6 +18,7 @@
 				<th>직급</th>
 				<th>연차</th>
 				<th>연봉</th>
+				<th>퇴직여부</th>
 			</tr>
 			<c:forEach var="vo" items="${list }">
 			<tr>
@@ -32,7 +33,13 @@
 				<td>${vo.employee2_position }</td>
 				<td>${vo.employee2_exp }</td>
 				<td>${vo.employee2_salary }</td>
-				<td><input type="button" value="퇴직등록" onclick="location.href='${pageContext.request.contextPath }/greeting/resign/insertForm?employee2_no=${vo.employee2_no }'">
+				<c:if test="${vo.emphistory_resign != null }">
+				<td>Y</td>
+				</c:if>
+				<c:if test="${vo.emphistory_resign == null }">
+				<td>N</td>
+				<td><input type="button" value="퇴직등록" onclick="location.href='${pageContext.request.contextPath }/greeting/resign/insertForm?employee2_no=${vo.employee2_no }&employee1_no=${vo.employee1_no }'">
+				</c:if>
 			</tr>
 			</c:forEach>
 		</table>

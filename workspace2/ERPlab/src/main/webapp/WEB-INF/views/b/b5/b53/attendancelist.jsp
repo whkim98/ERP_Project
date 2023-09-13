@@ -13,9 +13,6 @@
 			<th>내선번호</th>
 			<th>잔여휴가</th>
 			<th>근로형태</th>
-			<th>휴가시작일자</th>
-			<th>휴가종료일자</th>
-			<th>휴가종류</th>
 		</tr>
 			<c:forEach var="vo" items="${list }">
 		<tr>
@@ -26,9 +23,6 @@
 				<td>${vo.employee2_extension }</td>
 				<td>${vo.employee2_holiday }</td>
 				<td>${vo.employee2_worktype }</td>
-				<td>${vo.attendance_start }</td>
-				<td>${vo.attendance_end }</td>
-				<td>${vo.hdkind_name }</td>
 				<td><input type="button" value="근태관리" onclick="location.href='${pageContext.request.contextPath }/greeting/attendance/insertForm?employee2_no=${vo.employee2_no }'"></td>
 		</tr>
 			</c:forEach>

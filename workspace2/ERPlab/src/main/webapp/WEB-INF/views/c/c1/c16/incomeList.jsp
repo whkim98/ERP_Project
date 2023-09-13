@@ -129,7 +129,7 @@ border: 0;
 
 function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investmentList select문)
    var type = document.getElementsByName("type")[0].value;
-   var url = "${pageContext.request.contextPath}/internationalsales/bond/ajax";   // controller mapping
+   var url = "${pageContext.request.contextPath}/internationalsales/income/ajax";   // controller mapping
    if(v == ''){
       type = null;
       v = null;
@@ -146,38 +146,27 @@ function getlist(){
       let newTr = document.createElement("tr");      // tr 만듦
       let newTd = document.createElement("td");      // td 만듦
       procode.innerHTML = '';                     // 일단 테이블 비워줌
-      procode.innerHTML += '<tr><td>국가명</td><td>거래처명</td><td>거래처종류</td><td>대표자명</td><td>사업형태</td><td>업태명</td><td>대표번호</td><td>담당자연락처<td></tr>';
+      procode.innerHTML += '<tr><td>수입발주코드</td><td>팀명</td><td>거래처명</td><td>입고여부</td><td>입고일/입고예정일</td></tr>';
       if(data != ""){
          var data2 = JSON.parse(data);
          data2.forEach(function(map){      // 받아온 list 테이블에 입히기
             newTr = document.createElement("tr");
-            newTr.setAttribute("onclick", "selectForm("+map.client_no+", "+map.bs3_no1+", "+map.bs3_no2+")");
+            newTr.setAttribute("onclick", "selectForm("+map.importorder_no+")");
             procode.appendChild(newTr);
             newTd = document.createElement("td");
-            newTd.innerHTML = map.country_name;
+            newTd.innerHTML = map.importorder_code;
+            newTr.appendChild(newTd);
+            newTd = document.createElement("td");
+            newTd.innerHTML = map.team_name;
             newTr.appendChild(newTd);
             newTd = document.createElement("td");
             newTd.innerHTML = map.client_name;
             newTr.appendChild(newTd);
             newTd = document.createElement("td");
-            newTd.innerHTML = map.clientsort_name;
+            newTd.innerHTML = map.importorder_stored === 0 ? "N" : "Y"; // 0이면 "N", 1이면 "Y"
             newTr.appendChild(newTd);
             newTd = document.createElement("td");
-            newTd.innerHTML = map.client_representative;
-            newTr.appendChild(newTd);
-            newTd = document.createElement("td");
-            newTd.innerHTML = map.client_businesstype;
-            newTr.appendChild(newTd);
-            newTd = document.createElement("td");
-            newTd.innerHTML = map.businesstype_name;
-            newTr.appendChild(newTd);
-            newTd = document.createElement("td");
-            newTd.innerHTML = map.client_directno;
-            newTr.appendChild(newTd);
-            newTd = document.createElement("td");
-            newTd.innerHTML = map.client_manager;
-            newTd = document.createElement("td");
-            newTd.innerHTML = map.client_contact;
+            newTd.innerHTML = map.importorder_date;
             newTr.appendChild(newTd);
          });
       }else {
@@ -259,7 +248,7 @@ function teamname(){
 
    <div class="notosanskr">
       <div align="center">
-         <h1 style="font-size: 20pt;">거래처 관리</h1>
+         <h1 style="font-size: 20pt;">수입발주관리</h1>
       </div>
       <div class="divform2">
          <div>
@@ -268,9 +257,9 @@ function teamname(){
                   <td>
                      <select name="type">
                         <option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
-                        <option value="country_name" ${param.type == 'country_name' ? 'selected' : '' }>국가명</option>
-                        <option value="clientsort_name" ${param.type == 'clientsort_name' ? 'selected' : '' }>거래처종류</option>
-                        <option value="businesstype_name" ${param.type == 'businesstype_name' ? 'selected' : '' }>업태명</option>
+                        <option value="importorder_code" ${param.type == 'importorder_code' ? 'selected' : '' }>수입발주코드</option>
+                        <option value="team_no" ${param.type == 'team_no' ? 'selected' : '' }>팀명</option>
+                        <option value="importorder_stored" ${param.type == 'importorder_stored' ? 'selected' : '' }>입고여부</option>
                      </select>
                   </td>
                   <td>
@@ -285,28 +274,27 @@ function teamname(){
             <table id="procode">
             	<c:if test="${list != null }">
                		<tr>
-						<th>국가명</th>
+						<th>수입발주코드</th>
+						<th>팀명</th>
 						<th>거래처명</th>
-						<th>거래처종류</th>
-						<th>대표자명</th>
-						<th>사업형태</th>
-						<th>업태명</th>
-						<th>대표번호</th>
-						<th>담당자명</th>
-						<th>담당자연락처</th>
+						<th>입고여부</th>
+						<th>입고일/입고예정일</th>
 					</tr>
                <c:forEach var="vo" items="${list }">
-			     <tr onclick="selectForm(${vo.client_no})" class="filter" id="filter">
-			   		<td>${vo.country_name }</td>
+			     <tr>
+			   		<td onclick="selectForm(${vo.importorder_no}, ${import_no })" class="filter" id="filter">${vo.importorder_code }</td>
+					<td>${vo.team_name }</td>
 					<td>${vo.client_name }</td>
-					<td>${vo.clientsort_name }</td>
-					<td>${vo.client_representative }</td>
-					<td>${vo.client_businesstype }</td>
-					<td>${vo.businesstype_name }</td>
-					<td>${vo.client_directno }</td>
-					<td>${vo.client_manager }</td>
-					<td>${vo.client_contact }</td>
+					<c:if test="${vo.importorder_stored == 0 }">
+					<td>X</td>
+					</c:if>
+					<c:if test="${vo.importorder_stored != 0 }">
+					<td>O</td>
+					</c:if>
+					<td>${vo.importorder_date }</td>
+					<td><input type="button" value="입고처리" onclick="location.href='${pageContext.request.contextPath}/internationsales/income/storedform?importorder_no=${vo.importorder_no }'">
 				</tr>
+				
 				</c:forEach>
             </c:if>
             <c:if test="${list == null }">
@@ -320,11 +308,10 @@ function teamname(){
          </div> --%>
    
    <!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->   
-         <form action="${pageContext.request.contextPath }/internationalsales/bond/updateForm" id="content" method="post">
-            <input type="hidden" name="client_no">
+         <form action="${pageContext.request.contextPath }/internationsales/income/updateForm" id="content" method="post">
+            <input type="hidden" name="importorder_no">
             <input type="hidden" name="comcode_code" value="${comcode_code }">
          </form>
-      
       </div>
       
       <div class="divform4">
@@ -334,11 +321,12 @@ function teamname(){
       <div id="add" class="divform3">
          <c:choose>
             <c:when test="${map != null }">
-               <form action="${pageContext.request.contextPath }/internationalsales/bond/update" method="POST" id="update">
+               <form action="${pageContext.request.contextPath }/internationsales/income/update" method="POST" id="update">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
-                  <input type="hidden" name="client_no" value="${map.client_no }">
-                  <input type="hidden" name="country_no" id="country_no" value="${map.country_no }">
-                  <input type="hidden" name="businesstype_no" id="businesstype_no" value="${map.businesstype_no }">
+                  <input type="hidden" name="importorder_no" value="${map.importorder_no }">
+                  <input type="hidden" name="importpay_no" value="${map.importpay_no }">
+                  <input type="hidden" name="importorder_total" value="${map.importorder_total }">
+                  <input type="hidden" name="import_no" value="${import_no }">
                   <div class="warning_box">
                      <span class="red bigger">* </span>
                      <div class="yellow_box"></div>
@@ -346,223 +334,273 @@ function teamname(){
                   </div>
                      
                   <div>
-                     <label>국가명 </label>
-                     
-                     <select name="country_no">
-			  		<option value="1">미국</option>
-			  		<option value="2">캐나다</option>
-			  		<option value="3">버진아일랜드(미)</option>
-			  		<option value="4">북마리아나제도</option>
-			  		<option value="5">괌</option>
-			  		<option value="6">아메리칸사모아</option>
-			  		<option value="7">푸에르토리코</option>
-			  		<option value="8">버뮤다</option>
-			  		<option value="9">바하마</option>
-			  		<option value="10">바베이도스</option>
-			  		<option value="11">앵귈라</option>
-			  		<option value="12">바부다</option>
-			  		<option value="13">버진아일랜드</option>
-			  		<option value="14">케이맨 제도</option>
-			  		<option value="15">그레나다</option>
-			  		<option value="16">케이커스제도</option>
-			  		<option value="17">몬트세렛</option>
-			  		<option value="18">신트마르턴</option>
-			  		<option value="19">세인트루시아</option>
-			  		<option value="20">도미니카 연방</option>
-			  		<option value="21">세인트빈센트 그레나딘</option>
-			  		<option value="22">도미니카 공화국</option>
-			  		<option value="23">트리니다드 토바고</option>
-			  		<option value="24">세인트키츠 네비스</option>
-			  		<option value="25">일본</option>
-			  		<option value="26">대한민국</option>
-			  		<option value="27">베트남</option>
-			  		<option value="28">조선민주주의인민공화국</option>
-			  		<option value="29">홍콩</option>
-			  		<option value="30">마카오</option>
-			  		<option value="31">캄보디아</option>
-			  		<option value="32">라오스</option>
-			  		<option value="33">중화인민공화국</option>
-			  		<option value="34">방글라데시</option>
-			  		<option value="35">중화민국</option>
-				</select>
+                     <label>수입발주 코드</label>
+                     <input type="text" name="importorder_code" id="importorder_code" value="${map.importorder_code }" readonly="readonly">
                   </div>
                   
                   <div>
-                     <label>거래처명 </label>
-                     <input type="text" name="client_name" id="client_name" value="${map.client_name }">
+                     <label>팀명 </label>
+                     <select name="team_no">
+					    <option value="3" ${map.team_no == 3 ? 'selected' : ''}>경영기획팀</option>
+					    <option value="4" ${map.team_no == 4 ? 'selected' : ''}>전략기획팀</option>
+					    <option value="6" ${map.team_no == 6 ? 'selected' : ''}>회계팀</option>
+					    <option value="7" ${map.team_no == 7 ? 'selected' : ''}>재무팀</option>
+					    <option value="8" ${map.team_no == 8 ? 'selected' : ''}>인사팀</option>
+					    <option value="9" ${map.team_no == 9 ? 'selected' : ''}>총무팀</option>
+					    <option value="11" ${map.team_no == 11 ? 'selected' : ''}>해외영업팀</option>
+					    <option value="12" ${map.team_no == 12 ? 'selected' : ''}>국내영업팀</option>
+					    <option value="13" ${map.team_no == 13 ? 'selected' : ''}>매장영업팀</option>
+					    <option value="14" ${map.team_no == 14 ? 'selected' : ''}>영업관리팀</option>
+					    <option value="16" ${map.team_no == 16 ? 'selected' : ''}>생산팀</option>
+					    <option value="17" ${map.team_no == 17 ? 'selected' : ''}>구매팀</option>
+					    <option value="18" ${map.team_no == 18 ? 'selected' : ''}>품질관리팀</option>
+					    <option value="19" ${map.team_no == 19 ? 'selected' : ''}>물류팀</option>
+					</select>
                   </div>
                   
                   <div>
-                     <label>거래처종류 </label>
-                     <c:if test="${map.clientsort_no == 2 }">
-                     <select name="clientsort_no">
-					<option value="2" selected>매출</option>
-					<option value="1">매입</option>
-				</select>
-				</c:if>
-                     <c:if test="${map.clientsort_no == 1 }">
-                     <select name="clientsort_no">
-					<option value="2">매출</option>
-					<option value="1" selected>매입</option>
-				</select>
-				</c:if>
+                     <label>입고예정일 </label>
+                     <input type="date" name="importorder_date" id="importorder_date" value="${map.importorder_date }">
                   </div>
                   
                   <div>
-                     <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno" value="${map.client_registeredno }">
-                  </div>   
-                     
+				    <label>거래처명</label>
+						<select id="clientSelect2" name="client_no">
+						    <c:forEach var="vo" items="${cllist}">
+						        <option value="${vo.client_no}" ${map.client_no == vo.client_no ? 'selected' : ''}>${vo.client_name}</option>
+						    </c:forEach>
+						</select>
+				  </div>
+                    
+                    
+                  <!-- 상품명이 불러와지질 않음 --> 
                   <div>
-                     <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno" value="${map.client_corporatedno }">
+				    <label>상품명</label>
+				    <select id="goodsSelect2" name="goods_no">
+				      <!-- 상품 목록은 Ajax로 가져올 예정 -->
+				    </select>
+				  </div>   
+				  
+				  
+				  
+                    
+                  <div>
+                     <label>거래조건 </label>
+                     <select name="incoterms_no">
+                     	<option value="1" ${map.incoterms_no == 1 ? 'selected' : '' }>EWX</option>
+                     	<option value="2" ${map.incoterms_no == 2 ? 'selected' : ''}>FCA</option>
+                     	<option value="3" ${map.incoterms_no == 3 ? 'selected' : ''}>FAS</option>
+                     	<option value="4" ${map.incoterms_no == 4 ? 'selected' : ''}>FOB</option>
+                     	<option value="5" ${map.incoterms_no == 5 ? 'selected' : ''}>CFR</option>
+                     	<option value="6" ${map.incoterms_no == 6 ? 'selected' : ''}>CIF</option>
+                     	<option value="7" ${map.incoterms_no == 7 ? 'selected' : ''}>CPT</option>
+                     	<option value="8" ${map.incoterms_no == 8 ? 'selected' : ''}>CIP</option>
+                     	<option value="9" ${map.incoterms_no == 9 ? 'selected' : ''}>DAP</option>
+                     	<option value="10" ${map.incoterms_no == 10 ? 'selected' : ''}>DPU</option>
+                     	<option value="11" ${map.incoterms_no == 11 ? 'selected' : ''}>DDP</option>
+                     </select>
                   </div> 
                     
                   <div>
-                     <label>대표자명 </label>
-                     <input type="text" name="client_representative" id="client_representative" value="${map.client_representative }">
+                     <label>결제조건 및 구분 </label>
+                     <select name="settletype_no">
+						<option value="1" ${map.settletype_no == 1 ? 'selected' : ''}>선입금, 현금</option>
+						<option value="2" ${map.settletype_no == 2 ? 'selected' : ''}>선입금, 매출채권</option>
+						<option value="3" ${map.settletype_no == 3 ? 'selected' : ''}>선입금, 환어음</option>
+						<option value="4" ${map.settletype_no == 4 ? 'selected' : ''}>선입금, L/C</option>
+						<option value="5" ${map.settletype_no == 5 ? 'selected' : ''}>선입금, etc</option>
+						<option value="6" ${map.settletype_no == 6 ? 'selected' : ''}>후입금, 현금</option>
+						<option value="7" ${map.settletype_no == 7 ? 'selected' : ''}>후입금, 매출채권</option>
+						<option value="8" ${map.settletype_no == 8 ? 'selected' : ''}>후입금, 환어음</option>
+						<option value="9" ${map.settletype_no == 9 ? 'selected' : ''}>후입금, L/C</option>
+						<option value="10" ${map.settletype_no == 10 ? 'selected' : ''}>후입금, etc</option>
+						<option value="11" ${map.settletype_no == 11 ? 'selected' : ''}>선지급, 현금</option>
+						<option value="12" ${map.settletype_no == 12 ? 'selected' : ''}>선지급, 매출채권</option>
+						<option value="13" ${map.settletype_no == 13 ? 'selected' : ''}>선지급, 환어음</option>
+						<option value="14" ${map.settletype_no == 14 ? 'selected' : ''}>선지급, L/C</option>
+						<option value="15" ${map.settletype_no == 15 ? 'selected' : ''}>선지급, etc</option>
+						<option value="16" ${map.settletype_no == 16 ? 'selected' : ''}>후지급, 현금</option>
+						<option value="17" ${map.settletype_no == 17 ? 'selected' : ''}>후지급, 매출채권</option>
+						<option value="18" ${map.settletype_no == 18 ? 'selected' : ''}>후지급, 환어음</option>
+						<option value="19" ${map.settletype_no == 19 ? 'selected' : ''}>후지급, L/C</option>
+						<option value="20" ${map.settletype_no == 20 ? 'selected' : ''}>후지급, etc</option>
+					</select>
                   </div>   
+                  
+                  <h3>수입발주 등록 사항</h3>
                   <div>
-                     <label>사업형태 </label>
-                     <input type="text" name="client_businesstype" id="client_businesstype" value="${map.client_businesstype }">
-                  </div>   
+                  	<label>채권만기도래일</label>
+                  	<input type="date" name="importpay_expiry" id="importpay_expiry" value="${map3.importpay_expiry }">
+                  </div>
+                  
+                  <c:if test="${map.importorder_stored != 0 }">
                   <div>
-                     <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1" value="${map.client_addr1 }"><input type="text" name="client_addr2" id="client_addr2" value="${map.client_addr2 }"><input type="text" name="client_postal" id="client_postal" value="${map.client_postal } ">
+                     <label>차변 </label>
+                     <select name="bs3_no">
+						  <c:forEach var="vo" items="${dlist}">
+						    <option value="${vo.bs3_no}" ${vo.bs3_no == map.bs3_no ? 'selected' : ''}>
+						      ${vo.bs3_ctgr}
+						    </option>
+						  </c:forEach>
+						</select>
+
                   </div>   
+                  
                   <div>
-                     <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno" value="${map.client_directno }">
-                  </div>   
-                  <div>
-                     <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax" value="${map.client_fax }">
-                  </div>   
-                  <div>
-                     <label>세금계산서이메일 </label>
-                     <input type="text" name="client_email" id="client_email" value="${map.client_email }">
-                  </div>   
-                  <div>
-                     <label>담당자명 </label>
-                     <input type="text" name="client_manager" id="client_manager" value="${map.client_manager }">
-                  </div>   
-                  <div>
-                     <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact" value="${map.client_contact }">
-                  </div>   
+                     <label>대변</label> 
+                     <select name="dbs3_no">
+						  <c:forEach var="vo" items="${clist}">
+						    <option value="${vo.bs3_no}" ${vo.bs3_no == map2.bs3_no ? 'selected' : ''}>
+						      ${vo.bs3_ctgr}
+						    </option>
+						  </c:forEach>
+						</select>
+                  </div>
+                  </c:if>
+                  <c:if test="${map.importorder_stored == 0 }">
+                  	<input type="hidden" name="bs3_no" value="0">
+                  	<input type="hidden" name="dbs3_no" value="0">
+                  </c:if>
                                     
                   <div align="right">
-                     <input type="button" value="update" onclick="sub(this.form)">
-                     <input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
+                     <input type="button" value="update" onclick="submitt(this.form)">
+                     <input type="button" value="delete" onclick="deletei('${map2.bs3_no}', ${map.importorder_no }, '${comcode_code }')">
                   </div>
                </form>
             </c:when>
             
             
             <c:otherwise>
-               <form action="${pageContext.request.contextPath }/internationalsales/bond/insert" method="POST" id="create">
+               <form action="${pageContext.request.contextPath }/internationsales/income/insertImportorder" method="POST" id="create">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
-                     <h3>거래처 등록 사항</h3>
+                     <h3>수입발주 등록 사항</h3>
                   <div>
-                     <label>국가명 </label>
-                     <select name="country_no">
-			  		<option value="1">미국</option>
-			  		<option value="2">캐나다</option>
-			  		<option value="3">버진아일랜드(미)</option>
-			  		<option value="4">북마리아나제도</option>
-			  		<option value="5">괌</option>
-			  		<option value="6">아메리칸사모아</option>
-			  		<option value="7">푸에르토리코</option>
-			  		<option value="8">버뮤다</option>
-			  		<option value="9">바하마</option>
-			  		<option value="10">바베이도스</option>
-			  		<option value="11">앵귈라</option>
-			  		<option value="12">바부다</option>
-			  		<option value="13">버진아일랜드</option>
-			  		<option value="14">케이맨 제도</option>
-			  		<option value="15">그레나다</option>
-			  		<option value="16">케이커스제도</option>
-			  		<option value="17">몬트세렛</option>
-			  		<option value="18">신트마르턴</option>
-			  		<option value="19">세인트루시아</option>
-			  		<option value="20">도미니카 연방</option>
-			  		<option value="21">세인트빈센트 그레나딘</option>
-			  		<option value="22">도미니카 공화국</option>
-			  		<option value="23">트리니다드 토바고</option>
-			  		<option value="24">세인트키츠 네비스</option>
-			  		<option value="25">일본</option>
-			  		<option value="26">대한민국</option>
-			  		<option value="27">베트남</option>
-			  		<option value="28">조선민주주의인민공화국</option>
-			  		<option value="29">홍콩</option>
-			  		<option value="30">마카오</option>
-			  		<option value="31">캄보디아</option>
-			  		<option value="32">라오스</option>
-			  		<option value="33">중화인민공화국</option>
-			  		<option value="34">방글라데시</option>
-			  		<option value="35">중화민국</option>
-				</select>
+                     <label>수입발주 코드 </label>
+                     <input type="text" name="importorder_code" id="importorder_code">
                   </div>
                   
                   <div>
-                     <label>거래처명 </label>
-                     <input type="text" name="client_name" id="client_name">
+                  	<label>팀명</label>
+                  	<select name="team_no">
+				  		<option value="3">경영기획팀</option>
+				  		<option value="4">전략기획팀</option>
+				  		<option value="6">회계팀</option>
+				  		<option value="7">재무팀</option>
+				  		<option value="8">인사팀</option>
+				  		<option value="9">총무팀</option>
+				  		<option value="11">해외영업팀</option>
+				  		<option value="12">국내영업팀</option>
+				  		<option value="13">매장영업팀</option>
+				  		<option value="14">영업관리팀</option>
+				  		<option value="16">생산팀</option>
+				  		<option value="17">구매팀</option>
+				  		<option value="18">품질관리팀</option>
+				  		<option value="19">물류팀</option>
+					</select>
                   </div>
                   
                   <div>
-                     <label>거래처종류 </label>
-                     <select name="clientsort_no">
-					<option value="2">매출</option>
-					<option value="1">매입</option>
-				</select>
+                     <label>입고예정일 </label>
+                     <input type="date" name="importorder_date" id="importorder_date">
                   </div>
                   
                   <div>
-                     <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno">
-                  </div>   
+				    <label>거래처명</label>
+				    <select id="clientSelect" name="client_no">
+				      <c:forEach var="vo" items="${clist}">
+				        <option value="${vo.client_no}">${vo.client_name}</option>
+				      </c:forEach>
+				    </select>
+				  </div>
+                  
+                  <div>
+				    <label>상품명</label>
+				    <select id="goodsSelect" name="goods_no">
+				      <!-- 상품 목록은 Ajax로 가져올 예정 -->
+				    </select>
+				  </div>   
                      
+                  <script>
+    			  document.getElementById("clientSelect").addEventListener("change", function() {
+      			  var selectedClientNo = this.value;
+					
+      			  
+        		  var xhr = new XMLHttpRequest();
+      		   	  xhr.open("GET", "${pageContext.request.contextPath }/internationsales/income/goods?client_no2=" + selectedClientNo, true);
+
+      			  xhr.onload = function() {
+    	  		  if (xhr.status >= 200 && xhr.status < 300) {
+	              var response = JSON.parse(xhr.responseText);
+	              var goodsSelect = document.getElementById("goodsSelect");
+              
+	              goodsSelect.innerHTML = ""; // 기존 옵션 제거
+	              
+	              response.forEach(function(goods) {
+	                var option = document.createElement("option");
+	                option.value = goods.goods_no;
+	                option.textContent = goods.goods_name;
+	                goodsSelect.appendChild(option);
+	              });
+	              } else {
+	              console.error("Request failed with status:", xhr.status);
+	              }
+	         	  };
+          		  xhr.onerror = function() {
+              	  console.error("Request failed");
+            	  };
+
+            	  xhr.send();
+          	  	  });
+        		  </script>
+        		  
                   <div>
-                     <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno">
+                     <label>거래조건 </label>
+                     <select name="incoterms_no">
+                     	<option value="1">EWX</option>
+                     	<option value="2">FCA</option>
+                     	<option value="3">FAS</option>
+                     	<option value="4">FOB</option>
+                     	<option value="5">CFR</option>
+                     	<option value="6">CIF</option>
+                     	<option value="7">CPT</option>
+                     	<option value="8">CIP</option>
+                     	<option value="9">DAP</option>
+                     	<option value="10">DPU</option>
+                     	<option value="11">DDP</option>
+                     </select>
                   </div> 
                     
                   <div>
-                     <label>대표자명 </label>
-                     <input type="text" name="client_representative" id="client_representative">
-                  </div>   
-                  <div>
-                     <label>사업형태 </label>
-                     <input type="text" name="client_businesstype" id="client_businesstype" value="법인">
-                  </div>   
-                  <div>
-                     <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1"><input type="text" name="client_addr2" id="client_addr2"><input type="text" name="client_postal" id="client_postal">
-                  </div>   
-                  <div>
-                     <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno">
-                  </div>   
-                  <div>
-                     <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax">
-                  </div>   
-                  <div>
-                     <label>세금계산서이메일 </label>
-                     <input type="text" name="client_email" id="client_email">
-                  </div>   
-                  <div>
-                     <label>담당자명 </label>
-                     <input type="text" name="client_manager" id="client_manager">
-                  </div>   
-                  <div>
-                     <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact">
+                     <label>결제조건 및 구분 </label>
+                     <select name="settletype_no">
+						<option value="1">선입금, 현금</option>
+						<option value="2">선입금, 매출채권</option>
+						<option value="3">선입금, 환어음</option>
+						<option value="4">선입금, L/C</option>
+						<option value="5">선입금, etc</option>
+						<option value="6">후입금, 현금</option>
+						<option value="7">후입금, 매출채권</option>
+						<option value="8">후입금, 환어음</option>
+						<option value="9">후입금, L/C</option>
+						<option value="10">후입금, etc</option>
+						<option value="11">선지급, 현금</option>
+						<option value="12">선지급, 매출채권</option>
+						<option value="13">선지급, 환어음</option>
+						<option value="14">선지급, L/C</option>
+						<option value="15">선지급, etc</option>
+						<option value="16">후지급, 현금</option>
+						<option value="17">후지급, 매출채권</option>
+						<option value="18">후지급, 환어음</option>
+						<option value="19">후지급, L/C</option>
+						<option value="20">후지급, etc</option>
+					</select>
                   </div>   
                   
-                  
-                  
-                 
+                  <h3>수입발주 등록 사항</h3>
+                  <div>
+                  	<label>채권만기도래일</label>
+                  	<input type="date" name="importpay_expiry" id="importpay_expiry">
+                  </div>
                   
                   <div>
                      <input type="button" id="register" value="save" onclick="submitt(this.form)">
@@ -578,8 +616,8 @@ function teamname(){
 <script type="text/javascript">
 
 // 삭제버튼 경로 및 넘길 parameter 설정
-function deletei(no1, no2, ino, code){
-   location.href='${pageContext.request.contextPath }/a/a4/a41/delete?investment_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code;
+function deletei(no1, ino, code){
+   location.href='${pageContext.request.contextPath }/internationsales/income/delete?importorder_no='+ino+'&bs3_no='+no1+'&comcode_code='+code;
 }
 
 
@@ -653,67 +691,19 @@ function imcodecheck(){      // imcode의 sendRequest에서 지정한 콜벡함�
 
    function submitt(f) {
 	   
-	   var client_name = document.getElementById("client_name").value;
-	   var client_registeredno = document.getElementById("client_registeredno").value;
-	   var client_corporatedno = document.getElementById("client_corporatedno").value;
-	   var client_representative = document.getElementById("client_representative").value;
-	   var client_businesstype = document.getElementById("client_businesstype").value;
-	   var client_addr1 = document.getElementById("client_addr1").value;
-	   var client_addr2 = document.getElementById("client_addr2").value;
-	   var client_postal = document.getElementById("client_postal").value;
-	   var client_directno = document.getElementById("client_directno").value;
-	   var client_fax = document.getElementById("client_fax").value;
-	   var client_email = document.getElementById("client_email").value;
-	   var client_manager = document.getElementById("client_manager").value;
-	   var client_contact = document.getElementById("client_contact").value;
+	   var importorder_code = document.getElementById("importorder_code").value;
+	   var importorder_date = document.getElementById("importorder_date").value;
 	   
-	   console.log(client_name);
-	   console.log(client_registeredno);
+	   console.log(importorder_code);
 	   
-	   if(client_name == ""){
-		   alert('거래쳐명을 입력해 주세요');
-		   document.getElementById('client_name').focus();
+	   if(importorder_code == ""){
+		   alert('수입발주코드를 입력해 주세요');
+		   document.getElementById('importorder_code').focus();
 		   return false;
-	   }else if (client_registeredno == "") {
-	     alert("사업자등록번호를 입력해 주세요");
-	     document.getElementById("client_registeredno").focus();
-	     return false; // 폼 제출 방지
-	   }else if(client_corporatedno == ""){
-		  alert("법인등록번호를 입력해 주세요");
-		  document.getElementById("client_corporatedno").focus();
+	   }else if(importorder_date == ""){
+		  alert("올바른 예정일을 등록해 주세여");
+		  document.getElementById("importorder_date").focus();
 		  return false;
-	   }else if(client_representative == ""){
-		   alert("대표자명을 입력해 주세요");
-		   document.getElementById("client_representative").focus();
-		   return false;
-	   }else if(client_businesstype == ""){
-		   alert("사업형태를 입력해 주세요");
-		   document.getElementById("client_businesstype").focus();
-		   return false;
-	   }else if(client_addr1 == "" || client_addr2 == "" || client_postal == ""){
-		   alert("사업장 및 주소를 입력해 주세요");
-		   document.getElementById("client_addr1").focus();
-		   return false;
-	   }else if(client_directno == ""){
-		   alert("대표번호를 입력해 주세요");
-		   document.getElementById("client_directno").focus();
-		   return false;
-	   }else if(client_fax == ""){
-		   alert("팩스번호를 입력해 주세요");
-		   document.getElementById("client_fax").focus();
-		   return false;
-	   }else if(client_email == ""){
-		   alert("이메일을 입력해 주세요");
-		   document.getElementById("client_email").focus();
-		   return false;
-	   }else if(client_manager == ""){
-		   alert("담당자명을 입력해 주세요");
-		   document.getElementById("client_manager").focus();
-		   return false;
-	   }else if(client_contact == ""){
-		   alert("담당자번호를 입력해 주세요");
-		   document.getElementById("client_contact").focus();
-		   return false;
 	   }else {
 		      var ch = confirm("등록하시겠습니까?");
 		      if(ch){
@@ -766,7 +756,7 @@ function clName(){
 
 // 리스트에서 글 선택 시 넘어가는 form
 function selectForm(no){
-   document.getElementsByName("client_no")[0].value = no;
+   document.getElementsByName("importorder_no")[0].value = no;
    document.getElementById("content").submit(); // content라는 id의 form태그 submit
 }
 

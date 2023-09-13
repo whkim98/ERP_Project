@@ -67,4 +67,49 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("b1.getClosingCode",closing_code);
 	}
 	
-}
+	//===============
+	
+
+		
+	//b6
+		public int insertClosing(Erp_ClosingVO vo) {
+			return sqlSession.insert("b6.insertClosing", vo);
+		}
+
+	//c1
+		public int insertClosingC1(Erp_ClosingVO vo) {
+			return sqlSession.insert("c1.insertClosing", vo);
+		}
+		
+		public int insertClosingforsales(Erp_ClosingVO vo) {
+			return sqlSession.insert("c1.insertClosing1", vo);
+		}
+		
+		public int closingUpdate(Map<String, Object> map) {
+			return sqlSession.update("c1.closingUpdate", map);
+		}
+		
+		public int selectClosingno(String closing_code) {
+			return sqlSession.selectOne("c1.selectClosingno", closing_code);
+		}
+		
+		public int updateClosing2(Map<String, Object> map) {
+			return sqlSession.update("c1.updateClosing2", map);
+		}
+		
+		public int updateClosing(Map<String, Object> map) {
+			return sqlSession.update("c1.updateClosing", map);
+		}
+		
+		public int selectClosingdb(String closing_code) {
+			return sqlSession.selectOne("c1.selectClosingdb", closing_code);
+		}
+		
+		public int selectClosingcr(String closing_code) {
+			return sqlSession.selectOne("c1.selectClosingcr", closing_code);
+		}
+		
+	}
+
+	
+
