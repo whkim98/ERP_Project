@@ -79,6 +79,22 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("c1.selectCre", closing_code);
 	}
 	
+	public List<Erp_Bs1VO> selectBsdeb(){
+		return sqlSession.selectList("b7.selectBsdeb");
+	}
+	
+	public List<Erp_Bs1VO> selectBscre(){
+		return sqlSession.selectList("b7.selectBscre");
+	}
+	
+	public List<Erp_Bs1VO> selectBsdeb2(){
+		return sqlSession.selectList("b7.selectBsdeb2");
+	}
+	
+	public List<Erp_Bs1VO> selectBscre2(){
+		return sqlSession.selectList("b7.selectBscre2");
+	}
+	
 }
 
 	

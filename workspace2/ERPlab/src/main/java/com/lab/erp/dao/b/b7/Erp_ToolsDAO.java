@@ -26,4 +26,8 @@ private SqlSession sqlSession;
 		return sqlSession.insert("b7.insertTools", vo);
 	}
 	
+	public Map<String, Object> selectTools2(Map<String, Object> map){
+		return sqlSession.selectOne("b7.selectTools2", map);
+	}
+	
 }

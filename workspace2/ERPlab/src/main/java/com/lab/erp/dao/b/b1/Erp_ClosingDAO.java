@@ -109,6 +109,10 @@ private SqlSession sqlSession;
 			return sqlSession.selectOne("c1.selectClosingcr", closing_code);
 		}
 		
+		public int insertToolclosing(Erp_ClosingVO vo) {
+			return sqlSession.insert("b7.insertToolclosing", vo);
+		}
+		
 	}
 
 	

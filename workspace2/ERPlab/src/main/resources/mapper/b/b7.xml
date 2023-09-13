@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	on et.toolstype_no = ett.toolstype_no
 	where comcode_no = #{comcode_no}
 	<if test="type != null">
-            <if test="type == 'team_no'">
+            <if test="type == 'tools_code'">
                and team_no like '%${word}%' 
             </if>
             <if test="type == 'tools_name'">
@@ -30,8 +30,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	on es.suppliestype_no = est.suppliestype_no
 	where comcode_no = #{comcode_no}
 	<if test="type != null">
-            <if test="type == 'team_no'">
-               and team_no like '%${word}%' 
+            <if test="type == 'supplies_code'">
+               and supplies_code like '%${word}%' 
             </if>
             <if test="type == 'supplies_name'">
             	and supplies_name like '%${word}%'
@@ -73,5 +73,86 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="selectSumqty" parameterType="int" resultType="int">
 	select es.salesgoods_qty * es.salesgoods_price as total from erp_salesgoods es where es.salesgoods_no = #{salesgoods_no};
 </select>
+
+<select id="selectBsdeb" resultType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+	select eb.bs3_ctgr, eb.bs3_no from erp_debtor ed 
+left join erp_bs3 eb 
+on ed.bs3_no = eb.bs3_no 
+where ed.ctgr_no = 26
+</select>
+
+<select id="selectBscre" resultType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+	select eb.bs3_ctgr, eb.bs3_no from erp_creditor ec 
+left join erp_bs3 eb 
+on ec.bs3_no = eb.bs3_no 
+where ec.ctgr_no = 26
+</select>
+
+<select id="selectBsdeb2" resultType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+	select eb.bs3_ctgr, eb.bs3_no from erp_debtor ed 
+left join erp_bs3 eb 
+on ed.bs3_no = eb.bs3_no 
+where ed.ctgr_no = 27
+</select>
+
+<select id="selectBscre2" resultType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+	select eb.bs3_ctgr, eb.bs3_no from erp_creditor ec 
+left join erp_bs3 eb 
+on ec.bs3_no = eb.bs3_no 
+where ec.ctgr_no = 27
+</select>
+
+<select id="toolstypeList" resultType="com.lab.erp.vo.b.b7.Erp_ToolstypeVO">
+	select * from erp_toolstype
+</select>
+
+<select id="suppliestypeList" resultType="com.lab.erp.vo.b.b7.Erp_SuppliestypeVO">
+	select * from erp_suppliestype
+</select>
+
+<select id="selectSupplies2" parameterType="map" resultType="map">
+	select * from erp_supplies es
+	left join erp_suppliestype est
+	on es.suppliestype_no = est.suppliestype_no
+	where comcode_no = #{comcode_no} and supplies_no = #{supplies_no}
+	<if test="type != null">
+            <if test="type == 'supplies_code'">
+               and supplies_code like '%${word}%' 
+            </if>
+            <if test="type == 'supplies_name'">
+            	and supplies_name like '%${word}%'
+            </if>
+    </if>
+</select>
+
+<select id="selectTools2" parameterType="map" resultType="map">
+	select * from erp_tools et
+	left join erp_toolstype ett
+	on et.toolstype_no = ett.toolstype_no
+	where comcode_no = #{comcode_no} and tools_no = #{tools_no}
+	<if test="type != null">
+            <if test="type == 'tools_code'">
+               and team_no like '%${word}%' 
+            </if>
+            <if test="type == 'tools_name'">
+            	and tools_name like '%${word}%'
+            </if>
+    </if>
+</select>
+
+<select id="selectDebno" parameterType="int" resultType="int">
+select debtor_no from erp_debtor 
+where bs3_no = #{bs3_no} and ctgr_no = 26
+</select>
+
+<select id="selectCreno" parameterType="int" resultType="int">
+select creditor_no from erp_creditor 
+where bs3_no = #{bs3_no} and ctgr_no = 26
+</select>
+
+<insert id="insertToolclosing" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+insert into erp_closing(ctgr_no, closing_date, debtor_no, closing_debtor, creditor_no, closing_creditor, comcode_no, closing_code)
+values(26, now(), #{debtor_no}, #{closing_debtor}, #{creditor_no}, #{closing_creditor}, #{comcode_no}, #{closing_code})
+</insert>
 
 </mapper>
