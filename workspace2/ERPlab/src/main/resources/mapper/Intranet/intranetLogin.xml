@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intranetlogin">
+
+
+
+
+
+
+	
+	<!-- admin 계정 로그인 검사 -->
+	<select id="checkAdmin" parameterType="map" resultType="int">
+		select team_no from erp_admin where admin_id = #{admin_id} and admin_pw = #{admin_pw} and comcode_no = #{comcode_no}
+	</select>
+	
+	<!-- admin 계정 ID 찾기 -->
+	<select id="findAdminId" parameterType="int" resultType="com.lab.erp.vo.login.Erp_AdminVO">
+		select * from erp_admin where team_no = #{team_no}
+	</select>
+	
+	<!-- admin 계정 PW 찾기, admin에게 ID를 주면 비밀번호를 보내주는 형식 -->
+	<select id="findAdminPw" parameterType="map" resultType="com.lab.erp.vo.login.Erp_AdminVO">
+		select * from erp_admin where team_no = #{team_no} and admin_id = #{admin_id}
+	</select>
+	
+	<!-- employee 계정 로그인 검사 -->
+	<select id="checkEmp" parameterType="map" resultType="int">
+		select employee1_no from erp_employee1 where 
+		employee1_id = #{employee1_id} and employee1_pw = #{employee1_pw}
+	</select>
+	
+	<!-- employee 계정 ID 찾기 -->
+	<select id="findEmpId" parameterType="map" resultType="String">
+		select e1.employee1_id from erp_employee1 e1, erp_employee2 e2 where 
+		e1.employee1_no = e2.employee1_no and e2.team_no = #{team_no} and e1.employee1_name = #{employee1_name}
+		and e1.employee1_residentno = #{employee1_residentno}
+	</select>
+	
+	<!-- employee 계정 PW 찾기 -->
+	<select id="findEmpPw" parameterType="map" resultType="String">
+		select e1.employee1_pw from erp_employee1 e1, erp_employee2 e2 where 
+		e1.employee1_no = e2.employee1_no and e2.team_no = #{team_no} and e1.employee1_name = #{employee1_name}
+		and e1.employee1_residentno = #{employee1_residentno} and e1.employee1_id = #{employee1_id}
+	</select>
+	
+	<select id = "findComCode" parameterType="int" resultType="String">
+		select comcode_code from erp_comcode where comcode_no = #{comcode_no}
+	</select>
+	
+	<select id="comCodeList" resultType="com.lab.erp.vo.all.Erp_ComcodeVO" parameterType="map">
+		select * from erp_comcode 
+		<if test="type != null">
+			<if test="type == 'code'">
+				where comcode_code like '%${word}%'
+			</if>
+			<if test="type == 'name'">
+				where comcode_name like '%${word}%'
+			</if>
+		</if>
+	</select>
+
+</mapper>
+
+
+
+
+
+

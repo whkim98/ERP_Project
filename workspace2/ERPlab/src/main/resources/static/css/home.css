@@ -104,15 +104,11 @@ h6 span{
 .card-front, .card-back {
   width: 100%;
   height: 100%;
-  background-image: url("src/main/resources/static/image/bgimg.png");
   background-color: white;
-  background-position: bottom center;
-  background-repeat: no-repeat;
-  background-size: 300%;
   position: absolute;
   
   border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
+  box-shadow: 0 4px 8px 0 rgba(21,21,21,.2);
 
   left: 0;
   top: 0;
@@ -255,12 +251,14 @@ h6 span{
   color: white;
 
   transition: all 200ms linear;  
-	background-color: #102770;
+  background-color: #102770;
+
 }
 
 .erplog:hover{
-	background-color: #c4c3ca;
-	  color: #102770;
+  background-color: #c4c3ca;
+  color: #102770;
+  cursor: pointer;
 
 }
 

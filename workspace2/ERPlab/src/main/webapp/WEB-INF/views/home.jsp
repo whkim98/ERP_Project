@@ -24,10 +24,8 @@
                   <label for="reg-log"></label>
             <div class="card-3d-wrap mx-auto">
               <div class="card-3d-wrapper">
-				 
 				  
-                <div class="card-front">
-					
+                <div class="card-front">		
                   <div class="center-wrap">
                     <div class="section text-center">
                       <h4 class="mb-4 pb-3">ERP 로그인</h4>
@@ -48,52 +46,46 @@
                         <input type="password" name="admin_pw" class="form-style" placeholder="비밀번호" id="admin_pw" autocomplete="off">
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
-              			
-              			<div class="erplog">
-              			<a onclick="login(this.form)">LOGIN</a>
-						</div>
-
+             			<a onclick="login(this.form)">
+	           				<div class="erplog">
+		             			LOGIN
+	           				</div>
+             			</a>
 					  </form>
-					
-                      </div>
+                    </div>
+               	  </div>
                 </div>
 
                 <div class="card-back">
-					
                   <div class="center-wrap">
-					  
                     <div class="section text-center">
-						
                       <h4 class="mb-4 pb-3">인트라넷 로그인</h4>
                       
-                     <form>
-                      
+                     <form action="${pageContext.request.contextPath}/intranet" method="post" name="intranetlogincheck">
+
                       <div class="form-group">
-                        <a onclick="searchcode()"><input type="text" name="comcode_code" class="form-style" placeholder="회사코드" id="comcode" autocomplete="off"></a>
+                        <a onclick="searchcode()"><input type="text" name="comcode_code" class="form-style" placeholder="회사코드" id="comcode_code" autocomplete="off" value="${comcode_code }"></a>
                         <i class="input-icon uil uil-building"></i>
                       </div>
-                      
+
                       <div class="form-group">
-                        <input type="text" name="employee1_id" class="form-style" placeholder="아이디" id="logname" autocomplete="off">
+                        <input type="text" name="admin_id" class="form-style" placeholder="아이디" id="admin_id" autocomplete="off">
                         <i class="input-icon uil uil-user"></i>
-                      </div> 
-                        
-                      <div class="form-group">
-                        <input type="password" name="employee1_pw" class="form-style" placeholder="비밀번호" id="logpass" autocomplete="off">
+                      </div>
+                      
+                      <div class="form-group mt-2">
+                        <input type="password" name="admin_pw" class="form-style" placeholder="비밀번호" id="admin_pw" autocomplete="off">
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
-                      	
-              			<div class="erplog">
-              			<a href="#">LOGIN</a>
-						</div>                
-						 
-				      </form>
+              			<a onclick="intranetLogin(this.form)">
+              				<div class="erplog">LOGIN</div>
+              			</a>
+					  </form>
 					 	    
                       </div>
                         
                     </div>
                       
-                    </div>
                   </div>
                 </div>
               </div>
