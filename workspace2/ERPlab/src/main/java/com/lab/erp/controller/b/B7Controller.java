@@ -156,6 +156,8 @@ public class B7Controller {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
+		int prevTotal = b7.selectToolstotal(tools_no);
+		
 		if(type == null || word == null) {
 			type = null;
 			word = null;
@@ -183,12 +185,310 @@ public class B7Controller {
 		model.addAttribute("cclist", cclist);
 		model.addAttribute("tlist", tlist);
 		model.addAttribute("map", map);
+		model.addAttribute("prevTotal", prevTotal);
 		
 		return "/b/b7/b71/toolsList";
 	}
 	
 	@RequestMapping("/tools/update")
-	public String toolsUpdate(Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, String comcode_code) {
+	public String toolsUpdate(Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, String comcode_code, int prevTotal, int tools_no, String tools_code, int team_no, String tools_name, String tools_date, String tools_usage, String tools_expiry, int tools_price, int toolstype_no, int bs3_no, int dbs3_no) {
+		
+		int total = tools_price + (tools_price / 10);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("tools_code", tools_code);
+		map.put("team_no", team_no);
+		map.put("tools_name", tools_name);
+		map.put("toolstype_no", toolstype_no);
+		map.put("tools_usage", tools_usage);
+		map.put("tools_date", tools_date);
+		map.put("tools_price", tools_price);
+		map.put("tools_total", total);
+		map.put("tools_tax", tools_price/10);
+		map.put("tools_expiry", tools_expiry);
+		map.put("tools_no", tools_no);
+		
+		b7.updateTools(map);
+		
+		int debtor_no = b7.selectDebno(bs3_no);
+		int creditor_no = b7.selectCreno(dbs3_no);
+		
+		if(bs3_no == 1 && dbs3_no == 1) {
+			bs3_no = 15;
+			dbs3_no = 15;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 1;
+			dbs3_no = 1;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+		}else if(bs3_no == 1 && dbs3_no == 15) {
+			bs3_no = 15;
+			dbs3_no = 1;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 1;
+			dbs3_no = 15;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+		}else if(bs3_no == 15 && dbs3_no == 1) {
+			bs3_no = 1;
+			dbs3_no = 15;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 15;
+			dbs3_no = 1;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+		}else if(bs3_no == 15 && dbs3_no == 15) {
+			bs3_no = 1;
+			dbs3_no = 1;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 15;
+			dbs3_no = 15;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+		}
+		
 		
 		
 		
@@ -250,7 +550,7 @@ public class B7Controller {
 	}
 	
 	@RequestMapping("/supplies/insert")
-	public String insertSupplies(Erp_SuppliesVO vo, Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, int bs3_no, int dbs3_no, String comcode_code, String supplies_code, int team_no, String supplies_name, int suppliestype_no, String supplies_usage, String supplies_date, int supplies_price) {
+	public String insertSupplies(Erp_ClosingVO cvo, Erp_SuppliesVO vo, Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, int bs3_no, int dbs3_no, String comcode_code, String supplies_code, int team_no, String supplies_name, int suppliestype_no, String supplies_usage, String supplies_date, int supplies_price) {
 		int comcode_no = ls.comNo(comcode_code);
 		int total = supplies_price + (supplies_price / 10);
 		
@@ -265,6 +565,18 @@ public class B7Controller {
 		vo.setSuppliestype_no(suppliestype_no);
 		vo.setTeam_no(team_no);
 		b7.insertSupplies(vo);
+		
+		int debtor_no = b7.selectDebno(bs3_no);
+		int creditor_no = b7.selectCreno(dbs3_no);
+		
+		cvo.setClosing_code(supplies_code);
+		cvo.setDebtor_no(debtor_no);
+		cvo.setCreditor_no(creditor_no);
+		cvo.setComcode_no(comcode_no);
+		cvo.setClosing_creditor(-total);
+		cvo.setClosing_debtor(total);
+		
+		b7.insertToolclosing(cvo);
 		
 		int bs_no = b7.selectBsno(bs3_no);
 		int bs2_no = b7.selectBsno2(bs3_no);
@@ -305,6 +617,8 @@ public class B7Controller {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
+		int prevTotal = b7.selectSuppliestotal(supplies_no);
+		
 		if(type == null || word == null) {
 			type = null;
 			word = null;
@@ -332,9 +646,305 @@ public class B7Controller {
 		model.addAttribute("cclist", cclist);
 		model.addAttribute("slist", slist);
 		model.addAttribute("map", map);
+		model.addAttribute("prevTotal", prevTotal);
 		
 		return "/b/b7/b72/suppliesList";
 		
+	}
+	
+	@RequestMapping("/supplies/update")
+	public String suppliesUpdate(String supplies_code, int team_no, String supplies_name, int suppliestype_no, String supplies_usage, String supplies_date, int supplies_price, Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, String comcode_code, int prevTotal, int supplies_no, int bs3_no, int dbs3_no) {
+		int total = supplies_price + (supplies_price / 10);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("supplies_no", supplies_no);
+		map.put("supplies_code", supplies_code);
+		map.put("team_no", team_no);
+		map.put("suppliestype_no", suppliestype_no);
+		map.put("supplies_usage", supplies_usage);
+		map.put("supplies_date", supplies_date);
+		map.put("supplies_price", supplies_price);
+		map.put("supplies_tax", supplies_price / 10);
+		map.put("supplies_total", total);
+		
+		b7.updateSupplies(map);
+		
+		if(bs3_no == 1 && dbs3_no == 1) {
+			bs3_no = 15;
+			dbs3_no = 15;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 1;
+			dbs3_no = 1;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+		}else if(bs3_no == 1 && dbs3_no == 15) {
+			bs3_no = 15;
+			dbs3_no = 1;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 1;
+			dbs3_no = 15;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+		}else if(bs3_no == 15 && dbs3_no == 1) {
+			bs3_no = 1;
+			dbs3_no = 15;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 15;
+			dbs3_no = 1;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+		}else if(bs3_no == 15 && dbs3_no == 15) {
+			bs3_no = 1;
+			dbs3_no = 1;
+			
+			int bs_no = b7.selectBsno(bs3_no);
+			int bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(-prevTotal);
+			b2vo.setBs2_amount(-prevTotal);
+			b1vo.setBs1_amount(-prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(prevTotal);
+			b2vo.setBs2_amount(prevTotal);
+			b1vo.setBs1_amount(prevTotal);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs3_no = 15;
+			dbs3_no = 15;
+			
+			bs_no = b7.selectBsno(bs3_no);
+			bs2_no = b7.selectBsno2(bs3_no);
+			
+			b3vo.setBs3_no(bs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			//대변
+			b3vo.setBs3_amount(total);
+			b2vo.setBs2_amount(total);
+			b1vo.setBs1_amount(total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+			
+			bs_no = b7.selectBsno(dbs3_no);
+			bs2_no = b7.selectBsno2(dbs3_no);
+			
+			b3vo.setBs3_no(dbs3_no);
+			b2vo.setBs2_no(bs2_no);
+			b1vo.setBs1_no(bs_no);
+			
+			b3vo.setBs3_amount(-total);
+			b2vo.setBs2_amount(-total);
+			b1vo.setBs1_amount(-total);
+			
+			b7.updateBs(b1vo);
+			b7.updateBs2(b2vo);
+			b7.updateBs3(b3vo);
+		}
+		
+		return "redirect:/supplies?comcode_code=" + comcode_code;
 	}
 	
 }

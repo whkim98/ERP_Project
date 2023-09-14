@@ -134,4 +134,20 @@ public class B7Service {
 		return csdao.insertToolclosing(vo);
 	}
 	
+	public int updateTools(Map<String, Object> map) {
+		return tdao.updateTools(map);
+	}
+	
+	public int selectToolstotal(int tools_no) {
+		return tdao.selectToolstotal(tools_no);
+	}
+	
+	public int selectSuppliestotal(int supplies_no) {
+		return sdao.selectSuppliestotal(supplies_no);
+	}
+	
+	public int updateSupplies(Map<String, Object> map) {
+		return sdao.updateSupplies(map);
+	}
+	
 }

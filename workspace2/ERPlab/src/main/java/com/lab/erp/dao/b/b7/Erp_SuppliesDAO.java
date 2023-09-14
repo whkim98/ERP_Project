@@ -30,4 +30,12 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("b7.selectSupplies2", map);
 	}
 	
+	public int selectSuppliestotal(int supplies_no) {
+		return sqlSession.selectOne("b7.selectSuppliestotal", supplies_no);
+	}
+	
+	public int updateSupplies(Map<String, Object> map) {
+		return sqlSession.update("b7.updateSupplies", map);
+	}
+	
 }

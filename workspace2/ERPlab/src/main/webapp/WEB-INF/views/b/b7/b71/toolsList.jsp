@@ -317,6 +317,7 @@ function teamname(){
                <form action="${pageContext.request.contextPath }/tools/update" method="POST" id="update">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
                   <input type="hidden" name="tools_no" value="${map.tools_no }">
+                  <input type="hidden" name="prevTotal" value="${prevTotal }">
                   <div class="warning_box">
                      <span class="red bigger">* </span>
                      <div class="yellow_box"></div>

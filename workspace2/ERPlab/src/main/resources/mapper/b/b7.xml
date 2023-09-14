@@ -155,4 +155,33 @@ insert into erp_closing(ctgr_no, closing_date, debtor_no, closing_debtor, credit
 values(26, now(), #{debtor_no}, #{closing_debtor}, #{creditor_no}, #{closing_creditor}, #{comcode_no}, #{closing_code})
 </insert>
 
+<update id="updateTools" parameterType="map">
+update erp_tools set team_no = #{team_no}, 
+tools_code = #{tools_code}, tools_name = #{tools_name}, 
+toolstype_no = #{toolstype_no}, tools_usage = #{tools_usage}, 
+tools_date = #{tools_date},
+tools_price = #{tools_price},
+tools_total = #{tools_total},
+tools_expiry = #{tools_expiry},
+tools_tax = #{tools_tax}
+where tools_no = #{tools_no}
+</update>
+
+<update id="updateSupplies" parameterType="map">
+update erp_supplies set supplies_code = #{supplies_code},
+team_no = #{team_no}, supplies_name = #{supplies_name}, 
+suppliestype_no = #{suppliestype_no}, supplies_usage = #{supplies_usage},
+supplies_date = #{supplies_date}, supplies_price = #{supplies_price},
+supplies_tax = #{supplies_tax}, supplies_total = #{supplies_total}
+where supplies_no = #{supplies_no}
+</update>
+
+<select id="selectToolstotal" parameterType="int" resultType="int">
+select tools_total from erp_tools where tools_no = #{tools_no}
+</select>
+
+<select id="selectSuppliestotal" parameterType="int" resultType="int">
+select supplies_total from erp_supplies where supplies_no = #{supplies_no}
+</select>
+
 </mapper>
