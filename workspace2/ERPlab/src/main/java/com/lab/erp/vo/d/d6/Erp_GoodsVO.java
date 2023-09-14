@@ -23,4 +23,6 @@ public class Erp_GoodsVO {
 	private String goods_location;
 	private int comcode_no;
 	
+	
+	
 }

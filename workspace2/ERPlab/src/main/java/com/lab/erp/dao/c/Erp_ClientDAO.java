@@ -109,6 +109,11 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("c1.selectClientlist");
 	}
 	
+	//d6
+	public List<Erp_ClientVO> selectClient(){
+		return sqlSession.selectList("d6.selectClient");
+	}
+	
 }
 
 	

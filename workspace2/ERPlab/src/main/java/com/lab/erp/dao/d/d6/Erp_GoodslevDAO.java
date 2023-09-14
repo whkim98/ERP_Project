@@ -21,4 +21,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d6.goodslev");
 	}
 	
+	public List<Erp_GoodslevVO> selectGoodslev(){
+		return sqlSession.selectList("d6.selectGoodslev");
+	}
+	
 }

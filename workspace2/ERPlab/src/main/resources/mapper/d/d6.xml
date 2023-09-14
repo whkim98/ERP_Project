@@ -137,4 +137,61 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from erp_goodsst where goodsst_no = #{goodsst_no} 
 	</delete>
 	
+	
+	<!-- ㄱㅇㅎ -->
+	<select id="selectGoods" parameterType="map" resultType="map">
+		select * from erp_goodslot egl
+		left join erp_goods eg
+		on eg.goods_no = egl.goods_no
+		where comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goodslot_lot'">
+               and eg.goodslot_lot like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="selectGoodskind" resultType="com.lab.erp.vo.d.d6.Erp_GoodskindVO">
+		select * from erp_goodskind
+	</select>
+	
+	<select id="selectGoodsst" resultType="com.lab.erp.vo.d.d6.Erp_GoodsstVO">
+		select * from erp_goodsst
+	</select>
+	
+	<select id="selectGoodslev" resultType="com.lab.erp.vo.d.d6.Erp_GoodslevVO">
+		select * from erp_goodslev
+	</select>
+	
+	<select id="selectClient" resultType="com.lab.erp.vo.c.Erp_ClientVO">
+		select * from erp_client
+	</select>
+	
+	<insert id="insertGoods" parameterType="map">
+		insert into erp_goods(goods_code, goods_barcode, goods_name
+		, goodskind_no, goods_customerprice, goods_description,
+		goodsst_no, client_no1, client_no2, goods_stockqty, goodslev_no
+		, comcode_no) values(#{goods_code}, #{goods_barcode},
+		#{goods_name}, #{goodskind_no}, #{goods_customerprice},
+		#{goods_description}, #{goodsst_no}, #{client_no1},
+		#{client_no2}, #{goods_stockqty}, #{goodslev_no},
+		#{comcode_no})
+	</insert>
+	
+	<insert id="insertGoodslot" parameterType="map">
+		insert into erp_goodslot(goodslot_lot, goodslot_qty,
+		goodslot_production, goodslot_expiry, goodslot_price,
+		goodslot_tax, goodslot_total, goods_no) values(#{goodslot_lot},
+		#{goodslot_qty}, #{goodslot_production}, #{goodslot_expiry},
+		#{goodslot_price}, #{goodslot_tax}, #{goodslot_total},
+		#{goods_no})
+	</insert>
+	
+	<select id="selectGoodsno" parameterType="String" resultType="int">
+		select goods_no from erp_goods where goods_code = #{goods_code}
+	</select>
+	
 </mapper>

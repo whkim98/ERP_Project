@@ -1,5 +1,7 @@
 package com.lab.erp.dao.d.d6;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +31,10 @@ private SqlSession sqlSession;
 	
 	public int goodsstno(Erp_GoodsstVO vo) {
 		return sqlSession.selectOne("d6.goodsstno", vo);
+	}
+	
+	public List<Erp_GoodsstVO> selectGoodsst(){
+		return sqlSession.selectList("d6.selectGoodsst");
 	}
 	
 }

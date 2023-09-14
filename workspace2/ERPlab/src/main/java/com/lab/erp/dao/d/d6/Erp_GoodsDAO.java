@@ -100,4 +100,13 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("c1.selectGoodslist2", map);
 	}
 	
+	//ㄱㅇㅎ
+	public int insertGoods(Map<String, Object> map) {
+		return sqlSession.insert("d6.insertGoods", map);
+	}
+	
+	public int selectGoodsno(String goods_code) {
+		return sqlSession.selectOne("d6.selectGoodsno", goods_code);
+	}
+	
 }

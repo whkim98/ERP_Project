@@ -53,4 +53,15 @@ private SqlSession sqlSession;
 	public List<Map<String, Object>> productLot(int product_no){
 		return sqlSession.selectList("d1.productLot", product_no);
 	}
+	
+	// ㄱㅇㅎ
+	public List<Map<String, Object>> selectGoods(Map<String, Object> map){
+		return sqlSession.selectList("d6.selectGoods", map);
+	}
+	
+	public int insertGoodslot(Map<String, Object> map) {
+		return sqlSession.insert("d6.insertGoodslot", map);
+	}
+	
+	
 }
