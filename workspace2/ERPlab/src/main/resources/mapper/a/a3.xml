@@ -72,8 +72,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="empList" parameterType="map" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
 		select e1.employee1_no, e1.employee1_code, e1.employee1_name, e1.employee1_phone, e2.employee2_position 
 		from erp_employee1 e1, erp_employee2 e2, erp_comcode c 
-		where 
-		e1.employee1_name like '%${employee1_name}%' and e1.employee1_no = e2.employee1_no and c.comcode_code = #{comcode_code} and c.comcode_no = e2.comcode_no
+		where e1.employee1_no = e2.employee1_no 
+		and c.comcode_code = #{comcode_code} 
+		and c.comcode_no = e2.comcode_no
 		order by e1.employee1_no asc
 	</select>
 	

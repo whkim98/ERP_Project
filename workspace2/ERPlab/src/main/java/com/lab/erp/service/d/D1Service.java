@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.b.b1.Erp_Bs3DAO;
 import com.lab.erp.dao.b.b1.Erp_ClosingDAO;
+import com.lab.erp.dao.d.d1.Erp_BomDAO;
 import com.lab.erp.dao.d.d1.Erp_ConnectrequestDAO;
 import com.lab.erp.dao.d.d1.Erp_DefectiveDAO;
 import com.lab.erp.dao.d.d1.Erp_EvaluationDAO;
@@ -28,6 +29,7 @@ import com.lab.erp.dao.d.d6.Erp_GoodssortDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodsstDAO;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
+import com.lab.erp.vo.d.d1.Erp_BomVO;
 import com.lab.erp.vo.d.d1.Erp_ConnectrequestVO;
 import com.lab.erp.vo.d.d1.Erp_DefectiveVO;
 import com.lab.erp.vo.d.d1.Erp_EvaluationVO;
@@ -65,6 +67,7 @@ public class D1Service {
 	private Erp_ProinventoryDAO pidao;
 	private Erp_InvenlotDAO idao;
 	private Erp_WorktypeDAO wdao;
+	private Erp_BomDAO bdao;
 	
 	
 	private Erp_Bs3DAO bsdao;
@@ -76,7 +79,7 @@ public class D1Service {
 			Erp_GoodssortDAO gsdao, Erp_GoodsstDAO gtdao, Erp_ConnectrequestDAO crdao, Erp_PedworkDAO pwdao,
 			Erp_LotconnevDAO lcdao, Erp_RequestproductDAO rpdao, Erp_PedDAO pdao, Erp_ProductDAO ptdao,
 			Erp_DefectiveDAO ddao, Erp_EvaluationDAO edao, Erp_EvaluemngDAO emdao, Erp_ProinventoryDAO pidao,
-			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao, Erp_WorktypeDAO wdao) {
+			Erp_InvenlotDAO idao, Erp_Bs3DAO bsdao, Erp_ClosingDAO cldao, Erp_WorktypeDAO wdao, Erp_BomDAO bdao) {
 		this.gdao = gdao;
 		this.gvdao = gvdao;
 		this.gldao = gldao;
@@ -96,6 +99,7 @@ public class D1Service {
 		this.bsdao = bsdao;
 		this.cldao = cldao;
 		this.wdao = wdao;
+		this.bdao = bdao;
 	}
 
 
@@ -547,5 +551,31 @@ public class D1Service {
 	// 직원
 	public Map<String, Object> searchecode(String employee1_code){
 		return rpdao.searchecode(employee1_code);
+	}
+	
+	
+//	BOM
+	public int createBom(Erp_BomVO vo) {
+		return bdao.createBom(vo);
+	}
+	
+	public int updateBom(Erp_BomVO vo) {
+		return bdao.updateBom(vo);
+	}
+	
+	public int deleteBom(int bom_no) {
+		return bdao.deleteBom(bom_no);
+	}
+	
+	public List<Map<String, Object>> itemList(Map<String, Object> map){
+		return bdao.itemList(map);
+	}
+	
+	public Map<String, Object> selectItem(int goods_no){
+		return bdao.selectItem(goods_no);
+	}
+	
+	public List<Map<String, Object>> bomList(Map<String, Object> map){
+		return bdao.bomList(map);
 	}
 }

@@ -37,6 +37,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</select>
+	
+	<select id="goodsLotList" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, gl.* 
+		from erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_goodslot gl 
+		where g.goodskind_no = gk.goodskind_no 
+		and gl.goods_no = g.goods_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and g.comcode_no = #{comcode_no} 
+		<if test="btype != null">
+			<if test="btype == 'all'">
+				and (
+					g.goods_name like '%${bnword}%' or g.goods_barcode like '%${bnword}%' 
+					or gs.goodssort_name like '%${bnword}%' or gk.goodskind_name like '%${bnword}%' 
+					or gt.goodsst_spec like '%${bnword}%' or gl.goodslot_lot like '%${bnword}%'
+					)
+			</if>
+			<if test="btype == 'goods_name'">
+				and g.goods_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goods_barcode'">
+				and g.goods_barcode like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodssort_name'">
+				and gs.goodssort_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodskind_name'">
+				and gk.goodskind_name like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodsst_spec'">
+				and gt.goodsst_spec like '%${bnword}%'
+			</if>
+			<if test="btype == 'goodslot_lot'">
+				and gl.goodslot_lot like '%${bnword}%'
+			</if>
+		</if>
+	</select>
 
 <!-- 업태 -->
 	<select id="btList" parameterType="map" resultType="com.lab.erp.vo.a.a1.Erp_BusinesstypeVO">
@@ -523,8 +562,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 <!-- 국내영업매출 -->
 	<insert id="inputLocalSales" parameterType="com.lab.erp.vo.c.c2.Erp_LocalsalesVO">
-		insert into erp_localsales(ctgr_no,localsales_cino,team_no,client_no,localsales_date,goods_no,localsales_qty,localsales_price,localsales_tax,localsales_total,settletype_no,comcode_no) 
-		values(39,#{localsales_cino},#{team_no},#{client_no},#{localsales_date},#{goods_no},#{localsales_qty},#{localsales_price},#{localsales_tax},#{localsales_total},#{settletype_no},#{comcode_no})
+		insert into erp_localsales(ctgr_no,localsales_cino,team_no,client_no,localsales_date,localsales_price,localsales_tax,localsales_total,settletype_no,comcode_no) 
+		values(39,#{localsales_cino},#{team_no},#{client_no},#{localsales_date},#{localsales_price},#{localsales_tax},#{localsales_total},#{settletype_no},#{comcode_no})
 	</insert>
 	
 	<update id="updateLocalSales" parameterType="com.lab.erp.vo.c.c2.Erp_LocalsalesVO">
@@ -532,8 +571,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		team_no = #{team_no},
 		client_no = #{client_no},
 		localsales_date = #{localsales_date},
-		goods_no = #{goods_no},
-		localsales_qty = #{localsales_qty},
 		localsales_price = #{localsales_price},
 		localsales_tax = #{localsales_tax},
 		localsales_total = #{localsales_total},
@@ -541,22 +578,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where localsales_no = #{localsales_no}
 	</update>
 	
+	<update id="updateLocalPrice" parameterType="com.lab.erp.vo.c.c2.Erp_LocalsalesVO">
+		update erp_localsales set 
+		localsales_price = #{localsales_price},
+		localsales_tax = #{localsales_tax},
+		localsales_total = #{localsales_total} 
+		where localsales_cino = #{localsales_cino}
+	</update>
+	
 	<delete id="deleteLocalSales" parameterType="int">
 		delete from erp_localsales where localsales_no = #{localsales_no}
 	</delete>
 	
 	<select id="localSalesList" parameterType="map" resultType="map">
-		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type, g.goods_no, g.goods_name, g.goods_barcode 
-		from erp_localsales l, erp_goods g, erp_client c, erp_team t, erp_settletype s 
+		select l.*, t.team_name, c.client_name, s.settletype_condition, s.settletype_type
+		from erp_localsales l, erp_client c, erp_team t, erp_settletype s 
 		where l.team_no = t.team_no 
-		and l.goods_no = g.goods_no 
 		and l.client_no = c.client_no 
 		and l.settletype_no = s.settletype_no 
 		and l.comcode_no = #{comcode_no}
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-					c.client_name like '%${word}%' or g.goods_name like '%${word}%' 
+					c.client_name like '%${word}%' 
 					or l.localsales_cino like '%${word}%' or t.team_name like '%${word}%' 
 					or s.settletype_condition like '%${word}%' or s.settletype_type like '%${word}%' 
 					or date_format(l.localsales_date, '%m월 %d일') like '%${word}%' 
@@ -564,9 +608,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="type == 'client_name'">
 				and c.client_name like '%${word}%'
-			</if>
-			<if test="type == 'goods_name'">
-				and g.goods_name like '%${word}%'
 			</if>
 			<if test="type == 'localsales_cino'">
 				and l.localsales_cino like '%${word}%'
@@ -587,19 +628,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectLocalSales" parameterType="int" resultType="map">
-		select l.*, t.*, c.*, s.* 
-		from erp_localsales l, erp_client c, erp_team t, erp_settletype s 
+		select l.*, t.*, c.*, s.*, cl.*, d.bs3_no bs3_no1, cr.bs3_no bs3_no2  
+		from erp_localsales l, erp_client c, erp_team t, erp_settletype s, erp_closing cl, erp_debtor d, erp_creditor cr 
 		where l.team_no = t.team_no 
 		and l.client_no = c.client_no 
 		and l.settletype_no = s.settletype_no 
+		and cl.closing_code = l.localsales_cino 
+		and cl.debtor_no = d.debtor_no 
+		and cl.creditor_no = cr.creditor_no 
 		and l.localsales_no = #{localsales_no}
 	</select>
 	
+	
 	<select id="getSalesGoods" parameterType="String" resultType="map">
-		select g.*, gl.*, s.* from erp_goods g, erp_goodslot gl, erp_salesgoods s 
-		where s.salesgoods_code = #{salesgoods_code} 
+		select s.*, g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2 
+		from erp_goods g, erp_goodslot gl, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_client c1, erp_client c2, erp_salesgoods s 
+		where g.goodskind_no = gk.goodskind_no 
+		and gl.goods_no = g.goods_no 
+		and gk.goodssort_no = gs.goodssort_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
 		and gl.goodslot_no = s.goodslot_no 
-		and g.goods_no = gl.goods_no
+		and s.salesgoods_code = #{salesgoods_code} 
 	</select>
 	
 	<insert id="inputSalesGoods" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
@@ -609,7 +660,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="updateSGNo" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
 		update erp_salesgoods set 
-		salesgoods_code = #{salesgoods_code}, 
 		goodslot_no = #{goodslot_no}, 
 		salesgoods_qty = #{salesgoods_qty}, 
 		salesgoods_price = #{salesgoods_price}, 
@@ -627,5 +677,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="getSGNo" parameterType="String" resultType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
 		select * from erp_salesgoods where salesgoods_code = #{salesgoods_code} 
+	</select>
+	
+	<select id="getLocalCino" parameterType="String" resultType="int">
+		select localsales_no from erp_localsales where localsales_cino = #{localsales_cino}
+	</select>
+	
+	<select id="getCondition" resultType="com.lab.erp.vo.b.b3.Erp_SettletypeVO">
+		select settletype_condition from erp_settletype group by settletype_condition
+	</select>
+	
+	<select id="getSettleList" resultType="com.lab.erp.vo.b.b3.Erp_SettletypeVO">
+		select * from erp_settletype where settletype_condition = '선입금' or settletype_condition = '후입금'
 	</select>
 </mapper>

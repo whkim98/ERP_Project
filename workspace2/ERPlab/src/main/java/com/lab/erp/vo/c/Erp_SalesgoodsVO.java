@@ -16,6 +16,7 @@ public class Erp_SalesgoodsVO {
 	private int salesgoods_price;
 	private int salesgoods_tax;
 	private int salesgoods_total;
+	private int goods_no;
 	
 	private List<Erp_SalesgoodsVO> sglist;
 	private List<Erp_SalesgoodsVO> sglist1;

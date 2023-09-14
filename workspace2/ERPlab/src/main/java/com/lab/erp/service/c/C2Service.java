@@ -25,6 +25,7 @@ import com.lab.erp.dao.d.d6.Erp_GoodslotDAO;
 import com.lab.erp.vo.a.a1.Erp_BusinesstypeVO;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
+import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.Erp_BondbillsVO;
 import com.lab.erp.vo.c.Erp_ClientVO;
 import com.lab.erp.vo.c.Erp_ClientsortVO;
@@ -301,6 +302,10 @@ public class C2Service {
 		return ldao.updateLocalSales(vo);
 	}
 	
+	public int updateLocalPrice(Erp_LocalsalesVO vo) {
+		return ldao.updateLocalPrice(vo);
+	}
+	
 	public int deleteLocalSales(int localsales_no) {
 		return ldao.deleteLocalSales(localsales_no);
 	}
@@ -311,6 +316,18 @@ public class C2Service {
 	
 	public Map<String, Object> selectLocalSales(int localsales_no){
 		return ldao.selectLocalSales(localsales_no);
+	}
+	
+	public List<Erp_SettletypeVO> getCondition(){
+		return ldao.getCondition();
+	}
+	
+	public List<Erp_SettletypeVO> getSettleList(){
+		return ldao.getSettleList();
+	}
+	
+	public int getLocasCino(String localsales_cino) {
+		return ldao.getLocasCino(localsales_cino);
 	}
 	
 //	goods
@@ -325,6 +342,10 @@ public class C2Service {
 	}
 	public int updateGoodsSub(Erp_GoodsVO vo) {
 		return gsdao.updateGoodsSub(vo);
+	}
+	
+	public List<Map<String, Object>> goodsLotList(Map<String, Object> map){
+		return gsdao.goodsLotList(map);
 	}
 	
 	

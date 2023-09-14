@@ -30,6 +30,10 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("c2.goodsReturn", map);
 	}
 	
+	public List<Map<String, Object>> goodsLotList(Map<String, Object> map){
+		return sqlSession.selectList("c2.goodsLotList", map);
+	}
+	
 	
 //	d1
 	public List<Map<String, Object>> goodsListd1(Map<String, Object> map){

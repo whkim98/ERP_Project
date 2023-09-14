@@ -3,6 +3,7 @@ package com.lab.erp.controller.c;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lab.erp.common.ViewPath;
 import com.lab.erp.service.c.C2Service;
+import com.lab.erp.service.d.D2Service;
 import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.a.a1.Erp_BusinesstypeVO;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
+import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.Erp_BondbillsVO;
 import com.lab.erp.vo.c.Erp_ClientVO;
 import com.lab.erp.vo.c.Erp_ClientsortVO;
@@ -34,6 +37,8 @@ import com.lab.erp.vo.c.Erp_ReceivableVO;
 import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c2.Erp_ReturnVO;
+import com.lab.erp.vo.d.d2.Erp_OrderVO;
+import com.lab.erp.vo.d.d2.Erp_OrderconnectVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
 import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
 
@@ -59,12 +64,14 @@ public class C2Controller {
 	private C2Service c2;
 	private LoginService ls;
 	private HttpServletRequest request;
+	private D2Service d2;
 	
 	@Autowired
-	public C2Controller(C2Service c2, LoginService ls, HttpServletRequest request) {
+	public C2Controller(C2Service c2, LoginService ls, HttpServletRequest request, D2Service d2) {
 		this.c2 = c2;
 		this.ls = ls;
 		this.request = request;
+		this.d2 = d2;
 	}
 	
 	
@@ -1497,11 +1504,35 @@ public class C2Controller {
 		return list;
 	}
 	
+	@RequestMapping("/c25/addForm")
+	public String addLocalSales(Model model, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == "") {
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		List<Erp_Bs3VO> dlist = c2.ctgrDebtor(39);
+		List<Erp_Bs3VO> clist = c2.ctgrCreditor(39);
+		List<Erp_SettletypeVO> settleList = c2.getSettleList();
+		
+		model.addAttribute("settleList", settleList);
+		model.addAttribute("dlist", dlist);
+		model.addAttribute("clist", clist);
+		
+		return ViewPath.C2 + "/c25/selectForm";
+	}
+	
 	@RequestMapping("/c25/createLocalSales")
 	@Transactional
 	public String createLocalSales(Erp_LocalsalesVO vo, String comcode_code, Model model, 
 			String bs3_no1, String bs3_no2, String debtor_no, String creditor_no, 
-			Erp_SalesgoodsVO svo, String[] goods_no) {
+			Erp_SalesgoodsVO svo) {
 		String msg = null;
 		String url = null;
 		
@@ -1544,13 +1575,12 @@ public class C2Controller {
 		int sum = 0;
 		int qty = 0;
 		
-		int i = 0;
-		
+		System.out.println(vo.getLocalsales_cino());
 		List<Erp_SalesgoodsVO> sglist = svo.getSglist();
 		for(Erp_SalesgoodsVO sgvo : sglist) {
 			sgvo.setSalesgoods_code(vo.getLocalsales_cino());
 			sum += sgvo.getSalesgoods_price() * sgvo.getSalesgoods_qty();
-			c2.inputSalesGoods(svo);
+			c2.inputSalesGoods(sgvo);
 			
 			Erp_GoodslotVO glvo = new Erp_GoodslotVO();
 			glvo.setGoodslot_no(sgvo.getGoodslot_no());
@@ -1558,13 +1588,12 @@ public class C2Controller {
 			c2.updateLotQtySub(glvo);
 			
 			Erp_GoodsVO gvo = new Erp_GoodsVO();
-			gvo.setGoods_no(Integer.parseInt(goods_no[i]));
+			gvo.setGoods_no(sgvo.getGoods_no());
 			gvo.setGoods_stockqty(sgvo.getSalesgoods_qty());
-			c2.updateGoodsSub(gvo);
+			int gs = c2.updateGoodsSub(gvo);
 			
 			qty += sgvo.getSalesgoods_qty();
 			
-			i += 1;
 		}
 		
 		double tax = sum * 0.1;
@@ -1619,6 +1648,8 @@ public class C2Controller {
 		String msg = null;
 		String url = null;
 		
+		System.out.println("1 페이지왔다 근데 왜 안돼?");
+		
 		if(comcode_code == "") {
 			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
@@ -1640,17 +1671,25 @@ public class C2Controller {
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
 		
-		List<Map<String, Object>> list = c2.localSalesList(map);
+		List<Map<String, Object>> slist = c2.getSalesGoods(vo.getLocalsales_cino());
+		System.out.println("2 페이지왔다 근데 왜 안돼?");
 		
-		List<Erp_SalesgoodsVO> slist = c2.getSGNo(vo.getLocalsales_cino());
+		List<Erp_Bs3VO> dlist = c2.ctgrDebtor(39);
+		List<Erp_Bs3VO> clist = c2.ctgrCreditor(39);
+		List<Erp_SettletypeVO> settleList = c2.getSettleList();
+		
 		
 		Map<String, Object> inmap = c2.selectLocalSales(vo.getLocalsales_no());
+		System.out.println("3 페이지왔다 근데 왜 안돼?");
 		
+		model.addAttribute("settleList", settleList);
+		model.addAttribute("dlist", dlist);
+		model.addAttribute("clist", clist);
 		model.addAttribute("slist", slist);
-		model.addAttribute("list", list);
 		model.addAttribute("inmap", inmap);
+		System.out.println("4 페이지왔다 근데 왜 안돼?");
 		
-		return ViewPath.C2 + "/c25/inputLocalSales";
+		return ViewPath.C2 + "/c25/selectForm";
 	}
 	
 	@RequestMapping("/c25/update")
@@ -1740,7 +1779,7 @@ public class C2Controller {
 				qty += sgvo.getSalesgoods_qty();
 				
 				sgvo.setSalesgoods_code(vo.getLocalsales_cino());
-				c2.updateSGNo(svo);
+				c2.updateSGNo(sgvo);
 				
 				i += 1;
 			}
@@ -1759,7 +1798,7 @@ public class C2Controller {
 				glvo.setGoodslot_qty(sgvo.getSalesgoods_qty());
 				c2.updateLotQtySub(glvo);
 				
-				gvo.setGoods_no((int)sgmap.get(i).get("goods_no"));
+				gvo.setGoods_no(sgvo.getGoods_no());
 				gvo.setGoods_stockqty(sgvo.getSalesgoods_qty());
 				c2.updateGoodsSub(gvo);
 				
@@ -1832,7 +1871,9 @@ public class C2Controller {
 		c2.updateBs2Amount(map);
 		c2.updateBs1Amount(map);
 		
-		return "redirect:/c/c2/c25/updateForm?comcode_code="+comcode_code+"&localsales_no="+vo.getLocalsales_no()+"&localsales_cino="+vo.getLocalsales_cino();
+		String code = URLEncoder.encode(vo.getLocalsales_cino());
+		
+		return "redirect:/c/c2/c25/updateForm?comcode_code="+comcode_code+"&localsales_no="+vo.getLocalsales_no()+"&localsales_cino="+code;
 	}
 	
 	@RequestMapping("/c25/delete")
@@ -1898,6 +1939,233 @@ public class C2Controller {
 		model.addAttribute("comcode_code", comcode_code);
 		
 		return "redirect:/c/c2/c25/inputLocalSales?comcode_code="+comcode_code;
+	}
+	
+	@RequestMapping(value="/c25/localcino", produces = "application/text;charset=utf8")
+	@ResponseBody
+	public String localcino(String localsales_code) {
+		try {
+			if(localsales_code == "") {
+				return "공백은 허용되지 않습니다";
+			}
+			c2.getLocasCino(localsales_code);
+			
+			return "이미 존재하는 번호입니다.";
+		}catch(NullPointerException e) {
+			return "사용 가능한 번호입니다.";
+		}
+	}
+	
+	@RequestMapping("/c25/deleteGoods")
+	@Transactional
+	@ResponseBody
+	public List<Map<String, Object>> deleteLocalGoods(Erp_SalesgoodsVO vo, String localsales_cino){
+		System.out.println(localsales_cino);
+		String closing_code = localsales_cino;
+		
+		Erp_GoodslotVO glvo = new Erp_GoodslotVO();
+		Erp_GoodsVO gvo = new Erp_GoodsVO();
+		
+		glvo.setGoodslot_qty(vo.getSalesgoods_qty());
+		glvo.setGoodslot_no(vo.getGoodslot_no());
+		c2.updateLotQtyOne(glvo);
+		
+		gvo.setGoods_stockqty(vo.getSalesgoods_qty());
+		gvo.setGoods_no(vo.getGoods_no());
+		c2.updateGoodsOne(gvo);
+		
+		Erp_LocalsalesVO lvo = new Erp_LocalsalesVO();
+		
+		int sum = vo.getSalesgoods_qty() * vo.getSalesgoods_price();
+		
+		double tax = sum * 0.1;
+		
+		int total = sum + (int)tax;
+		
+		lvo.setLocalsales_price(sum);
+		lvo.setLocalsales_tax((int)tax);
+		lvo.setLocalsales_total(total);
+		lvo.setLocalsales_cino(localsales_cino);
+		
+		c2.updateLocalPrice(lvo);
+		
+		Map<String, Object> closing = d2.getClosingCode(closing_code);
+		
+		Map<String, Object> dmap = d2.getBsNo((int)closing.get("bs3_no1"));
+		Map<String, Object> cmap = d2.getBsNo((int)closing.get("bs3_no2"));
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("bs3_amount", (-total));
+		map.put("bs1_no", dmap.get("bs1_no"));
+		map.put("bs2_no", dmap.get("bsno2"));
+		map.put("bs3_no", dmap.get("bs3_no"));
+		
+		d2.updateBs1Amount(map);
+		d2.updateBs2Amount(map);
+		d2.updateBs3Amount(map);
+		
+		map.put("bs3_amount", total);
+		map.put("bs1_no", cmap.get("bs1_no"));
+		map.put("bs2_no", cmap.get("bsno2"));
+		map.put("bs3_no", cmap.get("bs3_no"));
+		
+		d2.updateBs1Amount(map);
+		d2.updateBs2Amount(map);
+		d2.updateBs3Amount(map);
+		
+		Erp_ClosingVO cvo = new Erp_ClosingVO();
+		cvo.setClosing_creditor(total);
+		cvo.setClosing_debtor(total);
+		cvo.setClosing_no(d2.getClosingNo(closing_code));
+		d2.updateClosingPrice(cvo);
+		
+		c2.deleteSGNo(vo.getSalesgoods_no());
+		
+		List<Map<String, Object>> list = c2.getSalesGoods(closing_code);
+		
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
+	@RequestMapping("/c25/goodsList")
+	public String goodsList(String btype, String bnword, String comcode_code, Model model, String i) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(btype == null || bnword == null) {
+			btype = null;
+			bnword = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("btype", btype);
+		map.put("bnword", bnword);
+		
+		List<Map<String, Object>> list = c2.goodsLotList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i", i);
+		
+		return ViewPath.WINDOW + "c/c2/c25/goodsList";
+	}
+	@RequestMapping("/c25/goodsList1")
+	public String goodsList1(String btype, String bnword, String comcode_code, Model model, String i) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(btype == null || bnword == null) {
+			btype = null;
+			bnword = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("btype", btype);
+		map.put("bnword", bnword);
+		
+		List<Map<String, Object>> list = c2.goodsLotList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i", i);
+		
+		return ViewPath.WINDOW + "c/c2/c25/goodsList1";
+	}
+	
+	@RequestMapping("/c25/goodsListAjax")
+	@ResponseBody
+	public List<Map<String, Object>> goodsListAjax(String btype, String bnword, String comcode_code, Model model) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(btype == null || bnword == null) {
+			btype = null;
+			bnword = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("btype", btype);
+		map.put("bnword", bnword);
+		
+		List<Map<String, Object>> list = c2.goodsLotList(map);
+		
+		return list;
+	}
+	
+	@RequestMapping("/c25/clList")
+	public String clList(String comcode_code, Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = d2.clientList(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "c/c2/c25/clList";
+	}
+	
+	@RequestMapping("/c25/clListAjax")
+	public List<Map<String, Object>> clListAjax(String comcode_code, Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = d2.clientList(map);
+		
+		return list;
 	}
 	
 }

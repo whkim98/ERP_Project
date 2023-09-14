@@ -7,7 +7,7 @@
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css"/>
+<link rel="stylesheet" href="/css/a/company.css"/>
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -114,7 +114,8 @@ function searchim(){
 function searcht(){
 	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
-function acList(code, team){
+function acList(code){
+	let team = document.getElementById("team_code").value;
 	let openWin = window.open("${pageContext.request.contextPath}/a/a4/acList?comcode_code="+code+"&team_code="+team, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function clList(code){
@@ -168,8 +169,11 @@ function teamname(){
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			document.getElementById("team_name").value = data2.team_name;
+			document.getElementById("team_code").value = data2.team_code;
 			document.getElementById("team_no").value = data2.team_no;
 		}else {
+			document.getElementById("team_no").value = 4;
+			document.getElementById("team_code").value = '';
 			document.getElementById("team_name").value = '';
 			alert("중복된 팀 이름입니다. 조회 버튼을 클릭하여 목록에서 팀을 선택해주세요.");
 		}
@@ -272,12 +276,12 @@ function teamname(){
 						
 						<div>
 							<label>기간 </label>
-							<input type="date" name="investment_start" id="investment_start" value="${inmap.investment_start }"> ~ <input type="date" name="investment_end" id="investment_end" value="${inmap.investment_end }">
+							<input type="date" name="investment_start" id="investment_start" value="${inmap.investment_start }" onchange="startcheck(this.value)"> ~ <input type="date" name="investment_end" id="investment_end" value="${inmap.investment_end }">
 						</div>
 						
 						<div>
 							<label>금액 </label>
-							<input type="text" name="investment_price" id="investment_price" value="${inmap.investment_price }">
+							<input type="text" name="investment_price" id="investment_price" value="${inmap.investment_price }" class="required">
 						</div>				
 						
 						<div>
@@ -304,13 +308,13 @@ function teamname(){
 						
 						<div>
 							<label>적요 </label>
-							<input type="text" name="investment_content" id="investment_content" value="${inmap.investment_content }" maxlength="500">
+							<input type="text" name="investment_content" id="investment_content" value="${inmap.investment_content }" maxlength="500" class="required">
 						</div>
 						
 						<div>
 							<label>은행 </label>
-							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}', '${inmap.team_code }')" value="${avo.account_bank }" readonly="readonly">
-							<input type="button" onclick="acList('${comcode_code}', '${inmap.team_code }')" value="조회">
+							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}')" value="${avo.account_bank }" readonly="readonly" class="required">
+							<input type="button" onclick="acList('${comcode_code}')" value="조회">
 						</div>
 						
 						<div>
@@ -353,12 +357,13 @@ function teamname(){
 						<div>
 							<label>담당팀 </label>
 							<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }">
+							<input type="hidden" name="team_code" id="team_code" value="${inmap.team_code }">
 							<input type="button" onclick="searcht()" value="조회">
 						</div>		
 						
 						<div>
 							<label>비고 </label>
-							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500">
+							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500" class="required">
 						</div>	
 						
 						<div align="right">
@@ -373,7 +378,7 @@ function teamname(){
 						<input type="hidden" name="imkind_no" id="imkind_no" value="13">
 						<input type="hidden" name="ctgr_no" id="ctgr_no" value="8">
 						<input type="hidden" name="client_no" id="client_no" value="17">
-						<input type="hidden" name="team_no" id="team_no" value="1">
+						<input type="hidden" name="team_no" id="team_no" value="4">
 						<input type="hidden" name="bs3_no1" id="bs3_no1">
 						<input type="hidden" name="bs3_no2" id="bs3_no2">
 						<input type="hidden" name="account_no" id="account_no" value="1">
@@ -387,12 +392,12 @@ function teamname(){
 						
 						<div>
 							<label>기간 </label>
-							<input type="date" name="investment_start" id="investment_start"> ~ <input type="date" name="investment_end" id="investment_end">
+							<input type="date" name="investment_start" id="investment_start" onchange="startcheck(this.value)"> ~ <input type="date" name="investment_end" id="investment_end">
 						</div>
 						
 						<div>
 							<label>금액 </label>
-							<input type="text" name="investment_price" id="investment_price">
+							<input type="text" name="investment_price" id="investment_price" class="required">
 						</div>				
 						
 						<div>
@@ -419,13 +424,13 @@ function teamname(){
 						
 						<div>
 							<label>적요 </label>
-							<input type="text" name="investment_content" id="investment_content" maxlength="500">
+							<input type="text" name="investment_content" id="investment_content" maxlength="500" class="required">
 						</div>
 						
 						<div>
 							<label>은행 </label>
-							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}', '${map.team_code }')" readonly="readonly">
-							<input type="button" onclick="acList('${comcode_code}', '${map.team_code }')" value="조회">
+							<input type="text" name="account_bank" id="account_bank" onclick="acList('${comcode_code}')" readonly="readonly" class="required">
+							<input type="button" onclick="acList('${comcode_code}')" value="조회">
 						</div>
 						
 						<div>
@@ -454,12 +459,13 @@ function teamname(){
 						<div>
 							<label>담당팀 </label>
 							<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
+							<input type="hidden" name="team_code" id="team_code">
 							<input type="button" onclick="searcht()" value="조회">
 						</div>		
 						
 						<div>
 							<label>비고 </label>
-							<input type="text" name="investment_note" id="investment_note" maxlength="500">
+							<input type="text" name="investment_note" id="investment_note" maxlength="500" class="required">
 						</div>	
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
@@ -473,6 +479,20 @@ function teamname(){
 	
 </div>
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+document.getElementById("investment_start").setAttribute("min", end+"-01-01");
+document.getElementById("investment_start").setAttribute("max", end+"-12-31");
+
+function startcheck(v){
+	document.getElementById("investment_end").setAttribute("min", v);
+	document.getElementById("investment_end").setAttribute("max", end+"-12-31");
+}
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no1, no2, ino, code){
@@ -566,82 +586,47 @@ function sub(f){
 		f.debtor_no.focus();
 		return;
 	}else if(f.investment_price.value == ""){
-		var ch = confirm("금액이 입력되지 않았습니다. 등록하시겠습니까?");	// 확인 true, 취소 false
-		if(ch){
-			f.investment_price.value = 0;
-			f.submit();
-		}else{
-			f.investment_price.focus();
-			return;
-		}
-	}else if(!pat.test(f.investment_price.value)){
+		f.investment_price.focus();
+		return;
+	}else if(f.account_bank.value == ""){
+		f.account_bank.focus();
+		return;
+	}else if(f.investment_note.value == ""){
+		f.investment_note.focus();
+		return;
+	}else if(f.investment_content.value == ""){
+		f.investment_content.focus();
+		return;
+	}
+	
+	if(!pat.test(f.investment_price.value)){
 		alert("100,000,000미만, 숫자만 입력 가능합니다.");
 		f.investment_price.focus();
 		return;
-	}else if(f.investment_start.value == "" || f.investment_end.value == ""){
-		var ch = confirm("기간이 입력되지 않았습니다. 등록하시겠습니까?");
+	}
+	
+	if(f.investment_start.value == "" || f.investment_end.value == ""){
+		var ch = confirm("기간이 입력되지 않았습니다. 계속하시겠습니까?");
 		if(ch){
-			f.submit();
+			if(f.investment_start.value == ""){
+				f.investment_start.value = today;
+			}
+			if(f.investment_end.value == ""){
+				f.investment_end.value = today;
+			}
 		}else {
 			f.investment_end.focus();
 			return;
 		}
-	}else if(f.client_name.value == ""){
-		var ch = confirm("거래처가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.client_name.focus();
-			return;
-		}
-	}else if(f.imkind_name.value == ""){
-		var ch = confirm("종류가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.imkind_name.focus();
-			return;
-		}
-	}else if(f.investment_content.value == ""){
-		var ch = confirm("적요가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_content.focus();
-			return;
-		}
-	}else if(f.account_bank.value == ""){
-		var ch = confirm("계좌가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.account_bank.focus();
-			return;
-		}
-	}else if(f.team_name.value == ""){
-		var ch = confirm("담당팀이 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.team_name.focus();
-			return;
-		}
-	}else if(f.investment_note.value == ""){
-		var ch = confirm("비고가 입력되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			f.investment_note.focus();
-			return;
-		}
-	}else {
-		var ch = confirm("등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			return;
-		}
 	}
+	
+	var ch = confirm("등록하시겠습니까?");
+	if(ch){
+		f.submit();
+	}else {
+		return;
+	}
+	
 }
 
 
@@ -670,6 +655,7 @@ function clName(){
 			document.getElementById("client_registeredno").value = data2.client_registeredno;
 			document.getElementById("client_manager").value = data2.client_manager;
 		}else {
+			document.getElementById("client_no").value = 17;
 			document.getElementById("client_name").value = '';
 			document.getElementById("client_registeredno").value = '';
 			document.getElementById("client_manager").value = '';

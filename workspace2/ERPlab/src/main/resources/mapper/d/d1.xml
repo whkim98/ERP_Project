@@ -800,4 +800,69 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</select>
+	
+	
+	
+	<!-- BOM -->
+	<insert id="createBom" parameterType="com.lab.erp.vo.d.d1.Erp_BomVO">
+		insert into erp_bom(goods_no1, goods_no2, bom_require, bom_obtain, bom_note, comcode_no) 
+		values(#{goods_no1}, #{goods_no2}, #{bom_require}, #{bom_obtain}, #{bom_note}, #{comcode_no})
+	</insert>
+	
+	<update id="updateBom" parameterType="com.lab.erp.vo.d.d1.Erp_BomVO">
+		update erp_bom set 
+		goods_no2 = #{goods_no2}, 
+		bom_require = #{bom_require}, 
+		bom_obtain = #{bom_obtain}, 
+		bom_note = #{bom_note} 
+		where bom_no = #{bom_no}
+	</update>
+	
+	<delete id="deleteBom" parameterType="int">
+		delete from erp_bom where bom_no = #{bom_no}
+	</delete>
+	
+	<select id="itemList" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, t.* 
+		from erp_goods g, erp_goodssort gs, erp_goodskind gk, erp_goodsst gt, erp_goodslev gl, erp_client c1, erp_client c2, 
+		(select goods_no, truncate(avg(goodslot_total),0) goodslot_total from erp_goodslot group by goods_no) t 
+		where g.goods_no = t.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.goodslev_no = gl.goodslev_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and gs.goodssort_no = gk.goodssort_no 
+		and g.comcode_no = #{comcode_no} 
+		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name}) 
+	</select>
+	
+	<select id="selectItem" parameterType="int" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, t.* 
+		from erp_goods g, erp_goodssort gs, erp_goodskind gk, erp_goodsst gt, erp_goodslev gl, erp_client c1, erp_client c2, 
+		(select goods_no, truncate(avg(goodslot_total),0) goodslot_total from erp_goodslot group by goods_no) t 
+		where g.goods_no = t.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.goodslev_no = gl.goodslev_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and gs.goodssort_no = gk.goodssort_no 
+		and g.goods_no = #{goods_no} 
+	</select>
+	
+	<select id="bomList" parameterType="map" resultType="map">
+		select g.*, gs.*, gk.*, gt.*, gl.*, c1.client_name client_name1, c2.client_name client_name2, t.*, b.* 
+		from erp_goods g, erp_goodssort gs, erp_goodskind gk, erp_goodsst gt, erp_goodslev gl, erp_client c1, erp_client c2, erp_bom b,
+		(select goods_no, truncate(avg(goodslot_total),0) goodslot_total from erp_goodslot group by goods_no) t 
+		where g.goods_no = t.goods_no 
+		and g.goodskind_no = gk.goodskind_no 
+		and g.goodsst_no = gt.goodsst_no 
+		and g.goodslev_no = gl.goodslev_no 
+		and g.client_no1 = c1.client_no 
+		and g.client_no2 = c2.client_no 
+		and gs.goodssort_no = gk.goodssort_no 
+		and b.goods_no2 = g.goods_no 
+		and b.goods_no1 = #{goods_no}
+	</select>
 </mapper>

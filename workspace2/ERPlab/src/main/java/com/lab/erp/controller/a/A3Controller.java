@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,17 +41,17 @@ public class A3Controller {
 		this.as = as;
 	}
 	
-	@RequestMapping("/a31/")
-	public String projectList(Model model, String comcode_code, String type, String word) {
-		System.out.println(comcode_code);
-		int comcode_no = ls.comNo(comcode_code);
-		
+	
+	@RequestMapping("/a31/inputProject")
+	public String inputProject(Model model, String type, String word, String comcode_code) {
 		if(type == null || word == null) {
 			type = null;
 			word = null;
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
+		
+		int comcode_no = ls.comNo(comcode_code);
 		
 		map.put("type",type);
 		map.put("word",word);
@@ -60,79 +61,68 @@ public class A3Controller {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.A3 + "/a31/list";
+		return ViewPath.A3 + "/a31/inputProject";
 	}
 	
-	@RequestMapping("/a31/inputProject")
-	public String inputProject(Model model, String type, String word) {
+	@RequestMapping("/a31/projectAjax")
+	@ResponseBody
+	public List<Map<String, Object>> projectAjax(String type, String word, String comcode_code) {
 		if(type == null || word == null) {
 			type = null;
 			word = null;
 		}
 		
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("type", type);
-		map.put("word", word);
-		List<Erp_TeamVO> tlist = as.teamList(map);
+		int comcode_no = ls.comNo(comcode_code);
 		
-		List<Erp_ProjectkindVO> pklist = a3.kindList(map);
+		map.put("type",type);
+		map.put("word",word);
+		map.put("comcode_no", comcode_no);
 		
-		model.addAttribute("tlist", tlist);
-		model.addAttribute("pklist", pklist);
+		List<Map<String, Object>> list = a3.searchList(map);
 		
-		return ViewPath.A3 + "/a31/inputProject";
+		return list;
 	}
 	
 //	프로젝트 관리
 	@RequestMapping("/a31/createProject")
+	@Transactional
 	public String createProject(Model model, Erp_ProjectVO vo, String comcode_code) {
 		int comcode_no = ls.comNo(comcode_code);
 		
 		vo.setComcode_no(comcode_no);
 		
-		int insert = a3.createProject(vo);
+		a3.createProject(vo);
 		
-		String msg = null;
-		String url = null;
-		
-		if(insert != 0) {
-			msg = "프로젝트가 정상적으로 등록되었습니다.";
-			url = "/a/a3/a31/?comcode_code=" + comcode_code;
-		}else {
-			msg = "프로젝트 등록에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a31//inputProject";
-		}
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a3/a31/inputProject?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a31/updateFormP")
-	public String updateForm(Model model, Erp_ProjectVO vo, String type, String word) {
+	public String updateForm(Model model, Erp_ProjectVO vo, String type, String word, String comcode_code) {
 		int prNo = vo.getProject_no();
 		
-		Map<String, Object> map = a3.selectProject(prNo);
+		Map<String, Object> inmap = a3.selectProject(prNo);
 		
 		if(type == null || word == null) {
 			type = null;
 			word = null;
 		}
 		
-		Map<String, Object> map1 = new HashMap<>();
-		map1.put("type", type);
-		map1.put("word", word);
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		List<Erp_TeamVO> tlist = as.teamList(map1);
-		List<Erp_ProjectkindVO> pklist = a3.kindList(map1);
+		int comcode_no = ls.comNo(comcode_code);
 		
-		model.addAttribute("tlist", tlist);
-		model.addAttribute("pklist", pklist);
-		model.addAttribute("map", map);
+		map.put("type",type);
+		map.put("word",word);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = a3.searchList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("inmap", inmap);
 
-		return ViewPath.A3 + "/a31/updateForm";
+		return ViewPath.A3 + "/a31/inputProject";
 	}
 	
 	@RequestMapping("/a31/update")
@@ -141,73 +131,24 @@ public class A3Controller {
 		
 		vo.setComcode_no(comcode_no);
 		
-		int update = a3.updateProject(vo);
+		a3.updateProject(vo);
 		
-		String msg = null;
-		String url = null;
-		
-		if(update != 0) {
-			msg = "프로젝트가 정상적으로 수정되었습니다.";
-			url = "/a/a3/a31/contentP?project_no=" + vo.getProject_no();
-		}else {
-			msg = "프로젝트 수정에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a31/updateFormP?project_no=" + vo.getProject_no();
-		}
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a3/a31/updateFormP?project_no="+vo.getProject_no()+"&comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a31/delete")
 	public String deleteProject(Model model, String project_no, String comcode_code) {
 		int prNo = Integer.parseInt(project_no);
 		
-		String msg = null;
-		String url = null;
+		a3.deleteProject(prNo);
 		
-		List<Erp_ContractVO> list = a3.prContract(prNo);
-		
-		if(!list.isEmpty()) {
-			a3.deleteContract(prNo);			
-		}
-		
-		int delete = a3.deleteProject(prNo);
-		if(delete != 0) {
-			msg = "프로젝트가 정상적으로 삭제되었습니다.";
-			url = "/a/a3/a31/?comcode_code=" + comcode_code;
-		}else {
-			msg = "프로젝트 삭제에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a31/contentP?project_no=" + prNo;
-		}
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return ViewPath.RESULT + "loginresult";
-	}
-	
-	@RequestMapping("/a31/contentP")
-	public String selectProject(Model model, Erp_ProjectVO vo) {
-		int prNo = vo.getProject_no();
-		
-		Map<String, Object> map = a3.selectProject(prNo);
-		if(map.isEmpty()) {
-			map = null;
-		}
-		
-		model.addAttribute("map", map);
-		
-		return ViewPath.A3 + "/a31/content";
+		return "redirect:/a/a3/a31/inputProject?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a31/searchemp")
-	public String searchemp(Model model, String employee1_name, String comcode_code) {
+	public String searchemp(Model model, String comcode_code) {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println(comcode_code);
 		
-		map.put("employee1_name", employee1_name);
 		map.put("comcode_code", comcode_code);
 		
 		List<Erp_Employee1VO> list = a3.empList(map);
@@ -283,7 +224,6 @@ public class A3Controller {
 	public Erp_TeamVO team(Model model, String team_name) {
 		try {
 			Erp_TeamVO vo = a3.teamName(team_name);
-			System.out.println("team:"+vo);
 			model.addAttribute("vo", vo);
 			
 			return vo;
@@ -293,8 +233,8 @@ public class A3Controller {
 	}
 	
 //	계약 관리
-	@RequestMapping("/a32/")
-	public String prContractList(Model model, Erp_ContractVO vo, String type, String word, String comcode_code) {
+	@RequestMapping("/a32/inputContract")
+	public String inputContract(String type, String word, String comcode_code, Model model) {
 		if(type == null || word == null) {
 			type = null;
 			word = null;
@@ -307,7 +247,6 @@ public class A3Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("type",type);
 		map.put("word",word);
-		map.put("project_no", vo.getProject_no());
 		
 		List<Map<String, Object>> list = a3.prContractList(map);
 		if(list.isEmpty()) {
@@ -316,41 +255,22 @@ public class A3Controller {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.A3 + "/a32/list";
-	}
-	
-	@RequestMapping("/a32/inputContract")
-	public String inputContract() {
 		return ViewPath.A3 + "/a32/inputContract";
 	}
 	
 	@RequestMapping("/a32/createContract")
-	public String createContract(Model model, Erp_ContractVO vo) {
-		String msg = null;
-		String url = null;
+	public String createContract(Model model, Erp_ContractVO vo, String comcode_code) {
 		
-		int insert = a3.createContract(vo);
+		a3.createContract(vo);
 		
-		
-		if(insert != 0) {
-			msg = "계약이 정상적으로 등록되었습니다.";
-			url = "/a/a3/a32/?project_no=" + vo.getProject_no();
-		}else {
-			msg = "계약 등록에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a32/inputContract";
-		}
-		
-		model.addAttribute("url", url);
-		model.addAttribute("msg", msg);
-		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a3/a32/inputContract?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a32/updateFormC")
 	public String updateFormC(Model model, Erp_ContractVO vo) {
-		Map<String, Object> map = a3.selectContract(vo.getContract_no());
+		Map<String, Object> inmap = a3.selectContract(vo.getContract_no());
 		
-		model.addAttribute("map", map);
+		model.addAttribute("inmap", inmap);
 		
 		return ViewPath.A3 + "/a32/updateForm";
 	}

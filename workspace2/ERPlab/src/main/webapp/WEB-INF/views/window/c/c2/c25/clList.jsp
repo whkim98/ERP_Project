@@ -9,7 +9,7 @@
 </head>
 <body>
 <div>
-<form action="${pageContext.request.contextPath}/a/a4/clListAjax" method="POST">
+<form action="${pageContext.request.contextPath}/c/c2/c25/clListAjax" method="POST">
 	<select name="type">
 		<option value="client_no">번호</option>
 		<option value="client_name">거래처명</option>
@@ -31,7 +31,7 @@
 			<td colspan="3">정보가 존재하지 않습니다.</td>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.client_no }, '${vo.client_name}', '${vo.client_registeredno }', '${vo.client_manager }')">
+				<tr onclick="setParentText(${vo.client_no }, '${vo.client_name}', '${vo.client_registeredno }', '${vo.client_manager }', '${vo.client_representative }', '${vo.client_directno }', '${vo.businesstype_name }', '${vo.businesstype_subctgr }', '${vo.client_addr1 }', '${vo.client_addr2 }')">
 					<td>${vo.client_name}</td>
 					<td>${vo.client_registeredno }</td>
 					<td>${vo.client_manager }</td>
@@ -41,12 +41,12 @@
 </div>
 
 <script type="text/javascript">
-	function setParentText(no, name, rno, manager){
-		console.log(no);
+	function setParentText(no, name, register, manager, representative, directno, bname, subctgr, addr1, addr2){
     	opener.document.getElementById("client_no").value = no;
     	opener.document.getElementById("client_name").value = name;
-    	opener.document.getElementById("client_manager").value = manager;
-    	opener.document.getElementById("client_registeredno").value = rno;
+    	opener.document.getElementById("client_registeredno").value = register;
+    	opener.document.getElementById("client_representative").value = representative;
+    	opener.document.getElementById("client_directno").value = directno;
     	window.close();
     }
 	

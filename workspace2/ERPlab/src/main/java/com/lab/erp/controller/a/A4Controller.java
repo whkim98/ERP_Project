@@ -851,7 +851,7 @@ public class A4Controller {
 	@RequestMapping("/acList")
 	public String acList(String comcode_code, Model model, String type, String word, String team_code) {
 		Map<String, Object> map = new HashMap<>();
-		
+		System.out.println(team_code);
 		if(type == null || word == null) {
 			type = null;
 			word = null;

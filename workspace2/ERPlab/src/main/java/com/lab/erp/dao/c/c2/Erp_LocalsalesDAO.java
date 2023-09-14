@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 
 @Component
@@ -26,6 +27,10 @@ private SqlSession sqlSession;
 		return sqlSession.update("c2.updateLocalSales", vo);
 	}
 	
+	public int updateLocalPrice(Erp_LocalsalesVO vo) {
+		return sqlSession.update("c2.updateLocalPrice", vo);
+	}
+	
 	public int deleteLocalSales(int localsales_no) {
 		return sqlSession.delete("c2.deleteLocasSales", localsales_no);
 	}
@@ -36,6 +41,18 @@ private SqlSession sqlSession;
 	
 	public Map<String, Object> selectLocalSales(int localsales_no){
 		return sqlSession.selectOne("c2.selectLocalSales", localsales_no);
+	}
+	
+	public List<Erp_SettletypeVO> getCondition(){
+		return sqlSession.selectList("c2.getCondition");
+	}
+	
+	public List<Erp_SettletypeVO> getSettleList(){
+		return sqlSession.selectList("c2.getSettleList");
+	}
+	
+	public int getLocasCino(String localsales_cino) {
+		return sqlSession.selectOne("c2.getLocalCino", localsales_cino);
 	}
 	
 }

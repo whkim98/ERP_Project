@@ -20,6 +20,7 @@ import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.c.Erp_ClientVO;
+import com.lab.erp.vo.d.d1.Erp_BomVO;
 import com.lab.erp.vo.d.d1.Erp_ConnectrequestVO;
 import com.lab.erp.vo.d.d1.Erp_DefectiveVO;
 import com.lab.erp.vo.d.d1.Erp_EvaluationVO;
@@ -2274,6 +2275,364 @@ public class D1Controller {
 		}catch(NullPointerException e) {
 			return "사용 가능한 코드입니다.";
 		}
+	}
+	
+	
+//	bom
+	@RequestMapping("/d18/inputBom")
+	public String inputBom(Model model, String type, String word, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		map.put("goodssort_name1", "상품");
+		map.put("goodssort_name2", "반제품");
+		
+		List<Map<String, Object>> list = d1.itemList(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.D1 + "/d18/inputBom";
+	}
+	
+	@RequestMapping("/d18/bomAjax")
+	@ResponseBody
+	public List<Map<String, Object>> bomAjax(String type, String word, Erp_GoodsVO vo) {
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("goods_no", vo.getGoods_no());
+		
+		List<Map<String, Object>> blist = d1.bomList(map);
+		
+		if(blist.isEmpty()) {
+			blist = null;
+		}
+		
+		return blist;
+	}
+	
+	@RequestMapping("/d18/addForm")
+	public String addBom(String comcode_code, Model model) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		return ViewPath.D1 + "/d18/selectForm";
+	}
+	
+	@RequestMapping("/d18/updateForm")
+	public String updateFormBom(Erp_GoodsVO vo, Model model, String type, String word, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("goods_no", vo.getGoods_no());
+		
+		Map<String, Object> inmap = d1.selectItem(vo.getGoods_no());
+		
+		List<Map<String, Object>> blist = d1.bomList(map);
+		if(blist.isEmpty()) {
+			blist = null;
+		}
+		
+		model.addAttribute("inmap", inmap);
+		model.addAttribute("blist", blist);
+		
+		return ViewPath.D1 + "/d18/selectForm";
+	}
+	
+	@RequestMapping("/d18/createBom")
+	@Transactional
+	public String createBom(Erp_BomVO vo, String comcode_code, Model model, String goods_no) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		List<Erp_BomVO> blist = vo.getBlist();
+		
+		if(blist != null) {
+			for(Erp_BomVO bvo : blist) {
+				bvo.setComcode_no(comcode_no);
+				bvo.setGoods_no1(Integer.parseInt(goods_no));
+				
+				d1.createBom(bvo);
+			}
+		}
+		
+		return "redirect:/d/d1/d18/inputBom?comcode_code="+comcode_code;
+	}
+	
+	@RequestMapping("/d18/update")
+	@Transactional
+	public String updateBom(Erp_BomVO vo, String comcode_code, Model model, String goods_no) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		List<Erp_BomVO> blist = vo.getBlist();
+		List<Erp_BomVO> blist1 = vo.getBlist1();
+		
+		if(blist != null) {
+			for(Erp_BomVO bvo : blist) {
+				bvo.setComcode_no(comcode_no);
+				bvo.setGoods_no1(Integer.parseInt(goods_no));
+				
+				d1.createBom(bvo);
+			}
+		}
+		
+		if(blist1 != null) {
+			for(Erp_BomVO bvo : blist1) {
+				d1.updateBom(bvo);
+			}
+		}
+		
+		return "redirect:/d/d1/d18/updateForm?comcode_code="+comcode_code+"&goods_no="+Integer.parseInt(goods_no);
+	}
+	
+	@RequestMapping("/d18/deleteBom")
+	@ResponseBody
+	@Transactional
+	public List<Map<String, Object>> deleteBom(Erp_BomVO vo, Erp_GoodsVO gvo, String type, String word) {
+		d1.deleteBom(vo.getBom_no());
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("goods_no", gvo.getGoods_no());
+		
+		List<Map<String, Object>> blist = d1.bomList(map);
+		
+		return blist;
+	}
+	
+	@RequestMapping("/d18/itemList")
+	public String itemList(Model model, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", null);
+		map.put("word", null);
+		map.put("comcode_no", comcode_no);
+		map.put("goodssort_name1", "상품");
+		map.put("goodssort_name2", "반제품");
+		
+		List<Map<String, Object>> list = d1.itemList(map);
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "d/d1/d18/itemList";
+	}
+	
+	@RequestMapping("/d18/itemListAjax")
+	public List<Map<String, Object>> itemListAjax(String comcode_code, String type, String word) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		map.put("goodssort_name1", "원자재");
+		map.put("goodssort_name2", "부자재");
+		
+		List<Map<String, Object>> list = d1.itemList(map);
+		
+		return list;
+	}
+	
+	@RequestMapping("/d18/itemListAjaxF")
+	public List<Map<String, Object>> itemListAjaxF(String comcode_code, String type, String word) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		map.put("goodssort_name1", "상품");
+		map.put("goodssort_name2", "반제품");
+		
+		List<Map<String, Object>> list = d1.itemList(map);
+		
+		return list;
+	}
+	
+	@RequestMapping("/d18/goodsList")
+	public String goodsListd18(String type, String word, String comcode_code, Model model, String i) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		map.put("goodssort_name1", "원자재");
+		map.put("goodssort_name2", "부자재");
+		
+		List<Map<String, Object>> list = d1.itemList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i", i);
+		
+		return ViewPath.WINDOW + "d/d1/d18/goodsList";
+	}
+	@RequestMapping("/d18/goodsList1")
+	public String goodsListd181(String type, String word, String comcode_code, Model model, String i) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		map.put("goodssort_name1", "원자재");
+		map.put("goodssort_name2", "부자재");
+		
+		List<Map<String, Object>> list = d1.itemList(map);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("i", i);
+		
+		return ViewPath.WINDOW + "d/d1/d18/goodsList1";
 	}
 	
 }
