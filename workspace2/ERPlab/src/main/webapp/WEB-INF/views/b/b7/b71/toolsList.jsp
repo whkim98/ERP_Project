@@ -371,7 +371,7 @@ function teamname(){
                   	<label>기자재종류</label>
                   	<select name="toolstype_no">
                   		<c:forEach var="vo" items="${tlist }">
-                  			<option value="${vo.toolstype_no }" ${vo.toolstype_no == map.toolstype_no ? 'selected' : "" }>>
+                  			<option value="${vo.toolstype_no }" ${vo.toolstype_no == map.toolstype_no ? 'selected' : "" }>
                   				${vo.toolstype_name }
                   			</option>
                   		</c:forEach>

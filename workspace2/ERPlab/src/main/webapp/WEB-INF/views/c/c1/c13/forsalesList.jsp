@@ -234,6 +234,7 @@ function team(e, name){
       sendRequest(url, param, teamname, "POST");
    }
 }
+
 function teamname(){
    if(xhr.readyState==4 && xhr.status==200) {
       var data = xhr.response;

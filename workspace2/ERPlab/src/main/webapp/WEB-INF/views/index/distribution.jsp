@@ -13,7 +13,7 @@
 <h2>물류팀</h2>
 <br>
 	<input type="button" value="재고관리" onclick="location.href='${pageContext.request.contextPath}/stock?comcode_code=${comcode_code }'">
-	<input type="button" value="입출고관리" onclick="#">
+	<input type="button" value="입출고관리" onclick="location.href='${pageContext.request.contextPath}/management?comcode_code=${comcode_code }'">
 	<input type="button" value="폐기/물류 감소" onclick="#">
 </div>
 </body>
