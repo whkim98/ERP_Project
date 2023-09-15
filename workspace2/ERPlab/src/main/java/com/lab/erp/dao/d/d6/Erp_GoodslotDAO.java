@@ -64,4 +64,16 @@ private SqlSession sqlSession;
 	}
 	
 	
+	public Map<String, Object> selectGoods2(Map<String, Object> map){
+		return sqlSession.selectOne("d6.selectGoods2", map);
+	}
+	
+	public int updateGoodslot(Map<String, Object> map) {
+		return sqlSession.update("d6.updateGoodslot", map);
+	}
+	
+	public int deleteGoodslot(Map<String, Object> map) {
+		return sqlSession.delete("d6.deleteGoodslot", map);
+	}
+	
 }

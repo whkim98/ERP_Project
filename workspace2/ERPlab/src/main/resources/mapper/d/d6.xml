@@ -149,6 +149,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                and eg.goods_name like '%${word}%' 
             </if>
             <if test="type == 'goodslot_lot'">
+               and egl.goodslot_lot like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="selectGoods2" parameterType="map" resultType="map">
+		select * from erp_goodslot egl
+		left join erp_goods eg
+		on eg.goods_no = egl.goods_no
+		where comcode_no = #{comcode_no} 
+		and goodslot_no = #{goodslot_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goodslot_lot'">
                and eg.goodslot_lot like '%${word}%' 
             </if>
         </if>
@@ -193,5 +209,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectGoodsno" parameterType="String" resultType="int">
 		select goods_no from erp_goods where goods_code = #{goods_code}
 	</select>
+	
+	<update id="updateGoods2" parameterType="map">
+		update erp_goods set 
+		goods_code = #{goods_code},
+		goods_barcode = #{goods_barcode},
+		goods_name = #{goods_name},
+		goodskind_no = #{goodskind_no},
+		goods_customerprice = #{goods_customerprice},
+		goods_description = #{goods_description},
+		goodsst_no = #{goodsst_no},
+		client_no1 = #{client_no1},
+		client_no2 = #{client_no2},
+		goods_stockqty = #{goods_stockqty},
+		goodslev_no = #{goodslev_no}
+		where goods_no = #{goods_no}
+	</update>
+	
+	<update id="updateGoodslot" parameterType="map">
+		update erp_goodslot set 
+		goodslot_lot = #{goodslot_lot},
+		goodslot_qty = #{goodslot_qty},
+		goodslot_production = #{goodslot_production},
+		goodslot_expiry = #{goodslot_expiry},
+		goodslot_price = #{goodslot_price},
+		goodslot_tax = #{goodslot_tax},
+		goodslot_total = #{goodslot_total},
+		goods_no = #{goods_no} 
+		where goodslot_no = #{goodslot_no}
+	</update>
+	
+	<delete id="deleteGoodslot" parameterType="map">
+		delete from erp_goodslot where goodslot_no = #{goodslot_no}
+	</delete>
+	
+	<update id="updateQty" parameterType="map">
+		update erp_goods set goods_stockqty = #{goods_stockqty} where goods_no = #{goods_no}
+	</update>
 	
 </mapper>

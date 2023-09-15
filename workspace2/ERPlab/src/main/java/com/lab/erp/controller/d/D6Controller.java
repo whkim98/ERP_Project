@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lab.erp.service.d.D6Service;
 import com.lab.erp.service.login.LoginService;
@@ -46,6 +47,30 @@ public class D6Controller {
 		List<Map<String, Object>> list = d6.selectGoods(map);
 		model.addAttribute("list", list);
 		return "/d/d6/d61/goodsList";
+	}
+	
+	@RequestMapping("/stock/ajax")
+	@ResponseBody
+	public List<Map<String, Object>> stockAjax(Model model, String type, String word, String comcode_code) {
+		Map<String, Object> map = new HashMap<>();
+		if(type == null || word == null) {
+	         type = null;
+	         word = null;
+	      }
+	      
+	      int comcode_no = ls.comNo(comcode_code);
+	      
+	      map.put("comcode_no", comcode_no);
+	      map.put("word", word);
+	      map.put("type", type);
+	      
+	      List<Map<String, Object>> list = d6.selectGoods(map);
+	      if(list.isEmpty()) {
+		         list = null;
+		      }
+	      
+	      System.out.println(list);
+		  return list;
 	}
 	
 	@RequestMapping("/stock/insertForm")
@@ -121,13 +146,6 @@ public class D6Controller {
 	    
 	    d6.insertGoodslot(map2);
 	    
-	    System.out.println("테스트" + goodslot_lot[1]);
-	    System.out.println("테스트" + goodslot_qty[1]);
-	    System.out.println("테스트" + goodslot_production[1]);
-	    System.out.println("테스트" + goodslot_expiry[1]);
-	    System.out.println("테스트" + goodslot_price[1]);
-	    System.out.println("테스트" + goodslot_tax[1]);
-	    
 	    if(goodslot_price[1] != 0) {
 	    	Map<String, Object> map3 = new HashMap<>();
 		    map3.put("goodslot_lot", goodslot_lot[1]);
@@ -159,11 +177,120 @@ public class D6Controller {
 	}
 
 	@RequestMapping("/stock/updateQty")
-	public String stockUpdateqty(int goods_no, int goodslot_no) {
+	public String stockUpdateqty(@RequestParam(required = false) String comcode_code, @RequestParam(required = false) Integer goods_no, @RequestParam(required = false) Integer goodslot_no, @RequestParam(required = false) Integer goods_stockqty) {
+	    System.out.println("테스"+goods_no);
+	    System.out.println(goodslot_no);
+	    System.out.println(goods_stockqty);
+	    
+	    Map<String, Object> map = new HashMap<>();
+	    map.put("goods_no", goods_no);
+	    map.put("goods_stockqty", goods_stockqty);
+	    
+	    d6.updateQty(map);
+	    
+	    // 나머지 로직 추가
+	    return "redirect:/stock?comcode_code=" + comcode_code;
+	}
+	
+	@RequestMapping("/stock/updateForm")
+	public String stockupdateForm(Model model, String type, String word, String comcode_code, int goods_no, int goodslot_no) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("goodslot_no", goodslot_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		map = d6.selectGoods2(map);
+		
+		List<Erp_GoodskindVO> list = d6.selectGoodskind();
+		List<Erp_GoodsstVO> gslist = d6.selectGoodsst();
+		List<Erp_GoodslevVO> gllist = d6.selectGoodslev();
+		List<Erp_ClientVO> clist = d6.selectClient();
 		
 		
+		model.addAttribute("gslist", gslist);
+		model.addAttribute("gllist", gllist);
+		model.addAttribute("clist", clist);
+		model.addAttribute("list", list);
 		
+		model.addAttribute("goods_no", goods_no);
+		model.addAttribute("goodslot_no", goodslot_no);
+		model.addAttribute("map", map);
+		
+		return "/d/d6/d61/updateForm";
+	}
+	
+	@RequestMapping("/stock/update")
+	public String stockUpdate(String comcode_code, int goods_no, 
+			int goodslot_no, String goods_code, 
+			String goods_barcode, String goods_name, 
+			int goodskind_no, int goods_customerprice, 
+			int goodsst_no, int client_no1, int client_no2, 
+			int goods_stockqty, int goodslev_no, 
+			String goods_description, String goodslot_lot, 
+			int goodslot_qty, String goodslot_production, 
+			int goodslot_tax, int goodslot_price, 
+			String goodslot_expiry) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("goods_no", goods_no);
+		map.put("goods_code", goods_code);
+		map.put("goods_barcode", goods_barcode);
+		map.put("goods_name", goods_name);
+		map.put("goodskind_no", goodskind_no);
+		map.put("goods_customerprice", goods_customerprice);
+		map.put("goods_description", goods_description);
+		map.put("goodsst_no", goodsst_no);
+		map.put("client_no1", client_no1);
+		map.put("client_no2", client_no2);
+		map.put("goods_stockqty", goods_stockqty);
+		map.put("goodslev_no", goodslev_no);
+		map.put("comcode_no", comcode_no);
+		
+		d6.updateGoods2(map);
+		
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("goodslot_lot", goodslot_lot);
+		map2.put("goodslot_qty", goodslot_qty);
+		map2.put("goodslot_production", goodslot_production);
+		map2.put("goodslot_expiry", goodslot_expiry);
+		map2.put("goodslot_price", goodslot_price);
+		map2.put("goodslot_tax", goodslot_tax);
+		map2.put("goodslot_total", goodslot_price + goodslot_tax);
+		map2.put("goodslot_no", goodslot_no);
+		map2.put("goods_no", goods_no);
+		
+		d6.updateGoodslot(map2);
+		
+		return "redirect:/stock?comcode_code=" + comcode_code;
+		
+	}
+	
+	@RequestMapping("/stock/delete")
+	public String stockDelete(int goods_no, int goodslot_no, String comcode_code) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("goodslot_no", goodslot_no);
+		
+		d6.deleteGoodslot(map);
+		return "redirect:/stock?comcode_code=" + comcode_code;
+	}
+	
+	@RequestMapping("/management")
+	public String management() {
 		return "";
 	}
+
 
 }

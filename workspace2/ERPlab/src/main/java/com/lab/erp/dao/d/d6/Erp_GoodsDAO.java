@@ -109,4 +109,12 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d6.selectGoodsno", goods_code);
 	}
 	
+	public int updateGoods2(Map<String, Object> map) {
+		return sqlSession.update("d6.updateGoods2", map);
+	}
+	
+	public int updateQty(Map<String, Object> map) {
+		return sqlSession.update("d6.updateQty", map);
+	}
+	
 }

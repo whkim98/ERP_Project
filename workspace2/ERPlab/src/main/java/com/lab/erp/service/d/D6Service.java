@@ -69,4 +69,24 @@ public class D6Service {
 		return gdao.selectGoodsno(goods_code);
 	}
 	
+	public Map<String, Object> selectGoods2(Map<String, Object> map){
+		return gldao.selectGoods2(map);
+	}
+	
+	public int updateGoods2(Map<String, Object> map) {
+		return gdao.updateGoods2(map);
+	}
+	
+	public int updateGoodslot(Map<String, Object> map) {
+		return gldao.updateGoodslot(map);
+	}
+	
+	public int deleteGoodslot(Map<String, Object> map) {
+		return gldao.deleteGoodslot(map);
+	}
+	
+	public int updateQty(Map<String, Object> map) {
+		return gdao.updateQty(map);
+	}
+	
 }
