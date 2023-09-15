@@ -25,5 +25,6 @@ public class ViewPath {
 	
 	// intranet
 	public static final String CHAT = "intranet/chat/";
+	public static final String INTRANET = "intranet/";
 	
 }

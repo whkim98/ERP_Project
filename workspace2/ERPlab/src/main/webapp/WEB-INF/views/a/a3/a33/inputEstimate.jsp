@@ -48,13 +48,13 @@ function getlist(){
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="6">목록이 없습니다.</td></tr>';
 		}
 	}
 }
 </script>
 	<div class="notosanskr">
-		<div align="center">
+		<div class="dh_aligncenter">
 			<h1 style="font-size: 20pt;">실적 등록</h1>
 		</div>
 		<br>
@@ -77,10 +77,12 @@ function getlist(){
 					</tr>
 				</table>
 			</div>
-			<div>
+			<div class="dh_overflow">
 				<c:choose>
 					<c:when test="${list == null }">
-						등록된 계약이 없습니다.
+						<table>
+							<tr><td>등록된 계약이 없습니다.</td></tr>
+						</table>
 					</c:when>
 					<c:otherwise>
 						<table>
@@ -107,7 +109,7 @@ function getlist(){
 				</c:choose>
 			</div>
 	
-			<div align="center">
+			<div class="dh_alignright">
 				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/inputEstimate?comcode_code=${comcode_code }'">
 			</div>
 	
@@ -130,54 +132,52 @@ function getlist(){
 				<input type="hidden" name="project_no" id="project_no" value="${inmap.project_no }">
 				<input type="hidden" name="employee1_no" id="employee1_no" value="${inmap.employee1_no }">
 					<h3>${inmap.project_name } 평가 수정</h3>
-					<table>
-						<tr>
-							<td>평가점수 </td>
-							<td><input type="text" name="estimate_score" id="estimate_score" value="${inmap.estimate_score}"></td>
-						</tr>
-						<tr>
-							<td>평가내용 </td>
-							<td><input type="text" name="estimate_content" id="estimate_content" value="${inmap.estimate_content }"></td>
-						</tr>
-						<tr>
-							<td>평가결과 </td>
-							<td><input type="text" name="estimate_result" id="estimate_result" value="${inmap.estimate_result}"></td>
-						</tr>
-						<tr>
-							<td>최종마감일 </td>
-							<td><input type="text" name="estimate_fact" id="estimate_fact" value="${inmap.estimate_fact }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트명 </td>
-							<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" value="${inmap.project_name }">
-							<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
-						</tr>
-						<tr>
-							<td>상태 </td>
-							<td><input type="text" name="project_status" id="project_status" readonly="readonly" value="${inmap.project_status }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 내용 </td>
-							<td><input type="text" name="project_content" id="project_content" readonly="readonly" value="${inmap.project_content }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 기간 </td>
-							<td><input type="text" name="project_start" id="project_start" readonly="readonly" value="${inmap.project_start }"> ~ <input type="text" name="project_end" id="project_end" readonly="readonly" value="${inmap.project_end }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 담당팀 </td>
-							<td><input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }">
-							<input type="button" onclick="searcht()" value="조회"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 담당자 </td>
-							<td><input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')" value="${inmap.employee1_name }"></td>
-						</tr>
-						<tr>
-							<td>전화번호 </td>
-							<td><input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly" value="${inmap.employee1_phone }"></td>
-						</tr>
-					</table>
+					<div>
+						<label>평가점수 </label>
+						<input type="text" name="estimate_score" id="estimate_score" value="${inmap.estimate_score }" maxlength="3" min="0" class="required">
+					</div>
+					<div>
+						<label>평가내용 </label>
+						<input type="text" name="estimate_content" id="estimate_content" value="${inmap.estimate_content }" class="required">
+					</div>
+					<div>
+						<label>평가결과 </label>
+						<input type="text" name="estimate_result" id="estimate_result" value="${inmap.estimate_result }" class="required">
+					</div>
+					<div>
+						<label>최종마감일 </label>
+						<input type="date" name="estimate_fact" id="estimate_fact" value="${inmap.estimate_fact }" class="required">
+					</div>
+					<div>
+						<label>프로젝트명 </label>
+						<input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" value="${inmap.project_name }" class="required">
+						<input type="button" onclick="prList('${comcode_code}')" value="조회">
+					</div>
+					<div>
+						<label>상태 </label>
+						<input type="text" name="project_status" id="project_status" value="${inmap.project_status }" readonly="readonly">
+					</div>
+					<div>
+						<label>프로젝트 내용 </label>
+						<input type="text" name="project_content" id="project_content" value="${inmap.project_content }" readonly="readonly">
+					</div>
+					<div>
+						<label>프로젝트 기간 </label>
+						<input type="date" name="project_start" id="project_start" value="${inmap.project_start }" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" value="${inmap.project_end }" readonly="readonly">
+					</div>
+					<div>
+						<label>평가 담당팀 </label>
+						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }" class="required">
+						<input type="button" onclick="searcht()" value="조회">
+					</div>
+					<div>
+						<label>담당자 </label>
+						<input type="text" name="employee1_name" id="employee1_name" value="${inmap.team_name }" onkeypress="searchemp(event, '${comcode_code}')" class="required">
+					</div>
+					<div>
+						<label>전화번호 </label>
+						<input type="text" name="employee1_phone" id="employee1_phone" value="${inmap.employee1_phone }" readonly="readonly">
+					</div>
 					
 					<input type="button" value="update" onclick="sub(this.form)">
 					<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/delete?estimate_no=${inmap.estimate_no }&comcode_code=${comcode_code }'">
@@ -193,77 +193,100 @@ function getlist(){
 				<input type="hidden" name="team_no" id="team_no">
 				<input type="hidden" name="employee1_no" id="employee1_no">
 					<h3>계약 등록 사항</h3>
-					<table>
-						<tr>
-							<td>평가점수 </td>
-							<td><input type="text" name="estimate_score" id="estimate_score"></td>
-						</tr>
-						<tr>
-							<td>평가내용 </td>
-							<td><input type="text" name="estimate_content" id="estimate_content"></td>
-						</tr>
-						<tr>
-							<td>평가결과 </td>
-							<td><input type="text" name="estimate_result" id="estimate_result"></td>
-						</tr>
-						<tr>
-							<td>최종마감일 </td>
-							<td><input type="date" name="estimate_fact" id="estimate_fact"></td>
-						</tr>
-						<tr>
-							<td>프로젝트명 </td>
-							<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')">
-							<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
-						</tr>
-						<tr>
-							<td>상태 </td>
-							<td><input type="text" name="project_status" id="project_status" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 내용 </td>
-							<td><input type="text" name="project_content" id="project_content" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 기간 :</td>
-							<td><input type="date" name="project_start" id="project_start" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>평가 담당팀 </td>
-							<td><input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
-							<input type="button" onclick="searcht()" value="조회"></td>
-						</tr>
-						<tr>
-							<td>담당자 </td>
-							<td><input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')"></td>
-						</tr>
-						<tr>
-							<td>전화번호 </td>
-							<td><input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly"></td>
-						</tr>
-					</table>
-					
-					<input type="button" value="save" onclick="sub(this.form)">
-					<input type="reset" value="reset">
+					<div>
+						<label>평가점수 </label>
+						<input type="text" name="estimate_score" id="estimate_score" maxlength="3" min="0" class="required">
+					</div>
+					<div>
+						<label>평가내용 </label>
+						<input type="text" name="estimate_content" id="estimate_content" class="required">
+					</div>
+					<div>
+						<label>평가결과 </label>
+						<input type="text" name="estimate_result" id="estimate_result" class="required">
+					</div>
+					<div>
+						<label>최종마감일 </label>
+						<input type="date" name="estimate_fact" id="estimate_fact" class="required">
+					</div>
+					<div>
+						<label>프로젝트명 </label>
+						<input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" class="required">
+						<input type="button" onclick="prList('${comcode_code}')" value="조회">
+					</div>
+					<div>
+						<label>상태 </label>
+						<input type="text" name="project_status" id="project_status" readonly="readonly">
+					</div>
+					<div>
+						<label>프로젝트 내용 </label>
+						<input type="text" name="project_content" id="project_content" readonly="readonly">
+					</div>
+					<div>
+						<label>프로젝트 기간 </label>
+						<input type="date" name="project_start" id="project_start" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" readonly="readonly">
+					</div>
+					<div>
+						<label>평가 담당팀 </label>
+						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" class="required">
+						<input type="button" onclick="searcht()" value="조회">
+					</div>
+					<div>
+						<label>담당자 </label>
+						<input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')" class="required">
+					</div>
+					<div>
+						<label>전화번호 </label>
+						<input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly">
+					</div>
+					<div>
+						<input type="button" value="save" onclick="sub(this.form)">
+						<input type="reset" value="reset">
+					</div>
 				</form>
 			</div>
 		</c:if>
 		
 	</div>
 	<script type="text/javascript">
+	
+	var now_utc = Date.now() // 지금 날짜를 밀리초로
+	//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+	var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+	//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+	var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+	var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+	document.getElementById("estimate_fact").setAttribute("min", end+"-01-01");
+	document.getElementById("estimate_fact").setAttribute("max", end+"-12-31");
+	
+	var pat = /^[0-9]{0,8}$/;
 
 	function sub(f){
-		if(f.estimate_result.value == ""){
-			f.estimate_result.focus();
+		if(!pat.test(f.estimate_score.value)){
+			alert("숫자로만 입력 가능합니다.");
+			f.estimate_score.value = '';
+			f.estimate_score.focus();
+			return;
+		}
+		
+		if(f.estimate_score.value == ""){
+			f.estimate_score.focus();
+			return;
 		}else if(f.estimate_content.value == ""){
 			f.estimate_content.focus();
-		}else if(f.estimate_score.value == ""){
-			f.estimate_score.focus();
+			return;
+		}else if(f.estimate_result.value == ""){
+			f.estimate_result.focus();
+			return;
 		}else if(f.project_name.value == ""){
 			f.project_name.focus();
+			return;
 		}else if(f.team_name.value == ""){
 			f.team_name.focus();
+			return;
 		}else if(f.employee1_name.value == ""){
 			f.employee1_name.focus();
+			return;
 		}
 		
 		if(f.estimate_fact.value = ""){

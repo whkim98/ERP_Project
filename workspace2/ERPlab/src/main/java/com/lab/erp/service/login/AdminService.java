@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.login.Erp_AdminDAO;
 import com.lab.erp.dao.login.Erp_EmployeeDAO;
+import com.lab.erp.vo.all.Erp_ComcodeVO;
 import com.lab.erp.vo.login.Erp_AdminVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 import com.lab.erp.vo.login.Erp_Employee2VO;
@@ -60,6 +61,10 @@ private Erp_EmployeeDAO edao;
 	
 	public List<Erp_TeamVO> teamList(Map<String, Object> map){
 		return dao.teamList(map);
+	}
+	
+	public String getComcodeName(String comcode_code) {
+		return dao.getComcodeName(comcode_code);
 	}
 	
 	

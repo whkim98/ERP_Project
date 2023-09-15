@@ -59,10 +59,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 전체 admin 계정 리스트 -->
 	<select id="adminList" resultType="map" parameterType="map">
-		select a.*, t.team_name, d.dept_name from erp_admin a, erp_team t, erp_dept d 
+		select a.*, t.team_name, d.dept_name from erp_admin a, erp_team t, erp_dept d  
 		where d.dept_no = t.dept_no 
 		and a.team_no = t.team_no 
 		and a.comcode_no = #{comcode_no} 
+	</select>
+	
+	<select id="getComcodeName" parameterType="String" resultType="String">
+		select comcode_name from erp_comcode where comcode_code = #{comcode_code}
 	</select>
 	
 	<!-- admin 계정 하나의 정보 > 팀, 부서명까지 출력 -->

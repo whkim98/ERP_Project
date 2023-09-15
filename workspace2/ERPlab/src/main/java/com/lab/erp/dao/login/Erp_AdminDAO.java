@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.lab.erp.vo.all.Erp_ComcodeVO;
 import com.lab.erp.vo.login.Erp_AdminVO;
 import com.lab.erp.vo.login.Erp_TeamVO;
 
@@ -67,5 +68,9 @@ private SqlSession sqlSession;
 	
 	public List<Erp_TeamVO> teamList(Map<String, Object> map){
 		return sqlSession.selectList("admin.teamList", map);
+	}
+	
+	public String getComcodeName(String comcode_code) {
+		return sqlSession.selectOne(comcode_code);
 	}
 }

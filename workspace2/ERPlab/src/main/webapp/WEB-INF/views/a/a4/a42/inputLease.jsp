@@ -4,54 +4,6 @@
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/dh/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/company.css" />
-
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-}
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: #000;
-	background-color: #000;
-}
-</style>
-
-
 <script type="text/javascript" charset="UTF-8">
 
 function surf(v, code){
@@ -352,7 +304,7 @@ function selectForm(no, bno1, bno2){
 
 
 	<div class="notosanskr">
-		<div align="center">
+		<div class="dh_aligncenter">
 			<h1 style="font-size: 20pt;">자금 조달</h1>
 		</div>
 		<div class="divform2">
@@ -378,7 +330,7 @@ function selectForm(no, bno1, bno2){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_overflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -399,7 +351,7 @@ function selectForm(no, bno1, bno2){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
+			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a42?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
@@ -536,7 +488,7 @@ function selectForm(no, bno1, bno2){
 							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500" class="required">
 						</div>	
 						
-						<div align="right">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
 						</div>

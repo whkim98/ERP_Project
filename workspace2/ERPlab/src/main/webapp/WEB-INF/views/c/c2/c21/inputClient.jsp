@@ -1,67 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 <script type="text/javascript" charset="UTF-8">
 
 function surf(v, code){
@@ -177,7 +116,7 @@ function clientsortname(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
+		<div class="dh_aligncenter">
 			<h1 style="font-size: 20pt;">거래처 관리</h1>
 		</div>
 		<div class="divform2">
@@ -203,7 +142,7 @@ function clientsortname(){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_overflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -224,7 +163,7 @@ function clientsortname(){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
+			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c21?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
@@ -340,7 +279,7 @@ function clientsortname(){
 							<input type="text" name="client_email" id="client_email" value="${inmap.client_email }" class="required">
 						</div>	
 						
-						<div align="right">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei(${inmap.client_no }, '${comcode_code }')">
 						</div>
@@ -443,7 +382,7 @@ function clientsortname(){
 							<input type="text" name="client_email" id="client_email" class="required">
 						</div>	
 						
-						<div align="right">
+						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
 							<input type="reset" value="reset">
 						</div>

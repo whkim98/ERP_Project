@@ -63,11 +63,19 @@
 	transform: translate(-50%, -50%);
 }
 
+.dh_alignrightsave {
+	position: absolute;
+	left: 77%;
+	transform: translate(-50%, -50%);
+}
+
 .required {
 	background-color : lightyellow !important;
 }
 
-
+.dh_overflow {
+	overflow: scroll;
+}
 
 
 

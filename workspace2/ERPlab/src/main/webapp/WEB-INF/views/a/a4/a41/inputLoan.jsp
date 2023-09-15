@@ -1,67 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/company.css"/>
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 <script type="text/javascript" charset="UTF-8">
 
 function surf(v, code){		// list ajax 함수 > A4Controller, a4.xml(investmentList select문)
@@ -182,7 +121,7 @@ function teamname(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
+		<div class="dh_aligncenter">
 			<h1 style="font-size: 20pt;">자금 조달</h1>
 		</div>
 		<div class="divform2">
@@ -208,7 +147,7 @@ function teamname(){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_overflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -229,7 +168,7 @@ function teamname(){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
+			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
@@ -319,7 +258,7 @@ function teamname(){
 						
 						<div>
 							<label>계좌번호 </label>
-							<td><input type="text" name="account_num" id="account_num" value="${avo.account_num }" readonly="readonly">
+							<input type="text" name="account_num" id="account_num" value="${avo.account_num }" readonly="readonly">
 						</div>
 						
 						<div>
@@ -366,7 +305,7 @@ function teamname(){
 							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500" class="required">
 						</div>	
 						
-						<div align="right">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
 						</div>

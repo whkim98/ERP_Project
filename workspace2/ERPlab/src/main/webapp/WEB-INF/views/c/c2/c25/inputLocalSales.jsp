@@ -2,61 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 
-<%@include file="/WEB-INF/views/layout/header.jsp" %>
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-}
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -136,7 +82,7 @@ function getlist(){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_overflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>

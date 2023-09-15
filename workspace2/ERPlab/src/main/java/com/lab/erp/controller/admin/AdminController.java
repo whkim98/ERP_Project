@@ -62,6 +62,8 @@ public class AdminController {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
+		String comcode_name = as.getComcodeName(comcode_code);
+		
 		int comcode_no = ls.comNo(comcode_code);
 		
 		Map<String, Object> map = new HashMap<>();
@@ -81,8 +83,9 @@ public class AdminController {
 			teamList = null;
 		}
 		
-		model.addAttribute("list", list);
-		model.addAttribute("teamList", teamList);
+		model.addAttribute("list", list);						// admin계정 list
+		model.addAttribute("teamList", teamList);				// admin계정 등록 시 권한 부여할 때 띄울 erp_team List
+		model.addAttribute("comcode_name", comcode_name);		// 고객사 이름
 		
 		return ViewPath.ADMIN + "inputAdmin";
 	}
@@ -146,6 +149,8 @@ public class AdminController {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
+		String comcode_name = as.getComcodeName(comcode_code);
+		
 		int comcode_no = ls.comNo(comcode_code);
 		
 		Map<String, Object> map = new HashMap<>();
@@ -168,9 +173,10 @@ public class AdminController {
 			list = null;
 		}
 		
-		model.addAttribute("list", list);
-		model.addAttribute("teamList", teamList);
-		model.addAttribute("selectAdmin", selectAdmin);
+		model.addAttribute("list", list);							// inputAdmin과 같은 페이지에서 띄울 admin계정 List
+		model.addAttribute("teamList", teamList);					// 같은 페이지에서 권한 부여할 때 선택할 erp_team List
+		model.addAttribute("selectAdmin", selectAdmin);				// admin List에서 선택한 사람의 정보
+		model.addAttribute("comcode_name", comcode_name);			// 고객사 이름
 		
 		return ViewPath.ADMIN + "inputAdmin";
 	}
@@ -195,7 +201,7 @@ public class AdminController {
 		
 		as.createAdmin(vo);
 		
-		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;
+		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;			// insert되는 순간 admin계정 List에 추가된 상태로 등록창 띄움
 	}
 	
 	@RequestMapping("/updateAdmin")
@@ -214,7 +220,7 @@ public class AdminController {
 		
 		as.updateAdmin(vo);
 		
-		return "redirect:/admin/updateFormAdmin?admin_no="+vo.getAdmin_no()+"&comcode_code="+comcode_code;
+		return "redirect:/admin/updateFormAdmin?admin_no="+vo.getAdmin_no()+"&comcode_code="+comcode_code;		// update되는 순간 update된 admin 정보 띄움
 	}
 	
 	@RequestMapping("/deleteAdmin")
@@ -233,7 +239,7 @@ public class AdminController {
 		
 		as.deleteAdmin(vo.getAdmin_no());
 		
-		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;
+		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;					// delete되는 순간 admin계정 List에 삭제된 상태로 등록창 띄움
 	}
 	
 	
@@ -257,6 +263,8 @@ public class AdminController {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
+		String comcode_name = as.getComcodeName(comcode_code);
+		
 		int comcode_no = ls.comNo(comcode_code);
 		
 		Map<String, Object> map = new HashMap<>();
@@ -268,8 +276,9 @@ public class AdminController {
 		List<Erp_TeamVO> teamList = as.teamList(map);
 		List<Map<String, Object>> list = as.EmpList(map);
 		
-		model.addAttribute("teamList", teamList);
-		model.addAttribute("list", list);
+		model.addAttribute("comcode_name", comcode_name);				// 고객사 이름
+		model.addAttribute("teamList", teamList);						// 직원 계정 등록 시 선택할 erp_team List
+		model.addAttribute("list", list);								// 직원 List
 		
 		return ViewPath.ADMIN + "inputEmployee";
 	}
@@ -293,6 +302,8 @@ public class AdminController {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
+		String comcode_name = as.getComcodeName(comcode_code);
+		
 		int comcode_no = ls.comNo(comcode_code);
 		
 		Map<String, Object> map = new HashMap<>();
@@ -303,13 +314,13 @@ public class AdminController {
 		
 		List<Erp_TeamVO> teamList = as.teamList(map);
 		List<Map<String, Object>> list = as.EmpList(map);
-		
-		model.addAttribute("teamList", teamList);
-		model.addAttribute("list", list);
-		
 		Map<String, Object> selectEmployee = as.selectEmp(vo.getEmployee2_no());
 		
-		model.addAttribute("selectEmployee", selectEmployee);
+		
+		model.addAttribute("comcode_name", comcode_name);
+		model.addAttribute("teamList", teamList);
+		model.addAttribute("list", list);
+		model.addAttribute("selectEmployee", selectEmployee);			// 직원List에서 선택한 직원의 정보
 		
 		return ViewPath.ADMIN + "inputEmployee";
 	}

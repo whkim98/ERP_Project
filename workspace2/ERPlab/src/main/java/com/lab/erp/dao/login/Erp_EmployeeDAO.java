@@ -20,15 +20,19 @@ public class Erp_EmployeeDAO {
 	}
 	
 	public int checkEmp(Map<String, Object> map) {
-		return sqlSession.selectOne("admin.checkEmp", map);
+		return sqlSession.selectOne("login.checkEmp", map);
 	}
 	
 	public String findEmpId(Map<String, Object> map) {
-		return sqlSession.selectOne("admin.findEmpId", map);
+		return sqlSession.selectOne("login.findEmpId", map);
 	}
 	
 	public String findEmpPw(Map<String, Object> map) {
-		return sqlSession.selectOne("admin.findEmpPw", map);
+		return sqlSession.selectOne("login.findEmpPw", map);
+	}
+	
+	public Map<String, Object> getEmpName(String employee1_id) {
+		return sqlSession.selectOne("login.getEmpName", employee1_id);
 	}
 	
 	public int emp1MaxNo() {

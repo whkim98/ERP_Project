@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,81 +18,50 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lab.erp.common.ViewPath;
+import com.lab.erp.service.intranet.IntranetService;
 import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.all.Erp_ComcodeVO;
+import com.lab.erp.vo.login.Erp_Employee1VO;
 
 
 @Controller
+@RequestMapping("/intranet")
 public class IntranetLoginController {
-	private LoginService login;
+	private LoginService ls;
+	private IntranetService is;
 
-	/*
 	@Autowired
 	public IntranetLoginController(LoginService ls) {
 		this.ls = ls;
 	}
 	
-	@RequestMapping("/login/check")
-	public String check(HttpServletRequest request, String admin_id, String admin_pw, String comcode_code) {
+	@RequestMapping("/")
+	public String intranetMain() {
+		return ViewPath.INTRANET + "main";
+	}
+	
+	@RequestMapping("/check")
+	public String check(HttpServletRequest request, Erp_Employee1VO vo, String comcode_code) {
 		try {
 			Map<String, Object> map = new HashMap<>();
 			
-			System.out.println(comcode_code);
-			int comcode_no = ls.comNo(comcode_code);
+			map.put("emploee1_id", vo.getEmployee1_id());
+			map.put("emploee1_pw", vo.getEmployee1_pw());
 			
-			System.out.println(comcode_no);
-			map.put("admin_id", admin_id);
-			map.put("admin_pw", admin_pw);
-			map.put("comcode_no", comcode_no);
+			ls.checkEmp(map);
 			
-			int su = ls.checkAdmin(map);
+			Map<String, Object> name = is.getEmpName(vo.getEmployee1_id());
 			
 			String msg = null;
 			String url = null;
 			
-			switch(su) {
-			case 1: request.getSession().setAttribute("login", su); msg = "관리자로 로그인 하셨습니다"; 
-			url = "/index"; break;
-			case 2: request.getSession().setAttribute("login", su); msg = "기획본부장으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 3: request.getSession().setAttribute("login", su); msg = "경영기획팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 4: request.getSession().setAttribute("login", su); msg = "전략기획팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 5: request.getSession().setAttribute("login", su); msg = "관리본부장으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 6: request.getSession().setAttribute("login", su); msg = "회계팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 7: request.getSession().setAttribute("login", su); msg = "재무팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 8: request.getSession().setAttribute("login", su); msg = "인사팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 9: request.getSession().setAttribute("login", su); msg = "총무팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 10: request.getSession().setAttribute("login", su); msg = "영업본부장으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 11: request.getSession().setAttribute("login", su); msg = "해외영업팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 12: request.getSession().setAttribute("login", su); msg = "국내영업팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 13: request.getSession().setAttribute("login", su); msg = "매장영업팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 14: request.getSession().setAttribute("login", su); msg = "영업관리팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 15: request.getSession().setAttribute("login", su); msg = "지원본부장으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 16: request.getSession().setAttribute("login", su); msg = "생산팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 17: request.getSession().setAttribute("login", su); msg = "구매팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			case 18: request.getSession().setAttribute("login", su); msg = "품질관리팀으로 로그인 하셨습니다";
-			url = "/index"; break;	
-			case 19: request.getSession().setAttribute("login", su); msg = "물류팀으로 로그인 하셨습니다";
-			url = "/index"; break;
-			default: msg = "신설 팀입니다"; request.getSession().setAttribute("login", su); 
-			url = "/index"; break;
-			}
-			System.out.println(request.getSession().getAttribute("login"));
+			msg = name + "님이 로그인 하셨습니다.";
+			url = "/index";
+			
+			request.getSession().setAttribute("chatNickName", name.get("team_name") + " " + name.get("employee1_name"));
+			request.getSession().setAttribute("empNo", name.get("employee2_no"));
+			
+			System.out.println(request.getSession().getAttribute("chatNickName"));
 			request.getSession().setAttribute("comcode_code", comcode_code);
 			request.setAttribute("msg", msg);
 			request.setAttribute("url", url);
@@ -108,32 +78,30 @@ public class IntranetLoginController {
 		}
 		
 	}
-	
-	@RequestMapping("/login/searchcode")
-	public String searchcode(Model model, String type, String word) {
-		
-		if(type == null || word == null) {
-			type = null;
-			word = null;
-		}
-		
-		Map<String, Object> map = new HashMap<>();
-		map.put("type", type);
-		map.put("word", word);
-		
-		
-		List<Erp_ComcodeVO> list = ls.comCodeList(map);
-		model.addAttribute("list", list);
-		return "window/comcode";
-	}
 		
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.invalidate();
+		session.removeAttribute("empNo");
+		session.removeAttribute("chatNickName");
 		
 	    return "redirect:/"; 
 	}
 	
-*/
+	@RequestMapping("/inputPw")
+	public String inputPw(Erp_Employee1VO vo, Model model) {
+		Map<String, Object> map = is.selectEmp(vo.getEmployee2_no());
+		
+		model.addAttribute("map", map);
+		
+		return ViewPath.INTRANET + "inputPw";
+	}
+	
+	@RequestMapping("/updatePw")
+	@Transactional
+	public String updatePw(Erp_Employee1VO vo, Model model) {
+		is.updateEmpPw(vo);
+		
+		return "redirect:/intranet/inputPw?employee2_no="+vo.getEmployee2_no();
+	}
     
 }

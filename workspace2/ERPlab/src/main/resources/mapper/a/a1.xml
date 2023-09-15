@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.a1.A1Repository">
 	<select id="findAll_company" resultType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
-	 	SELECT * FROM erp_company ORDER BY company_no DESC;
+	 	SELECT * FROM erp_company ORDER BY company_no DESC
 	</select>
 	
 	<insert id="save_company" flushCache="true" parameterType="com.lab.erp.vo.a.a1.Erp_CompanyVO" keyProperty="company_no" useGeneratedKeys="true" keyColumn="company_no">

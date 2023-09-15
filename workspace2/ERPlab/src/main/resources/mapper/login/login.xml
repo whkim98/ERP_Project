@@ -25,6 +25,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		employee1_id = #{employee1_id} and employee1_pw = #{employee1_pw}
 	</select>
 	
+	<select id="getEmpName" parameterType="String" resultType="map">
+		select e.*, e2.*, t.* from erp_employee1 e, erp_employee2 e2, erp_team t 
+		where e.employee1_id = #{employee1_id} 
+		and e.employee1_no = e2.employee1_no 
+		and e2.team_no = t.team_no 
+	</select>
+	
 	<!-- employee 계정 ID 찾기 -->
 	<select id="findEmpId" parameterType="map" resultType="String">
 		select e1.employee1_id from erp_employee1 e1, erp_employee2 e2 where 
@@ -35,8 +42,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- employee 계정 PW 찾기 -->
 	<select id="findEmpPw" parameterType="map" resultType="String">
 		select e1.employee1_pw from erp_employee1 e1, erp_employee2 e2 where 
-		e1.employee1_no = e2.employee1_no and e2.team_no = #{team_no} and e1.employee1_name = #{employee1_name}
-		and e1.employee1_residentno = #{employee1_residentno} and e1.employee1_id = #{employee1_id}
+		e1.employee1_no = e2.employee1_no 
+		and e2.team_no = #{team_no} 
+		and e1.employee1_name = #{employee1_name}
+		and e1.employee1_residentno = #{employee1_residentno} 
+		and e1.employee1_id = #{employee1_id}
 	</select>
 	
 	<select id = "findComCode" parameterType="int" resultType="String">

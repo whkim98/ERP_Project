@@ -151,41 +151,44 @@ function getlist(){
 					</tr>
 				</table>
 			</div>
-			<c:choose>
-				<c:when test="${list == null }">
-					프로젝트 목록이 없습니다.
-				</c:when>
-				<c:otherwise>
-					<table id="procode">
-						<tr>
-							<td>코드</td>
-							<td>종류</td>
-							<td>이름</td>
-							<td>상태</td>
-							<td>담당자</td>
-							<td>진행팀</td>
-						</tr>
-					<c:forEach var="map" items="${list }">
-						<tr onclick="selectForm(${map.project_no})">
-							<td>${map.project_no }</td>
-							<td>${map.projectkind_name }</td>
-							<td>${map.project_name }</td>
-							<c:if test="${map.project_status == 0}">
-								<td>미완료</td>
-							</c:if>
-							<c:if test="${map.project_status == 1}">
-								<td>완료</td>
-							</c:if>
-							<c:if test="${map.project_status == 2}">
-								<td>진행중</td>
-							</c:if>
-							<td>${map.employee1_name }</td>
-							<td>${map.team_name }</td>
-						</tr>
-					</c:forEach>
-					</table>
-				</c:otherwise>
-			</c:choose>
+			
+			<div class="dh_overflow">
+				<c:choose>
+					<c:when test="${list == null }">
+						프로젝트 목록이 없습니다.
+					</c:when>
+					<c:otherwise>
+						<table id="procode">
+							<tr>
+								<td>코드</td>
+								<td>종류</td>
+								<td>이름</td>
+								<td>상태</td>
+								<td>담당자</td>
+								<td>진행팀</td>
+							</tr>
+						<c:forEach var="map" items="${list }">
+							<tr onclick="selectForm(${map.project_no})">
+								<td>${map.project_no }</td>
+								<td>${map.projectkind_name }</td>
+								<td>${map.project_name }</td>
+								<c:if test="${map.project_status == 0}">
+									<td>미완료</td>
+								</c:if>
+								<c:if test="${map.project_status == 1}">
+									<td>완료</td>
+								</c:if>
+								<c:if test="${map.project_status == 2}">
+									<td>진행중</td>
+								</c:if>
+								<td>${map.employee1_name }</td>
+								<td>${map.team_name }</td>
+							</tr>
+						</c:forEach>
+						</table>
+					</c:otherwise>
+				</c:choose>
+			</div>
 			<div class="dh_alignright">
 				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code }'">
 			</div>
@@ -208,65 +211,63 @@ function getlist(){
 				<input type="hidden" name="project_no" id="project_no" value="${inmap.project_no}">
 				<input type="hidden" name="projectkind_no" id="projectkind_no" value="${inmap.projectkind_no}">
 					<h3>프로젝트</h3>
-					<table>
-						<tr>
-							<td>프로젝트명 </td>
-							<td><input type="text" name="project_name" id="project_name" value="${inmap.project_name }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 기간 </td>
-							<td><input type="date" name="project_start" id="project_start" value="${inmap.project_start}" onchange="startcheck(this.value)"> ~ 
-							<input type="date" name="project_end" id="project_end" value="${inmap.project_end }"></td>
-						</tr>
-						<tr>
-							<td>원청 회사 </td>
-							<td><input type="text" name="project_contractor" id="project_contractor" value="${inmap.project_contractor }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 예산 </td>
-							<td><input type="text" name="project_budget" id="project_budget" value="${inmap.project_budget }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 종류 </td>
-							<td><input type="text" name="projectkind_name" id="projectkind_name" value="${inmap.projectkind_name }" onkeypress="kind(event, this.value)">
-							<input type="button" onclick="searchpk()" value="조회"></td>
-						</tr>
-						<tr>
-							<td>내용 </td>
-							<td><input type="text" name="project_content" id="project_content" value="${inmap.project_content }"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 담당자 </td>
-							<td><input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="searchemp('${comcode_code}')" readonly="readonly">
-							<input type="hidden" name="employee1_no" id="employee1_no" value="${inmap.employee1_no }"></td>
-						</tr>
-						<tr>
-							<td>전화번호 </td>
-							<td><input type="text" name="employee1_phone" id="employee1_phone" value="${inmap.employee1_phone }" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>직급 </td>
-							<td><input type="text" name="employee2_position" id="employee2_position" value="${inmap.employee2_position }" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 담당팀 </td>
-							<td><input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeypress="team(event, this.value)">
-							<input type="button" onclick="searcht()" value="조회">
-							<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }"></td>
-						</tr>
-						<tr>
-							<td>상태 </td>
-							<td>
-								<select name="project_status" id="project_status">
-									<option value="0" ${inmap.project_status == 0 ? 'selected' : '' }>미완료</option>
-									<option value="1" ${inmap.project_status == 1 ? 'selected' : '' }>완료</option>
-									<option value="2" ${inmap.project_status == 2 ? 'selected' : '' }>진행중</option>
-								</select>
-							</td>
-						</tr>
-					</table>
-					<input type="button" value="update" onclick="sub(this.form)">
-					<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/delete?project_no=${inmap.project_no }&comcode_code=${comcode_code }'">
+					<div>
+						<label>프로젝트명 </label>
+						<input type="text" name="project_name" id="project_name" value="${inmap.project_name }">
+					</div>
+					<div>
+						<label>프로젝트 기간 </label>
+						<input type="date" name="project_start" id="project_start" value="${inmap.project_start}" onchange="startcheck(this.value)"> ~ 
+						<input type="date" name="project_end" id="project_end" value="${inmap.project_end }">
+					</div>
+					<div>
+						<label>원청 회사 </label>
+						<input type="text" name="project_contractor" id="project_contractor" value="${inmap.project_contractor }">
+					</div>
+					<div>
+						<label>프로젝트 예산 </label>
+						<input type="text" name="project_budget" id="project_budget" value="${inmap.project_budget }">
+					</div>
+					<div>
+						<label>프로젝트 종류 </label>
+						<input type="text" name="projectkind_name" id="projectkind_name" value="${inmap.projectkind_name }" onkeypress="kind(event, this.value)">
+						<input type="button" onclick="searchpk()" value="조회">
+					</div>
+					<div>
+						<label>내용 </label>
+						<input type="text" name="project_content" id="project_content" value="${inmap.project_content }">
+					</div>
+					<div>
+						<label>프로젝트 담당자 </label>
+						<input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="searchemp('${comcode_code}')" readonly="readonly">
+						<input type="hidden" name="employee1_no" id="employee1_no" value="${inmap.employee1_no }">
+					</div>
+					<div>
+						<label>전화번호 </label>
+						<input type="text" name="employee1_phone" id="employee1_phone" value="${inmap.employee1_phone }" readonly="readonly">
+					</div>
+					<div>
+						<label>직급 </label>
+						<input type="text" name="employee2_position" id="employee2_position" value="${inmap.employee2_position }" readonly="readonly">
+					</div>
+					<div>
+						<label>프로젝트 담당팀 </label>
+						<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeypress="team(event, this.value)">
+						<input type="button" onclick="searcht()" value="조회">
+						<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
+					</div>
+					<div>
+						<label>상태 </label>
+						<select name="project_status" id="project_status">
+							<option value="0" ${inmap.project_status == 0 ? 'selected' : '' }>미완료</option>
+							<option value="1" ${inmap.project_status == 1 ? 'selected' : '' }>완료</option>
+							<option value="2" ${inmap.project_status == 2 ? 'selected' : '' }>진행중</option>
+						</select>
+					</div>
+					<div>
+						<input type="button" value="update" onclick="sub(this.form)">
+						<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/delete?project_no=${inmap.project_no }&comcode_code=${comcode_code }'">
+					</div>
 				</form>
 			</div>
 		</c:if>
@@ -277,65 +278,63 @@ function getlist(){
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 				<input type="hidden" name="projectkind_no" id="projectkind_no">
 					<h3>프로젝트 등록 사항</h3>
-					<table>
-						<tr>
-							<td>프로젝트명 </td>
-							<td><input type="text" name="project_name" id="project_name"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 기간 </td>
-							<td><input type="date" name="project_start" id="project_start" onchange="startcheck(this.value)"> ~ <input type="date" name="project_end" id="project_end"></td>
-						</tr>
-						<tr>
-							<td>원청 회사 </td>
-							<td><input type="text" name="project_contractor" id="project_contractor"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 예산 </td>
-							<td><input type="text" name="project_budget" id="project_budget"></td>
-						</tr>
-						
-						<tr>
-							<td>프로젝트 종류 </td>
-							<td><input type="text" name="projectkind_name" id="projectkind_name" onkeypress="kind(event, this.value)">
-							<input type="button" onclick="searchpk()" value="조회"></td>
-						</tr>
-						<tr>
-							<td>내용 </td>
-							<td><input type="text" name="project_content" id="project_content"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 담당자 </td>
-							<td><input type="text" name="employee1_name" id="employee1_name" onclick="searchemp('${comcode_code}')" readonly="readonly">
-							<input type="hidden" name="employee1_no" id="employee1_no"></td>
-						</tr>
-						<tr>
-							<td>전화번호 </td>
-							<td><input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>직급 </td>
-							<td><input type="text" name="employee2_position" id="employee2_position" readonly="readonly"></td>
-						</tr>
-						<tr>
-							<td>프로젝트 담당팀 </td>
-							<td><input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
-							<input type="button" onclick="searcht()" value="조회">
-							<input type="hidden" name="team_no" id="team_no"></td>
-						</tr>
-						<tr>
-							<td>상태 </td>
-							<td>
-								<select name="project_status" id="project_status">
-									<option value="0" selected>미완료</option>
-									<option value="1">완료</option>
-									<option value="2">진행중</option>
-								</select>
-							</td>
-						</tr>
-					</table>
-					<input type="button" value="save" onclick="sub(this.form)">
-					<input type="reset" value="reset">
+					<div>
+						<label>프로젝트명 </label>
+						<input type="text" name="project_name" id="project_name">
+					</div>
+					<div>
+						<label>프로젝트 기간 </label>
+						<input type="date" name="project_start" id="project_start" onchange="startcheck(this.value)"> ~ 
+						<input type="date" name="project_end" id="project_end">
+					</div>
+					<div>
+						<label>원청 회사 </label>
+						<input type="text" name="project_contractor" id="project_contractor">
+					</div>
+					<div>
+						<label>프로젝트 예산 </label>
+						<input type="text" name="project_budget" id="project_budget">
+					</div>
+					<div>
+						<label>프로젝트 종류 </label>
+						<input type="text" name="projectkind_name" id="projectkind_name" onkeypress="kind(event, this.value)">
+						<input type="button" onclick="searchpk()" value="조회">
+					</div>
+					<div>
+						<label>내용 </label>
+						<input type="text" name="project_content" id="project_content">
+					</div>
+					<div>
+						<label>프로젝트 담당자 </label>
+						<input type="text" name="employee1_name" id="employee1_name" onclick="searchemp('${comcode_code}')" readonly="readonly">
+						<input type="hidden" name="employee1_no" id="employee1_no">
+					</div>
+					<div>
+						<label>전화번호 </label>
+						<input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly">
+					</div>
+					<div>
+						<label>직급 </label>
+						<input type="text" name="employee2_position" id="employee2_position" readonly="readonly">
+					</div>
+					<div>
+						<label>프로젝트 담당팀 </label>
+						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
+						<input type="button" onclick="searcht()" value="조회">
+						<input type="hidden" name="team_no" id="team_no">
+					</div>
+					<div>
+						<label>상태 </label>
+						<select name="project_status" id="project_status">
+							<option value="0" selected="selected">미완료</option>
+							<option value="1">완료</option>
+							<option value="2">진행중</option>
+						</select>
+					</div>
+					<div>
+						<input type="button" value="save" onclick="sub(this.form)">
+						<input type="reset" value="reset">
+					</div>
 				</form>
 			</div>
 		</c:if>

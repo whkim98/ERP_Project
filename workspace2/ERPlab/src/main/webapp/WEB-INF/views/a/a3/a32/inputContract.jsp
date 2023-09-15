@@ -77,7 +77,7 @@ function getlist(){
 						</tr>
 					</table>
 			</div>
-			<div>
+			<div class="dh_overflow">
 				<c:choose>
 					<c:when test="${list == null }">
 						<table>
@@ -115,7 +115,7 @@ function getlist(){
 				</c:choose>
 			</div>
 	
-			<div align="center">
+			<div class="dh_alignright">
 				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/inputContract?comcode_code=${comcode_code }'">
 			</div>
 	
@@ -140,58 +140,58 @@ function getlist(){
 					<input type="hidden" name="contractkind_no" id="contractkind_no" value="${inmap.contractkind_no }">
 					<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
 						<h3>계약서 수정</h3>
-						<table>
-							<tr>
-								<td>계약명 :</td>
-								<td><input type="text" name="contract_name" value="${inmap.contract_name }" class="required"></td>
-							</tr>
-							<tr>
-								<td>계약 종류 :</td>
-								<td><input type="text" name="contractkind_name" id="contractkind_name" value="${inmap.contractkind_name }" onkeypress="searchck(event)" class="required">
-								<input type="button" onclick="ckList()" value="조회"></td>
-							</tr>
-							<tr>
-								<td>거래처명 :</td>
-								<td><input type="text" name="client_name" id="client_name" value="${inmap.client_name }" onkeypress="searchcl(event, '${comcode_code}')" class="required">
-								<input type="button" onclick="clList('${comcode_code}')" value="조회"></td>
-							</tr>
-							<tr>
-								<td>사업자등록번호 :</td>
-								<td><input type="text" name="client_registeredno" id="client_registeredno" value="${inmap.client_registeredno }" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>담당자 :</td>
-								<td><input type="text" name="client_manager" id="client_manager" value="${inmap.client_manager }" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>계약 기간 :</td>
-								<td><input type="date" name="contract_start" id="contract_start" value="${inmap.contract_start}" onchange="startcheck(this.value)" class="required"> ~ 
-								<input type="date" name="contract_end" id="contract_end" value="${inmap.contract_end }" class="required"></td>
-							</tr>
-							<tr>
-								<td>프로젝트명 :</td>
-								<td><input type="text" name="project_name" id="project_name" value="${inmap.project_name }" onkeypress="searchpr(event, '${comcode_code}')" class="required">
-								<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
-							</tr>
-							<tr>
-								<td>프로젝트 예산 :</td>
-								<td><input type="text" name="project_budget" id="project_budget" value="${inmap.project_budget }" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>프로젝트 내용 :</td>
-								<td><input type="text" name="project_content" id="project_content" value="${inmap.project_content }" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>프로젝트 기간 :</td>
-								<td><input type="date" name="project_start" id="project_start" value="${inmap.project_start}" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" value="${inmap.project_end }" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>계약 내용 :</td>
-								<td><input type="text" name="contract_content" value="${inmap.contract_content }"></td>
-							</tr>
-						</table>
-					<input type="button" value="수정" onclick="sub(this.form)">
-					<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/delete?contract_no=${inmap.contract_no }&comcode_code=${comcode_code }'">
+						<div>
+							<label>계약명 </label>
+							<input type="text" name="contract_name" id="contract_name" value="${inmap.contract_name }" class="required">
+						</div>
+						<div>
+							<label>계약 종류 </label>
+							<input type="text" name="contractkind_name" id="contractkind_name" value="${inmap.contractkind_name }" onkeypress="searchck(event)" class="required">
+							<input type="button" onclick="ckList()" value="조회">
+						</div>
+						<div>
+							<label>거래처명 </label>
+							<input type="text" name="client_name" id="client_name" value="${inmap.client_name }" onkeypress="searchcl(event, '${comcode_code}')" class="required">
+							<input type="button" onclick="clList('${comcode_code}')" value="조회">
+						</div>
+						<div>
+							<label>사업자등록번호 </label>
+							<input type="text" name="client_registeredno" id="client_registeredno" value="${inmap.client_registeredno }" readonly="readonly">
+						</div>
+						<div>
+							<label>담당자 </label>
+							<input type="text" name="client_manager" id="client_manager" value="${inmap.client_manager }" readonly="readonly">
+						</div>
+						<div>
+							<label>계약 기간 </label>
+							<input type="date" name="contract_start" id="contract_start" value="${inmap.contract_start}" onchange="startcheck(this.value)" class="required"> ~ 
+							<input type="date" name="contract_end" id="contract_end" value="${inmap.contract_end }" class="required">
+						</div>
+						<div>
+							<label>프로젝트명 </label>
+							<input type="text" name="project_name" id="project_name" value="${inmap.project_name }" onkeypress="searchpr(event, '${comcode_code}')" class="required">
+							<input type="button" onclick="prList('${comcode_code}')" value="조회">
+						</div>
+						<div>
+							<label>프로젝트 예산 </label>
+							<input type="text" name="project_budget" id="project_budget" value="${inmap.project_budget }" readonly="readonly">
+						</div>
+						<div>
+							<label>프로젝트 내용 </label>
+							<input type="text" name="project_content" id="project_content" value="${inmap.project_content }" readonly="readonly">
+						</div>
+						<div>
+							<label>프로젝트 기간 </label>
+							<input type="date" name="project_start" id="project_start" value="${inmap.project_start}" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" value="${inmap.project_end }" readonly="readonly">
+						</div>
+						<div>
+							<label>계약 내용 </label>
+							<input type="text" name="contract_content" id="contract_content" value="${inmap.contract_content }">
+						</div>
+						<div>
+							<input type="button" value="수정" onclick="sub(this.form)">
+							<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/delete?contract_no=${inmap.contract_no }&comcode_code=${comcode_code }'">
+						</div>
 				</form>
 			</div>
 		</c:if>
@@ -204,58 +204,58 @@ function getlist(){
 					<input type="hidden" name="contractkind_no" id="contractkind_no">
 					<input type="hidden" name="project_no" id="project_no">
 						<h3>계약 등록 사항</h3>
-						<table>
-							<tr>
-								<td>계약명 :</td>
-								<td><input type="text" name="contract_name" id="contract_name" class="required"></td>
-							</tr>
-							<tr>
-								<td>계약 종류 :</td>
-								<td><input type="text" name="contractkind_name" id="contractkind_name" onkeypress="searchck(event)" class="required">
-								<input type="button" onclick="ckList()" value="조회"></td>
-							</tr>
-							<tr>
-								<td>거래처명 :</td>
-								<td><input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" class="required">
-								<input type="button" onclick="clList('${comcode_code}')" value="조회"></td>
-							</tr>
-							<tr>
-								<td>사업자등록번호 :</td>
-								<td><input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>담당자 :</td>
-								<td><input type="text" name="client_manager" id="client_manager" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>계약 기간 :</td>
-								<td><input type="date" name="contract_start" id="contract_start" onchange="startcheck(this.value)" class="required"> ~ 
-								<input type="date" name="contract_end" id="contract_end" class="required"></td>
-							</tr>
-							<tr>
-								<td>프로젝트명 :</td>
-								<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" class="required">
-								<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
-							</tr>
-							<tr>
-								<td>프로젝트 예산 :</td>
-								<td><input type="text" name="project_budget" id="project_budget" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>프로젝트 내용 :</td>
-								<td><input type="text" name="project_content" id="project_content" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>프로젝트 기간 :</td>
-								<td><input type="date" name="project_start" id="project_start" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" readonly="readonly"></td>
-							</tr>
-							<tr>
-								<td>계약 내용 :</td>
-								<td><input type="text" name="contract_content"></td>
-							</tr>
-						</table>
-						
-					<input type="button" value="등록" onclick="sub(this.form)">
+						<div>
+							<label>계약명 </label>
+							<input type="text" name="contract_name" id="contract_name" class="required">
+						</div>
+						<div>
+							<label>계약 종류 </label>
+							<input type="text" name="contractkind_name" id="contractkind_name" onkeypress="searchck(event)" class="required">
+							<input type="button" onclick="ckList()" value="조회">
+						</div>
+						<div>
+							<label>거래처명 </label>
+							<input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" class="required">
+							<input type="button" onclick="clList('${comcode_code}')" value="조회">
+						</div>
+						<div>
+							<label>사업자등록번호 </label>
+							<input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly">
+						</div>
+						<div>
+							<label>담당자 </label>
+							<input type="text" name="client_manager" id="client_manager" readonly="readonly">
+						</div>
+						<div>
+							<label>계약 기간 </label>
+							<input type="date" name="contract_start" id="contract_start" onchange="startcheck(this.value)" class="required"> ~ 
+							<input type="date" name="contract_end" id="contract_end" class="required">
+						</div>
+						<div>
+							<label>프로젝트명 </label>
+							<input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" class="required">
+							<input type="button" onclick="prList('${comcode_code}')" value="조회">
+						</div>
+						<div>
+							<label>프로젝트 예산 </label>
+							<input type="text" name="project_budget" id="project_budget" readonly="readonly">
+						</div>
+						<div>
+							<label>프로젝트 내용 </label>
+							<input type="text" name="project_content" id="project_content" vreadonly="readonly">
+						</div>
+						<div>
+							<label>프로젝트 기간 </label>
+							<input type="date" name="project_start" id="project_start" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" value="${inmap.project_end }" readonly="readonly">
+						</div>
+						<div>
+							<label>계약 내용 </label>
+							<input type="text" name="contract_content" id="contract_content">
+						</div>
+						<div>
+							<input type="button" value="등록" onclick="sub(this.form)">
+							<input type="reset" value="reset">
+						</div>
 				</form>
 			</div>
 		</c:if>
