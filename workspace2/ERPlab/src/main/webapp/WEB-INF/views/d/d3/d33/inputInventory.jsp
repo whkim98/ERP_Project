@@ -69,7 +69,7 @@ function surf(v, code){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/d/d2/d22/inputPurchaseAjax";
+	var url = "${pageContext.request.contextPath}/d/d3/d33/inputInventoryAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -81,34 +81,40 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>매입코드</td><td>담당자</td><td>담당팀</td><td>차변</td><td>대변</td><td>매입일자</td></tr>';
+		procode.innerHTML += '<tr><td>지점코드</td><td>지점명</td><td>사업자등록번호</td><td>대표자</td><td>주소지</td><td>상세주소</td><td>재고담당자/직급</td><td>담당팀</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.purchase_no+",'"+map.purchase_code+"')");
+				newTr.setAttribute("onclick", "selectForm("+map.inventory_no+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.purchase_code;
+				newTd.innerHTML = map.comptype_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.employee1_name;
+				newTd.innerHTML = map.company_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.company_registeredno;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.company_representative;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.company_addr1;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.company_addr2;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.employee1_name + "/" + map.employee2_position;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.team_name;
 				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.closing_debtor;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.closing_creditor;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.purchase_date;
-				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="6">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="8">목록이 없습니다.</td></tr>';
 		}
 	}
 }
@@ -116,7 +122,7 @@ function getlist(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">매입 등록(원부자재)</h1>
+			<h1 style="font-size: 20pt;">구매 재고 관리(완제품)</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -125,9 +131,9 @@ function getlist(){
 						<td>
 							<select name="type">
 								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
-								<option value="purchase_code" ${param.type == 'purchase_code' ? 'selected' : '' }>코드</option>
 								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당팀</option>
-								<option value="purchase_date" ${param.type == 'purchase_date' ? 'selected' : '' }>매입일자</option>
+								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>거래처</option>
+								<option value="comptype_code" ${param.type == 'comptype_code' ? 'selected' : '' }>지점코드</option>
 								<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>담당자</option>
 							</select>
 						</td>
@@ -143,21 +149,25 @@ function getlist(){
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
-						<td>매입코드</td>
-						<td>담당자</td>
+						<td>지점코드</td>
+						<td>지점명</td>
+						<td>사업자등록번호</td>
+						<td>대표자</td>
+						<td>주소지</td>
+						<td>상세주소</td>
+						<td>재고담당자/직급</td>
 						<td>담당팀</td>
-						<td>차변</td>
-						<td>대변</td>
-						<td>매입일자</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
-					<tr onclick="selectForm(${map.purchase_no}, '${map.purchase_code }')" class="filter">
-						<td>${map.purchase_code }</td>
-						<td>${map.employee1_name}</td>
+					<tr onclick="selectForm(${map.inventory_no})" class="filter">
+						<td>${map.comptype_code }</td>
+						<td>${map.company_name }</td>
+						<td>${map.company_registeredno }</td>
+						<td>${map.company_representative}</td>
+						<td>${map.company_addr1}</td>
+						<td>${map.company_addr2}</td>
+						<td>${map.employee1_name}/${map.employee2_position}</td>
 						<td>${map.team_name}</td>
-						<td>${map.closing_debtor}</td>
-						<td>${map.closing_creditor}</td>
-						<td>${map.purchase_date }</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -167,30 +177,26 @@ function getlist(){
 				</table>
 			</div>
 			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d22/addForm?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d3/d33/addInventory?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
-			<form action="${pageContext.request.contextPath }/d/d2/d22/updateForm" id="content" method="post">
-				<input type="hidden" name="purchase_no">
-				<input type="hidden" name="purchase_code">
+			<form action="${pageContext.request.contextPath }/d/d3/d33/updateForm" id="content" method="post">
+				<input type="hidden" name="inventory_no">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 			</form>
 		
 		</div>
 		
-	
 </div>
 <script type="text/javascript">
 
 // 리스트에서 글 선택 시 넘어가는 form
-function selectForm(no, code){
-	document.getElementsByName("purchase_no")[0].value = no;
-	document.getElementsByName("purchase_code")[0].value = code;
+function selectForm(no){
+	document.getElementsByName("inventory_no")[0].value = no;
 	
 	document.getElementById("content").submit(); // content라는 id의 form태그 submit
 }
-
 
 </script>
 </div>

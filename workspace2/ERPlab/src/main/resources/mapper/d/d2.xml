@@ -194,6 +194,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and o.team_no = t.team_no 
 		and o.company_no = co.company_no 
 		and cl.closing_code = o.order_code 
+		and o.order_type = #{order_type}
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
@@ -317,6 +318,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and e.employee1_no = e2.employee1_no 
 		and cl.closing_code = p.purchase_code 
 		and p.comcode_no = #{comcode_no} 
+		and p.purchase_type = #{purchase_type}
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
@@ -379,6 +381,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and pc.goodslot_no = gl.goodslot_no 
 		and p.purchase_code = cl.closing_code 
 		and p.comcode_no = #{comcode_no} 
+		and p.purchase_type = #{purchase_type}
 		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name2})
 		<if test="btype != null">
 			<if test="btype == 'all'">
@@ -454,6 +457,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and pt.purchaseconnect_no = pc.purchaseconnect_no 
 		and pc.purchase_no = p.purchase_no 
 		and pt.comcode_no = #{comcode_no} 
+		and pt.producttest_type = #{producttest_type}
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
@@ -552,6 +556,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and e2.employee1_no = e.employee1_no 
 		and cp.comptype_no = co.comptype_no 
 		and i.comcode_no = #{comcode_no} 
+		and i.inventory_type = #{inventory_type}
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (

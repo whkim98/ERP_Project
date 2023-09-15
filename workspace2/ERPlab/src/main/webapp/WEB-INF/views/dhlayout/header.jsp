@@ -16,6 +16,9 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="${pageContext.request.contextPath }/webdesign/assets/css/main.css" />
+		<link href="/css/dhcss/dh.css" rel="stylesheet" type="text/css">
+		<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+		<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 		
 		<c:if test="${login == null }">
 			<script type="text/javascript">
@@ -29,6 +32,8 @@
 				location.href="${pageContext.request.contextPath }/";
 			</script>
 		</c:if>
+		
+		
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->

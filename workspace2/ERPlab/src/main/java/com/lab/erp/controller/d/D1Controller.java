@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.lab.erp.common.ViewPath;
 import com.lab.erp.service.a.A4Service;
 import com.lab.erp.service.d.D1Service;
+import com.lab.erp.service.d.D2Service;
 import com.lab.erp.service.login.LoginService;
 import com.lab.erp.vo.b.b1.Erp_Bs3VO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
@@ -47,13 +48,15 @@ public class D1Controller {
 	private D1Service d1;
 	private HttpServletRequest request;
 	private A4Service a4;
+	private D2Service d2;
 	
 	@Autowired
-	public D1Controller(LoginService ls, D1Service d1, HttpServletRequest request, A4Service a4) {
+	public D1Controller(LoginService ls, D1Service d1, HttpServletRequest request, A4Service a4, D2Service d2) {
 		this.ls = ls;
 		this.d1 = d1;
 		this.request = request;
 		this.a4 = a4;
+		this.d2 = d2;
 	}
 	
 //	생산의뢰 requestproduct
@@ -1182,6 +1185,7 @@ public class D1Controller {
 		
 		for(int i = 0; i < list.size(); i++) {
 			Erp_GoodslotVO lvo = new Erp_GoodslotVO();
+			Erp_GoodsVO gvo = new Erp_GoodsVO();
 			
 			int goodsno = d1.goodsno((String)list.get(i).get("goods_code"));
 			int lotprice = (int)list.get(i).get("goodslot_price");
@@ -1202,6 +1206,11 @@ public class D1Controller {
 			lvo.setGoodslot_expiry("9999-01-01");
 			
 			d1.createGoodsLot(lvo);
+			
+			gvo.setGoods_no(goodsno);
+			gvo.setGoods_stockqty(lotqty);
+			d2.updateGoodsOne(gvo);
+			
 		}
 		
 		List<Integer> glno = d1.getLotNo(pvo.getProduct_lot());
@@ -1273,18 +1282,25 @@ public class D1Controller {
 		
 		List<Map<String, Object>> lclist = d1.selectEvGoods(vo.getEvaluation_no());
 		
-		System.out.println(vo.getEvaluation_no());
-		
 		int lotqty = 0;
 		List<Integer> glno = d1.getLotNo((String)imap.get("product_lot"));
 		for(int i = 0; i < list.size(); i++) {
 			Erp_GoodslotVO lvo = new Erp_GoodslotVO();
+			Erp_GoodsVO gvo = new Erp_GoodsVO();
 			
 			if(lotconnev_qty[i] != null) {
 				lotqty = Integer.parseInt(lotconnev_qty[i]);
 			}else {
 				lotqty = 0;
 			}
+			
+			int goodsno = d1.goodsno((String)list.get(i).get("goods_code"));
+			gvo.setGoods_no(goodsno);
+			gvo.setGoods_stockqty((int)lclist.get(i).get("goodslot_qty"));
+			d2.updateGoodsSub(gvo);
+			
+			gvo.setGoods_stockqty(lotqty);
+			d2.updateGoodsOne(gvo);
 			
 			lvo.setGoodslot_no(glno.get(i));
 			lvo.setGoodslot_qty(lotqty);

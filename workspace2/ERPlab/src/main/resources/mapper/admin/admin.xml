@@ -58,9 +58,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<!-- 전체 admin 계정 리스트 -->
-	<select id="adminList" resultType="map">
+	<select id="adminList" resultType="map" parameterType="map">
 		select a.*, t.team_name, d.dept_name from erp_admin a, erp_team t, erp_dept d 
-		where d.dept_no = t.dept_no and a.team_no = t.team_no
+		where d.dept_no = t.dept_no 
+		and a.team_no = t.team_no 
+		and a.comcode_no = #{comcode_no} 
 	</select>
 	
 	<!-- admin 계정 하나의 정보 > 팀, 부서명까지 출력 -->
@@ -146,6 +148,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		employee2_holiday = #{employee2_holiday},
 		employee2_four = #{employee2_four},
 		employee2_worktype = #{employee2_worktype} 
+		where employee1_no = #{employee2_no}
+	</update>
+	
+	<update id="updateEmpPw" parameterType="com.lab.erp.vo.login.Erp_Employee1VO">
+		update erp_employee1 set 
+		employee1_pw = #{employee1_pw} 
 		where employee1_no = #{employee1_no}
 	</update>
 	
@@ -158,39 +166,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 직원 한명의 정보 출력 -->
 	<select id="selectEmp" resultType="map" parameterType="int">
-		select 
-		e1.*, 
-		e2.employee2_no,
-		e2.employee2_extension, 
-		e2.employee2_position, 
-		e2.employee2_exp,
-		e2.employee2_salary,
-		e2.employee2_holiday,
-		e2.employee2_four,
-		e2.employee2_worktype,
-		t.team_name,
-		d.dept_name 
-		from erp_employee1 e1, erp_employee2 e2, erp_team t, erp_dept d where
-		e1.employee1_no = e2.employee1_no and e2.team_no = t.team_no and t.dept_no = d.dept_no
+		select e1.*, e2.*, t.team_name, d.dept_name 
+		from erp_employee1 e1, erp_employee2 e2, erp_team t, erp_dept d 
+		where e1.employee1_no = e2.employee1_no 
+		and e2.team_no = t.team_no 
+		and t.dept_no = d.dept_no 
 		and e2.employee2_no = #{employee2_no} 
 	</select>
 	
 	<!-- 전체 직원 리스트 -->
-	<select id="EmpList" resultType="map">
-		select 
-		e1.*, 
-		e2.employee2_no,
-		e2.employee2_extension, 
-		e2.employee2_position, 
-		e2.employee2_exp,
-		e2.employee2_salary,
-		e2.employee2_holiday,
-		e2.employee2_four,
-		e2.employee2_worktype,
-		t.team_name,
-		d.dept_name 
-		from erp_employee1 e1, erp_employee2 e2, erp_team t, erp_dept d where
-		e1.employee1_no = e2.employee1_no and e2.team_no = t.team_no and t.dept_no = d.dept_no
+	<select id="EmpList" resultType="map" parameterType="map">
+		select e1.*, e2.*, t.team_name, d.dept_name 
+		from erp_employee1 e1, erp_employee2 e2, erp_team t, erp_dept d 
+		where e1.employee1_no = e2.employee1_no 
+		and e2.team_no = t.team_no 
+		and t.dept_no = d.dept_no 
+		and e2.comcode_no = #{comcode_no} 
 	</select>
 	
 </mapper>

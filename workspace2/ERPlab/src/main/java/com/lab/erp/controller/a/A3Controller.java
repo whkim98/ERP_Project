@@ -27,18 +27,22 @@ import com.lab.erp.vo.c.Erp_ClientVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 import com.lab.erp.vo.login.Erp_TeamVO;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RequestMapping("/a/a3")
 @Controller
 public class A3Controller {
 	private A3Service a3;
 	private LoginService ls;
 	private AdminService as;
+	private HttpServletRequest request;
 	
 	@Autowired
-	public A3Controller(A3Service a3, LoginService ls, AdminService as) {
+	public A3Controller(A3Service a3, LoginService ls, AdminService as, HttpServletRequest request) {
 		this.a3 = a3;
 		this.ls = ls;
 		this.as = as;
+		this.request = request;
 	}
 	
 	
@@ -126,6 +130,7 @@ public class A3Controller {
 	}
 	
 	@RequestMapping("/a31/update")
+	@Transactional
 	public String updateProject(Model model, Erp_ProjectVO vo, String comcode_code) {
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -137,6 +142,7 @@ public class A3Controller {
 	}
 	
 	@RequestMapping("/a31/delete")
+	@Transactional
 	public String deleteProject(Model model, String project_no, String comcode_code) {
 		int prNo = Integer.parseInt(project_no);
 		
@@ -240,6 +246,18 @@ public class A3Controller {
 			word = null;
 		}
 		
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		int comcode_no = ls.comNo(comcode_code);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -258,72 +276,127 @@ public class A3Controller {
 		return ViewPath.A3 + "/a32/inputContract";
 	}
 	
+	@RequestMapping("/a32/contractAjax")
+	@ResponseBody
+	public List<Map<String, Object>> contractAjax(String type, String word, String comcode_code) {
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type",type);
+		map.put("word",word);
+		
+		List<Map<String, Object>> list = a3.prContractList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
 	@RequestMapping("/a32/createContract")
 	public String createContract(Model model, Erp_ContractVO vo, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
 		
 		a3.createContract(vo);
 		
 		return "redirect:/a/a3/a32/inputContract?comcode_code="+comcode_code;
 	}
 	
-	@RequestMapping("/a32/updateFormC")
-	public String updateFormC(Model model, Erp_ContractVO vo) {
-		Map<String, Object> inmap = a3.selectContract(vo.getContract_no());
-		
-		model.addAttribute("inmap", inmap);
-		
-		return ViewPath.A3 + "/a32/updateForm";
-	}
-	
 	@RequestMapping("/a32/update")
-	public String updateContract(Model model, Erp_ContractVO vo) {
+	public String updateContract(Model model, Erp_ContractVO vo, String comcode_code) {
 		String msg = null;
 		String url = null;
 		
-		int update = a3.updateContract(vo);
-		
-		if(update != 0) {
-			msg = "계약이 정상적으로 수정되었습니다.";
-			url = "/a/a3/a32/contentC?contract_no=" + vo.getContract_no();
-		}else {
-			msg = "계약 수정에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a32/updateFormC?contract_no=" + vo.getContract_no();
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
 		}
 		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
+		a3.updateContract(vo);
 		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a3/a32/updateForm?comcode_code="+comcode_code+"&contract_no="+vo.getContract_no();
 	}
 	
 	@RequestMapping("/a32/delete")
 	public String deleteContract(Model model, Erp_ContractVO vo, String comcode_code) {
-		int delete = a3.deleteContract(vo.getContract_no());
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		a3.deleteContract(vo.getContract_no());
+		
+		return "redirect:/a/a3/a32/inputContract?comcode_code="+comcode_code;
+	}
+	
+	@RequestMapping("/a32/updateForm")
+	public String selectContract(Model model, Erp_ContractVO vo,String type, String word, String comcode_code) {
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
 		
 		String msg = null;
 		String url = null;
 		
-		if(delete != 0) {
-			msg = "계약이 정상적으로 삭제되었습니다.";
-			url = "/a/a3/a32/?project_no=" + vo.getProject_no() + "&comcode_code=" + comcode_code;
-		}else {
-			msg = "계약 삭제에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a32/contentC?contract_no=" + vo.getContract_no();
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
 		}
 		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
+		int comcode_no = ls.comNo(comcode_code);
 		
-		return ViewPath.RESULT + "loginresult";
-	}
-	
-	@RequestMapping("/a32/contentC")
-	public String selectContract(Model model, Erp_ContractVO vo) {
-		Map<String, Object> map = a3.selectContract(vo.getContract_no());
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		model.addAttribute("map", map);
+		map.put("comcode_no", comcode_no);
+		map.put("type",type);
+		map.put("word",word);
 		
-		return ViewPath.A3 + "/a32/content";
+		List<Map<String, Object>> list = a3.prContractList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		Map<String, Object> inmap = a3.selectContract(vo.getContract_no());
+		System.out.println("no : " + vo.getContract_no());
+		System.out.println("inmap : " + inmap);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("inmap", inmap);
+		
+		return ViewPath.A3 + "/a32/inputContract";
 	}
 	
 	@RequestMapping("/a32/clList")
@@ -467,8 +540,46 @@ public class A3Controller {
 	}
 	
 //	실적 / 평가
-	@RequestMapping("/a33/")
-	public String estimateList(Model model, Erp_EstimateVO vo, String type, String word, String comcode_code) {
+	@RequestMapping("/a33/inputEstimate")
+	public String estimateList(Model model, String type, String word, String comcode_code) {
+		Map<String, Object> map = new HashMap<>();
+		
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		map.put("type",type);
+		map.put("word",word);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = a3.estimateList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.A3 + "/a33/inputEstimate";
+	}
+	
+	@RequestMapping("/a33/estimateAjax")
+	@ResponseBody
+	public List<Map<String, Object>> estimateAjax(String type, String word, String comcode_code) {
 		Map<String, Object> map = new HashMap<>();
 		
 		int comcode_no = ls.comNo(comcode_code);
@@ -481,7 +592,60 @@ public class A3Controller {
 		map.put("type",type);
 		map.put("word",word);
 		map.put("comcode_no", comcode_no);
-		map.put("project_no", vo.getProject_no());
+		
+		List<Map<String, Object>> list = a3.estimateList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
+	@RequestMapping("/a33/createEstimate")
+	public String createEstimate(Model model, Erp_EstimateVO vo, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		a3.createEstimate(vo);
+		
+		return "redirect:/a/a3/a33/inputEstimate?comcode_code="+comcode_code;
+	}
+	
+	@RequestMapping("/a33/updateForm")
+	public String updateFormE(Model model, Erp_EstimateVO vo, String comcode_code, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		map.put("type",type);
+		map.put("word",word);
+		map.put("comcode_no", comcode_no);
 		
 		List<Map<String, Object>> list = a3.estimateList(map);
 		if(list.isEmpty()) {
@@ -490,102 +654,53 @@ public class A3Controller {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.A3 + "/a33/list";
-	}
-	
-	@RequestMapping("/a33/inputEstimate")
-	public String inputEstimate() {
-		return ViewPath.A3 + "/a33/inputEstimate";
-	}
-	
-	@RequestMapping("/a33/createEstimate")
-	public String createEstimate(Model model, Erp_EstimateVO vo, String comcode_code) {
-		int insert = a3.createEstimate(vo);
-		
-		String msg = null;
-		String url = null;
-		
-		if(insert != 0) {
-			msg = "평가가 정상적으로 등록되었습니다.";
-			url = "/a/a3/a33/?comcode_code=" + comcode_code;
-		}else {
-			msg = "평가 등록에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a33/inputEstimate";
-		}
-		
-		model.addAttribute("url", url);
-		model.addAttribute("msg", msg);
-		
-		return ViewPath.RESULT + "loginresult";
-	}
-	
-	@RequestMapping("/a33/updateForm")
-	public String updateFormE(Model model, Erp_EstimateVO vo) {
 		Map<String, Object> vomap = new HashMap<>();
 		
 		vomap.put("estimate_no", vo.getEstimate_no());
-		vomap.put("project_no", vo.getProject_no());
 		
-		Map<String, Object> map = a3.selectEstimate(vomap);
+		Map<String, Object> inmap = a3.selectEstimate(vomap);
 		
-		model.addAttribute("map", map);
+		model.addAttribute("inmap", inmap);
 		
 		return ViewPath.A3 + "/a33/updateForm";
 	}
 	
 	@RequestMapping("/a33/update")
 	public String updateEstimate(Model model, Erp_EstimateVO vo, String comcode_code) {
-		int update = a3.updateEstimate(vo);
-		
 		String msg = null;
 		String url = null;
 		
-		if(update != 0) {
-			msg = "평가가 정상적으로 수정되었습니다.";
-			url = "/a/a3/a33/?comcode_code=" + comcode_code;
-		}else {
-			msg = "평가 수정에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a33/updateFormE?estimate_no="+vo.getEstimate_no()+"&project_no="+vo.getProject_no();
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
 		}
 		
-		model.addAttribute("url", url);
-		model.addAttribute("msg", msg);
+		a3.updateEstimate(vo);
 		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a3/a33/updateForm?estimate_no="+vo.getEstimate_no();
 	}
 	
 	@RequestMapping("/a33/delete")
 	public String deleteEstimate(Model model, Erp_EstimateVO vo, String comcode_code) {
-		int delete = a3.deleteEstimate(vo.getEstimate_no());
+		a3.deleteEstimate(vo.getEstimate_no());
 		
 		String msg = null;
 		String url = null;
 		
-		if(delete != 0) {
-			msg = "평가가 정상적으로 삭제되었습니다.";
-			url = "/a/a3/a33/?project_no=" + vo.getProject_no() + "&comcode_code=" + comcode_code;
-		}else {
-			msg = "평가 삭제에 실패하였습니다. 지속적으로 문제가 발생한다면 관리자에게 문의주시기 바랍니다.";
-			url = "/a/a3/a33/contentE?estimate_no="+vo.getEstimate_no()+"&project_no="+vo.getProject_no();
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
 		}
 		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return ViewPath.RESULT + "loginresult";
-	}
-	
-	@RequestMapping("/a33/content")
-	public String selectEstimate(Model model, Erp_EstimateVO vo) {
-		Map<String, Object> vomap = new HashMap<>();
-		
-		vomap.put("estimate_no", vo.getEstimate_no());
-		
-		Map<String, Object> map = a3.selectEstimate(vomap);
-		
-		model.addAttribute("map", map);
-		
-		return ViewPath.A3 + "/a33/content";
+		return "redirect:/a/a3/a33/inputEstimate?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a33/searchpr")
@@ -600,8 +715,6 @@ public class A3Controller {
 			map.put("project_name", project_name);
 			
 			Erp_ProjectVO vo = a3.getProject(map);
-			
-			model.addAttribute("vo", vo);
 			
 			return vo;
 		}catch(Exception e) {

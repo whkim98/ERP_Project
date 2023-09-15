@@ -51,6 +51,9 @@ public class Erp_EmployeeDAO {
 	public int updateEmp2(Erp_Employee2VO vo) {
 		return sqlSession.update("admin.updateEmployee2", vo);
 	}
+	public int updateEmpPw(Erp_Employee1VO vo) {
+		return sqlSession.update("admin.updateEmpPw", vo);
+	}
 	
 	public int deleteEmp1(int employee1_no) {
 		return sqlSession.delete("admin.deleteEmp1", employee1_no);
@@ -62,8 +65,8 @@ public class Erp_EmployeeDAO {
 	public Map<String, Object> selectEmp(int employee2_no){
 		return sqlSession.selectOne("admin.selectEmp", employee2_no);
 	}
-	public List<Map<String, Object>> EmpList(){
-		return sqlSession.selectList("admin.EmpList");
+	public List<Map<String, Object>> EmpList(Map<String, Object> map){
+		return sqlSession.selectList("admin.EmpList", map);
 	}
 
 	public List<Erp_Employee1VO> selectEmployee(){

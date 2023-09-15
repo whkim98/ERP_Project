@@ -83,7 +83,7 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>발주코드</td><td>신청일</td><td>상태</td><td>승인여부</td><td>담당팀</td><td>거래처</td>td>마감일</td></tr>';
+		procode.innerHTML += '<tr><td>발주코드</td><td>신청일</td><td>상태</td><td>승인여부</td><td>담당팀</td><td>거래처</td><td>마감일</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
@@ -122,7 +122,7 @@ function getlist(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">발주 등록</h1>
+			<h1 style="font-size: 20pt;">발주 등록(원부자재)</h1>
 		</div>
 		<div class="divform2">
 			<div>

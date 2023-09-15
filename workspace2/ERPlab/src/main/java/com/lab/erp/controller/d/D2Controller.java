@@ -81,6 +81,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("order_type", 1);
 		
 		List<Map<String, Object>> list = d2.orderList(map);
 		
@@ -104,6 +105,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("order_type", 1);
 		
 		List<Map<String, Object>> list = d2.orderList(map);
 		
@@ -778,6 +780,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseList(map);
 		
@@ -801,6 +804,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseList(map);
 		
@@ -1493,6 +1497,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("producttest_type", 1);
 		
 		List<Erp_PtkindVO> ptlist = d2.ptList();
 		List<Map<String, Object>> list = d2.productTestList(map);
@@ -1529,6 +1534,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("producttest_type", 1);
 		
 		List<Erp_PtkindVO> ptlist = d2.ptList();
 		List<Map<String, Object>> list = d2.productTestList(map);
@@ -1556,6 +1562,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("producttest_type", 1);
 		
 		List<Map<String, Object>> list = d2.productTestList(map);
 		
@@ -1654,6 +1661,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseList(map);
 		
@@ -1676,6 +1684,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseList(map);
 		
@@ -1729,6 +1738,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("inventory_type", 1);
 		
 		List<Map<String, Object>> list = d2.inventoryList(map);
 		
@@ -1752,6 +1762,7 @@ public class D2Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
+		map.put("inventory_type", 1);
 		
 		List<Map<String, Object>> list = d2.inventoryList(map);
 		

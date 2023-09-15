@@ -96,17 +96,17 @@ border: 0;
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="taxinvoice-container">
-    <h1>발주 등록(원부자재)</h1>
+    <h1>발주 등록(완제품)</h1>
     
     <div class="taxinvoice-lower">
         <c:if test="${inmap != null }">
-        <form action="${pageContext.request.contextPath}/d/d2/d21/update">
+        <form action="${pageContext.request.contextPath}/d/d3/d31/update">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
         	<input type="hidden" name="company_no" id="company_no" value="${inmap.company_no }">
         	<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
         	<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
         	<input type="hidden" name="order_no" id="order_no" value="${inmap.order_no }">
-        	<input type="hidden" name="order_type" id="order_type" value="1">
+        	<input type="hidden" name="order_type" id="order_type" value="0">
         	<input type="hidden" name="bs3_no11" id="bs3_no11" value="${cmap.bs3_no1 }">
         	<input type="hidden" name="bs3_no21" id="bs3_no21" value="${cmap.bs3_no2 }">
         	<input type="hidden" name="bs3_no12" id="bs3_no12">
@@ -285,8 +285,8 @@ border: 0;
         </div>
         <div>
            <input type="button" value="update" onclick="sub(this.form)">
-           <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d2/d21/delete?order_code=${inmap.order_code }&order_no=${inmap.order_no }&comcode_code=${comcode_code }&bs3_no1=${cmap.bs3_no1}&bs3_no2=${cmap.bs3_no2 }'">
-           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d2/d21/inputOrder?comcode_code=${comcode_code }'">
+           <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d3/d31/delete?order_code=${inmap.order_code }&order_no=${inmap.order_no }&comcode_code=${comcode_code }&bs3_no1=${cmap.bs3_no1}&bs3_no2=${cmap.bs3_no2 }'">
+           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d3/d31/inputOrder?comcode_code=${comcode_code }'">
         </div>
         </form>
         </c:if>
@@ -294,12 +294,12 @@ border: 0;
             
     <div>
         <c:if test="${inmap == null }">
-        <form action="${pageContext.request.contextPath}/d/d2/d21/createOrder">
+        <form action="${pageContext.request.contextPath}/d/d3/d31/createOrder">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
         	<input type="hidden" name="company_no" id="company_no" value="1">
         	<input type="hidden" name="team_no" id="team_no" value="17">
         	<input type="hidden" name="client_no" id="client_no" value="1">
-        	<input type="hidden" name="order_type" id="order_type" value="1">
+        	<input type="hidden" name="order_type" id="order_type" value="0">
         	<input type="hidden" name="bs3_no1" id="bs3_no1">
         	<input type="hidden" name="bs3_no2" id="bs3_no2">
         	<div class="taxinvoice-body">
@@ -706,7 +706,7 @@ function clearRow(button) {
 
 
 function coList(code){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/coList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/coList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 
 
@@ -718,7 +718,7 @@ function deleteGoods(ono, odno, price, tax, total, code, qty){
 		alert("상품은 반드시 1개 이상이어야 합니다.");
 		return;
 	}
-	var url = "${pageContext.request.contextPath }/d/d2/d21/deleteGoods";
+	var url = "${pageContext.request.contextPath }/d/d3/d31/deleteGoods";
 	var param = "orderconnect_no="+encodeURIComponent(ono)+"&order_no="+encodeURIComponent(odno)+"&orderconnect_price="+encodeURIComponent(price)+"&orderconnect_tax="+encodeURIComponent(tax)+"&orderconnect_total="+encodeURIComponent(total)+"&order_code="+encodeURIComponent(code)+"&orderconnect_qty="+encodeURIComponent(qty);
 	
 	sendRequest(url,param,deleteGoodscheck,"POST");
@@ -799,7 +799,7 @@ function goodsList(code, h){
 		document.getElementById("client_name").focus();
 		return;
 	}
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/goodsList?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/goodsList?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 function goodsList1(code, h){
 	let cv = document.getElementById("client_name").value;
@@ -808,13 +808,13 @@ function goodsList1(code, h){
 		document.getElementById("client_name").focus();
 		return;
 	}
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/goodsList1?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/goodsList1?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 function searcht(){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function clList(code){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function team(e, name){
 	if(e.keyCode == 13){
@@ -823,7 +823,7 @@ function team(e, name){
 			document.getElementById("team_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/d/d2/d21/team";
+		var url = "${pageContext.request.contextPath}/d/d3/d31/team";
 		var param = "team_name=" + encodeURIComponent(name);
 		
 		sendRequest(url, param, teamname, "POST");
@@ -851,7 +851,7 @@ function searchcl(e, code){
 			document.getElementById("client_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/d/d2/d21/searchcl";
+		var url = "${pageContext.request.contextPath}/d/d3/d31/searchcl";
 		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
 		sendRequest(url, param, clName, "POST");
@@ -912,7 +912,7 @@ function conculator22(k, e, v){
 }
 
 function code(v){
-	var url = "${pageContext.request.contextPath }/d/d2/d21/getOrderCode";
+	var url = "${pageContext.request.contextPath }/d/d3/d31/getOrderCode";
 	var param = "order_code="+encodeURIComponent(v);
 	
 	sendRequest(url,param,codecheck,"POST");

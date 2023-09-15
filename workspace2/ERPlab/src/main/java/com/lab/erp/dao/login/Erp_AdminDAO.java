@@ -49,12 +49,12 @@ private SqlSession sqlSession;
 		return sqlSession.delete("admin.deleteAdmin", admin_no);
 	}
 	
-	public Erp_AdminVO selectAdmin(Map<String, Object> map) {
-		return sqlSession.selectOne("admin.selectAdmin", map);
+	public Map<String, Object> selectAdmin(int admin_no) {
+		return sqlSession.selectOne("admin.selectAdmin", admin_no);
 	}
 	
-	public List<Map<String, Object>> adminList(){
-		return sqlSession.selectList("admin.adminList");
+	public List<Map<String, Object>> adminList(Map<String, Object> map){
+		return sqlSession.selectList("admin.adminList", map);
 	}
 	
 	public Erp_AdminVO giveAdmin(int admin_no) {

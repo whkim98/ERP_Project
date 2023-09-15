@@ -69,7 +69,7 @@ function surf(v, code){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/d/d2/d22/inputPurchaseAjax";
+	var url = "${pageContext.request.contextPath}/d/d3/d32/inputPurchaseAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -116,7 +116,7 @@ function getlist(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">매입 등록(원부자재)</h1>
+			<h1 style="font-size: 20pt;">매입 등록(완제품)</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -167,11 +167,11 @@ function getlist(){
 				</table>
 			</div>
 			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d22/addForm?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d3/d32/addForm?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
-			<form action="${pageContext.request.contextPath }/d/d2/d22/updateForm" id="content" method="post">
+			<form action="${pageContext.request.contextPath }/d/d3/d32/updateForm" id="content" method="post">
 				<input type="hidden" name="purchase_no">
 				<input type="hidden" name="purchase_code">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">

@@ -96,75 +96,66 @@ border: 0;
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="taxinvoice-container">
-    <h1>발주 등록(원부자재)</h1>
+    <h1>구매 매입 관리(완제품)</h1>
     
     <div class="taxinvoice-lower">
         <c:if test="${inmap != null }">
-        <form action="${pageContext.request.contextPath}/d/d2/d21/update">
+        <form action="${pageContext.request.contextPath}/d/d3/d32/update">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
-        	<input type="hidden" name="company_no" id="company_no" value="${inmap.company_no }">
         	<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
         	<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
-        	<input type="hidden" name="order_no" id="order_no" value="${inmap.order_no }">
-        	<input type="hidden" name="order_type" id="order_type" value="1">
+        	<input type="hidden" name="employee2_no" id="employee2_no" value="${inmap.employee2_no }">
+        	<input type="hidden" name="purchase_no" id="purchase_no" value="${inmap.purchase_no }">
+        	<input type="hidden" name="purchase_type" id="purchase_type" value="0">
         	<input type="hidden" name="bs3_no11" id="bs3_no11" value="${cmap.bs3_no1 }">
         	<input type="hidden" name="bs3_no21" id="bs3_no21" value="${cmap.bs3_no2 }">
         	<input type="hidden" name="bs3_no12" id="bs3_no12">
         	<input type="hidden" name="bs3_no22" id="bs3_no22">
         <table>
         	<tr>
-        		<th colspan="4">발주 등록</th>
+        		<th colspan="4">구매 등록</th>
         		<th colspan="3">거래처 정보</th>
         		<th><input type="button" value="조회" onclick="clList('${comcode_code}')"></th>
-        		<th colspan="3">지점 정보</th>
+        		<th colspan="3">매입 담당자</th>
         		<th><input type="button" value="조회" onclick="coList('${comcode_code}')"></th>
         	</tr>
         	<tr>
-        		<th>발주코드</th>
-        		<td><input type="text" name="order_code" id="order_code" value="${inmap.order_code }" readonly="readonly" class="required"></td>
-        		<th>입고 요청일</th>
-        		<td><input type="date" name="order_schedule" id="order_schedule" value="${inmap.order_schedule }"></td>
+        		<th>구매코드</th>
+        		<td><input type="text" name="purchase_code" id="purchase_code" value="${inmap.purchase_code }" readonly="readonly" class="required"></td>
+        		<th>매입 일자</th>
+        		<td><input type="date" name="purchase_date" id="purchase_date" value="${inmap.purchase_date }" class="required"></td>
         		<th>거래처</th>
         		<td><input type="text" name="client_name" id="client_name" value="${cl.client_name }" onkeyup="searchcl(event, '${comcode_code}')" class="required"></td>
         		<th>사업자등록번호</th>
         		<td><input type="text" name="client_registeredno" id="client_registeredno" value="${cl.client_registeredno }" readonly="readonly"></td>
-        		<th>사업자등록번호</th>
-        		<td><input type="text" name="company_registeredno" id="company_registeredno" value="${inmap.company_registeredno }" readonly="readonly" onclick="coList('${comcode_code}')"></td>
-        		<th>지점명</th>
-        		<td><input type="text" name="company_name" id="company_name" value="${inmap.company_name }" readonly="readonly" class="required"></td>
+        		<th>사원 코드</th>
+        		<td><input type="text" name="employee1_code" id="employee1_code" value="${inmap.employee1_code }" readonly="readonly" onclick="employee('${comcode_code}')" class="required"></td>
+        		<th>이름</th>
+        		<td><input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" readonly="readonly"></td>
         	</tr>
         	<tr>
-        		<th>발주상태</th>
-        		<td><input type="text" name="order_status" id="order_status" value="${inmap.order_status }"></td>
-        		<th>승인여부</th>
-        		<td>
-        			<select name="order_approval" id="order_approval">
-        				<option value="0" ${inmap.order_approval == 0 ? 'selected' : '' }>미승인</option>
-        				<option value="1" ${inmap.order_approval == 1 ? 'selected' : '' }>승인</option>
-        			</select>
-        		</td>
+        		<th>매입 내용</th>
+        		<td colspan="3" rowspan="2"><input type="text" name="purchase_content" id="purchase_content" value="${inmap.purchase_content }"></td>
         		<th>대표자</th>
         		<td><input type="text" name="client_representative" id="client_representative" value="${cl.client_representative }" readonly="readonly"></td>
         		<th>전화번호</th>
         		<td><input type="text" name="client_directno" id="client_directno" value="${cl.client_directno }" readonly="readonly"></td>
-        		<th>대표자</th>
-        		<td><input type="text" name="company_representative" id="company_representative" value="${inmap.company_representative }" readonly="readonly"></td>
+        		<th>직급</th>
+        		<td><input type="text" name="employee2_position" id="employee2_position" value="${inmap.employee2_position }" readonly="readonly"></td>
         		<th>전화번호</th>
-        		<td><input type="text" name="company_directno" id="company_directno" value="${inmap.company_directno }" readonly="readonly"></td>
+        		<td><input type="text" name="employee2_extension" id="employee2_extension" value="${inmap.employee2_extension }" readonly="readonly"></td>
         	</tr>
         	<tr>
-        		<th>신청일</th>
-        		<td><input type="date" name="order_odate" id="order_odate" value="${inmap.order_odate }"></td>
-        		<th>마감일</th>
-        		<td><input type="date" name="order_end" id="order_end" value="${inmap.order_end }" class="required"></td>
+        		<th>매입 총액</th>
+        		<th id="purchase_total">${inmap.purchase_total }</th>
         		<th>업태</th>
         		<td><input type="text" name="businesstype_name" id="businesstype_name1" value="${cl.businesstype_name }" readonly="readonly"></td>
         		<th>업종</th>
         		<td><input type="text" name="businesstype_subctgr" id="businesstype_subctgr1" value="${cl.businesstype_subctgr }" readonly="readonly"></td>
-        		<th>업태</th>
-        		<td><input type="text" name="businesstype_name" id="businesstype_name2" value="${inmap.businesstype_name }" readonly="readonly"></td>
-        		<th>업종</th>
-        		<td><input type="text" name="businesstype_subctgr" id="businesstype_subctgr2" value="${inmap.businesstype_subctgr }" readonly="readonly"></td>
+        		<th>팀</th>
+        		<td><input type="text" name="team_name1" id="team_name1" value="${inmap.team_name1 }" readonly="readonly"></td>
+        		<th></th>
+        		<td></td>
         	</tr>
         	<tr class="wwww">
         		<th>담당팀</th>
@@ -173,8 +164,8 @@ border: 0;
 	        			<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeyup="team(event, this.value)">
 	        		</div>
         		</td>
-        		<th>금액</th>
-        		<th id="order_price">${inmap.order_price }</th>
+        		<th></th>
+        		<td></td>
         		<th>주소</th>
         		<td colspan="3">
 	        		<div class="ffff">
@@ -187,17 +178,8 @@ border: 0;
 	        			</div>
         			</div>
         		</td>
-        		<th>주소</th>
+        		<th></th>
         		<td colspan="3">
-        			<div class="ffff">
-	        			<div class="addr">
-		        			<input type="text" name="company_addr1" id="company_addr1" value="${inmap.company_addr1 }" readonly="readonly">
-		        		</div>
-		        		<div class="sssss"> - </div>
-		        		<div class="addr">
-		        			<input type="text" name="company_addr2" id="company_addr2" value="${inmap.company_addr2 }" readonly="readonly">
-	        			</div>
-        			</div>
         		</td>
         	</tr>
         	<tr>
@@ -227,7 +209,7 @@ border: 0;
          	</p>
             <table class="taxinvoice-contentsBody" id="itemTable">
                 <tr id="itemTableTitle">
-                    <th>조회</th>
+                    <th>수량</th>
                     <th>상품명</th>
                     <th>상품코드</th>
                     <th>바코드</th>
@@ -237,7 +219,7 @@ border: 0;
                     <th>제조사</th>
                     <th>책임판매업자</th>
                     <th>사입량</th>
-                    <th>발주 수량</th>
+                    <th>매입 수량</th>
                     <th>단가</th>
                     <th>세액</th>
                     <th>총액</th>
@@ -246,10 +228,13 @@ border: 0;
                 <c:if test="${list != null }">
 	                <c:forEach var="i" items="${list }" varStatus="status">
 	                	<tr class="plist">
-		                	<td><input type="button" onclick="goodsList('${comcode_code}',${status.index })" value="search"></td>
+		                	<td>
+		                		<input type="button" onclick="goodsList('${comcode_code}',${status.index })" value="search">
+		                		<input type="hidden" name="goods_no" id="goods_no" value="${i.goods_no }">
+		                	</td>
 							<td>
 								<input type="text" name="crlist1[${status.index }].goods_name" id="crlist1[${status.index }].goods_name" value="${i.goods_name }" readonly="readonly">
-								<input type="hidden" name="oclist1[${status.index }].goods_no" id="oclist1[${status.index }].goods_no" value="${i.goods_no }" readonly="readonly">
+								<input type="hidden" name="plist1[${status.index }].goodslot_no" id="plist1[${status.index }].goodslot_no" value="${i.goodslot_no }" readonly="readonly">
 							</td>
 							<td><input type="text" name="crlist1[${status.index }].goods_code" id="crlist1[${status.index }].goods_code" value="${i.goods_code }" readonly="readonly"></td>
 							<td><input type="text" name="crlist1[${status.index }].goods_barcode" id="crlist1[${status.index }].goods_barcode" value="${i.goods_barcode }" readonly="readonly"></td>
@@ -265,15 +250,15 @@ border: 0;
 								<input type="text" name="crlist1[${status.index }].client_name2" id="crlist1[${status.index }].client_name2" value="${i.client_name2}" readonly="readonly">
 							</td>
 							<td><input type="text" name="crlist1[${status.index }].goodsst_ea" id="crlist1[${status.index }].goodsst_ea" value="${i.goodsst_ea }" readonly="readonly"></td>
-							<td><input type="text" min="0" name="oclist1[${status.index }].orderconnect_qty" id="oclist1[${status.index }].orderconnect_qty" value="${i.orderconnect_qty }" maxlength="4" class="required"></td>
-							<td><input type="text" min="0" name="oclist1[${status.index }].orderconnect_price" id="oclist1[${status.index }].orderconnect_price" value="${i.orderconnect_price }" onblur="conculator12(${status.index },this.value)" onkeyup="conculator22(${status.index },event, this.value)" class="required"></td>
-							<td><input type="text" name="oclist1[${status.index }].orderconnect_tax" id="oclist1[${status.index }].orderconnect_tax" value="${i.orderconnect_tax }" readonly="readonly"></td>
+							<td><input type="text" min="0" name="plist1[${status.index }].purchaseconnect_number" id="plist1[${status.index }].purchaseconnect_number" value="${i.purchaseconnect_number }" maxlength="4" class="required"></td>
+							<td><input type="text" min="0" name="plist1[${status.index }].purchaseconnect_price" id="plist1[${status.index }].purchaseconnect_price" value="${i.purchaseconnect_price }" onblur="conculator12(${status.index },this.value)" onkeyup="conculator22(${status.index },event, this.value)" class="required"></td>
+							<td><input type="text" name="plist1[${status.index }].purchaseconnect_tax" id="plist1[${status.index }].purchaseconnect_tax" value="${i.purchaseconnect_tax }" readonly="readonly"></td>
 							<td>
-								<input type="text" name="oclist1[${status.index }].orderconnect_total" id="oclist1[${status.index }].orderconnect_total" value="${i.orderconnect_total }" readonly="readonly">
-								<input type="hidden" name="oclist1[${status.index }].orderconnect_no" id="oclist1[${status.index }].orderconnect_no" value="${i.orderconnect_no }">
+								<input type="text" name="plist1[${status.index }].purchaseconnect_total" id="plist1[${status.index }].purchaseconnect_total" value="${i.purchaseconnect_total }" readonly="readonly">
+								<input type="hidden" name="plist1[${status.index }].purchaseconnect_no" id="plist1[${status.index }].purchaseconnect_no" value="${i.purchaseconnect_no }">
 							</td>
 							<td>
-								<input type="button" onclick="deleteGoods(${i.orderconnect_no},${i.order_no },${i.orderconnect_price },${i.orderconnect_tax },${i.orderconnect_total },'${i.order_code }',${i.orderconnect_qty })" value="delete">
+								<input type="button" onclick="deleteGoods(${i.purchaseconnect_no},${i.purchase_no },${i.purchaseconnect_price },${i.purchaseconnect_tax },${i.purchaseconnect_total },'${i.purchase_code }',${i.purchaseconnect_number },${i.goodslot_no },${i.goods_no })" value="delete">
 							</td>
 						</tr>
 	                </c:forEach>
@@ -285,8 +270,8 @@ border: 0;
         </div>
         <div>
            <input type="button" value="update" onclick="sub(this.form)">
-           <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d2/d21/delete?order_code=${inmap.order_code }&order_no=${inmap.order_no }&comcode_code=${comcode_code }&bs3_no1=${cmap.bs3_no1}&bs3_no2=${cmap.bs3_no2 }'">
-           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d2/d21/inputOrder?comcode_code=${comcode_code }'">
+           <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d2/d22/delete?purchase_code=${inmap.purchase_code }&purchase_no=${inmap.purchase_no }&comcode_code=${comcode_code }&bs3_no1=${cmap.bs3_no1}&bs3_no2=${cmap.bs3_no2 }'">
+           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d2/d22/inputPurchase?comcode_code=${comcode_code }'">
         </div>
         </form>
         </c:if>
@@ -294,78 +279,71 @@ border: 0;
             
     <div>
         <c:if test="${inmap == null }">
-        <form action="${pageContext.request.contextPath}/d/d2/d21/createOrder">
+        <form action="${pageContext.request.contextPath}/d/d3/d32/createPurchase">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
-        	<input type="hidden" name="company_no" id="company_no" value="1">
         	<input type="hidden" name="team_no" id="team_no" value="17">
         	<input type="hidden" name="client_no" id="client_no" value="1">
-        	<input type="hidden" name="order_type" id="order_type" value="1">
+        	<input type="hidden" name="employee2_no" id="employee2_no" value="1">
+        	<input type="hidden" name="purchase_type" id="purchase_type" value="0">
         	<input type="hidden" name="bs3_no1" id="bs3_no1">
         	<input type="hidden" name="bs3_no2" id="bs3_no2">
         	<div class="taxinvoice-body">
 	        <table>
         	<tr>
-        		<th colspan="4">발주 등록</th>
+        		<th colspan="4">구매 등록</th>
         		<th colspan="3">거래처 정보</th>
         		<th><input type="button" value="조회" onclick="clList('${comcode_code}')"></th>
-        		<th colspan="3">지점 정보</th>
-        		<th><input type="button" value="조회" onclick="coList('${comcode_code}')"></th>
+        		<th colspan="3">매입 담당자</th>
+        		<th><input type="button" value="조회" onclick="employee('${comcode_code}')"></th>
         	</tr>
         	<tr>
-        		<th>발주코드</th>
+        		<th>구매코드</th>
         		<td>
-	        		<input type="text" name="order_code" id="order_code" onblur="code(this.value)" class="required">
-	        		<h6 id="ocode" style="color:red;"></h6>
+        			<input type="text" name="purchase_code" id="purchase_code" onblur="code(this.value)" class="required">
+        			<h6 id="ocode" style="color:red;"></h6>
         		</td>
-        		<th>입고 요청일</th>
-        		<td><input type="date" name="order_schedule" id="order_schedule"></td>
+        		<th>매입 일자</th>
+        		<td><input type="date" name="purchase_date" id="purchase_date" class="required"></td>
         		<th>거래처</th>
         		<td><input type="text" name="client_name" id="client_name" onkeyup="searchcl(event, '${comcode_code}')" class="required"></td>
         		<th>사업자등록번호</th>
         		<td><input type="text" name="client_registeredno" id="client_registeredno" readonly="readonly"></td>
-        		<th>사업자등록번호</th>
-        		<td><input type="text" name="company_registeredno" id="company_registeredno" onclick="coList('${comcode_code}')"></td>
-        		<th>지점명</th>
-        		<td><input type="text" name="company_name" id="company_name" readonly="readonly" class="required"></td>
+        		<th>사원 코드</th>
+        		<td><input type="text" name="employee1_code" id="employee1_code" readonly="readonly" onclick="employee('${comcode_code}')"></td>
+        		<th>이름</th>
+        		<td><input type="text" name="employee1_name" id="employee1_name" readonly="readonly"></td>
         	</tr>
         	<tr>
-        		<th>발주상태</th>
-        		<td><input type="text" name="order_status" id="order_status"></td>
-        		<th>승인여부</th>
-        		<td>
-        			<select name="order_approval" id="order_approval">
-        				<option value="0" selected>미승인</option>
-        				<option value="1">승인</option>
-        			</select>
-        		</td>
+        		<th rowspan="2">매입 내용</th>
+        		<td colspan="3" rowspan="2"><input type="text" name="purchase_content" id="purchase_content"></td>
         		<th>대표자</th>
         		<td><input type="text" name="client_representative" id="client_representative" readonly="readonly"></td>
         		<th>전화번호</th>
         		<td><input type="text" name="client_directno" id="client_directno" readonly="readonly"></td>
-        		<th>대표자</th>
-        		<td><input type="text" name="company_representative" id="company_representative" readonly="readonly"></td>
+        		<th>직급</th>
+        		<td><input type="text" name="employee2_position" id="employee2_position" readonly="readonly"></td>
         		<th>전화번호</th>
-        		<td><input type="text" name="company_directno" id="company_directno" readonly="readonly"></td>
+        		<td><input type="text" name="employee2_extension" id="employee2_extension" readonly="readonly"></td>
         	</tr>
         	<tr>
-        		<th colspan="2">마감일</th>
-        		<td colspan="2"><input type="date" name="order_end" id="order_end" class="required"></td>
         		<th>업태</th>
         		<td><input type="text" name="businesstype_name" id="businesstype_name1" readonly="readonly"></td>
         		<th>업종</th>
         		<td><input type="text" name="businesstype_subctgr" id="businesstype_subctgr1" readonly="readonly"></td>
-        		<th>업태</th>
-        		<td><input type="text" name="businesstype_name" id="businesstype_name2" readonly="readonly"></td>
-        		<th>업종</th>
-        		<td><input type="text" name="businesstype_subctgr" id="businesstype_subctgr2" readonly="readonly"></td>
+        		<th>팀</th>
+        		<td><input type="text" name="team_name1" id="team_name1" readonly="readonly"></td>
+        		<th></th>
+        		<td></td>
         	</tr>
         	<tr class="wwww">
-        		<th colspan="2">담당팀</th>
-        		<td colspan="2">
-        		<div class="dddd">
-        			<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
-        		</div>
+        		<th>담당팀</th>
+        		<td>
+	        		<div class="dddd">
+	        			<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
+	        		</div>
         		</td>
+        		<th></th>
+        		<td></td>
         		<th>주소</th>
         		<td colspan="3">
 	        		<div class="ffff">
@@ -378,17 +356,8 @@ border: 0;
 	        			</div>
         			</div>
         		</td>
-        		<th>주소</th>
+        		<th></th>
         		<td colspan="3">
-        			<div class="ffff">
-	        			<div class="addr">
-		        			<input type="text" name="company_addr1" id="company_addr1" readonly="readonly">
-		        		</div>
-		        		<div class="sssss"> - </div>
-		        		<div class="addr">
-		        			<input type="text" name="company_addr2" id="company_addr2" readonly="readonly">
-	        			</div>
-        			</div>
         		</td>
         	</tr>
         	<tr>
@@ -432,17 +401,20 @@ border: 0;
                     <th>제조사</th>
                     <th>책임판매업자</th>
                     <th>사입량</th>
-                    <th>발주 수량</th>
+                    <th>매입 수량</th>
                     <th>단가</th>
                     <th>세액</th>
                     <th>총액</th>
                     <th>품목삭제</th>
                 </tr>
                	<tr id="procode" class="plist">
-					<td><input type="button" onclick="goodsList1('${comcode_code}',0)" value="search"></td>
+					<td>
+						<input type="button" onclick="goodsList1('${comcode_code}',0)" value="search">
+						<input type="hidden" name="goods_no" id="goods_no">
+					</td>
 					<td>
 						<input type="text" name="crlist[0].goods_name" id="crlist[0].goods_name" readonly="readonly">
-						<input type="hidden" name="oclist[0].goods_no" id="oclist[0].goods_no">
+						<input type="hidden" name="plist[0].goodslot_no" id="plist[0].goodslot_no">
 					</td>
 					<td><input type="text" name="crlist[0].goods_code" id="crlist[0].goods_code" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].goods_barcode" id="crlist[0].goods_barcode" readonly="readonly"></td>
@@ -452,10 +424,10 @@ border: 0;
 					<td><input type="text" name="crlist[0].client_name1" id="crlist[0].client_name1" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].client_name2" id="crlist[0].client_name2" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].goodsst_ea" id="crlist[0].goodsst_ea" readonly="readonly"></td>
-					<td><input type="text" min="0" name="oclist[0].orderconnect_qty" id="oclist[0].orderconnect_qty" maxlength="4" class="required"></td>
-					<td><input type="text" min="0" name="oclist[0].orderconnect_price" id="oclist[0].orderconnect_price" onblur="conculator11(0,this.value)" onkeyup="conculator21(0,event, this.value)" class="required"></td>
-					<td><input type="text" name="oclist[0].orderconnect_tax" id="oclist[0].orderconnect_tax" readonly="readonly"></td>
-					<td><input type="text" name="oclist[0].orderconnect_total" id="oclist[0].orderconnect_total" readonly="readonly"></td>
+					<td><input type="text" min="0" name="plist[0].purchaseconnect_number" id="plist[0].purchaseconnect_number" maxlength="4" class="required"></td>
+					<td><input type="text" min="0" name="plist[0].purchaseconnect_price" id="plist[0].purchaseconnect_price" onblur="conculator11(0,this.value)" onkeyup="conculator21(0,event, this.value)" class="required"></td>
+					<td><input type="text" name="plist[0].purchaseconnect_tax" id="plist[0].purchaseconnect_tax" readonly="readonly"></td>
+					<td><input type="text" name="plist[0].purchaseconnect_total" id="plist[0].purchaseconnect_total" readonly="readonly"></td>
 					<td>
 						<input type="button" onclick="clearRow(this)" value="delete">
 					</td>
@@ -482,11 +454,9 @@ var now_utc = Date.now() // 지금 날짜를 밀리초로
 var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
 //new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
 var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
-document.getElementById("order_schedule").setAttribute("min", today);
-document.getElementById("order_end").setAttribute("min", today);
 var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
-document.getElementById("order_schedule").setAttribute("max", end+"-12-31");
-document.getElementById("order_end").setAttribute("max", end+"-12-31");
+document.getElementById("purchase_date").setAttribute("min", end+"-01-01");
+document.getElementById("purchase_date").setAttribute("max", end+"-12-31");
 
 var pat = /^[0-9]{0,8}$/;
 
@@ -503,10 +473,14 @@ function sub(f){
 			}
 			if(!pat.test(arr.item(12).value)){
 				arr.item(12).value = 0;
+				arr.item(13).value = 0;
+				arr.item(14).value = 0;
 				alert("금액은 100,000,000미만, 숫자만 입력 가능합니다.");
 				return;
 			}
 			if(Number(arr.item(11).value * arr.item(12).value) > 99999999){
+				arr.item(14).value = 0;
+				arr.item(13).value = 0;
 				arr.item(12).value = 0;
 				arr.item(11).value = 0;
 				alert("한도가 초과됩니다.");
@@ -520,8 +494,8 @@ function sub(f){
 		}
 	}
 	
-	if(document.getElementById("company_name").value == ""){
-		f.company_name.focus();
+	if(document.getElementById("employee1_name").value == ""){
+		f.employee1_name.focus();
 		return;
 	}else if(document.getElementById("client_name").value == ""){
 		f.client_name.focus();
@@ -532,26 +506,17 @@ function sub(f){
 	}else if(document.getElementById("creditor_no").value == 0){
 		f.creditor_no.focus();
 		return;
-	}else if(document.getElementById("creditor_no").value == document.getElementById("debtor_no").value){
+	}
+	if(document.getElementById("creditor_no").value == document.getElementById("debtor_no").value){
 		alert("계정과목이 같습니다.");
 		f.creditor_no.focus();
 		return;
 	}
 	
-	if(document.getElementById("order_end").value == ""){
-		var ch = confirm("마감일이 등록되지 않았습니다. 등록하시겠습니까?");
+	if(document.getElementById("purchase_date").value == ""){
+		var ch = confirm("구매 일자가 등록되지 않았습니다. 진행하시겠습니까?");
 		if(ch){
-			document.getElementById("order_end").value = today;
-			f.submit();
-		}else {
-			return;
-		}
-	}
-	if(document.getElementById("order_schedule").value == ""){
-		var ch = confirm("마감일이 등록되지 않았습니다. 등록하시겠습니까?");
-		if(ch){
-			document.getElementById("order_schedule").value = today;
-			f.submit();
+			document.getElementById("purchase_date").value = today;
 		}else {
 			return;
 		}
@@ -634,9 +599,9 @@ addRowButton.addEventListener('click', function() {
         for (let i = 0; i < 15; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
-                cells[i].innerHTML = '<td><input type="button" onclick="goodsList1(`${comcode_code}`,'+j+')" value="search"></td>';
+                cells[i].innerHTML = '<td><input type="button" onclick="goodsList1(`${comcode_code}`,'+j+')" value="search"><input type="hidden" name="goods_no" id="goods_no"></td>';
             } else if (i === 1) {
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_name" id="crlist['+j+'].goods_name" readonly="readonly"><input type="hidden" name="oclist['+j+'].goods_no" id="oclist['+j+'].goods_no"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_name" id="crlist['+j+'].goods_name" readonly="readonly"><input type="hidden" name="plist['+j+'].goodslot_no" id="plist['+j+'].goodslot_no"></td>';
             } else if (i === 2) {
                 cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_code" id="crlist['+j+'].goods_code" readonly="readonly"></td>';
             } else if (i === 3){
@@ -654,13 +619,13 @@ addRowButton.addEventListener('click', function() {
             } else if (i === 9){
                 cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_ea" id="crlist['+j+'].goodsst_ea" readonly="readonly"></td>';
             } else if (i === 10){
-                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_qty" id="oclist['+j+'].orderconnect_qty" maxlength="4" class="required"></td>';
+                cells[i].innerHTML = '<td><input type="text" min="0" name="plist['+j+'].purchaseconnect_number" id="plist['+j+'].purchaseconnect_number" maxlength="4" class="required"></td>';
             } else if (i === 11){
-                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_price" id="oclist['+j+'].orderconnect_price" onblur="conculator11('+j+',this.value)" onkeyup="conculator21('+j+',event, this.value)" class="required"></td>';
+                cells[i].innerHTML = '<td><input type="text" min="0" name="plist['+j+'].purchaseconnect_price" id="oclist['+j+'].purchaseconnect_price" onblur="conculator11('+j+',this.value)" onkeyup="conculator21('+j+',event, this.value)" class="required"></td>';
             } else if (i === 12){
-                cells[i].innerHTML = '<td><input type="text" name="oclist['+j+'].orderconnect_tax" id="oclist['+j+'].orderconnect_tax" readonly="readonly"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="plist['+j+'].purchaseconnect_tax" id="plist['+j+'].purchaseconnect_tax" readonly="readonly"></td>';
             } else if (i === 13){
-                cells[i].innerHTML = '<td><input type="text" name="oclist['+j+'].orderconnect_total" id="oclist['+j+'].orderconnect_total" readonly="readonly"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="plist['+j+'].purchaseconnect_total" id="plist['+j+'].purchaseconnect_total" readonly="readonly"></td>';
             } else {
                 cells[i].innerHTML = '<td><input type="button" onclick="clearRow(this)" value="delete"></td>';
             }
@@ -704,22 +669,20 @@ function clearRow(button) {
     }
 }
 
-
-function coList(code){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/coList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+function employee(code){
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d32/employee?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=500, height=500");
 }
 
-
 var t = 0;
-function deleteGoods(ono, odno, price, tax, total, code, qty){
+function deleteGoods(ono, odno, price, tax, total, code, qty, glno){
 	var list = document.getElementById("itemTable");
 	var arr = list.getElementsByTagName('input');
 	if(list.getElementsByTagName("tr").length < 3){
 		alert("상품은 반드시 1개 이상이어야 합니다.");
 		return;
 	}
-	var url = "${pageContext.request.contextPath }/d/d2/d21/deleteGoods";
-	var param = "orderconnect_no="+encodeURIComponent(ono)+"&order_no="+encodeURIComponent(odno)+"&orderconnect_price="+encodeURIComponent(price)+"&orderconnect_tax="+encodeURIComponent(tax)+"&orderconnect_total="+encodeURIComponent(total)+"&order_code="+encodeURIComponent(code)+"&orderconnect_qty="+encodeURIComponent(qty);
+	var url = "${pageContext.request.contextPath }/d/d3/d32/deleteGoods";
+	var param = "purchaseconnect_no="+encodeURIComponent(ono)+"&purchase_no="+encodeURIComponent(odno)+"&purchaseconnect_price="+encodeURIComponent(price)+"&purchaseconnect_tax="+encodeURIComponent(tax)+"&purchaseconnect_total="+encodeURIComponent(total)+"&purchase_code="+encodeURIComponent(code)+"&purchaseconnect_number="+encodeURIComponent(qty)+"&goodslot_no="+encodeURIComponent(glno);
 	
 	sendRequest(url,param,deleteGoodscheck,"POST");
 }
@@ -731,17 +694,16 @@ function deleteGoodscheck(){
 		let newTd = document.createElement("td");
 		if(data != ""){
 			procode.innerHTML = '';
-			procode.innerHTML += '<tr><th>품명</th><th>상품코드</th><th>바코드</th><th>종류</th><th>단위</th><th>규격</th><th>제조사</th><th>책임판매업자</th><th>발주수량</th><th>단가</th><th>세액</th><th>총액</th></tr>';
+			procode.innerHTML += '<tr><th>품명</th><th>상품코드</th><th>바코드</th><th>종류</th><th>단위</th><th>규격</th><th>제조사</th><th>책임판매업자</th><th>매입수량</th><th>단가</th><th>세액</th><th>총액</th></tr>';
 			var data2 = JSON.parse(data);
-			console.log(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<td><input type="button" onclick="goodsList(`${comcode_code}`,'+t+')" value="search"></td>';
+				newTd.innerHTML = '<td><input type="button" onclick="goodsList(`${comcode_code}`,'+t+')" value="search"><input type="hidden" name="goods_no" id="goods_no" value="'+map.goods_no+'"></td>';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<td><input type="text" value="'+map.goods_name+'" name="crlist1['+t+'].goods_name" id="crlist1['+t+'].goods_name" readonly="readonly"><input type="hidden" value="'+map.goods_no+'" name="oclist1['+t+'].goods_no" id="oclist1['+t+'].goods_no"></td>';
+				newTd.innerHTML = '<td><input type="text" value="'+map.goods_name+'" name="crlist1['+t+'].goods_name" id="crlist1['+t+'].goods_name" readonly="readonly"><input type="hidden" value="'+map.goodslot_no+'" name="plist1['+t+'].goodslot_no" id="plist1['+t+'].goodslot_no"></td>';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="text" value="'+map.goods_code+'" name="crlist1['+t+'].goods_code" id="crlist1['+t+'].goods_code">';
@@ -768,19 +730,19 @@ function deleteGoodscheck(){
 				newTd.innerHTML = '<input type="text" value="'+map.goodsst_ea+'" name="crlist1['+t+'].goodsst_ea" id="crlist1['+t+'].goodsst_ea">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" min="0" name="oclist1['+t+'].orderconnect_qty" id="oclist1['+t+'].orderconnect_qty" value="'+map.orderconnect_qty+'" maxlength="4" class="required">';
+				newTd.innerHTML = '<input type="text" min="0" name="plist1['+t+'].purchaseconnect_number" id="plist1['+t+'].purchaseconnect_number" value="'+map.purchaseconnect_number+'" maxlength="4" class="required">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" min="0" name="oclist1['+t+'].orderconnect_price" id="oclist1['+t+'].orderconnect_price" value="'+map.orderconnect_price+'" onblur="conculator11('+t+',this.value)" onkeyup="conculator21('+t+',event, this.value)" class="required">';
+				newTd.innerHTML = '<input type="text" min="0" name="plist1['+t+'].purchaseconnect_price" id="plist1['+t+'].purchaseconnect_price" value="'+map.purchaseconnect_price+'" onblur="conculator11('+t+',this.value)" onkeyup="conculator21('+t+',event, this.value)" class="required">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" name="oclist1['+t+'].orderconnect_tax" id="oclist1['+t+'].orderconnect_tax" value="'+map.orderconnect_tax+'" readonly="readonly">';
+				newTd.innerHTML = '<input type="text" name="plist1['+t+'].purchaseconnect_tax" id="plist1['+t+'].purchaseconnect_tax" value="'+map.purchaseconnect_tax+'" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" name="oclist1['+t+'].orderconnect_total" id="oclist1['+t+'].orderconnect_total" value="'+map.orderconnect_total+'" readonly="readonly"><input type="hidden" name="oclist1['+t+'].orderconnect_no" id="oclist1['+t+'].orderconnect_no" value="'+map.orderconnect_no+'">';
+				newTd.innerHTML = '<input type="text" name="plist1['+t+'].purchaseconnect_total" id="plist1['+t+'].purchaseconnect_total" value="'+map.purchaseconnect_total+'" readonly="readonly"><input type="hidden" name="plist1['+t+'].purchaseconnect_no" id="plist1['+t+'].purchaseconnect_no" value="'+map.purchaseconnect_no+'">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="button" onclick="deleteGoods('+map.orderconnect_no+','+map.order_no+','+map.orderconnect_price+','+map.orderconnect_tax+','+map.orderconnect_total+',`'+map.order_code+'`,'+map.orderconnect_qty+')" value="delete">';
+				newTd.innerHTML = '<input type="button" onclick="deleteGoods('+map.purchaseconnect_no+','+map.purchase_no+','+map.purchaseconnect_price+','+map.purchaseconnect_tax+','+map.purchaseconnect_total+',`'+map.purchase_code+'`,'+map.purchaseconnect_number+','+map.goodslot_no+','+map.goods_no+')" value="delete">';
 				newTr.appendChild(newTd);
 				t = Number(t) + 1;
 			});
@@ -799,7 +761,7 @@ function goodsList(code, h){
 		document.getElementById("client_name").focus();
 		return;
 	}
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/goodsList?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d32/goodsList?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 function goodsList1(code, h){
 	let cv = document.getElementById("client_name").value;
@@ -808,13 +770,13 @@ function goodsList1(code, h){
 		document.getElementById("client_name").focus();
 		return;
 	}
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/goodsList1?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d32/goodsList1?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 function searcht(){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function clList(code){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d31/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function team(e, name){
 	if(e.keyCode == 13){
@@ -823,7 +785,7 @@ function team(e, name){
 			document.getElementById("team_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/d/d2/d21/team";
+		var url = "${pageContext.request.contextPath}/d/d3/d31/team";
 		var param = "team_name=" + encodeURIComponent(name);
 		
 		sendRequest(url, param, teamname, "POST");
@@ -851,7 +813,7 @@ function searchcl(e, code){
 			document.getElementById("client_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/d/d2/d21/searchcl";
+		var url = "${pageContext.request.contextPath}/d/d3/d31/searchcl";
 		var param = "comcode_code="+encodeURIComponent(code)+"&client_name="+encodeURIComponent(clname);
 		
 		sendRequest(url, param, clName, "POST");
@@ -886,34 +848,34 @@ function clName(){
 }
 
 function conculator11(k,v){
-	document.getElementById("oclist["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
-	let tax = document.getElementById("oclist["+k+"].orderconnect_tax").value; 
-	document.getElementById("oclist["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
+	document.getElementById("plist["+k+"].purchaseconnect_tax").value = Math.round(Number(v) * 0.1);
+	let tax = document.getElementById("plist["+k+"].purchaseconnect_tax").value; 
+	document.getElementById("plist["+k+"].purchaseconnect_total").value = Math.round(Number(v) + Number(tax));
 }
 function conculator21(k, e, v){
 	if(e.keyCode == 13){
-		document.getElementById("oclist["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
-		let tax = document.getElementById("oclist["+k+"].orderconnect_tax").value; 
-		document.getElementById("oclist["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
+		document.getElementById("plist["+k+"].purchaseconnect_tax").value = Math.round(Number(v) * 0.1);
+		let tax = document.getElementById("plist["+k+"].purchaseconnect_tax").value; 
+		document.getElementById("plist["+k+"].purchaseconnect_total").value = Math.round(Number(v) + Number(tax));
 	}
 }
 
 function conculator12(k,v){
-	document.getElementById("oclist1["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
-	let tax = document.getElementById("oclist1["+k+"].orderconnect_tax").value; 
-	document.getElementById("oclist1["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
+	document.getElementById("plist1["+k+"].purchaseconnect_tax").value = Math.round(Number(v) * 0.1);
+	let tax = document.getElementById("plist1["+k+"].purchaseconnect_tax").value; 
+	document.getElementById("plist1["+k+"].purchaseconnect_total").value = Math.round(Number(v) + Number(tax));
 }
 function conculator22(k, e, v){
 	if(e.keyCode == 13){
-		document.getElementById("oclist1["+k+"].orderconnect_tax").value = Math.round(Number(v) * 0.1);
-		let tax = document.getElementById("oclist1["+k+"].orderconnect_tax").value; 
-		document.getElementById("oclist1["+k+"].orderconnect_total").value = Math.round(Number(v) + Number(tax));
+		document.getElementById("plist1["+k+"].purchaseconnect_tax").value = Math.round(Number(v) * 0.1);
+		let tax = document.getElementById("plist1["+k+"].purchaseconnect_tax").value; 
+		document.getElementById("plist1["+k+"].purchaseconnect_total").value = Math.round(Number(v) + Number(tax));
 	}
 }
 
 function code(v){
-	var url = "${pageContext.request.contextPath }/d/d2/d21/getOrderCode";
-	var param = "order_code="+encodeURIComponent(v);
+	var url = "${pageContext.request.contextPath }/d/d3/d32/getPurchaseCode";
+	var param = "purchase_code="+encodeURIComponent(v);
 	
 	sendRequest(url,param,codecheck,"POST");
 }

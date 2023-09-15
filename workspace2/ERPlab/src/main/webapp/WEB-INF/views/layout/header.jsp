@@ -49,14 +49,17 @@
 								<li><a href="#">주소록</a></li>
 								<li><a href="${pageContext.request.contextPath}/erpchat?comcode_code=${comcode_code}" target="_blank">메신저</a></li>
 								<li><a href="#">이메일</a></li>
-								<li><a href="#">연차</a></li>								
+								<li><a href="#">연차</a></li>	
+								<c:if test="${login == 1 }">
+									<li><a href="#">관리자</a></li>	
+								</c:if>					
 							</ul>
 							<ul>
 								<li><a href="#">재고</a></li>
 								<li><a href="#">물류</a></li>
-								<li><a href="#">발주</a></li>
+								<li><a href="${pageContext.request.contextPath}/d/d3/d31/inputOrder?comcode_code=${comcode_code}">발주</a></li>
 								<li><a href="#">부서별매출</a></li>
-								<li><a href="#">프로젝트</a></li>
+								<li><a href="${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code}">프로젝트</a></li>
 								<li><a href="#">회사정보</a></li>
 								<li><a href="${pageContext.request.contextPath}/b11main?comcode_code=${comcode_code}">재무제표</a></li>
 							</ul>
@@ -99,13 +102,13 @@
 									</li>
 									<li>
 											<h3>전략기획팀</h3>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code}">
 											<p>프로젝트</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/a/a3/a32/inputContract?comcode_code=${comcode_code}&project_no=0">
 											<p>계약관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/a/a3/a33/?comcode_code=${comcode_code}&project_no=0">
 											<p>실적 / 평가</p>
 										</a>
 									</li>
@@ -141,10 +144,10 @@
 										<a href="${pageContext.request.contextPath }/b33main">
 											<p>외화관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/b/b4/b41?comcode_code=${comcode_code }">
 											<p>마감 / 결산</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath}/d/d1/d18/inputBom?comcode_code=${comcode_code}">
 											<p>원가분석</p>
 										</a>
 									</li>
@@ -192,19 +195,16 @@
 									</li>
 									<li>
 										<h3>국내영업팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/c/c2/c21?comcode_code=${comcode_code }">
 												<p>국내거래처관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/c/c2/c22?comcode_code=${comcode_code }">
 												<p>채권관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/c/c2/c23/inputReturn?comcode_code=${comcode_code }">
 												<p>반품관리</p>
 											</a>
-											<a href="#">
-												<p>영업전표</p>
-											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/c/c2/c25/inputLocalSales?comcode_code=${comcode_code }">
 												<p>매출현황</p>
 											</a>
 									</li>
@@ -240,52 +240,46 @@
 									</li>
 									<li>
 										<h3>생산팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d1/d11/inputProduct?comcode_code=${comcode_code}">
 												<p>생산 / 제조</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d1/d12/inputRequestProduct?comcode_code=${comcode_code}">
 												<p>생산의뢰</p>
 											</a>
-											<a href="#">
-												<p>작업지시서</p>
-											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d1/d14/inputEvaluation?comcode_code=${comcode_code}">
 												<p>생산실적관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d1/d15/inputEvaluemng?comcode_code=${comcode_code}">
 												<p>작업실적관리</p>
 											</a>
-											<a href="#">
-												<p>불량분석</p>
-											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d1/d17/inputProinventory?comcode_code=${comcode_code}">
 												<p>공정재고관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d2/d21/inputOrder?comcode_code=${comcode_code}">
 												<p>발주관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d2/d22/inputPurchase?comcode_code=${comcode_code}">
 												<p>매입관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d2/d23/inputInventory?comcode_code=${comcode_code}">
 												<p>재고관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d2/d24/inputProductTest?comcode_code=${comcode_code}">
 												<p>재고평가</p>
 											</a>
 									</li>
 									<li>
 										<h3>구매팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d3/d31/inputOrder?comcode_code=${comcode_code}">
 												<p>발주관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d3/d32/inputPurchase?comcode_code=${comcode_code}">
 												<p>매입관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d3/d33/inputInventory?comcode_code=${comcode_code}">
 												<p>재고관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/d/d3/d34/inputProductTest?comcode_code=${comcode_code}">
 												<p>재고평가</p>
 											</a>
 									</li>

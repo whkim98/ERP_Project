@@ -2,11 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
+<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="/css/a/a_company.css"/>
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -62,14 +59,18 @@ height:20px;
 border: 0;
 }
 </style>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
+	console.log(v);
 	if(v == ''){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/d/d2/d22/inputPurchaseAjax";
+	var url = "${pageContext.request.contextPath}/d/d3/d31/inputOrderAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -77,34 +78,38 @@ function surf(v, code){
 function getlist(){
 	if(xhr.readyState==4 && xhr.status==200) {	
 		var data = xhr.response;
+		console.log(data);
 		let procode = document.getElementById("procode");
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>매입코드</td><td>담당자</td><td>담당팀</td><td>차변</td><td>대변</td><td>매입일자</td></tr>';
+		procode.innerHTML += '<tr><td>발주코드</td><td>신청일</td><td>상태</td><td>승인여부</td><td>담당팀</td><td>거래처</td><td>마감일</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.purchase_no+",'"+map.purchase_code+"')");
+				newTr.setAttribute("onclick", "selectForm("+map.order_no+",'"+map.order_code+"')");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.purchase_code;
+				newTd.innerHTML = map.order_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.employee1_name;
+				newTd.innerHTML = map.order_odate;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.order_status;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.order_approval;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.team_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.closing_debtor;
+				newTd.innerHTML = map.client_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.closing_creditor;
-				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = map.purchase_date;
+				newTd.innerHTML = map.order_end;
 				newTr.appendChild(newTd);
 			});
 		}else {
@@ -112,11 +117,12 @@ function getlist(){
 		}
 	}
 }
+
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">매입 등록(원부자재)</h1>
+			<h1 style="font-size: 20pt;">발주 등록(완제품)</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -124,11 +130,13 @@ function getlist(){
 					<tr>
 						<td>
 							<select name="type">
-								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
-								<option value="purchase_code" ${param.type == 'purchase_code' ? 'selected' : '' }>코드</option>
-								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당팀</option>
-								<option value="purchase_date" ${param.type == 'purchase_date' ? 'selected' : '' }>매입일자</option>
-								<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>담당자</option>
+								<option value="all">전체</option>
+								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>코드</option>
+								<option value="order_code" ${param.type == 'order_code' ? 'selected' : '' }>생산명</option>
+								<option value="company_name" ${param.type == 'company_name' ? 'selected' : '' }>의뢰명</option>
+								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당자</option>
+								<option value="order_odate" ${param.type == 'order_odate' ? 'selected' : '' }>신청일</option>
+								<option value="order_end" ${param.type == 'order_end' ? 'selected' : '' }>마감일</option>
 							</select>
 						</td>
 						<td>
@@ -143,22 +151,24 @@ function getlist(){
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
-						<td>매입코드</td>
-						<td>담당자</td>
+						<td>발주코드</td>
+						<td>신청일</td>
+						<td>상태</td>
+						<td>승인여부</td>
 						<td>담당팀</td>
-						<td>차변</td>
-						<td>대변</td>
-						<td>매입일자</td>
+						<td>거래처</td>
+						<td>마감일</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
-					<tr onclick="selectForm(${map.purchase_no}, '${map.purchase_code }')" class="filter">
-						<td>${map.purchase_code }</td>
-						<td>${map.employee1_name}</td>
-						<td>${map.team_name}</td>
-						<td>${map.closing_debtor}</td>
-						<td>${map.closing_creditor}</td>
-						<td>${map.purchase_date }</td>
-					</tr>
+						<tr onclick="selectForm(${map.order_no}, '${map.order_code }')" class="filter">
+							<td>${map.order_code }</td>
+							<td>${map.order_odate }</td>
+							<td>${map.order_status}</td>
+							<td>${map.order_approval}</td>
+							<td>${map.team_name}</td>
+							<td>${map.client_name}</td>
+							<td>${map.order_end}</td>
+						</tr>
 					</c:forEach>
 				</c:if>
 				<c:if test="${list == null }">
@@ -167,30 +177,28 @@ function getlist(){
 				</table>
 			</div>
 			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d22/addForm?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d3/d31/addForm?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
-			<form action="${pageContext.request.contextPath }/d/d2/d22/updateForm" id="content" method="post">
-				<input type="hidden" name="purchase_no">
-				<input type="hidden" name="purchase_code">
+			<form action="${pageContext.request.contextPath }/d/d3/d31/updateForm" id="content" method="post">
+				<input type="hidden" name="order_no">
+				<input type="hidden" name="order_code">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 			</form>
 		
 		</div>
-		
 	
 </div>
 <script type="text/javascript">
 
 // 리스트에서 글 선택 시 넘어가는 form
 function selectForm(no, code){
-	document.getElementsByName("purchase_no")[0].value = no;
-	document.getElementsByName("purchase_code")[0].value = code;
+	document.getElementsByName("order_no")[0].value = no;
+	document.getElementsByName("order_code")[0].value = code;
 	
 	document.getElementById("content").submit(); // content라는 id의 form태그 submit
 }
-
 
 </script>
 </div>

@@ -1,219 +1,286 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: #000;
-	background-color: #000;
-}
-</style>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
+<<script type="text/javascript">
+function surf(v, code){
+	var type = document.getElementsByName("type")[0].value;
+	if(v == ''){
+		type = null;
+		v = null;
+	}
+	var url = "${pageContext.request.contextPath}/a/a3/a33/estimateAjax";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;
+	
+	sendRequest(url,param,getlist,"POST");
+}
+function getlist(){
+	if(xhr.readyState==4 && xhr.status==200) {	
+		var data = xhr.response;
+		let procode = document.getElementById("procode");
+		let newTr = document.createElement("tr");
+		let newTd = document.createElement("td");
+		procode.innerHTML = '';
+		procode.innerHTML += '<tr><td>번호</td><td>프로젝트명</td><td>평가점수</td><td>평가결과</td><td>최종마감일</td><td>담당팀</td></tr>';
+		if(data != ""){
+			var data2 = JSON.parse(data);
+			data2.forEach(function(map){
+				newTr = document.createElement("tr");
+				newTr.setAttribute("onclick", "selectForm("+map.estimate_no+")");
+				procode.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.estimate_no;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.project_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.estimate_score;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.estimate_result;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.estimate_fact;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.team_name;
+				newTr.appendChild(newTd);
+			});
+		}else {
+			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+		}
+	}
+}
+</script>
 	<div class="notosanskr">
 		<div align="center">
 			<h1 style="font-size: 20pt;">실적 등록</h1>
 		</div>
-		<div align="center" class="divform1">
-			<table>
-				<tr>
-					<td>프로젝트명 :</td>
-					<td><input type="text" name="project_name"></td>
-					<td>
-						<a href="${pageContext.request.contextPath}/">
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-						</a>
-					</td>
-					<td>조회 구분 :</td>
-					<td><select name="project_status">
-							<option value="0">미완료</option>
-							<option value="1">완료</option>
-							<option value="2">진행중</option>
-					</select></td>
-					<td>
-						<a href="${pageContext.request.contextPath}/">
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-						</a>
-					</td>
-					<td>프로젝트 기간 :</td>
-					<td><input type="text" name="project_instdate" size="8" maxlength="8"> ~ <input
-						type="text" name="project_enddate" size="8" maxlength="8"></td>
-					<td>
-						<a href="${pageContext.request.contextPath}/">
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-						</a>
-					</td>
-				</tr>
-				<tr>
-					<td>코드 :</td>
-					<td><input type="text" name="project_no"></td>
-					<td>
-						<a href="${pageContext.request.contextPath}/">
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-						</a>
-					</td>
-					<td>프로젝트 종류 :</td>
-					<td><input type="text" name="project_kind"></td>
-					<td>
-						<a href="${pageContext.request.contextPath}/">
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-						</a>
-					</td>
-					<td>원청 회사 :</td>
-					<td><input type="text" name="project_contractor"></td>
-					<td>
-						<a href="${pageContext.request.contextPath}/">
-							<img alt="glasses" src="/image/donghyeon/magnifier.png" class="">
-						</a>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<hr>
+		<br>
 		<div class="divform2">
-			<table id="procode">
-				<tr>
-					<td>이름</td>
-					<td>구분</td>
-				</tr>
-				<tr>
-					<td><input type="text" name="project_name" class="erag"
-						onkeypress="add(event)" onclick="put(this.value)"></td>
-					<td><select name="project_status">
-							<option value="1">완료</option>
-							<option value="0" selected>미완료</option>
-							<option value="2">진행중</option>
-					</select></td>
-				</tr>
-			</table>
+			<div>
+				<table>
+					<tr>
+						<td>
+							<select name="type">
+								<option value="project_name" ${param.type == 'project_name' ? 'selected' : '' }>이름</option>
+								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>종류</option>
+								<option value="estimate_content" ${param.type == 'estimate_content' ? 'selected' : '' }>내용</option>
+								<option value="estimate_fact" ${param.type == 'estimate_fact' ? 'selected' : '' }>거래처</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
+							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<c:choose>
+					<c:when test="${list == null }">
+						등록된 계약이 없습니다.
+					</c:when>
+					<c:otherwise>
+						<table>
+							<tr>
+								<td>번호</td>
+								<td>프로젝트명</td>
+								<td>평가점수</td>
+								<td>평가결과</td>
+								<td>최종마감일</td>
+								<td>담당팀</td>
+							</tr>
+						<c:forEach var="map" items="${list }">
+							<tr onclick="selectForm(${map.estimate_no})">
+								<td>${map.estimate_no }</td>
+								<td>${map.project_name }</td>
+								<td>${map.estimate_score }</td>
+								<td>${map.estimate_result }</td>
+								<td>${map.estimate_fact }</td>
+								<td>${map.team_name }</td>
+							</tr>
+						</c:forEach>
+						</table>
+					</c:otherwise>
+				</c:choose>
+			</div>
+	
+			<div align="center">
+				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/inputEstimate?comcode_code=${comcode_code }'">
+			</div>
+	
 		</div>
+		
+		<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
+			<form action="${pageContext.request.contextPath }/a/a3/a33/updateForm" id="content" method="post">
+				<input type="hidden" name="estimate_no">
+				<input type="hidden" name="comcode_code" value="${comcode_code }">
+			</form>
+		
 		<div class="divform4">
 			<hr class="hr">
 		</div>
-		<div id="add" class="divform3">
-			<form action="${pageContext.request.contextPath }/a/a3/a33/createEstimate" method="POST" name="estimate">
-			<input type="hidden" name="comcode_code" value="${comcode_code }">
-			<input type="hidden" name="project_no" id="project_no">
-			<input type="hidden" name="team_no" id="team_no">
-			<input type="hidden" name="employee1_no" id="employee1_no">
-				<h3>계약 등록 사항</h3>
-				<table>
-					<tr>
-						<td>평가점수 :</td>
-						<td><input type="text" name="estimate_score" id="estimate_score"></td>
-					</tr>
-					<tr>
-						<td>평가내용 :</td>
-						<td><input type="text" name="estimate_content" id="estimate_content"></td>
-					</tr>
-					<tr>
-						<td>평가결과 :</td>
-						<td><input type="text" name="estimate_result" id="estimate_result"></td>
-					</tr>
-					<tr>
-						<td>최종마감일 :</td>
-						<td><input type="text" name="estimate_fact" id="estimate_fact"></td>
-					</tr>
-					<tr>
-						<td>프로젝트명 :</td>
-						<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')">
-						<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
-					</tr>
-					<tr>
-						<td>상태 :</td>
-						<td><input type="text" name="project_status" id="project_status"></td>
-					</tr>
-					<tr>
-						<td>프로젝트 내용 :</td>
-						<td><input type="text" name="project_content" id="project_content"></td>
-					</tr>
-					<tr>
-						<td>프로젝트 기간 :</td>
-						<td><input type="text" name="project_start" id="project_start"> ~ <input type="text" name="project_end" id="project_end"></td>
-					</tr>
-					<tr>
-						<td>프로젝트 담당팀 :</td>
-						<td><input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
-						<input type="button" onclick="searcht()" value="조회"></td>
-					</tr>
-					<tr>
-						<td>프로젝트 담당자 :</td>
-						<td><input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')"></td>
-					</tr>
-					<tr>
-						<td>전화번호 :</td>
-						<td><input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly"></td>
-					</tr>
-				</table>
-				
-				<input type="button" value="등록" onclick="sub(this.form)">
-			</form>
-		</div>
+		
+		<c:if test="${inmap != null }">
+			<div id="add" class="divform3">
+				<form action="${pageContext.request.contextPath }/a/a3/a33/update" method="POST" name="estimate">
+				<input type="hidden" name="comcode_code" value="${comcode_code }">
+				<input type="hidden" name="project_no" id="project_no" value="${inmap.project_no }">
+				<input type="hidden" name="employee1_no" id="employee1_no" value="${inmap.employee1_no }">
+					<h3>${inmap.project_name } 평가 수정</h3>
+					<table>
+						<tr>
+							<td>평가점수 </td>
+							<td><input type="text" name="estimate_score" id="estimate_score" value="${inmap.estimate_score}"></td>
+						</tr>
+						<tr>
+							<td>평가내용 </td>
+							<td><input type="text" name="estimate_content" id="estimate_content" value="${inmap.estimate_content }"></td>
+						</tr>
+						<tr>
+							<td>평가결과 </td>
+							<td><input type="text" name="estimate_result" id="estimate_result" value="${inmap.estimate_result}"></td>
+						</tr>
+						<tr>
+							<td>최종마감일 </td>
+							<td><input type="text" name="estimate_fact" id="estimate_fact" value="${inmap.estimate_fact }"></td>
+						</tr>
+						<tr>
+							<td>프로젝트명 </td>
+							<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" value="${inmap.project_name }">
+							<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
+						</tr>
+						<tr>
+							<td>상태 </td>
+							<td><input type="text" name="project_status" id="project_status" readonly="readonly" value="${inmap.project_status }"></td>
+						</tr>
+						<tr>
+							<td>프로젝트 내용 </td>
+							<td><input type="text" name="project_content" id="project_content" readonly="readonly" value="${inmap.project_content }"></td>
+						</tr>
+						<tr>
+							<td>프로젝트 기간 </td>
+							<td><input type="text" name="project_start" id="project_start" readonly="readonly" value="${inmap.project_start }"> ~ <input type="text" name="project_end" id="project_end" readonly="readonly" value="${inmap.project_end }"></td>
+						</tr>
+						<tr>
+							<td>프로젝트 담당팀 </td>
+							<td><input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }">
+							<input type="button" onclick="searcht()" value="조회"></td>
+						</tr>
+						<tr>
+							<td>프로젝트 담당자 </td>
+							<td><input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')" value="${inmap.employee1_name }"></td>
+						</tr>
+						<tr>
+							<td>전화번호 </td>
+							<td><input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly" value="${inmap.employee1_phone }"></td>
+						</tr>
+					</table>
+					
+					<input type="button" value="update" onclick="sub(this.form)">
+					<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/delete?estimate_no=${inmap.estimate_no }&comcode_code=${comcode_code }'">
+				</form>
+			</div>
+		</c:if>
+		
+		<c:if test="${inmap == null }">
+			<div id="add" class="divform3">
+				<form action="${pageContext.request.contextPath }/a/a3/a33/createEstimate" method="POST" name="estimate">
+				<input type="hidden" name="comcode_code" value="${comcode_code }">
+				<input type="hidden" name="project_no" id="project_no">
+				<input type="hidden" name="team_no" id="team_no">
+				<input type="hidden" name="employee1_no" id="employee1_no">
+					<h3>계약 등록 사항</h3>
+					<table>
+						<tr>
+							<td>평가점수 </td>
+							<td><input type="text" name="estimate_score" id="estimate_score"></td>
+						</tr>
+						<tr>
+							<td>평가내용 </td>
+							<td><input type="text" name="estimate_content" id="estimate_content"></td>
+						</tr>
+						<tr>
+							<td>평가결과 </td>
+							<td><input type="text" name="estimate_result" id="estimate_result"></td>
+						</tr>
+						<tr>
+							<td>최종마감일 </td>
+							<td><input type="date" name="estimate_fact" id="estimate_fact"></td>
+						</tr>
+						<tr>
+							<td>프로젝트명 </td>
+							<td><input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')">
+							<input type="button" onclick="prList('${comcode_code}')" value="조회"></td>
+						</tr>
+						<tr>
+							<td>상태 </td>
+							<td><input type="text" name="project_status" id="project_status" readonly="readonly"></td>
+						</tr>
+						<tr>
+							<td>프로젝트 내용 </td>
+							<td><input type="text" name="project_content" id="project_content" readonly="readonly"></td>
+						</tr>
+						<tr>
+							<td>프로젝트 기간 :</td>
+							<td><input type="date" name="project_start" id="project_start" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" readonly="readonly"></td>
+						</tr>
+						<tr>
+							<td>평가 담당팀 </td>
+							<td><input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
+							<input type="button" onclick="searcht()" value="조회"></td>
+						</tr>
+						<tr>
+							<td>담당자 </td>
+							<td><input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')"></td>
+						</tr>
+						<tr>
+							<td>전화번호 </td>
+							<td><input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly"></td>
+						</tr>
+					</table>
+					
+					<input type="button" value="save" onclick="sub(this.form)">
+					<input type="reset" value="reset">
+				</form>
+			</div>
+		</c:if>
+		
 	</div>
 	<script type="text/javascript">
 
 	function sub(f){
-		if(f.contract_name.value == ""){
-			alert("계약명을 입력하십시오!");
-			f.contract_name.focus();
-		}else if(f.contractkind_name.value == ""){
-			alert("계약 종류를 입력하십시오!");
-			f.contractkind_name.focus();
-		}else if(f.client_name.value == ""){
-			alert("거래처명을 입력하십시오!");
-			f.client_name.focus();
-		}else if(f.contract_start.value == "" || f.contract_end.value == ""){
-			alert("기간을 입력하십시오!");
-			f.contract_start.focus();
+		if(f.estimate_result.value == ""){
+			f.estimate_result.focus();
+		}else if(f.estimate_content.value == ""){
+			f.estimate_content.focus();
+		}else if(f.estimate_score.value == ""){
+			f.estimate_score.focus();
 		}else if(f.project_name.value == ""){
-			alert("프로젝트명을 입력하십시오!");
 			f.project_name.focus();
-		}else if(f.contract_content.value == ""){
-			alert("계약내용을 입력하십시오!");
-			f.contract_content.focus();
-		}else{
+		}else if(f.team_name.value == ""){
+			f.team_name.focus();
+		}else if(f.employee1_name.value == ""){
+			f.employee1_name.focus();
+		}
+		
+		if(f.estimate_fact.value = ""){
+			var ch = confirm("최종마감일이 입력되지 않았습니다. 계속하시겠습니까?");
+			if(ch){
+				f.estimate_fact.value = today;
+			}else {
+				f.estimate_fact.focus();
+				return;
+			}
+		}
+		
+		var ch = confirm("등록하시겠습니까?")
+		if(ch){
 			f.submit();
+		}else {
+			return;
 		}
 	}
 	
@@ -301,6 +368,13 @@
 				alert("중복된 팀 이름입니다. 조회 버튼을 클릭하여 목록에서 팀을 선택해주세요.");
 			}
 		}
+	}
+	
+	// 리스트에서 글 선택 시 넘어가는 form
+	function selectForm(no){
+		document.getElementsByName("estimate_no")[0].value = no;
+		
+		document.getElementById("content").submit(); // content라는 id의 form태그 submit
 	}
 	
 </script>

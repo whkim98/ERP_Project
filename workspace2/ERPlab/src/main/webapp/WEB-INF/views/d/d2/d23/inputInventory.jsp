@@ -122,7 +122,7 @@ function getlist(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">구매 재고 관리</h1>
+			<h1 style="font-size: 20pt;">구매 재고 관리(원부자재)</h1>
 		</div>
 		<div class="divform2">
 			<div>

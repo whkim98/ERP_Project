@@ -7,28 +7,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.login.Erp_AdminDAO;
+import com.lab.erp.dao.login.Erp_EmployeeDAO;
 import com.lab.erp.vo.login.Erp_AdminVO;
+import com.lab.erp.vo.login.Erp_Employee1VO;
+import com.lab.erp.vo.login.Erp_Employee2VO;
 import com.lab.erp.vo.login.Erp_TeamVO;
 
 @Service
 public class AdminService {
 private Erp_AdminDAO dao;
+private Erp_EmployeeDAO edao;
 	
 	@Autowired
-	public AdminService(Erp_AdminDAO dao) {
+	public AdminService(Erp_AdminDAO dao, Erp_EmployeeDAO edao) {
 		this.dao = dao;
+		this.edao = edao;
 	}
 	
+	
+//	admin
 	public int adminMaxNo() {
 		return dao.adminMaxNo();
 	}
 	
 	public int createAdmin(Erp_AdminVO vo) {
-		
-		int no = adminMaxNo() + 1;
-			
-		vo.setAdmin_no(no);
-		
 		return dao.createAdmin(vo);
 	}
 	
@@ -40,12 +42,12 @@ private Erp_AdminDAO dao;
 		return dao.deleteAdmin(admin_no);
 	}
 	
-	public Erp_AdminVO selectAdmin(Map<String, Object> map) {
-		return dao.selectAdmin(map);
+	public Map<String, Object> selectAdmin(int admin_no) {
+		return dao.selectAdmin(admin_no);
 	}
 	
-	public List<Map<String, Object>> adminList(){
-		return dao.adminList();
+	public List<Map<String, Object>> adminList(Map<String, Object> map){
+		return dao.adminList(map);
 	}
 	
 	public Erp_AdminVO giveAdmin(int admin_no) {
@@ -58,5 +60,43 @@ private Erp_AdminDAO dao;
 	
 	public List<Erp_TeamVO> teamList(Map<String, Object> map){
 		return dao.teamList(map);
+	}
+	
+	
+//	employee
+	public List<Map<String, Object>> EmpList(Map<String, Object> map){
+		return edao.EmpList(map);
+	}
+	
+	public int createEmployee1(Erp_Employee1VO vo) {
+		return edao.createEmployee1(vo);
+	}
+	
+	public int createEmployee2(Erp_Employee2VO vo) {
+		return edao.createEmployee2(vo);
+	}
+	
+	public int updateEmp1(Erp_Employee1VO vo) {
+		return edao.updateEmp1(vo);
+	}
+	
+	public int updateEmp2(Erp_Employee2VO vo) {
+		return edao.updateEmp2(vo);
+	}
+	
+	public int updateEmpPw(Erp_Employee1VO vo) {
+		return edao.updateEmpPw(vo);
+	}
+	
+	public int deleteEmp1(int employee1_no) {
+		return edao.deleteEmp1(employee1_no);
+	}
+	
+	public int deleteEmp2(int employee2_no) {
+		return edao.deleteEmp2(employee2_no);
+	}
+	
+	public Map<String, Object> selectEmp(int employee2_no){
+		return edao.selectEmp(employee2_no);
 	}
 }

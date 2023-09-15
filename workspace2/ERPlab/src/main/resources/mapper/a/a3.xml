@@ -258,9 +258,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and c.client_no = cl.client_no 
 		and c.project_no = p.project_no 
 		and p.comcode_no = #{comcode_no} 
-		<if test="project_no != '0'">
-			and c.project_no = #{project_no} 
-		</if>
 		<if test="type != null">
 			<if test="type == 'contract_name'">
 				and c.contract_name like '%${word}%' 
@@ -282,7 +279,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectContract" resultType="map" parameterType="int">
-		select c.*, ck.contractkind_name, cl.client_name, cl.client_manager, cl.client_contact, cl.client_no, p.project_name, p.project_start, p.project_end, p.project_budget, p.project_content 
+		select c.*, ck.contractkind_name, cl.*, p.project_name, p.project_start, p.project_end, p.project_budget, p.project_content 
 		from erp_contract c, erp_contractkind ck, erp_client cl, erp_project p 
 		where c.contractkind_no = ck.contractkind_no 
 		and c.client_no = cl.client_no 
@@ -332,9 +329,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select e.*, p.project_name, t.team_name from erp_estimate e, erp_project p, erp_team t 
 		where e.project_no = p.project_no and p.team_no = t.team_no 
 		and p.comcode_no = #{comcode_no} 
-		<if test="project_no != '0'">
-			and e.project_no = #{project_no} 
-		</if>
 		<if test="type != null">
 			<if test="type == 'project_name'">
 				and p.project_name like '%${word}%' 

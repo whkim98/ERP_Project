@@ -1,50 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-}
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: #000;
-	background-color: #000;
-}
-</style>
 <script type="text/javascript">
 //전체목록조회
 function searchpk(){
@@ -170,7 +126,8 @@ function getlist(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
+	
+		<div class="dh_aligncenter">
 			<h2>프로젝트 등록</h2>
 		</div>
 		<br>
@@ -229,7 +186,7 @@ function getlist(){
 					</table>
 				</c:otherwise>
 			</c:choose>
-			<div align="right">
+			<div class="dh_alignright">
 				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code }'">
 			</div>
 		</div>
@@ -395,6 +352,7 @@ function getlist(){
 	document.getElementById("project_start").setAttribute("max", end+"-12-31");
 
 	function startcheck(v){
+		document.getElementById("project_end").value = v;
 		document.getElementById("project_end").setAttribute("min", v);
 		document.getElementById("project_end").setAttribute("max", end+"-12-31");
 	}

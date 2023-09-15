@@ -69,7 +69,7 @@ function surf(v, code){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/d/d2/d24/inputProductTestAjax";
+	var url = "${pageContext.request.contextPath}/d/d3/d34/inputProductTestAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -116,7 +116,7 @@ function getlist(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div align="center">
-			<h1 style="font-size: 20pt;">재고 평가 등록(원부자재)</h1>
+			<h1 style="font-size: 20pt;">재고 평가 등록(완제품)</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -169,11 +169,11 @@ function getlist(){
 				</table>
 			</div>
 			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d24/inputProductTest?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d3/d34/inputProductTest?comcode_code=${comcode_code }'" value="add">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
-			<form action="${pageContext.request.contextPath }/d/d2/d24/updateForm" id="content" method="post">
+			<form action="${pageContext.request.contextPath }/d/d3/d34/updateForm" id="content" method="post">
 				<input type="hidden" name="producttest_no">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 			</form>
@@ -187,14 +187,14 @@ function getlist(){
 		<div id="add" class="divform3">
 			<c:choose>
 				<c:when test="${inmap != null }">
-					<form action="${pageContext.request.contextPath }/d/d2/d24/update" method="POST" id="update">
+					<form action="${pageContext.request.contextPath }/d/d3/d34/update" method="POST" id="update">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="purchase_no" id="purchase_no" value="${inmap.purchase_no }">
 						<input type="hidden" name="producttest_no" id="producttest_no" value="${inmap.producttest_no }">
 						<input type="hidden" name="ptkind_no" id="ptkind_no" value="${inmap.ptkind_no }">
 						<input type="hidden" name="goodslot_no" id="goodslot_no" value="${inmap.goodslot_no }">
 						<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
-						<input type="hidden" name="producttest_type" id="producttest_type" value="${inmap.producttest_type }">
+						<input type="hidden" name="producttest_type" id="producttest_type" value="0">
 						<input type="hidden" name="purchaseconnect_price" id="purchaseconnect_price" value="${inmap.purchaseconnect_price }">
 						<input type="hidden" name="purchaseconnect_number" id="purchaseconnect_number" value="${inmap.purchaseconnect_number }">
 						<input type="hidden" name="purchaseconnect_no" id="purchaseconnect_no" value="${inmap.purchaseconnect_no }">
@@ -291,12 +291,12 @@ function getlist(){
 					</form>
 				</c:when>
 				<c:otherwise>
-					<form action="${pageContext.request.contextPath }/d/d2/d24/createProductTest" method="POST" id="create">
+					<form action="${pageContext.request.contextPath }/d/d3/d34/createProductTest" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="goodslot_no" id="goodslot_no">
 						<input type="hidden" name="purchase_no" id="purchase_no">
 						<input type="hidden" name="team_no" id="team_no" value="17">
-						<input type="hidden" name="producttest_type" id="producttest_type" value="1">
+						<input type="hidden" name="producttest_type" id="producttest_type" value="0">
 						<input type="hidden" name="purchaseconnect_price" id="purchaseconnect_price">
 						<input type="hidden" name="purchaseconnect_number" id="purchaseconnect_number">
 						<input type="hidden" name="purchaseconnect_no" id="purchaseconnect_no">
@@ -404,7 +404,7 @@ var pat = /^[0-9]{0,8}$/;
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no, code){
-	location.href='${pageContext.request.contextPath }/d/d2/d24/delete?producttest_no='+no+'&comcode_code='+code;
+	location.href='${pageContext.request.contextPath }/d/d3/d34/delete?producttest_no='+no+'&comcode_code='+code;
 }
 
 function conculator(e, v){
@@ -588,7 +588,7 @@ function team(e, name){
 			document.getElementById("team_name").focus();
 			return;
 		}
-		var url = "${pageContext.request.contextPath}/d/d2/d21/team";
+		var url = "${pageContext.request.contextPath}/d/d3/d31/team";
 		var param = "team_name=" + encodeURIComponent(name);
 		
 		sendRequest(url, param, teamname, "POST");
@@ -609,7 +609,7 @@ function teamname(){
 }
 
 function purchase(code){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d24/purchase?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=1000");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d34/purchase?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=1000");
 }
 
 function purchasegoods(){
@@ -619,7 +619,7 @@ function purchasegoods(){
 		document.getElementById("purchase_code").focus();
 		return;
 	}
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d24/goodsList?purchase_no="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+	let openWin = window.open("${pageContext.request.contextPath}/d/d3/d34/goodsList?purchase_no="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 
 
