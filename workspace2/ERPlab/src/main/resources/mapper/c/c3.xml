@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE warehouse_no = #{warehouse_no}
 	</update>
 	
-	<delete id="delete_warehouse" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_EventVO">
+	<delete id="delete_warehouse" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_WarehouseVO">
 		DELETE FROM erp_warehouse WHERE warehouse_no = #{warehouse_no}
 	</delete>
 	
@@ -48,11 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 온라인매출 -->
 	<select id="findAll_online" resultType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
-	 	SELECT * FROM erp_event ORDER BY event_no DESC
+	 	SELECT * FROM erp_online ORDER BY event_no DESC
 	</select>
 	
 	<insert id="save_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO" keyProperty="online_no" useGeneratedKeys="true" keyColumn="online_no">
-		INSERT INTO erp_event (ctgr_no, online_code, team_no, online_date, customer_no, goods_no, online_qty, online_price, online_tax, online_total, settletype_no, comcodee_no) 
+		INSERT INTO erp_online (ctgr_no, online_code, team_no, online_date, customer_no, goods_no, online_qty, online_price, online_tax, online_total, settletype_no, comcodee_no) 
 		VALUES (#{ctgr_no}, #{online_code}, #{team_no}, #{online_date}, #{customer_no}, #{goods_no}, #{online_qty}, #{online_price}, #{online_tax}, #{online_total}, #{settletype_no}, #{comcode_no})
 	</insert>
 	
