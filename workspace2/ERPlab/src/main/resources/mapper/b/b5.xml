@@ -4,8 +4,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b5">
 
-<select id="selectEmployee" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
-	select * from erp_employee1 e1 left join erp_employee2 e2 on e1.employee1_no = e2.employee1_no
+<select id="selectEmployee" parameterType="map" resultType="map">
+	select * from erp_employee1 e1 
+	left join erp_employee2 e2 
+	on e1.employee1_no = e2.employee1_no
+	left join erp_team et
+	on e2.team_no = et.team_no
+	where e2.comcode_no = #{comcode_no}
+	<if test="type != null">
+	    <if test="type == 'employee1_code'">
+	       and e1.employee1_code like '%${word}%' 
+	    </if>
+	    <if test="type == 'employee2_position'">
+	       and e2.employee2_position like '%${word}%' 
+	    </if>
+	</if>
+</select>
+
+<select id="selectEmployee2" parameterType="map" resultType="map">
+	select * from erp_employee1 e1 
+	left join erp_employee2 e2 
+	on e1.employee1_no = e2.employee1_no
+	left join erp_team et
+	on e2.team_no = et.team_no
+	where e2.comcode_no = #{comcode_no}
+	and e1.employee1_no = #{employee1_no}
+	<if test="type != null">
+	    <if test="type == 'employee1_code'">
+	       and e1.employee1_code like '%${word}%' 
+	    </if>
+	    <if test="type == 'employee2_position'">
+	       and e2.employee2_position like '%${word}%' 
+	    </if>
+	</if>
 </select>
 
 <insert id="insertEmployee1" parameterType="com.lab.erp.vo.login.Erp_Employee1VO">
@@ -22,8 +53,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </insert> -->
 
 <insert id="insertEmployee2" parameterType="com.lab.erp.vo.login.Erp_Employee2VO">
-    insert into erp_employee2 (employee1_no, team_no, employee2_extension, employee2_position, employee2_salary, employee2_holiday, employee2_four, employee2_worktype)
-    values (#{employee1_no}, #{team_no}, #{employee2_extension}, #{employee2_position}, #{employee2_salary}, COALESCE(#{employee2_holiday}, 15), #{employee2_four}, #{employee2_worktype})
+    insert into erp_employee2 (employee1_no, team_no, employee2_extension, employee2_position, employee2_salary, employee2_holiday, employee2_four, employee2_worktype, comcode_no)
+    values (#{employee1_no}, #{team_no}, #{employee2_extension}, #{employee2_position}, #{employee2_salary}, COALESCE(#{employee2_holiday}, 15), #{employee2_four}, #{employee2_worktype}, #{comcode_no})
 </insert>
 
 <select id="selectEmployeeno" parameterType="String" resultType="int">

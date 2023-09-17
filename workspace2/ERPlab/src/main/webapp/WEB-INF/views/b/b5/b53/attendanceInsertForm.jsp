@@ -6,6 +6,7 @@
 <div align="center">
 	<form action="${pageContext.request.contextPath }/greeting/attendance/insert" method="post" name="privacy">
 	<input type="hidden" name="employee2_no" value="${employee2_no }">
+	<input type="hidden" name="comcode_code" value="${comcode_code }">
 	<table>
 		<tr>
 			<td>휴가종류</td>

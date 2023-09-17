@@ -19,6 +19,7 @@
 				<th>연차</th>
 				<th>연봉</th>
 				<th>퇴직여부</th>
+				<th></th>
 			</tr>
 			<c:forEach var="vo" items="${list }">
 			<tr>

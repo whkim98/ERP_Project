@@ -73,8 +73,10 @@ public class Erp_EmployeeDAO {
 		return sqlSession.selectList("admin.EmpList", map);
 	}
 
-	public List<Erp_Employee1VO> selectEmployee(){
-		return sqlSession.selectList("b5.selectEmployee");
+	
+	//ㄱㅇㅎ
+	public List<Map<String, Object>> selectEmployee(Map<String, Object> map){
+		return sqlSession.selectList("b5.selectEmployee", map);
 	}
 	
 	public int insertEmployee1(Erp_Employee1VO vo) {
@@ -91,6 +93,10 @@ public class Erp_EmployeeDAO {
 	
 	public List<Erp_Employee1VO> selectAttendance(int employee2_no){
 		return sqlSession.selectList("b5.selectAttendance", employee2_no);
+	}
+	
+	public Map<String, Object> selectEmployee2(Map<String, Object> map){
+		return sqlSession.selectOne("b5.selectEmployee2", map);
 	}
 	
 }

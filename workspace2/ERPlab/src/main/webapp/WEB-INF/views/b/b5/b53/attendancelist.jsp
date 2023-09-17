@@ -13,6 +13,7 @@
 			<th>내선번호</th>
 			<th>잔여휴가</th>
 			<th>근로형태</th>
+			<th></th>
 		</tr>
 			<c:forEach var="vo" items="${list }">
 		<tr>

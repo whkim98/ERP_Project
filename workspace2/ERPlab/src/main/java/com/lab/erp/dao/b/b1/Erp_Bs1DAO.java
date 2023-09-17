@@ -24,7 +24,7 @@ private SqlSession sqlSession;
 	}
 	
 	public List<Erp_Bs1VO> selectBs(){
-		return sqlSession.selectList("c1.selectBs");
+		return sqlSession.selectList("b6.selectBs");
 	}
 	
 	public List<Erp_Bs1VO> selectBsd(){

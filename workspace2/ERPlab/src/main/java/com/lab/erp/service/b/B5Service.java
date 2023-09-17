@@ -31,8 +31,8 @@ public class B5Service {
 		this.emdao = emdao;
 	}
 	
-	public List<Erp_Employee1VO> selectEmployee(){
-		return edao.selectEmployee();
+	public List<Map<String, Object>> selectEmployee(Map<String, Object> map){
+		return edao.selectEmployee(map);
 	}
 	
 	public int insertEmployee1(Erp_Employee1VO vo) {
@@ -65,6 +65,10 @@ public class B5Service {
 	
 	public int insertEmphistory(Erp_EmphistoryVO vo) {
 		return emdao.insetEmphistory(vo);
+	}
+	
+	public Map<String, Object> selectEmployee2(Map<String, Object> map){
+		return edao.selectEmployee2(map);
 	}
 	
 }

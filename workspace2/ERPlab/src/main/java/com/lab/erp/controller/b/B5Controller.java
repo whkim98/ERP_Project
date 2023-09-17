@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lab.erp.service.b.B5Service;
 import com.lab.erp.service.login.LoginService;
@@ -35,41 +36,45 @@ public class B5Controller {
 		this.ls = ls;
 	}
 	
-	@GetMapping("/greeting")
-	public String greeting(HttpSession session, HttpServletRequest request, Model model) {
+	@RequestMapping("/greeting")
+	public String greeting(String comcode_code, String type, String word, HttpSession session, HttpServletRequest request, Model model) {
+		System.out.println("zhem" + comcode_code);
 		
-		Integer no = (Integer)session.getAttribute("login");
+		int comcode_no = ls.comNo(comcode_code);
 		
-		System.out.println(no);
+		Map<String, Object> map = new HashMap<>();
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
 		
-		List<Erp_Employee1VO> list = b5.selectEmployee();
-		
-		System.out.println(list);
-		
-		String msg = null;
-		String url = null;
-		
-		if(no != 8) {
-			msg = "정보를 불러올 수 없습니다.";
-			url = "/index";
-		} else {
-			url = "/b/b5/b51/list";
-		}
-		
-		System.out.println(msg);
-		System.out.println(url);
-		
-		request.setAttribute("msg", msg);
-		request.setAttribute("url", url);
-		request.setAttribute("list", list);
-		
-		return url;
+		List<Map<String, Object>> list = b5.selectEmployee(map);
+		model.addAttribute("list", list);
+
+		return "/b/b5/b51/list";
 		
 	}
 	
-	@RequestMapping("/greeting/employee/insertForm")
-	public String insertForm() {
-		return "/b/b5/b51/insertForm";
+	@RequestMapping("/greeting/ajax")
+	@ResponseBody
+	public List<Map<String, Object>> greetingAjax(Model model, String comcode_code, String type, String word){
+		Map<String, Object> map = new HashMap<>();
+	      if(type == null || word == null) {
+	         type = null;
+	         word = null;
+	      }
+	      
+	      int comcode_no = ls.comNo(comcode_code);
+	      
+	      map.put("comcode_no", comcode_no);
+	      map.put("word", word);
+	      map.put("type", type);
+	      
+	      List<Map<String, Object>> list = b5.selectEmployee(map);
+	      if(list.isEmpty()) {
+		         list = null;
+		      }
+		      System.out.println(list);
+		  return list;
 	}
 	
 	@RequestMapping("/greeting/employee/insert")
@@ -90,7 +95,7 @@ public class B5Controller {
 		vo1.setEmployee1_disability(employee1_disability);
 		vo1.setEmployee1_merit(employee1_merit);
 		
-		int su = b5.insertEmployee1(vo1);
+		b5.insertEmployee1(vo1);
 		
 		int employee1_no = b5.selectEmployeeno(vo1.getEmployee1_code());
 		
@@ -102,8 +107,9 @@ public class B5Controller {
 		vo2.setEmployee2_holiday(employee2_holiday);
 		vo2.setEmployee2_four(employee2_four);
 		vo2.setEmployee2_worktype(employee2_worktype);
+		vo2.setComcode_no(comcode_no);
 		
-		int su2 = b5.insertEmployee2(vo2);
+		b5.insertEmployee2(vo2);
 		
 		vo.setComcode_no(comcode_no);
 		vo.setEmployee1_no(employee1_no);
@@ -111,12 +117,47 @@ public class B5Controller {
 		
 		b5.insertEmphistory(vo);
 		
-		return "redirect:/greeting";
+		return "redirect:/greeting?comcode_code=" + comcode_code;
+	}
+	
+	@RequestMapping("/greeting/updateForm")
+	public String greetingUpdateform(String type, String word, Model model, String comcode_code, int employee1_no) {
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("employee1_no", employee1_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		map = b5.selectEmployee2(map);
+		
+		List<Map<String, Object>> list = b5.selectEmployee(map);
+		
+		model.addAttribute("map", map);
+		model.addAttribute("list", list);
+		
+		return "/b/b5/b51/list";
+		
 	}
 	
 	@RequestMapping("/greeting/attendance")
-	public String attendance(Model model) {
-		List<Erp_Employee1VO> list = b5.selectEmployee();
+	public String attendance(Model model, String comcode_code, String type, String word) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b5.selectEmployee(map);
 		model.addAttribute("list", list);
 		return "/b/b5/b53/attendancelist";
 	}
@@ -130,7 +171,7 @@ public class B5Controller {
 	}
 	
 	@RequestMapping("/greeting/attendance/insert")
-	public String insert(int employee2_no, int hdkind_no, String attendance_start, String attendance_end, Erp_AttendanceVO vo, Erp_Employee2VO evo) {
+	public String insert(String comcode_code, int employee2_no, int hdkind_no, String attendance_start, String attendance_end, Erp_AttendanceVO vo, Erp_Employee2VO evo) {
 		
 		
 		vo.setEmployee2_no(employee2_no);
@@ -192,7 +233,7 @@ public class B5Controller {
 		
 		int su2 = b5.updateHoliday(evo);
 		
-		return "";
+		return "redirect:/greeting/attendance?comcode_code=" + comcode_code;
 		
 	}
 	

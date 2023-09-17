@@ -41,14 +41,14 @@ public class B6Controller {
 	
 	
 	//추가근무수당 정산
-	@GetMapping("/greeting/privacy")
+	@RequestMapping("/greeting/privacy")
 	public String privacy() {
 		return "/b/b6/b61/privacy";
 	}
 	
 	@RequestMapping("/greeting/list")
 	public String list(String employee1_code, Model model, String comcode_code, String type, String word) {
-		int comcode_no = ls.comNo("default_company");
+		int comcode_no = ls.comNo(comcode_code);
 		
 		if(type == null || word == null) {
 			type = null;
@@ -273,6 +273,7 @@ public class B6Controller {
 		vo.setEmployee2_no(employee2_no);
 		vo.setResign_code(resign_code);
 		vo.setResign_date(resign_date);
+		vo.setComcode_no(comcode_no);
 		int employee2_salary = b6.selectSalary(employee2_no);
 		int employee2_exp = b6.selectExp(employee2_no);
 		int resign_cost = (employee2_salary / 12) * employee2_exp;
