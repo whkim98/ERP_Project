@@ -7,6 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lab.erp.dao.c.Erp_ClientDAO;
+import com.lab.erp.dao.c.c1.Erp_ForsalesDAO;
+import com.lab.erp.dao.c.c1.Erp_ImportDAO;
+import com.lab.erp.dao.c.c2.Erp_LocalsalesDAO;
+import com.lab.erp.dao.c.c3.Erp_OnlineDAO;
+import com.lab.erp.dao.c.c3.Erp_StoresalesDAO;
+import com.lab.erp.dao.d.d2.Erp_PurchaseconnectDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodsDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodskindDAO;
 import com.lab.erp.dao.d.d6.Erp_GoodslevDAO;
@@ -27,14 +33,28 @@ public class D6Service {
 	private Erp_ClientDAO ecdao;
 	private Erp_GoodsDAO gdao;
 	
+	//입출고관리
+	private Erp_ForsalesDAO fdao;
+	private Erp_ImportDAO idao;
+	private Erp_LocalsalesDAO ldao;
+	private Erp_StoresalesDAO sdao;
+	private Erp_OnlineDAO odao;
+	private Erp_PurchaseconnectDAO pdao;
+	
 	@Autowired
-	public D6Service(Erp_GoodsDAO gdao, Erp_GoodsstDAO gsdao, Erp_GoodslevDAO gvdao, Erp_ClientDAO ecdao, Erp_GoodslotDAO gldao, Erp_GoodskindDAO gkdao) {
+	public D6Service(Erp_PurchaseconnectDAO pdao, Erp_OnlineDAO odao, Erp_StoresalesDAO sdao, Erp_LocalsalesDAO ldao, Erp_ForsalesDAO fdao, Erp_ImportDAO idao, Erp_GoodsDAO gdao, Erp_GoodsstDAO gsdao, Erp_GoodslevDAO gvdao, Erp_ClientDAO ecdao, Erp_GoodslotDAO gldao, Erp_GoodskindDAO gkdao) {
 		this.gldao = gldao;
 		this.gkdao = gkdao;
 		this.gsdao = gsdao;
 		this.gvdao = gvdao;
 		this.ecdao = ecdao;
 		this.gdao = gdao;
+		this.fdao = fdao;
+		this.idao = idao;
+		this.ldao = ldao;
+		this.sdao = sdao;
+		this.odao = odao;
+		this.pdao = pdao;
 	}
 	
 	public List<Map<String, Object>> selectGoods(Map<String, Object> map){
@@ -87,6 +107,35 @@ public class D6Service {
 	
 	public int updateQty(Map<String, Object> map) {
 		return gdao.updateQty(map);
+	}
+	
+	//입출고관리
+	public List<Map<String, Object>> manageForsales(Map<String, Object> map){
+		return fdao.manageForsales(map);
+	}
+	
+	public List<Map<String, Object>> manageImport(Map<String, Object> map){
+		return idao.manageImport(map);
+	}
+	
+	public List<Map<String, Object>> manageLocalsales(Map<String, Object> map){
+		return ldao.manageLocalsales(map);
+	}
+	
+	public List<Map<String, Object>> manageStoresales(Map<String, Object> map){
+		return sdao.manageStoresales(map);
+	}
+	
+	public List<Map<String, Object>> manageOnline(Map<String, Object> map){
+		return odao.manageOnline(map);
+	}
+	
+	public List<Map<String, Object>> managePurchase(Map<String, Object> map){
+		return pdao.managePurchase(map);
+	}
+	
+	public int updateGoodslev(Map<String, Object> map) {
+		return gdao.updateGoodslev(map);
 	}
 	
 }

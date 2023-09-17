@@ -46,6 +46,14 @@ function deleteForm(goodsNo, goodslotNo, code){
 	location.href = url + param;
 }
 
+function disposeForm(goodsNo, code){
+	var param = "?goods_no=" + goodsNo + "&comcode_code=" + code;
+	
+	const url = `${pageContext.request.contextPath}/stock/dispose`;
+	
+	location.href = url + param;
+}
+
 function selectForm(no){
 	   document.getElementsByName("goodslot_no")[0].value = no;
 	   document.getElementById("content").submit(); // content라는 id의 form태그 submit
@@ -149,6 +157,17 @@ function getlist() {
                 };
                 newTd.appendChild(button3);
                 newTr.appendChild(newTd);
+                
+                // "폐기처리" 버튼
+                newTd = document.createElement("td");
+                var button4 = document.createElement("input");
+                button4.type = "button";
+                button4.value = "폐기처리";
+                button4.onclick = function () {
+                    disposeForm(map.goods_no, co);
+                };
+                newTd.appendChild(button4);
+                newTr.appendChild(newTd);
             });
         } else {
             procode.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
@@ -198,7 +217,9 @@ function getlist() {
 						<th>로트번호</th>
 						<th>유통기한</th>
 						<th>소비자가</th>
+						<th>폐기여부</th>
 						<th>재고수량</th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -209,8 +230,15 @@ function getlist() {
 			    <td>${vo.goodslot_lot}</td>
 			    <td>${vo.goodslot_expiry}</td>
 			    <td>${vo.goods_customerprice}</td>
+			    <c:if test="${vo.goodslev_no == 4 }">
+			    <td>O</td>
+			    </c:if>
+			    <c:if test="${vo.goodslev_no != 4 }">
+			    <td>X</td>
+			    </c:if>
 			    <td><input type="number" class="goods_stockqty" name="goods_stockqty" value="${vo.goods_stockqty}"></td>
 			    <td><input type="button" value="수량입력" onclick="updateQty(${vo.goods_no}, ${vo.goodslot_no}, '${comcode_code }')"></td>
+			    <td><input type="button" value="폐기처리" onclick="location.href='${pageContext.request.contextPath}/stock/dispose?goods_no=${vo.goods_no }&goodslot_no=${vo.goodslot_no }&comcode_code=${comcode_code }'">
 			    <td><input type="button" value="UPDATE" onclick="location.href='${pageContext.request.contextPath}/stock/updateForm?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&comcode_code=${comcode_code }'"></td>
 			    <td><input type="button" value="DELETE" onclick="location.href='${pageContext.request.contextPath}/stock/delete?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&comcode_code=${comcode_code }'"></td>
 			</tr>

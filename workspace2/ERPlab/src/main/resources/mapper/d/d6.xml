@@ -143,6 +143,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from erp_goodslot egl
 		left join erp_goods eg
 		on eg.goods_no = egl.goods_no
+		left join erp_goodslev egle
+		on eg.goodslev_no = egle.goodslev_no
 		where comcode_no = #{comcode_no}
 		<if test="type != null">
             <if test="type == 'goods_name'">
@@ -246,5 +248,111 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateQty" parameterType="map">
 		update erp_goods set goods_stockqty = #{goods_stockqty} where goods_no = #{goods_no}
 	</update>
+	
+	<!-- 입출고관리 -->
+	<select id="manageForsales" parameterType="map" resultType="map">
+		select * from erp_forsales ef
+		left join erp_goods eg
+		on ef.goods_no = eg.goods_no
+		where ef.comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goods_code'">
+               and eg.goods_code like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="manageImport" parameterType="map" resultType="map">
+		select * from erp_import ei
+		left join erp_importorder ei2
+		on ei.importorder_no = ei2.importorder_no
+		left join erp_goods eg
+		on ei2.goods_no = eg.goods_no
+		where ei.comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goods_code'">
+               and eg.goods_code like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="manageLocalsales" parameterType="map" resultType="map">
+		select * from erp_localsales el
+		left join erp_salesgoods es
+		on el.localsales_cino = es.salesgoods_code
+		left join erp_goodslot eg
+		on eg.goodslot_no = es.goodslot_no
+		left join erp_goods eg2
+		on eg.goods_no = eg2.goods_no
+		where el.comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg2.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goods_code'">
+               and eg2.goods_code like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="manageStoresales" parameterType="map" resultType="map">
+		select * from erp_storesales es
+		left join erp_goods eg
+		on es.goods_no = eg.goods_no
+		where es.comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goods_code'">
+               and eg.goods_code like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="manageOnline" parameterType="map" resultType="map">
+		select * from erp_online eo
+		left join erp_goods eg
+		on eo.goods_no = eg.goods_no
+		where eo.comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goods_code'">
+               and eg.goods_code like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<select id="managePurchase" parameterType="map" resultType="map">
+		select * from erp_purchaseconnect ep
+		left join erp_purchase ep2
+		on ep.purchase_no = ep2.purchase_no
+		left join erp_goodslot eg
+		on ep.goodslot_no = eg.goodslot_no
+		left join erp_goods eg2
+		on eg.goods_no = eg2.goods_no
+		where ep2.comcode_no = #{comcode_no}
+		<if test="type != null">
+            <if test="type == 'goods_name'">
+               and eg2.goods_name like '%${word}%' 
+            </if>
+            <if test="type == 'goods_code'">
+               and eg2.goods_code like '%${word}%' 
+            </if>
+        </if>
+	</select>
+	
+	<update id="updateGoodslev" parameterType="map">
+		update erp_goods set goodslev_no = #{goodslev_no} where goods_no = #{goods_no}
+	</update>
+	
 	
 </mapper>
