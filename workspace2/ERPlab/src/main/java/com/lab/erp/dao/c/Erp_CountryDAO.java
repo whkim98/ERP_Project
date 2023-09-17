@@ -27,4 +27,9 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("c2.autoCountry", country_name);
 	}
 	
+	//b2
+	public int selectCountryno(String country_code) {
+		return sqlSession.selectOne("b2.selectCountryno", country_code);
+	}
+	
 }

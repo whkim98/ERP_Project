@@ -1,5 +1,6 @@
 package com.lab.erp.controller.b;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lab.erp.service.b.B2Service;
 import com.lab.erp.service.login.LoginService;
+import com.lab.erp.vo.b.b2.Erp_AccountVO;
 import com.lab.erp.vo.b.b2.Erp_BudgetVO;
 import com.lab.erp.vo.b.b2.Erp_MoneyVO;
+import com.lab.erp.vo.b.b3.Erp_CurrencyVO;
 
 @Controller
 public class B2Controller {
@@ -28,9 +35,124 @@ public class B2Controller {
 	}
 	
 	@RequestMapping("/account")
-	public String account() {
-		return "";
+	public String account(Model model, String type, String word, String comcode_code) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b2.selectAccount(map);
+		model.addAttribute("list", list);
+		
+		return "/b/b2/b21/accountList";
 	}
+	
+	@RequestMapping("/account/ajax")
+	@ResponseBody
+	public List<Map<String, Object>> accountAjax(Model model, String comcode_code, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+	      if(type == null || word == null) {
+	         type = null;
+	         word = null;
+	      }
+	      
+	      int comcode_no = ls.comNo(comcode_code);
+	      
+	      map.put("comcode_no", comcode_no);
+	      map.put("word", word);
+	      map.put("type", type);
+	      
+	      List<Map<String, Object>> list = b2.selectAccount(map);
+	      if(list.isEmpty()) {
+		         list = null;
+		      }
+	      System.out.println(list);
+	      return list;
+	}
+	
+	@RequestMapping(value = "/account/autoUpdate", method = RequestMethod.POST)
+	public String autoUpdate(@RequestParam("jsonData") String jsonData, Erp_AccountVO avo, Erp_CurrencyVO vo, String comcode_code) {
+	    // 받은 JSON 데이터를 다시 객체로 변환
+	    List<Map<String, String>> dataList = new ArrayList<>();
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        dataList = objectMapper.readValue(jsonData, new TypeReference<List<Map<String, String>>>() {});
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    // 데이터 처리 로직 추가
+	    for (Map<String, String> item : dataList) {
+	        System.out.println("fxrt: " + item.get("fxrt"));
+	        System.out.println("aplyBgnDt: " + item.get("aplyBgnDt"));
+	        System.out.println("currSgn: " + item.get("currSgn"));
+	        String country_code = item.get("cntySgn");
+	        
+	        int country_no = b2.selectCountryno(country_code);
+	        
+	        System.out.println(country_no);
+
+	        String currency_date = b2.currencyDate(country_no);
+	       
+	        String fxrtString = item.get("fxrt"); // "fxrt"에 해당하는 문자열 값을 가져온다.
+
+	        
+	        double fxrtDouble = Double.parseDouble(fxrtString); // 문자열을 double로 변환한다.
+	           
+	        System.out.println(fxrtDouble);
+	        
+	        System.out.println("=================");
+	        
+//	        vo.setCountry_no(country_no);
+//	        vo.setCurrency_date(item.get("aplyBgnDt"));
+//	        vo.setCurrency_name(item.get("currSgn"));
+//	        vo.setCurrency_rate(fxrtDouble);
+//	        
+//	        b2.insertCurrency(vo);
+	        
+	        
+	        if(currency_date != item.get("aplyBgnDt")) {
+	        	vo.setCountry_no(country_no);
+	        	vo.setCurrency_name(item.get("currSgn"));
+	        	vo.setCurrency_rate(fxrtDouble);
+	        	vo.setCurrency_date(item.get("aplyBgnDt"));
+	        	
+	        	try {
+	        		
+		        	for(int i = 1; i <= item.size(); i++) {
+		        		int account_no = i;
+			        	int currency_no = b2.selectCurrencyno(account_no);
+		        		int account_balance = b2.selectBalance(account_no);
+		        		
+		        		double currency_rate = b2.selectRate(currency_no);
+		        		
+		        		double account_exchange = account_balance * currency_rate;
+		        		
+		        		Map<String, Object> map = new HashMap<>();
+		        		map.put("account_no", account_no);
+		        		map.put("account_exchange", account_exchange);
+		        		
+		        		b2.updateExchange(map);
+		        		
+	        	}
+		        	
+	        		}catch(Exception e) {
+	        			e.printStackTrace();
+	        		}
+	        	
+	        	
+	        }
+	        
+	     
+	    }
+
+	   
+	    return "redirect:/account?comcode_code=" + comcode_code;
+	}
+
 	
 	@RequestMapping("/funds")
 	public String funds(Model model, String type, String word, String comcode_code) {

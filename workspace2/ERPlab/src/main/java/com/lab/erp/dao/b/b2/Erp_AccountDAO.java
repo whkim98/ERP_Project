@@ -26,4 +26,20 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("a4.selectAccount", account_no);
 	}
 	
+	public List<Map<String, Object>> selectAccount(Map<String, Object> map){
+		return sqlSession.selectList("b2.selectAccount", map);
+	}
+	
+	public int updateExchange(Map<String, Object> map) {
+		return sqlSession.update("b2.updateExchange", map);
+	}
+	
+	public int selectBalance(int account_no) {
+		return sqlSession.selectOne("b2.selectBalance", account_no);
+	}
+	
+	public int selectCurrencyno(int account_no) {
+		return sqlSession.selectOne("b2.selectCurrencyno", account_no);
+	}
+	
 }

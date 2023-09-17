@@ -82,4 +82,53 @@ select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no}
 	where budget_no = #{budget_no}
 </update>
 
+<!-- 계좌관리 -->
+<select id="selectAccount" parameterType="map" resultType="map">
+	select * from erp_account ea
+	left join erp_currency ec
+	on ea.currency_no = ec.currency_no
+	where ea.comcode_no = #{comcode_no}
+	<if test="type != null">
+	    <if test="type == 'account_num'">
+	       and ea.account_num like '%${word}%' 
+	    </if>
+	    <if test="type == 'account_swift'">
+	       and ea.account_swift like '%${word}%' 
+	    </if>
+	</if>
+</select>
+
+<select id="selectCountryno" parameterType="String" resultType="int">
+	select country_no from erp_country where country_code = #{country_code}
+</select>
+
+<select id="currencyDate" parameterType="int" resultType="String">
+	select currency_date from erp_currency where country_no = #{country_no}
+</select>
+
+<insert id="insertCurrency" parameterType="com.lab.erp.vo.b.b3.Erp_CurrencyVO">
+	insert into erp_currency(country_no, currency_name, 
+	currency_rate, currency_date) values(
+	#{country_no}, #{currency_name}, #{currency_rate},
+	#{currency_date}
+	)
+</insert>
+
+<select id="selectCurrencyno" parameterType="int" resultType="int">
+	select currency_no from erp_account where account_no = #{account_no}
+</select>
+
+<update id="updateExchange" parameterType="map">
+	update erp_account set account_exchange = #{account_exchange}
+	where account_no = #{account_no}
+</update>
+
+<select id="selectBalance" parameterType="int" resultType="int">
+	select account_balance from erp_account where account_no = #{account_no}
+</select>
+
+<select id="selectRate" parameterType="int" resultType="double">
+	select currency_rate from erp_currency where currency_no = #{currency_no}
+</select>
+
 </mapper>

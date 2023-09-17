@@ -151,5 +151,5 @@ function getlist() {
                <tr><td>목록이 비어있습니다</td></tr>
             </c:if>
             </table>
-         </div>]
+         </div>
          <%@ include file="/WEB-INF/views/layout/footer.jsp"%>
