@@ -61,7 +61,7 @@ select:focus {
 	border-color: #000b9e;
 }
 
-.claim_container>.claim_body>.regits_form .sec>.eqkind_regist, .eqgrade_regist  {
+.claim_container>.claim_body>.regits_form .sec>.client_regist, .cvalue_regist  {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
@@ -73,10 +73,10 @@ select:focus {
 	width: 15%;
 }
 
-.claim_container>.claim_body>.regits_form .sec>.eqkind_regist>#eqkind_name {
+.claim_container>.claim_body>.regits_form .sec>.client_regist>#client_name {
 	width: 80%;
 }
-.claim_container>.claim_body>.regits_form .sec>.eqgrade_regist>#eqgrade_name {
+.claim_container>.claim_body>.regits_form .sec>.cvalue_regist>#cvalue_name {
 	width: 80%;
 }
 .claim_container>.claim_body>.regits_form .sec>input[type="number"] {
@@ -96,19 +96,19 @@ select:focus {
 .post .content {
 	font-size: 1.1rem;
 }
-.claim_container>.claim_body>.regits_form .sec>.eqkind_regist>#eqkindlist_search {
+.claim_container>.claim_body>.regits_form .sec>.client_regist>#clientlist_search {
 	line-height: 0;
 }
 
-.claim_container>.claim_body>.regits_form .sec>.eqkind_regist>#eqkindlist_search>img {
+.claim_container>.claim_body>.regits_form .sec>.client_regist>#clientlist_search>img {
 	width: 25px;
 	height: 25px;
 }
-.claim_container>.claim_body>.regits_form .sec>.eqgrade_regist>#eqgrade_search {
+.claim_container>.claim_body>.regits_form .sec>.cvalue_regist>#cvaluelist_search {
 	line-height: 0;
 }
 
-.claim_container>.claim_body>.regits_form .sec>.eqgrade_regist>#eqgradelist_search>img {
+.claim_container>.claim_body>.regits_form .sec>.cvalue_regist>#cvaluelist_search>img {
 	width: 25px;
 	height: 25px;
 }

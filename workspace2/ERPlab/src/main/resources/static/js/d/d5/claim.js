@@ -1,12 +1,11 @@
-let eqkindlist_search_btn = document.getElementById("eqkindlist_search");
-eqkindlist_search_btn.addEventListener('click', () => {
-	window.open("../d4/eqkind_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+let clientlist_search_btn = document.getElementById("clientlist_search");
+clientlist_search_btn.addEventListener('click', () => {
+	window.open("../d5/client_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
-// 설비/장비등급목록 조회 버튼
-let eqgradelist_search_btn = document.getElementById("eqgradelist_search");
-eqgradelist_search_btn.addEventListener('click', () => {
-	window.open("../d4/eqgrade_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+let cvaluelist_search_btn = document.getElementById("cvaluelist_search");
+cvaluelist_search_btn.addEventListener('click', () => {
+	window.open("../d5/cvalue_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
 // 행사 리스트 클릭시 정보출력

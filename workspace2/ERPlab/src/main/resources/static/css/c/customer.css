@@ -62,16 +62,12 @@ select:focus {
   border-color: #000b9e;
 }
 
-.customer_container > .customer_body > .regits_form .sec > .goods_regist {
+.customer_container > .customer_body > .regits_form .sec > .csgrade_regist {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.customer_container > .customer_body > .regits_form .sec > .company_regist {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
+
 
 .customer_container > .customer_body > .regits_form button {
   border-color: #000b9e;
@@ -83,18 +79,11 @@ select:focus {
   > .customer_body
   > .regits_form
   .sec
-  > .goods_regist
-  > #goods_name {
+  > .csgrade_regist
+  > #csgrade_name {
   width: 80%;
 }
-.customer_container
-  > .customer_body
-  > .regits_form
-  .sec
-  > .company_regist
-  > #company_name {
-  width: 80%;
-}
+
 .customer_container
   > .customer_body
   > .regits_form
@@ -120,36 +109,18 @@ select:focus {
   > .customer_body
   > .regits_form
   .sec
-  > .company_regist
-  > #companylist_search {
+  > .csgrade_regist
+  > #csgradelist_search {
   line-height: 0;
 }
+
 
 .customer_container
   > .customer_body
   > .regits_form
   .sec
-  > .company_regist
-  > #companylist_search
-  > img {
-  width: 25px;
-  height: 25px;
-}
-.customer_container
-  > .customer_body
-  > .regits_form
-  .sec
-  > .goods_regist
-  > #goodslist_search {
-  line-height: 0;
-}
-
-.customer_container
-  > .customer_body
-  > .regits_form
-  .sec
-  > .goods_regist
-  > #goodslist_search
+  > .csgrade_regist
+  > #csgradelist_search
   > img {
   width: 25px;
   height: 25px;

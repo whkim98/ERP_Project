@@ -66,5 +66,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM erp_online
 	</select>
 	
-	
+	<!-- 온라인영업매출조회 -->
+	<select id="findCsgradeAll" resultType="com.lab.erp.vo.c.c4.Erp_CsgradeVO">
+		SELECT * FROM erp_csgrade
+	</select>
+
 </mapper>

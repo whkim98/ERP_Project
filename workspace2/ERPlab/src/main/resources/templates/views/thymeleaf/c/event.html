@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="/css/c/event.css" />
     </head>
     <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="event_container">
             <h2 class="event_title"><a th:href="@{/c/c33/event}">행사관리</a></h2>
             <div class="event_body">
@@ -212,6 +214,9 @@
                 </div>
             </div>
         </div>
+        
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

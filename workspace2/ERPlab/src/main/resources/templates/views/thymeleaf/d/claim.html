@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="/css/d/claim.css" />
     </head>
     <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="claim_container">
             <h2 class="claim_title"><a th:href="@{/d/d51/claim}">클레임(기업)</a></h2>
             <div class="claim_body">
@@ -90,7 +92,7 @@
                             </div>
                         </div>
 
-						<input type="hidden" name="client_no" id="eqkind_no" th:value="${erp_ClaimVO?.client_no}">
+						<input type="hidden" name="client_no" id="client_no" th:value="${erp_ClaimVO?.client_no}">
 
                 	  	<div class="sec">
                             <label for="claim_manager">담당자</label>
@@ -121,7 +123,7 @@
                             </div>
                         </div>
 
-						<input type="hidden" name="cvalue_no" id="eqkind_no" th:value="${erp_ClaimVO?.cvalue_no}">
+						<input type="hidden" name="cvalue_no" id="cvalue_no" th:value="${erp_ClaimVO?.cvalue_no}">
 
                         <div class="sec">
                             <label for="claim_contents">내용</label>
@@ -140,7 +142,6 @@
                                 type="text"
                                 name="claim_response"
                                 id="claim_response"
-                                class="required"
                                 th:value="${erp_ClaimVO?.claim_response}"
                             />
                         </div>
@@ -151,7 +152,6 @@
                                 type="text"
                                 name="claim_handle"
                                 id="claim_handle"
-                                class="required"
                                 th:value="${erp_ClaimVO?.claim_handle}"
                             />
                         </div>
@@ -170,13 +170,16 @@
                 </div>
             </div>
         </div>
+        
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>
         <script src="/webdesign/assets/js/breakpoints.min.js"></script>
         <script src="/webdesign/assets/js/util.js"></script>
         <script src="/webdesign/assets/js/main.js"></script>
-        <script src="/js/d/d4/equipment.js"></script>
+        <script src="/js/d/d5/claim.js"></script>
         <script th:inline="javascript">
 			// 설비/장비 리스트 검색 필터링 기능
 			let search_filter = (type,word) => {

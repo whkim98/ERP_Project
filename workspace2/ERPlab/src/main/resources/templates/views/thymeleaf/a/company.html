@@ -9,7 +9,8 @@
         <link rel="stylesheet" href="/css/a/company.css" />
     </head>
     <body>
-		<th:block th:insert="~{common/header::header}"></th:block>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="comp_container">
             <h2 class="comp_title"><a th:href="@{/a/a1/a11/company}">회사등록</a></h2>
             <div class="comp_body">
@@ -253,53 +254,8 @@
             </div>
         </div>
         
-          <div id="wrapper">
-            <div id="main">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="businesstype_title">
-                                <span>업종코드목록조회</span>
-                                <button class="close_businesstype">X</button>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="items">
-                            <td>
-                                <article class="post" th:each="bst_item : ${bst_list}">
-                                    <header>
-                                        <div class="title">
-                                            <h2>[[${bst_item.businesstype_subctgr}]]</h2>
-                                            <p>
-                                                [[${bst_item.businesstype_name}]] > [[${bst_item.businesstype_biotore}]] > [[${bst_item.businesstype_ctgr}]] >
-                                                [[${bst_item.businesstype_subctgr}]]
-                                            </p>
-                                            <p class="hidden">[[${bst_item.businesstype_no}]]</p>
-                                        </div>
-                                    </header>
-                                    <p class="content">
-                                        업종코드 : [[${bst_item.businesstype_code}]]<br />
-                                        적용 범위 및 기준 : <br />
-                                        [[${bst_item.businesstype_description}]]
-                                        <br />
-                                    </p>
-                                    <footer>
-                                        <ul class="actions">
-                                            <li>
-                                                <button class="button large comp_type_select_btn" th:id="${bst_item.businesstype_code}">
-													SELECT
-												</button>
-                                            </li>
-                                        </ul>
-                                    </footer>
-                                </article>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
         
       	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

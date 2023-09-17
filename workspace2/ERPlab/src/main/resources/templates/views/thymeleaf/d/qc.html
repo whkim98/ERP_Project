@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="/css/d/qc.css" />
     </head>
     <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="qc_container">
             <h2 class="qc_title"><a th:href="@{/d/d41/qc}">품질검사</a></h2>
             <div class="qc_body">
@@ -56,11 +58,149 @@
                 <hr class="vertical_line">
                 
                 <div class="regits_form">
+					
+					<!--productTest-->
+					<div class="viewsec">
+                        <label for="producttest_no" class="forViewLabel">재고평가코드</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_no"
+                            id="producttest_no"
+                            th:value="${erp_ProducttestVO?.producttest_no}"
+                        />
+                    </div>
+                        
+                    <div class="viewsec">
+                        <label for="producttest_grade" class="forViewLabel">평가등급</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_grade"
+                            id="producttest_grade"
+                            th:value="${erp_ProducttestVO?.producttest_grade}"
+                        />
+                    </div>
+                        
+                    <div class="viewsec">
+                        <label for="producttest_lossrate" class="forViewLabel">손실률</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_lossrate"
+                            id="producttest_lossrate"
+                            th:value="${erp_ProducttestVO?.producttest_lossrate}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_lossprice" class="forViewLabel">손실금액</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_lossprice"
+                            id="producttest_lossprice"
+                            th:value="${erp_ProducttestVO?.producttest_lossprice}"
+                        />
+                    </div>
+                    
+                	<div class="viewsec">
+                        <label for="producttest_losstax" class="forViewLabel">손실새액</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_losstax"
+                            id="producttest_losstax"
+                            th:value="${erp_ProducttestVO?.producttest_losstax}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_losstax" class="forViewLabel">손실총액</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_losstotal"
+                            id="producttest_losstotal"
+                            th:value="${erp_ProducttestVO?.producttest_losstotal}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_lossqty" class="forViewLabel">손실수량</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_lossqty"
+                            id="producttest_lossqty"
+                            th:value="${erp_ProducttestVO?.producttest_lossqty}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_date" class="forViewLabel">평가날짜</label>
+                        <input
+                        	class="forViewSec"
+                            type="date"
+                            name="producttest_date"
+                            id="producttest_date"
+                            th:value="${erp_ProducttestVO?.producttest_date}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_content" class="forViewLabel">평가내용</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_content"
+                            id="producttest_content"
+                            th:value="${erp_ProducttestVO?.producttest_content}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_lossfull" class="forViewLabel">손실충당가능금액</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_lossfull"
+                            id="producttest_lossfull"
+                            th:value="${erp_ProducttestVO?.producttest_lossfull}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_pnp" class="forViewLabel">합/불</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_pnp"
+                            id="producttest_pnp"
+                            th:value="${erp_ProducttestVO?.producttest_pnp}"
+                        />
+                    </div>
+                    
+                    <div class="viewsec">
+                        <label for="producttest_type" class="forViewLabel">"원부자재/상품구분</label>
+                        <input
+                        	class="forViewSec"
+                            type="text"
+                            name="producttest_type"
+                            id="producttest_type"
+                            th:value="${erp_ProducttestVO?.producttest_type}"
+                        />
+                    </div>
+                        
+					<hr>
+					
 					<div class="warning_box">
 						<span class="red bigger">* </span>
 						<div class="yellow_box"></div>
 						<span class="red">는 필수 입력란입니다.</span>
 					</div>
+					
+				
                     <form th:action="@{/d/d41/qc}" method="post" id="qc_frm">
 						<input type="hidden" name="qc_no" id="qc_no" th:value="${erp_QcVO?.qc_no}"/>
 						
@@ -129,7 +269,7 @@
                         
                        <div class="sec">
                             <label for="qc_result">합/불유무</label>
-                            <select name="qc_result" id="qc_result" class="required">
+                            <select name="qc_result" id="qc_result" class="required forViewSec">
                                 <option value="0" th:selected="${erp_QcVO?.qc_result} == 0">불합격(0)</option>
                                 <option value="1" th:selected="${erp_QcVO?.qc_result} == 1">합격(1)</option>
                             </select>
@@ -170,6 +310,8 @@
                 </div>
             </div>
         </div>
+        
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

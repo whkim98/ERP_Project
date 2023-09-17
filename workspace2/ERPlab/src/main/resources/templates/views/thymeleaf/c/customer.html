@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="/css/c/customer.css" />
     </head>
     <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="customer_container">
             <h2 class="customer_title"><a th:href="@{/c/c43/customer}">고객관리</a></h2>
             <div class="customer_body">
@@ -83,10 +85,11 @@
                         <div class="sec">
                             <label for="customer_name">고객명</label>
                             <input
-                                type="date"
+                                type="text"
                                 name="customer_name"
                                 id="customer_name"
                                 th:value="${erp_CustomerVO?.customer_name}"
+                                class="required"
                             />
                         </div>
                       
@@ -104,7 +107,7 @@
                         <div class="sec">
                             <label for="customer_addr2">상세주소</label>
                             <input
-                                type="date"
+                                type="text"
                                 name="customer_addr2"
                                 id="customer_addr2"
                                 th:value="${erp_CustomerVO?.customer_addr2}"
@@ -114,7 +117,7 @@
                         <div class="sec">
                             <label for="customer_postal">우편번호</label>
                             <input
-                                type="date"
+                                type="text"
                                 name="customer_postal"
                                 id="customer_postal"
                                 th:value="${erp_CustomerVO?.customer_postal}"
@@ -124,17 +127,18 @@
                         <div class="sec">
                             <label for="customer_phone">전화번호</label>
                             <input
-                                type="date"
+                                type="text"
                                 name="customer_phone"
                                 id="customer_phone"
                                 th:value="${erp_CustomerVO?.customer_phone}"
+                                class="required"
                             />
                         </div>
 
                         <div class="sec">
                             <label for="customer_comment">비고</label>
                             <input
-                                type="date"
+                                type="text"
                                 name="customer_comment"
                                 id="customer_comment"
                                 th:value="${erp_CustomerVO?.customer_comment}"
@@ -155,6 +159,8 @@
                 </div>
             </div>
         </div>
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

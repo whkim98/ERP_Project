@@ -7,6 +7,7 @@ import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
+import com.lab.erp.vo.c.c4.Erp_CsgradeVO;
 import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.c.c4.Erp_SalesresultVO;
 
@@ -46,6 +47,8 @@ public interface C4Repository {
 	// ---------온라인영업매출조회---------
 	List<Erp_OnlineVO> findOnlineAll();
 	
-	
+	// ---------고객등급조회---------
+	List<Erp_CsgradeVO> findCsgradeAll();
+
 	
 }

@@ -8,7 +8,9 @@
         <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
         <link rel="stylesheet" href="/css/c/warehouse.css" />
     </head>
-    <body>
+    <body>	
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="warehouse_container">
             <h2 class="warehouse_title"><a th:href="@{/c/c32/warehouse}">창고관리</a></h2>
             <div class="warehouse_body">
@@ -147,6 +149,9 @@
                 </div>
             </div>
         </div>
+        
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

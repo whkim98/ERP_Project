@@ -49,9 +49,8 @@ public class D4Controller {
 			}
 			// 에러가 없다며 일반적 저장기능 실행
 			else {
-//				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
-//				erp_QcVO.setComcode_no(comcode_no);
-				erp_QcVO.setComcode_no(1); //temporary TODO 삭제할것
+				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+				erp_QcVO.setComcode_no(comcode_no);
 				d4Service.save_qc(erp_QcVO);
 			}
 		} 
@@ -90,9 +89,8 @@ public class D4Controller {
 			}
 			// 에러가 없다며 일반적 저장기능 실행
 			else {
-//				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
-//				erp_EquipmentVO.setComcode_no(comcode_no);
-				erp_EquipmentVO.setComcode_no(1); //temporary TODO 삭제할것
+				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+				erp_EquipmentVO.setComcode_no(comcode_no);
 				d4Service.save_equipment(erp_EquipmentVO);
 			}
 		} 

@@ -6,11 +6,13 @@
         <title>ERP lab 영업실적관리</title>
         <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
-        <link rel="stylesheet" href="/css/d/claim.css" />
+        <link rel="stylesheet" href="/css/c/salesresult.css" />
     </head>
     <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="salesresult_container">
-            <h2 class="salesresult_title"><a th:href="@{/d/d51/claim}">클레임(기업)</a></h2>
+            <h2 class="salesresult_title"><a th:href="@{/d/d51/claim}">영업실적관리</a></h2>
             <div class="salesresult_body">
                 <div class="salesresult_regist">
 					<table class="salesresult_search">
@@ -153,7 +155,7 @@
                         </div>
                         
                         <div class="sec">
-                            <label for="online_regist">국내영업매출</label>
+                            <label for="online_regist">온라인영업매출</label>
                             <div class="online_regist">
                                 <input
                                     type="text"
@@ -164,7 +166,7 @@
                                     readonly
                                     disabled
                                 />
-                               <button type="button" id="localsaleslist_search">                        
+                               <button type="button" id="onlinelist_search">                        
 									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
 								</button>
                             </div>
@@ -196,6 +198,9 @@
                 </div>
             </div>
         </div>
+        
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

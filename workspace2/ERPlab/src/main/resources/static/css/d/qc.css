@@ -173,3 +173,28 @@ select:focus {
 .required {
 	background-color: lightyellow !important;
 }
+
+.viewsec{
+	display: flex;
+	margin: 2% 0;
+}
+
+.viewsec>label{
+	width:40%;
+}
+
+.forViewLabel, .forViewSec {
+	font-size:10px;
+	margin-top:0;
+	margin-bottom:0;
+}
+
+#producttest_date {
+	appearance: none;
+	background: rgba(160, 160, 160, 0.075);
+	border: solid 1px rgba(160, 160, 160, 0.3);
+	outline: 0;
+	padding: 0 1em;
+	text-decoration: none;
+	width: 100%;
+}

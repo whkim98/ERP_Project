@@ -98,7 +98,7 @@ select:focus {
     width: 80%;
 }
 
-#wrapper {
+#list_wrapper {
     width: 100vw;
     height: 100vh;
     position: fixed;

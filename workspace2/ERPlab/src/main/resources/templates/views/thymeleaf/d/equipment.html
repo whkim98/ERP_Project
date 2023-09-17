@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="/css/d/equipment.css" />
     </head>
     <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
         <div class="equipment_container">
             <h2 class="equipment_title"><a th:href="@{/d/d42/equipment}">설비/장비관리</a></h2>
             <div class="equipment_body">
@@ -216,6 +218,8 @@
                 </div>
             </div>
         </div>
+        
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
 
      	<script src="/webdesign/assets/js/jquery.min.js"></script>
         <script src="/webdesign/assets/js/browser.min.js"></script>

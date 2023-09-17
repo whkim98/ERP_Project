@@ -62,12 +62,22 @@ select:focus {
 	border-color: #000b9e;
 }
 
-.salesresult_container>.salesresult_body>.regits_form .sec>.goods_regist {
+.salesresult_container>.salesresult_body>.regits_form .sec>.forsales_regist {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
 }
-.salesresult_container>.salesresult_body>.regits_form .sec>.company_regist {
+.salesresult_container>.salesresult_body>.regits_form .sec>.localsales_regist {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+.salesresult_container>.salesresult_body>.regits_form .sec>.storesales_regist {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+.salesresult_container>.salesresult_body>.regits_form .sec>.online_regist {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;

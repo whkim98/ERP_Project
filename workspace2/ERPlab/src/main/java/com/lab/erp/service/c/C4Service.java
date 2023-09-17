@@ -10,6 +10,7 @@ import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
+import com.lab.erp.vo.c.c4.Erp_CsgradeVO;
 import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.c.c4.Erp_SalesresultVO;
 
@@ -56,5 +57,7 @@ public class C4Service {
 
 	// ---------온라인영업매출조회---------
 	public List<Erp_OnlineVO> findOnlineAll() {return c4Repository.findOnlineAll();}
-
+	
+	// ---------고객등급조회---------
+	public List<Erp_CsgradeVO> findCsgradeAll(){return c4Repository.findCsgradeAll();}
 }
