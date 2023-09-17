@@ -288,8 +288,51 @@ public class D6Controller {
 	}
 	
 	@RequestMapping("/management")
-	public String management() {
-		return "";
+	public String management(Model model, String comcode_code, String word, String type) {
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> flist = d6.manageForsales(map);
+		List<Map<String, Object>> ilist = d6.manageImport(map);
+		List<Map<String, Object>> llist = d6.manageLocalsales(map);
+		List<Map<String, Object>> slist = d6.manageStoresales(map);
+		List<Map<String, Object>> olist = d6.manageOnline(map);
+		List<Map<String, Object>> plist = d6.managePurchase(map);
+		
+		model.addAttribute("flist", flist);
+		model.addAttribute("ilist", ilist);
+		model.addAttribute("llist", llist);
+		model.addAttribute("slist", slist);
+		model.addAttribute("olist", olist);
+		model.addAttribute("plist", plist);
+
+		
+		return "/d/d6/d62/managementList";
+	}
+	
+	@RequestMapping("/stock/dispose")
+	public String dispose(Model model, String comcode_code, int goods_no) {
+		
+		System.out.println("폐기"+goods_no);
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("goodslev_no", 4);
+		map.put("goods_no", goods_no);
+	
+		d6.updateGoodslev(map);
+		
+		return "redirect:/stock?comcode_code=" + comcode_code;
 	}
 
 

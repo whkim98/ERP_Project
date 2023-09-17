@@ -1,21 +1,29 @@
 package com.lab.erp.controller.b;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lab.erp.service.c.C2Service;
+import com.lab.erp.service.b.B2Service;
 import com.lab.erp.service.login.LoginService;
+import com.lab.erp.vo.b.b2.Erp_BudgetVO;
+import com.lab.erp.vo.b.b2.Erp_MoneyVO;
 
 @Controller
 public class B2Controller {
 
-	private C2Service c2;
+	private B2Service b2;
 	private LoginService ls;
 	
 	@Autowired
-	public B2Controller(C2Service c2, LoginService ls) {
-		this.c2 = c2;
+	public B2Controller(B2Service b2, LoginService ls) {
+		this.b2 = b2;
 		this.ls = ls;
 	}
 	
@@ -24,6 +32,206 @@ public class B2Controller {
 		return "";
 	}
 	
+	@RequestMapping("/funds")
+	public String funds(Model model, String type, String word, String comcode_code) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b2.closingList(map);
+		model.addAttribute("list", list);
+		
+		return "/b/b2/b22/fundsList";
+	}
 	
+	@RequestMapping("/funds/ajax")
+	@ResponseBody
+	public List<Map<String, Object>> fundsAjax(Model model, String type, String word, String comcode_code){
+		
+		System.out.println("ㅠ펀드ajax");
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+	         type = null;
+	         word = null;
+	      }
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b2.closingList(map);
+		
+		if(list.isEmpty()) {
+	         list = null;
+	      }
+     
+	    System.out.println(list);
+		return list;
+		
+	}
+	
+	@RequestMapping("/funds/insert")
+	public String insertFunds(Erp_MoneyVO vo, String money_code, 
+			int debtor_no, int money_debtoramount,
+			int creditor_no, int money_creditoramount,
+			String comcode_code) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		int bs3_no = b2.moneyBs3nod(debtor_no);
+		
+		String money_debtor = b2.moneyBs3ctgrd(bs3_no);
+		
+		bs3_no = b2.moneyBs3noc(creditor_no);
+		
+		String money_creditor = b2.moneyBs3ctgrc(bs3_no);
+		
+		vo.setComcode_no(comcode_no);
+		vo.setCreditor_no(creditor_no);
+		vo.setDebtor_no(debtor_no);
+		vo.setMoney_code(money_code);
+		vo.setMoney_creditor(money_creditor);
+		vo.setMoney_creditoramount(money_creditoramount);
+		vo.setMoney_debtor(money_debtor);
+		vo.setMoney_debtoramount(money_debtoramount);
+		
+		b2.insertMoney(vo);
+		
+		return "redirect:/funds?comcode_code=" + comcode_code;
+		
+	}
+	
+	@RequestMapping("/budget")
+	public String budget(Model model, String comcode_code, String type, String word) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b2.budgetList(map);
+		model.addAttribute("list", list);
+		
+		return "/b/b2/b23/budgetList";
+	}
+	
+	@RequestMapping("/budget/insert")
+	public String insertBudget(Erp_BudgetVO vo, String budget_type, int team_no, 
+			String budget_contents, String budget_approved,
+			String budget_execution, int budget_amount, int budget_tax
+			, String comcode_code) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		int total = budget_tax + budget_amount;
+		
+		vo.setBudget_amount(budget_amount);
+		vo.setBudget_approved(budget_approved);
+		vo.setBudget_contents(budget_contents);
+		vo.setBudget_execution(budget_execution);
+		vo.setBudget_tax(budget_tax);
+		vo.setBudget_total(total);
+		vo.setBudget_type(budget_type);
+		vo.setComcode_no(comcode_no);
+		vo.setTeam_no(team_no);
+		
+		b2.insertBudget(vo);
+		
+		return "redirect:/budget?comcode_code=" + comcode_code;
+	}
+	
+	@RequestMapping("/budget/updateForm")
+	public String budgetUpdateform(Model model, String type, String word, String comcode_code, int budget_no) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("comcode_no", comcode_no);
+		map.put("budget_no", budget_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		map = b2.budgetList2(map);
+		
+		List<Map<String, Object>> list = b2.budgetList(map);
+		
+		model.addAttribute("map", map);
+		model.addAttribute("list", list);
+		
+		return "/b/b2/b23/budgetList";
+	}
+	
+	@RequestMapping("/budget/update")
+	public String updateBudget(String comcode_code, int budget_no
+			, String budget_type, int team_no, String budget_contents
+			, String budget_approved, String budget_execution,
+			int budget_amount, int budget_tax) {
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		int total = budget_tax + budget_amount;
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("comcode_no", comcode_no);
+		map.put("budget_no", budget_no);
+		map.put("budget_type", budget_type);
+		map.put("team_no", team_no);
+		map.put("budget_contents", budget_contents);
+		map.put("budget_approved", budget_approved);
+		map.put("budget_execution", budget_execution);
+		map.put("budget_amount", budget_amount);
+		map.put("budget_tax", budget_tax);
+		map.put("budget_total", total);
+		
+		b2.updateBudget(map);
+		
+		return "redirect:/budget?comcode_code=" + comcode_code;
+		
+	}
+	
+	@RequestMapping("/budget/ajax")
+	@ResponseBody
+	public List<Map<String, Object>> budgetAjax(Model model, String type, String word, String comcode_code){
+		
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+	         type = null;
+	         word = null;
+	      }
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b2.budgetList(map);
+		
+		if(list.isEmpty()) {
+	         list = null;
+	      }
+     
+	    System.out.println(list);
+		return list;
+		
+	}
 	
 }

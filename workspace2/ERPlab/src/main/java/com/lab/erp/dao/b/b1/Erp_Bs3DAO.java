@@ -66,4 +66,14 @@ private SqlSession sqlSession;
 		return sqlSession.update("b1.updateBs3Amount", map);
 	}
 	
+	
+	//ㄱㅇㅎ
+	public String moneyBs3ctgrd(int bs3_no) {
+		return sqlSession.selectOne("b2.moneyBs3ctgrd", bs3_no);
+	}
+	
+	public String moneyBs3ctgrc(int bs3_no) {
+		return sqlSession.selectOne("b2.moneyBs3ctgrc", bs3_no);
+	}
+	
 }
