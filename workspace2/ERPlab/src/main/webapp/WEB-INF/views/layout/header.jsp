@@ -20,7 +20,6 @@
 		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
 		
 		<!-- 로그인 세션 -->
-		<!--
 		<c:if test="${login == null }">
 			<script type="text/javascript">
 				alert("세션이 만료되었습니다.");
@@ -33,7 +32,8 @@
 				location.href="${pageContext.request.contextPath }/";
 			</script>
 		</c:if>
-			-->
+		
+		
 	</head>
 	<body class="is-preload">
 		<!-- Wrapper -->
