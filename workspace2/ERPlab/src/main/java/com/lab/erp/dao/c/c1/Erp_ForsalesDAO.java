@@ -42,4 +42,8 @@ private SqlSession sqlSession;
 		return sqlSession.delete("c1.deleteForsales", forsales_no);
 	}
 	
+	public List<Map<String, Object>> manageForsales(Map<String, Object> map){
+		return sqlSession.selectList("d6.manageForsales", map);
+	}
+	
 }

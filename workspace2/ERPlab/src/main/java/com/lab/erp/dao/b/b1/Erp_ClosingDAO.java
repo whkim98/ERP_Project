@@ -113,6 +113,11 @@ private SqlSession sqlSession;
 			return sqlSession.insert("b7.insertToolclosing", vo);
 		}
 		
+		//b2
+		public List<Map<String, Object>> closingList(Map<String, Object> map){
+			return sqlSession.selectList("b2.closingList", map);
+		}
+		
 	}
 
 	

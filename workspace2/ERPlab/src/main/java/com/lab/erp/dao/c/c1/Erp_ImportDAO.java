@@ -54,4 +54,8 @@ private SqlSession sqlSession;
 		return sqlSession.delete("c1.deleteImport", importorder_no);
 	}
 	
+	public List<Map<String, Object>> manageImport(Map<String, Object> map){
+		return sqlSession.selectList("d6.manageImport", map);
+	}
+	
 }

@@ -13,8 +13,8 @@
 <h2>재무팀</h2>
 <br>
 	<input type="button" value="계좌 현황/관리" onclick="location.href='${pageContext.request.contextPath }/account?comcode_code=${comcode_code}'">
-	<input type="button" value="자금관리" onclick="#">
-	<input type="button" value="예산관리" onclick="#">
+	<input type="button" value="자금관리" onclick="location.href='${pageContext.request.contextPath }/funds?comcode_code=${comcode_code}'">
+	<input type="button" value="예산관리" onclick="location.href='${pageContext.request.contextPath }/budget?comcode_code=${comcode_code}'">
 	
  	<input type="button" value="전표입력" onclick="location.href='${pageContext.request.contextPath }/b31main?comcode_code=${comcode_code}'">
 	<input type="button" value="전자세금계산서" onclick="location.href='${pageContext.request.contextPath }/b32main?comcode_code=${comcode_code}'">

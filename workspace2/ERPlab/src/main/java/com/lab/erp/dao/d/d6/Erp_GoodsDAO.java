@@ -117,4 +117,8 @@ private SqlSession sqlSession;
 		return sqlSession.update("d6.updateQty", map);
 	}
 	
+	public int updateGoodslev(Map<String, Object> map) {
+		return sqlSession.update("d6.updateGoodslev", map);
+	}
+	
 }

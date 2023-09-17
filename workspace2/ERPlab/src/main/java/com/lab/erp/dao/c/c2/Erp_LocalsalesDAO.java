@@ -55,4 +55,9 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("c2.getLocalCino", localsales_cino);
 	}
 	
+	//ㄱㅇㅎ
+	public List<Map<String, Object>> manageLocalsales(Map<String, Object> map){
+		return sqlSession.selectList("d6.manageLocalsales", map);
+	}
+	
 }

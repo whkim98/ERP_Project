@@ -38,4 +38,9 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d2.selectPurchaseGoods", map);
 	}
 	
+	//ㄱㅇㅎ
+	public List<Map<String, Object>> managePurchase(Map<String, Object> map){
+		return sqlSession.selectList("d6.managePurchase", map);
+	}
+	
 }

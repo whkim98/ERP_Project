@@ -4,4 +4,82 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="b2">
 
+<select id="closingList" parameterType="map" resultType="map">
+select * from erp_closing ec
+where comcode_no = #{comcode_no}
+<if test="type != null">
+    <if test="type == 'closing_code'">
+       and closing_code like '%${word}%' 
+    </if>
+</if>
+</select>
+
+<insert id="insertMoney" parameterType="com.lab.erp.vo.b.b2.Erp_MoneyVO">
+insert into erp_money(money_code, money_date, debtor_no, money_debtor,
+money_debtoramount, creditor_no, money_creditor, money_creditoramount,
+comcode_no) 
+values(#{money_code}, now(), #{debtor_no}, #{money_debtor}, 
+#{money_debtoramount}, #{creditor_no}, #{money_creditor}, 
+#{money_creditoramount}, #{comcode_no})
+</insert>
+
+<select id="moneyBs3nod" parameterType="int" resultType="int">
+select bs3_no from erp_debtor where debtor_no = #{debtor_no}
+</select>
+
+<select id="moneyBs3noc" parameterType="int" resultType="int">
+select bs3_no from erp_creditor where creditor_no = #{creditor_no}
+</select>
+
+<select id="moneyBs3ctgrd" parameterType="int" resultType="String">
+select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no}
+</select>
+
+<select id="moneyBs3ctgrc" parameterType="int" resultType="String">
+select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no}
+</select>
+
+<!-- 예산 -->
+<select id="budgetList" parameterType="map" resultType="map">
+	select * from erp_budget eb 
+	left join erp_team et
+	on eb.team_no = et.team_no
+	where eb.comcode_no = #{comcode_no}
+	<if test="type != null">
+	    <if test="type == 'budget_type'">
+	       and eb.budget_type like '%${word}%' 
+	    </if>
+	</if>
+</select>
+
+<insert id="insertBudget" parameterType="com.lab.erp.vo.b.b2.Erp_BudgetVO">
+	insert into erp_budget(budget_type, team_no, budget_contents,
+	budget_approved, budget_execution, budget_amount, budget_tax,
+	budget_total, comcode_no) values(#{budget_type}, #{team_no},
+	#{budget_contents}, #{budget_approved}, #{budget_execution},
+	#{budget_amount}, #{budget_tax}, #{budget_total}, #{comcode_no})
+</insert>
+
+<select id="budgetList2" parameterType="map" resultType="map">
+	select * from erp_budget eb 
+	left join erp_team et
+	on eb.team_no = et.team_no
+	where eb.comcode_no = #{comcode_no}
+	and eb.budget_no = #{budget_no}
+	<if test="type != null">
+	    <if test="type == 'budget_type'">
+	       and eb.budget_type like '%${word}%' 
+	    </if>
+	</if>
+</select>
+
+<update id="updateBudget" parameterType="map">
+	update erp_budget set budget_type = #{budget_type},
+	team_no = #{team_no}, budget_contents = #{budget_contents},
+	budget_approved = #{budget_approved}, budget_execution = #{budget_execution}
+	, budget_amount = #{budget_amount}, budget_tax = #{budget_tax},
+	budget_total = #{budget_total}
+	where budget_no = #{budget_no}
+</update>
+
 </mapper>
