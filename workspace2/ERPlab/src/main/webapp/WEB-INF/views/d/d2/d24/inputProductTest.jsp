@@ -1,67 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -115,8 +53,8 @@ function getlist(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">재고 평가 등록(원부자재)</h1>
+		<div class="dh_aligncenter">
+			<h1>재고 평가 관리(원부자재)</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -141,7 +79,7 @@ function getlist(){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_overflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -168,8 +106,8 @@ function getlist(){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d24/inputProductTest?comcode_code=${comcode_code }'" value="add">
+			<div class="dh_alignright">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d24/inputProductTest?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -276,15 +214,16 @@ function getlist(){
 						
 						<div>
 							<label>최종 평가 등급 </label>
-							<input type="text" name="producttest_grade" id="producttest_grade" value="${inmap.producttest_grade }" class="required">
+							<input type="text" name="producttest_grade" id="producttest_grade" value="${inmap.producttest_grade }" class="required" maxlength="30">
 						</div>
 						
 						<div>
 							<label>평가 담당팀 </label>
 							<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)" value="${inmap.team_name }">
+							<input type="button" onclick="searcht()" value="조회">
 						</div>
 						
-						<div align="right">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei(${inmap.producttest_no }, '${comcode_code }')">
 						</div>
@@ -300,7 +239,6 @@ function getlist(){
 						<input type="hidden" name="purchaseconnect_price" id="purchaseconnect_price">
 						<input type="hidden" name="purchaseconnect_number" id="purchaseconnect_number">
 						<input type="hidden" name="purchaseconnect_no" id="purchaseconnect_no">
-						<h3>재고 평가 등록 사항</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -380,12 +318,13 @@ function getlist(){
 						
 						<div>
 							<label>최종 평가 등급 </label>
-							<input type="text" name="producttest_grade" id="producttest_grade" class="required">
+							<input type="text" name="producttest_grade" id="producttest_grade" class="required" maxlength="30">
 						</div>
 						
 						<div>
 							<label>평가 담당팀 </label>
 							<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
+							<input type="button" onclick="searcht()" value="조회">
 						</div>
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)">
@@ -620,6 +559,10 @@ function purchasegoods(){
 		return;
 	}
 	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d24/goodsList?purchase_no="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+}
+
+function searcht(){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 
 

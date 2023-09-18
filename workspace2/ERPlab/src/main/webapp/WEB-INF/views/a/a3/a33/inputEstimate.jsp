@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 <<script type="text/javascript">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -53,9 +51,10 @@ function getlist(){
 	}
 }
 </script>
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div class="dh_aligncenter">
-			<h1 style="font-size: 20pt;">실적 등록</h1>
+			<h1>실적 관리</h1>
 		</div>
 		<br>
 		<div class="divform2">
@@ -110,7 +109,7 @@ function getlist(){
 			</div>
 	
 			<div class="dh_alignright">
-				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/inputEstimate?comcode_code=${comcode_code }'">
+				<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/inputEstimate?comcode_code=${comcode_code }'">
 			</div>
 	
 		</div>
@@ -131,7 +130,11 @@ function getlist(){
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 				<input type="hidden" name="project_no" id="project_no" value="${inmap.project_no }">
 				<input type="hidden" name="employee1_no" id="employee1_no" value="${inmap.employee1_no }">
-					<h3>${inmap.project_name } 평가 수정</h3>
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
 					<div>
 						<label>평가점수 </label>
 						<input type="text" name="estimate_score" id="estimate_score" value="${inmap.estimate_score }" maxlength="3" min="0" class="required">
@@ -142,7 +145,7 @@ function getlist(){
 					</div>
 					<div>
 						<label>평가결과 </label>
-						<input type="text" name="estimate_result" id="estimate_result" value="${inmap.estimate_result }" class="required">
+						<input type="text" name="estimate_result" id="estimate_result" value="${inmap.estimate_result }" class="required" maxlength="500">
 					</div>
 					<div>
 						<label>최종마감일 </label>
@@ -192,7 +195,11 @@ function getlist(){
 				<input type="hidden" name="project_no" id="project_no">
 				<input type="hidden" name="team_no" id="team_no">
 				<input type="hidden" name="employee1_no" id="employee1_no">
-					<h3>계약 등록 사항</h3>
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
 					<div>
 						<label>평가점수 </label>
 						<input type="text" name="estimate_score" id="estimate_score" maxlength="3" min="0" class="required">
@@ -203,7 +210,7 @@ function getlist(){
 					</div>
 					<div>
 						<label>평가결과 </label>
-						<input type="text" name="estimate_result" id="estimate_result" class="required">
+						<input type="text" name="estimate_result" id="estimate_result" class="required" maxlength="500">
 					</div>
 					<div>
 						<label>최종마감일 </label>

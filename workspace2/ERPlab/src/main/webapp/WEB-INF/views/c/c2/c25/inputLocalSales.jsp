@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 
-<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -55,12 +53,13 @@ function getlist(){
 }
 </script>
 
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">자금 조달</h1>
+		<div class="dh_aligncenter">
+			<h1>매출 현황</h1>
 		</div>
-		<div class="divform2">
-			<div>
+		<div>
+			<div class="inputdivform2">
 				<table>
 					<tr>
 						<td>
@@ -82,7 +81,7 @@ function getlist(){
 				</table>
 			</div>
 			
-			<div class="dh_overflow">
+			<div class="dh_inputoverflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -109,8 +108,8 @@ function getlist(){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c25/addForm?comcode_code=${comcode_code }'" value="add">
+			<div class="dh_inputalignright">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c25/addForm?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	

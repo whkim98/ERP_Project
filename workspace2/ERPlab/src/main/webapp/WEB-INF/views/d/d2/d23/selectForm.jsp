@@ -1,73 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
-	<div class="taxinvoice-container">
-    <h1>구매 재고 관리(원부자재)</h1>
+<div class="notosanskr">
+	<div class="dh_aligncenter">
+    	<h1>구매 재고 등록(원부자재)</h1>
+    </div>
     
-    <div class="taxinvoice-lower">
+    <div class="warning_box">
+		<span class="red bigger">* </span>
+		<div class="yellow_box"></div>
+		<span class="red">는 필수 입력란입니다.</span>
+	</div>
+    
+    <div>
         <c:if test="${inmap != null }">
         <form action="${pageContext.request.contextPath}/d/d2/d23/update">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
@@ -116,17 +62,18 @@ border: 0;
         		<td>
 	        		<div class="dddd">
 	        			<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeyup="team(event, this.value)">
+	        			<input type="button" onclick="searcht()" value="조회">
 	        		</div>
         		</td>
         	</tr>
          </table>
          
-         <div class="taxinvoice-contentItem">
+         <div>
          	<p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
          	</p>
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                     <th>제품조회</th>
                     <th>상품명</th>
@@ -158,7 +105,7 @@ border: 0;
 						<td>
 							<input type="text" name="crlist1[${status.index }].goodssort_name" id="crlist1[${status.index }].goodssort_name" value="${i.goodssort_name } - ${i.goodskind_name}" readonly="readonly">
 						</td>
-						<td><input type="text" name="crlist1[${status.index }].goodslot_price" id="crlist1[${status.index }].goodslot_price" value="${i.goodslot_price }" readonly="readonly"></td>
+						<td><input type="text" name="crlist1[${status.index }].goodslot_total" id="crlist1[${status.index }].goodslot_total" value="${i.goodslot_total }" readonly="readonly"></td>
 						<td><input type="text" name="crlist1[${status.index }].goodsst_unit" id="crlist1[${status.index }].goodsst_unit" value="${i.goodsst_unit }" readonly="readonly"></td>
 						<td><input type="text" name="crlist1[${status.index }].goodsst_size" id="crlist1[${status.index }].goodsst_size" value="${i.goodsst_size }" readonly="readonly"></td>
 						<td>
@@ -201,7 +148,7 @@ border: 0;
         	<input type="hidden" name="employee2_no" id="employee2_no">
         	<input type="hidden" name="team_no" id="team_no" value="17">
         	<input type="hidden" name="inventory_type" id="inventory_type" value="1">
-        	<div class="taxinvoice-body">
+        	<div>
 		        <table>
 			       	<tr>
 			     		<th colspan="6">재고 지점 등록(조회 버튼 클릭 후 해당 지점을 클릭하여 주세요)<input type="button" value="지점조회" onclick="coList('${comcode_code}')"></th>
@@ -242,19 +189,20 @@ border: 0;
 			     		<td>
 				      		<div class="dddd">
 				      			<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
+				      			<input type="button" onclick="searcht()" value="조회">
 				      		</div>
 			     		</td>
 			     	</tr>
 		        </table>
          	</div>
            
-        <div class="taxinvoice-contentItem">
+        <div>
             <p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
             </p>
     
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                 	<th>제품조회</th>
                     <th>상품명</th>
@@ -285,7 +233,7 @@ border: 0;
 					<td>
 						<input type="text" name="crlist[0].goodssort_name" id="crlist[0].goodssort_name" readonly="readonly">
 					</td>
-					<td><input type="text" name="crlist[0].goodslot_price" id="crlist[0].goodslot_price" readonly="readonly"></td>
+					<td><input type="text" name="crlist[0].goodslot_total" id="crlist[0].goodslot_total" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].goodsst_unit" id="crlist[0].goodsst_unit" readonly="readonly"></td>
 					<td><input type="text" name="crlist[0].goodsst_size" id="crlist[0].goodsst_size" readonly="readonly"></td>
 					<td>
@@ -473,7 +421,7 @@ addRowButton.addEventListener('click', function() {
             } else if (i === 4){
                 cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodssort_name" id="crlist['+j+'].goodssort_name" readonly="readonly"></td>';
             } else if (i === 5){
-                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodslot_price" id="crlist['+j+'].goodslot_price" readonly="readonly"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodslot_total" id="crlist['+j+'].goodslot_total" readonly="readonly"></td>';
             } else if (i === 6){
                 cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_unit" id="crlist['+j+'].goodsst_unit" readonly="readonly"></td>';
             } else if (i === 7){
@@ -587,7 +535,7 @@ function deleteGoodscheck(){
 				newTd.innerHTML = '<input type="text" name="crlist1['+t+'].goodssort_name" id="crlist1['+t+'].goodssort_name" value="'+map.goodssort_name+' - '+map.goodskind_name+'" readonly="readonly">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" value="'+map.goodslot_price+'" name="crlist1['+t+'].goodslot_price" id="crlist1['+t+'].goodslot_price">';
+				newTd.innerHTML = '<input type="text" value="'+map.goodslot_total+'" name="crlist1['+t+'].goodslot_total" id="crlist1['+t+'].goodslot_total">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="text" value="'+map.goodsst_unit+'" name="crlist1['+t+'].goodsst_unit" id="crlist1['+t+'].goodsst_unit">';
@@ -649,6 +597,10 @@ function employee(code){
 
 function coList(code){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d23/coList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
+}
+
+function searcht(){
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 </script>
 </div>

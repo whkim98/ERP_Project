@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <script type="text/javascript" charset="UTF-8">
 
 function surf(v, code){
@@ -9,7 +8,7 @@ function surf(v, code){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/a/a4/a41/loanAjax";
+	var url = "${pageContext.request.contextPath}/c/c2/c21/clientAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -117,7 +116,7 @@ function clientsortname(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div class="dh_aligncenter">
-			<h1 style="font-size: 20pt;">거래처 관리</h1>
+			<h1>거래처 관리</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -152,9 +151,9 @@ function clientsortname(){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.client_no})" class="filter" id="filter">
-						<td class="code">${map.client_name }</td>
-						<td class="price">${map.client_registeredno }</td>
-						<td class="cont">${map.client_businesstype }</td>
+						<td>${map.client_name }</td>
+						<td>${map.client_registeredno }</td>
+						<td>${map.client_businesstype }</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -164,7 +163,7 @@ function clientsortname(){
 				</table>
 			</div>
 			<div class="dh_alignright">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c21?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c21?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -188,7 +187,6 @@ function clientsortname(){
 						<input type="hidden" name="clientsort_no" id="clientsort_no" value="${inmap.clientsort_no }">
 						<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
 						<input type="hidden" name="businesstype_no" id="businesstype_no" value="${inmap.businesstype_no }">
-							<h3>거래처 등록 사항</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -225,12 +223,12 @@ function clientsortname(){
 						
 						<div>
 							<label>대표자 </label>
-							<input type="text" name="client_representative" id="client_representative" value="${inmap.client_representative }" class="required">
+							<input type="text" name="client_representative" id="client_representative" value="${inmap.client_representative }" class="required" maxlength="30">
 						</div>				
 						
 						<div>
 							<label>사업형태 </label>
-							<input type="text" name="client_businesstype" id="client_businesstype" value="${inmap.client_businesstype }">
+							<input type="text" name="client_businesstype" id="client_businesstype" value="${inmap.client_businesstype }" maxlength="30">
 						</div>	
 							
 						<div>
@@ -257,26 +255,26 @@ function clientsortname(){
 						
 						<div>
 							<label>담당자 </label>
-							<input type="text" name="client_manager" id="client_manager" value="${inmap.client_manager }">
+							<input type="text" name="client_manager" id="client_manager" value="${inmap.client_manager }" maxlength="30">
 						</div>
 						<div>
 							<label>담당자번호 </label>
-							<input type="text" name="client_contact" id="client_contact" value="${inmap.client_contact }">
+							<input type="text" name="client_contact" id="client_contact" value="${inmap.client_contact }" maxlength="30">
 						</div>
 						
 						<div>
 							<label>대표 번호 </label>
-							<input type="text" name="client_directno" id="client_directno" value="${inmap.client_directno }" class="required">
+							<input type="text" name="client_directno" id="client_directno" value="${inmap.client_directno }" class="required" maxlength="30">
 						</div>
 						
 						<div>
 							<label>fax </label>
-							<input type="text" name="client_fax" id="client_fax" value="${inmap.client_fax }">
+							<input type="text" name="client_fax" id="client_fax" value="${inmap.client_fax }" maxlength="30">
 						</div>		
 						
 						<div>
 							<label>이메일 </label>
-							<input type="text" name="client_email" id="client_email" value="${inmap.client_email }" class="required">
+							<input type="text" name="client_email" id="client_email" value="${inmap.client_email }" class="required" maxlength="30">
 						</div>	
 						
 						<div>
@@ -291,7 +289,6 @@ function clientsortname(){
 						<input type="hidden" name="country_no" id="country_no" value="26">
 						<input type="hidden" name="clientsort_no" id="clientsort_no" value="3">
 						<input type="hidden" name="businesstype_no" id="businesstype_no" value="1">
-							<h3>거래처 등록 사항</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -328,12 +325,12 @@ function clientsortname(){
 						
 						<div>
 							<label>대표자 </label>
-							<input type="text" name="client_representative" id="client_representative" class="required">
+							<input type="text" name="client_representative" id="client_representative" class="required" maxlength="30">
 						</div>				
 						
 						<div>
 							<label>사업형태 </label>
-							<input type="text" name="client_businesstype" id="client_businesstype">
+							<input type="text" name="client_businesstype" id="client_businesstype" maxlength="30">
 						</div>	
 							
 						<div>
@@ -360,26 +357,26 @@ function clientsortname(){
 						
 						<div>
 							<label>담당자 </label>
-							<input type="text" name="client_manager" id="client_manager">
+							<input type="text" name="client_manager" id="client_manager" maxlength="30">
 						</div>
 						<div>
 							<label>담당자번호 </label>
-							<input type="text" name="client_contact" id="client_contact">
+							<input type="text" name="client_contact" id="client_contact" maxlength="30">
 						</div>
 						
 						<div>
 							<label>대표 번호 </label>
-							<input type="text" name="client_directno" id="client_directno" class="required">
+							<input type="text" name="client_directno" id="client_directno" class="required" maxlength="30">
 						</div>
 						
 						<div>
 							<label>fax </label>
-							<input type="text" name="client_fax" id="client_fax">
+							<input type="text" name="client_fax" id="client_fax" maxlength="30">
 						</div>		
 						
 						<div>
 							<label>이메일 </label>
-							<input type="text" name="client_email" id="client_email" class="required">
+							<input type="text" name="client_email" id="client_email" class="required" maxlength="30">
 						</div>	
 						
 						<div>
@@ -438,7 +435,7 @@ function registerednocheck1(){
 	if(xhr.readyState==4 && xhr.status==200) {		
 		var data = xhr.responseText;	
 		if(data != ""){		
-			if(data == "사용 가능한 코드입니다."){		
+			if(data == "사용 가능한 사업자등록번호입니다."){		
 				document.getElementById("registeredno").innerText = data;
 				document.getElementById("registeredno").style.color = "blue";
 				document.getElementById("register").disabled = false;		

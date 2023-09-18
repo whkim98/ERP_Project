@@ -1,30 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<%@ include file="/WEB-INF/views/layout/header.jsp" %>
+<%@ include file="/WEB-INF/views/dhlayout/header.jsp" %>
 
-
-
-<style>
-   /* input type="number"일 떄 위/아래 화살표 버튼 제거*/
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    input[type="number"] {
-        -moz-appearance: textfield; /* Firefox */
-    }
+<div class="notosanskr">
+	<div class="dh_aligncenter">
+    	<h1>생산 의뢰서 등록</h1>
+	</div>
+	
+	<div class="warning_box">
+		<span class="red bigger">* </span>
+		<div class="yellow_box"></div>
+		<span class="red">는 필수 입력란입니다.</span>
+	</div>
     
-</style>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<div class="taxinvoice-container">
-    <h1>생산 의뢰서</h1>
-    
-    <div class="taxinvoice-lower">
+    <div>
         <c:if test="${inmap != null }">
         <form action="${pageContext.request.contextPath}/d/d1/d12/update">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
@@ -36,7 +26,7 @@
         		<th>코드</th>
         		<td><input type="text" name="requestproduct_code" id="requestproduct_code" value="${inmap.requestproduct_code }" readonly="readonly" maxlength="30" class="required"></td>
         		<th>의뢰명</th>
-        		<td><input type="text" name="requestproduct_name" id="requestproduct_name" value="${inmap.requestproduct_name }" class="required"></td>
+        		<td><input type="text" name="requestproduct_name" id="requestproduct_name" value="${inmap.requestproduct_name }" class="required" maxlength="50"></td>
         		<th>기간</th>
         		<td><input type="date" name="requestproduct_start" id="requestproduct_start" value="${inmap.requestproduct_start }" onchange="startcheck(this.value)"> - <input type="date" name="requestproduct_end" id="requestproduct_end" value="${inmap.requestproduct_end }"></td>
         	</tr>
@@ -48,8 +38,8 @@
         	</tr>
         </table>
         
-        <table class="taxinvoice-company">
-            <tr id="b32-taxinvoice-supplier">
+        <table>
+            <tr>
                 <th rowspan="6">의뢰 거래처<input type="button" onclick="clList('${comcode_code}')" value="search"></th>
                 <th>* 사업자등록번호</th>
                 <td id="client_registeredno">${inmap.client_registeredno}</td>
@@ -63,7 +53,7 @@
                 <td id="employee1_phone">${inmap.employee1_phone }</td>
             </tr>
             
-            <tr id="b32-taxinvoice-receiver">
+            <tr>
                 <th>* 상호</th>
                 <td><input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')" value="${inmap.client_name }"></td>
                 <th>* 성명</th>
@@ -93,12 +83,12 @@
             </tr>
          </table>
          
-         <div class="taxinvoice-contentItem">
+         <div>
          	<p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
          	</p>
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                     <th>제품조회</th>
                     <th>상품명</th>
@@ -168,14 +158,14 @@
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
         	<input type="hidden" name="employee1_no" id="employee1_no" value="1">
         	<input type="hidden" name="client_no" id="client_no" value="17">
-        	<div class="taxinvoice-body">
+        	<div>
         <table>
         	<tr>
         		<th>코드</th>
         		<td><input type="text" name="requestproduct_code" id="requestproduct_code" maxlength="30" class="required" onblur="code(this.value)">
         		<h6 id="requestcode" style="color:red;"></h6></td>
         		<th>의뢰명</th>
-        		<td><input type="text" name="requestproduct_name" id="requestproduct_name" class="required"></td>
+        		<td><input type="text" name="requestproduct_name" id="requestproduct_name" class="required" maxlength="50"></td>
         		<th>기간</th>
         		<td><input type="date" name="requestproduct_start" id="requestproduct_start" onchange="startcheck(this.value)"> - <input type="date" name="requestproduct_end" id="requestproduct_end"></td>
         	</tr>
@@ -187,8 +177,8 @@
         	</tr>
         </table>
         
-        <table class="taxinvoice-company">
-            <tr id="b32-taxinvoice-supplier">
+        <table>
+            <tr>
                 <th rowspan="6">의뢰 거래처<input type="button" onclick="clList('${comcode_code}')" value="search"></th>
                 <th>* 사업자등록번호</th>
                 <td id="client_registeredno"></td>
@@ -202,7 +192,7 @@
                 <td id="employee1_phone"></td>
             </tr>
             
-            <tr id="b32-taxinvoice-receiver">
+            <tr>
                 <th>* 상호</th>
                 <td><input type="text" name="client_name" id="client_name" onkeypress="searchcl(event, '${comcode_code}')"></td>
                 <th>* 성명</th>
@@ -235,13 +225,13 @@
 
          </div>
            
-        <div class="taxinvoice-contentItem">
+        <div>
             <p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
             </p>
     
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                     <th>제품조회</th>
                     <th>상품명</th>

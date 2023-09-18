@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 
 <script type="text/javascript">
 function surf(v, code){
@@ -51,10 +49,11 @@ function getlist(){
 	}
 }
 </script>
+<%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 	
 		<div class="dh_aligncenter">
-			<h2>프로젝트 등록</h2>
+			<h2>계약 관리</h2>
 		</div>
 		<br>
 		<div class="divform2">
@@ -116,7 +115,7 @@ function getlist(){
 			</div>
 	
 			<div class="dh_alignright">
-				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/inputContract?comcode_code=${comcode_code }'">
+				<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/inputContract?comcode_code=${comcode_code }'">
 			</div>
 	
 		</div>
@@ -139,10 +138,14 @@ function getlist(){
 					<input type="hidden" name="project_no" id="project_no" value="${inmap.project_no}">
 					<input type="hidden" name="contractkind_no" id="contractkind_no" value="${inmap.contractkind_no }">
 					<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
-						<h3>계약서 수정</h3>
+						<div class="warning_box">
+							<span class="red bigger">* </span>
+							<div class="yellow_box"></div>
+							<span class="red">는 필수 입력란입니다.</span>
+						</div>
 						<div>
 							<label>계약명 </label>
-							<input type="text" name="contract_name" id="contract_name" value="${inmap.contract_name }" class="required">
+							<input type="text" name="contract_name" id="contract_name" value="${inmap.contract_name }" class="required" maxlength="30">
 						</div>
 						<div>
 							<label>계약 종류 </label>
@@ -186,7 +189,7 @@ function getlist(){
 						</div>
 						<div>
 							<label>계약 내용 </label>
-							<input type="text" name="contract_content" id="contract_content" value="${inmap.contract_content }">
+							<input type="text" name="contract_content" id="contract_content" value="${inmap.contract_content }" class="required">
 						</div>
 						<div>
 							<input type="button" value="수정" onclick="sub(this.form)">
@@ -203,10 +206,14 @@ function getlist(){
 					<input type="hidden" name="client_no" id="client_no">
 					<input type="hidden" name="contractkind_no" id="contractkind_no">
 					<input type="hidden" name="project_no" id="project_no">
-						<h3>계약 등록 사항</h3>
+						<div class="warning_box">
+							<span class="red bigger">* </span>
+							<div class="yellow_box"></div>
+							<span class="red">는 필수 입력란입니다.</span>
+						</div>
 						<div>
 							<label>계약명 </label>
-							<input type="text" name="contract_name" id="contract_name" class="required">
+							<input type="text" name="contract_name" id="contract_name" class="required" maxlength="30">
 						</div>
 						<div>
 							<label>계약 종류 </label>
@@ -250,7 +257,7 @@ function getlist(){
 						</div>
 						<div>
 							<label>계약 내용 </label>
-							<input type="text" name="contract_content" id="contract_content">
+							<input type="text" name="contract_content" id="contract_content" class="required">
 						</div>
 						<div>
 							<input type="button" value="등록" onclick="sub(this.form)">
@@ -280,27 +287,49 @@ function getlist(){
 	function sub(f){
 		if(f.contract_name.value == ""){
 			f.contract_name.focus();
+			return;
 		}else if(f.contractkind_name.value == ""){
 			f.contractkind_name.focus();
+			return;
 		}else if(f.client_name.value == ""){
 			f.client_name.focus();
+			return;
 		}else if(f.contract_start.value == "" || f.contract_end.value == ""){
 			f.contract_start.focus();
+			return;
 		}else if(f.project_name.value == ""){
 			f.project_name.focus();
+			return;
+		}else if(f.contract_content.value == ""){
+			f.contract_content.focus();
+			return;
 		}
 		
-		if(f.contract_content.value == ""){
-			let con = confirm("계약내용이 입력되지 않았습니다. 계속하시겠습니까?");
-			if(con){
-				
+		if(f.contract_start.value == ""){
+			let cc = confirm("계약기간이 입력되지 않았습니다. 계속하시겠습니까?");
+			if(cc){
+				f.contract_start.value = today;
 			}else {
-				f.contract_content.focus();
+				f.contract_start.focus();
 				return;
 			}
 		}
 		
-		let ch = confirm("등록하시겠습니까?")
+		if(f.contract_end.value == ""){
+			let cc = confirm("계약기간이 입력되지 않았습니다. 계속하시겠습니까?");
+			if(cc){
+				if(f.contract_start.value != ""){
+					f.contract_end.value = f.contract_start.value + 1;
+				}else {
+					f.contract_end.value = today;
+				}
+			}else {
+				f.contract_end.focus();
+				return;
+			}
+		}
+		
+		var ch = confirm("등록하시겠습니까?")
 		if(ch){
 			f.submit();
 		}else {

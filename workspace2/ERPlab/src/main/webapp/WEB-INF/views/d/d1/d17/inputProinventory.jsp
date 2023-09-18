@@ -1,67 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -131,25 +69,33 @@ function getlist(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">수금</h1>
+		<div class="dh_aligncenter">
+			<h1>공정 재고 관리</h1>
 		</div>
-		<div align="center">
-			<div>
-				<select name="type">
-					<option value="all">전체</option>
-					<option value="company_name">상호</option>
-					<option value="company_businesstype">형태</option>
-					<option value="company_use">용도</option>
-					<option value="businesstype_name">업태</option>
-					<option value="businesstype_subctgr">업종</option>
-					<option value="comptype_name">구분</option>
-				</select>
-				<input type="text" name="word" id="word" onkeyup="surf(this.value, '${comcode_code}')" onblur="surf(this.value, '${comcode_code}')">
-				<input type="button" onclick="surf('', '${comcode_code}')" value="전체목록">
+		<div>
+			<div class="inputdivform2">
+				<table>
+					<tr>
+						<td>
+							<select name="type">
+								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
+								<option value="company_name" ${param.type == 'company_name' ? 'selected' : '' }>상호</option>
+								<option value="company_businesstype" ${param.type == 'company_businesstype' ? 'selected' : '' }>형태</option>
+								<option value="company_use" ${param.type == 'company_use' ? 'selected' : '' }>용도</option>
+								<option value="businesstype_name" ${param.type == 'businesstype_name' ? 'selected' : '' }>업태</option>
+								<option value="businesstype_subctgr" ${param.type == 'businesstype_subctgr' ? 'selected' : '' }>업종</option>
+								<option value="comptype_name" ${param.type == 'comptype_name' ? 'selected' : '' }>구분</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" name="word" id="word" onkeyup="surf(this.value, '${comcode_code}')" onblur="surf(this.value, '${comcode_code}')">
+							<input type="button" onclick="surf('', '${comcode_code}')" value="전체목록">
+						</td>
+					</tr>
+				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_inputoverflow">
 				<table id="procode">
 					<tr>
 						<td>상호</td>
@@ -186,8 +132,8 @@ function getlist(){
 					</c:forEach>
 				</table>
 			</div>
-			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d17/add?comcode_code=${comcode_code }'" value="add">
+			<div class="dh_inputalignright">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d17/add?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	

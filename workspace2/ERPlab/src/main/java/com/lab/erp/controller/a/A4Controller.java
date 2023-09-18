@@ -24,23 +24,39 @@ import com.lab.erp.vo.b.b2.Erp_AccountVO;
 import com.lab.erp.vo.c.Erp_ClientVO;
 import com.lab.erp.vo.login.Erp_TeamVO;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/a/a4")
 public class A4Controller {
 	private A4Service a4;
 	private A3Service a3;
 	private LoginService ls;
+	private HttpServletRequest request;
 	
 	@Autowired
-	public A4Controller(A4Service a4, A3Service a3, LoginService ls) {
+	public A4Controller(A4Service a4, A3Service a3, LoginService ls, HttpServletRequest request) {
 		this.a4 = a4;
 		this.a3 = a3;
 		this.ls = ls;
+		this.request = request;
 	}
 	
 //	a41
 	@RequestMapping("/a41")
 	public String inputLoan(String type, String word, Model model, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		if(type == null || word == null) {
 			type = null;
@@ -99,6 +115,18 @@ public class A4Controller {
 	@RequestMapping("/a41/createLoan")
 	@Transactional
 	public String createLoan(Erp_InvestmentVO vo, Model model, String bs3_no1, String bs3_no2, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		int b1 = 0;
 		int b2 = 0;
 		
@@ -124,66 +152,60 @@ public class A4Controller {
 		
 		vo.setComcode_no(comcode_no);
 		
-		int insert = a4.createInvestment(vo);
+		a4.createInvestment(vo);
 		
-		if(insert == 0) {
-			String msg = "등록 실패";
-			String url = "redirect:/a/a4/a41?comcode_code="+comcode_code;
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			int ctgr = 8;
+		int ctgr = 8;
+		
+		Erp_ClosingVO cvo = new Erp_ClosingVO();
+		cvo.setClosing_code(vo.getInvestment_code());
+		cvo.setClosing_debtor(vo.getInvestment_price());
+		cvo.setClosing_creditor(vo.getInvestment_price());
+		cvo.setComcode_no(vo.getComcode_no());
+		cvo.setDebtor_no(vo.getDebtor_no());
+		cvo.setCreditor_no(vo.getCreditor_no());
+		cvo.setCtgr_no(ctgr);
+		
+		a4.createClosing(cvo);
 			
-			Erp_ClosingVO cvo = new Erp_ClosingVO();
-			cvo.setClosing_code(vo.getInvestment_code());
-			cvo.setClosing_debtor(vo.getInvestment_price());
-			cvo.setClosing_creditor(vo.getInvestment_price());
-			cvo.setComcode_no(vo.getComcode_no());
-			cvo.setDebtor_no(vo.getDebtor_no());
-			cvo.setCreditor_no(vo.getCreditor_no());
-			cvo.setCtgr_no(ctgr);
+		Map<String, Object> dmap = a4.getBsNo(b1);
+		Map<String, Object> cmap = a4.getBsNo(b2);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("bs3_amount", vo.getInvestment_price());
+		map.put("bs3_no", dmap.get("bs3_no"));
+		map.put("bs2_no", dmap.get("bsno2"));
+		map.put("bs1_no", dmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
+		
+		map.put("bs3_amount", vo.getInvestment_price());
+		map.put("bs3_no", cmap.get("bs3_no"));
+		map.put("bs2_no", cmap.get("bsno2"));
+		map.put("bs1_no", cmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
 			
-			int closing = a4.createClosing(cvo);
-			if(closing == 0) {
-				int delete = a4.deleteInvestment(vo.getInvestment_no());
-				if(delete != 0) {
-					String msg = "등록 실패";
-					String url = "redirect:/a/a4/a41?comcode_code="+comcode_code;
-					model.addAttribute("msg", msg);
-					model.addAttribute("url", url);
-					return ViewPath.RESULT + "loginresult";
-				}
-			}else {
-				Map<String, Object> dmap = a4.getBsNo(b1);
-				Map<String, Object> cmap = a4.getBsNo(b2);
-				
-				Map<String, Object> map = new HashMap<>();
-				map.put("bs3_amount", vo.getInvestment_price());
-				map.put("bs3_no", dmap.get("bs3_no"));
-				map.put("bs2_no", dmap.get("bsno2"));
-				map.put("bs1_no", dmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-				
-				map.put("bs3_amount", vo.getInvestment_price());
-				map.put("bs3_no", cmap.get("bs3_no"));
-				map.put("bs2_no", cmap.get("bsno2"));
-				map.put("bs1_no", cmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-			}
-			
-			return "redirect:/a/a4/a41?comcode_code="+comcode_code;
-		}
+		return "redirect:/a/a4/a41?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a41/updateForm")
 	public String updateFormI(Erp_InvestmentVO vo, String bs3_no1, String bs3_no2, Model model, String type, String word, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		int b1 = 0;
 		int b2 = 0;
@@ -246,6 +268,18 @@ public class A4Controller {
 	@RequestMapping("/a41/update")
 	@Transactional
 	public String updateInvestment(Erp_InvestmentVO vo, Model model, String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		Map<String, Object> map = new HashMap<>();
 		map.put("investment_no", vo.getInvestment_no());
@@ -306,7 +340,8 @@ public class A4Controller {
 		a4.updateBs1Amount(map);
 		
 		vo.setComcode_no(comcode_no);
-		int update = a4.updateInvestment(vo);
+		
+		a4.updateInvestment(vo);
 		
 		map.put("bs3_no1", b12);
 		map.put("bs3_no2", b22);
@@ -332,39 +367,34 @@ public class A4Controller {
 		a4.updateBs2Amount(map);
 		a4.updateBs1Amount(map);
 		
-		String msg = null;
-		String url = null;
+		cvo.setClosing_no((int)imap.get("closing_no"));
+		cvo.setClosing_code(vo.getInvestment_code());
+		cvo.setClosing_debtor(vo.getInvestment_price());
+		cvo.setClosing_creditor(vo.getInvestment_price());
+		cvo.setComcode_no(vo.getComcode_no());
+		cvo.setDebtor_no(vo.getDebtor_no());
+		cvo.setCreditor_no(vo.getCreditor_no());
 		
-		if(update != 0) {
-			cvo.setClosing_no((int)imap.get("closing_no"));
-			cvo.setClosing_code(vo.getInvestment_code());
-			cvo.setClosing_debtor(vo.getInvestment_price());
-			cvo.setClosing_creditor(vo.getInvestment_price());
-			cvo.setComcode_no(vo.getComcode_no());
-			cvo.setDebtor_no(vo.getDebtor_no());
-			cvo.setCreditor_no(vo.getCreditor_no());
-			
-			int cupdate = a4.updateClosing(cvo);
-			if(cupdate != 0) {
-				return "redirect:/a/a4/a41/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
-			}else {
-				msg = "수정 실패";
-				url = "redirect:/a/a4/a41/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
-			}
-		}else {
-			msg = "수정 실패";
-			url = "redirect:/a/a4/a41/updateForm?bs3_no1="+b11+"&bs3_no2="+b21+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
-		}
+		a4.updateClosing(cvo);
 		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a4/a41/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a41/delete")
 	@Transactional
 	public String deleteInvestment(int investment_no, String bs3_no1, String bs3_no2, Model model, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("investment_no", investment_no);
 		
@@ -381,53 +411,49 @@ public class A4Controller {
 		map.put("bs3_no2", b2);
 		Map<String, Object> imap = a4.selectInvestment(map);
 		
-		int delete = a4.deleteInvestment(investment_no);
+		a4.deleteClosing((int)imap.get("closing_no"));
+				
+		a4.deleteInvestment(investment_no);
 		
-		String url = null;
-		String msg = null;
+		Map<String, Object> dmap = a4.getBsNo(b1);
+		Map<String, Object> cmap = a4.getBsNo(b2);
 		
-		if(delete != 0) {
+		map.put("bs3_amount", (-(int)imap.get("investment_price")));
+		map.put("bs3_no", dmap.get("bs3_no"));
+		map.put("bs2_no", dmap.get("bsno2"));
+		map.put("bs1_no", dmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
+		
+		map.put("bs3_no", cmap.get("bs3_no"));
+		map.put("bs2_no", cmap.get("bsno2"));
+		map.put("bs1_no", cmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
 				
-			int cdelete = a4.deleteClosing((int)imap.get("closing_no"));
-			if(cdelete != 0) {
-				Map<String, Object> dmap = a4.getBsNo(b1);
-				Map<String, Object> cmap = a4.getBsNo(b2);
-				
-				map.put("bs3_amount", (-(int)imap.get("investment_price")));
-				map.put("bs3_no", dmap.get("bs3_no"));
-				map.put("bs2_no", dmap.get("bsno2"));
-				map.put("bs1_no", dmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-				
-				map.put("bs3_no", cmap.get("bs3_no"));
-				map.put("bs2_no", cmap.get("bsno2"));
-				map.put("bs1_no", cmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-				return "redirect:/a/a4/a41?comcode_code="+comcode_code;
-			}else {
-				msg = "삭제 실패";
-				url = "redirect:/a/a4/a41/updateForm?bs3_no1="+bs3_no1+"&bs3_no2="+bs3_no2+"&investment_no="+investment_no+"&comcode_code="+comcode_code;
-				return ViewPath.RESULT + "loginresult";
-			}
-		}else {
-			msg = "삭제 실패";
-			url = "redirect:/a/a4/a41/updateForm?bs3_no1="+bs3_no1+"&bs3_no2="+bs3_no2+"&investment_no="+investment_no+"&comcode_code="+comcode_code;
-			model.addAttribute("url", url);
-			model.addAttribute("msg", msg);
-			return ViewPath.RESULT + "loginresult";
-		}
+		return "redirect:/a/a4/a41?comcode_code="+comcode_code;
 	}
 	
 	
 //	a42
 	@RequestMapping("/a42")
 	public String inputLease(String type, String word, Model model, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		if(type == null || word == null) {
 			type = null;
@@ -486,6 +512,18 @@ public class A4Controller {
 	@RequestMapping("/a42/createLease")
 	@Transactional
 	public String createLease(Erp_InvestmentVO vo, Model model, String bs3_no1, String bs3_no2, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		int b1 = 0;
 		int b2 = 0;
 		if(vo.getInvestment_start().equals("")) {
@@ -510,66 +548,60 @@ public class A4Controller {
 		
 		vo.setComcode_no(comcode_no);
 		
-		int insert = a4.createInvestment(vo);
+		a4.createInvestment(vo);
 		
-		if(insert == 0) {
-			String msg = "등록 실패";
-			String url = "redirect:/a/a4/a42?comcode_code="+comcode_code;
-			model.addAttribute("msg", msg);
-			model.addAttribute("url", url);
-			return ViewPath.RESULT + "loginresult";
-		}else {
-			int ctgr = 9;
-			
-			Erp_ClosingVO cvo = new Erp_ClosingVO();
-			cvo.setClosing_code(vo.getInvestment_code());
-			cvo.setClosing_debtor(vo.getInvestment_price());
-			cvo.setClosing_creditor(vo.getInvestment_price());
-			cvo.setComcode_no(vo.getComcode_no());
-			cvo.setDebtor_no(vo.getDebtor_no());
-			cvo.setCreditor_no(vo.getCreditor_no());
-			cvo.setCtgr_no(ctgr);
-			
-			int closing = a4.createClosing(cvo);
-			if(closing == 0) {
-				int delete = a4.deleteInvestment(vo.getInvestment_no());
-				if(delete != 0) {
-					String msg = "등록 실패";
-					String url = "redirect:/a/a4/a42?comcode_code="+comcode_code;
-					model.addAttribute("msg", msg);
-					model.addAttribute("url", url);
-					return ViewPath.RESULT + "loginresult";
-				}
-			}else {
-				Map<String, Object> dmap = a4.getBsNo(b1);
-				Map<String, Object> cmap = a4.getBsNo(b2);
+		int ctgr = 9;
+		
+		Erp_ClosingVO cvo = new Erp_ClosingVO();
+		cvo.setClosing_code(vo.getInvestment_code());
+		cvo.setClosing_debtor(vo.getInvestment_price());
+		cvo.setClosing_creditor(vo.getInvestment_price());
+		cvo.setComcode_no(vo.getComcode_no());
+		cvo.setDebtor_no(vo.getDebtor_no());
+		cvo.setCreditor_no(vo.getCreditor_no());
+		cvo.setCtgr_no(ctgr);
+		
+		a4.createClosing(cvo);
 				
-				Map<String, Object> map = new HashMap<>();
-				map.put("bs3_amount", vo.getInvestment_price());
-				map.put("bs3_no", dmap.get("bs3_no"));
-				map.put("bs2_no", dmap.get("bsno2"));
-				map.put("bs1_no", dmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-				
-				map.put("bs3_amount", (-vo.getInvestment_price()));
-				map.put("bs3_no", cmap.get("bs3_no"));
-				map.put("bs2_no", cmap.get("bsno2"));
-				map.put("bs1_no", cmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-			}
-			
-			return "redirect:/a/a4/a42?comcode_code="+comcode_code;
-		}
+		Map<String, Object> dmap = a4.getBsNo(b1);
+		Map<String, Object> cmap = a4.getBsNo(b2);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("bs3_amount", vo.getInvestment_price());
+		map.put("bs3_no", dmap.get("bs3_no"));
+		map.put("bs2_no", dmap.get("bsno2"));
+		map.put("bs1_no", dmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
+		
+		map.put("bs3_amount", (-vo.getInvestment_price()));
+		map.put("bs3_no", cmap.get("bs3_no"));
+		map.put("bs2_no", cmap.get("bsno2"));
+		map.put("bs1_no", cmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
+		
+		return "redirect:/a/a4/a42?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a42/updateForm")
 	public String updateFormL(Erp_InvestmentVO vo, String bs3_no1, String bs3_no2, Model model, String type, String word, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		int b1 = 0;
 		int b2 = 0;
@@ -632,6 +664,18 @@ public class A4Controller {
 	@RequestMapping("/a42/update")
 	@Transactional
 	public String updateLease(Erp_InvestmentVO vo, Model model, String bs3_no11, String bs3_no21, String bs3_no12, String bs3_no22, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		Map<String, Object> map = new HashMap<>();
 		map.put("investment_no", vo.getInvestment_no());
@@ -692,7 +736,8 @@ public class A4Controller {
 		a4.updateBs1Amount(map);
 		
 		vo.setComcode_no(comcode_no);
-		int update = a4.updateInvestment(vo);
+		
+		a4.updateInvestment(vo);
 		
 		map.put("bs3_no1", b12);
 		map.put("bs3_no2", b22);
@@ -719,39 +764,34 @@ public class A4Controller {
 		a4.updateBs2Amount(map);
 		a4.updateBs1Amount(map);
 		
-		String msg = null;
-		String url = null;
+		cvo.setClosing_no((int)imap.get("closing_no"));
+		cvo.setClosing_code(vo.getInvestment_code());
+		cvo.setClosing_debtor(vo.getInvestment_price());
+		cvo.setClosing_creditor(vo.getInvestment_price());
+		cvo.setComcode_no(vo.getComcode_no());
+		cvo.setDebtor_no(vo.getDebtor_no());
+		cvo.setCreditor_no(vo.getCreditor_no());
 		
-		if(update != 0) {
-			cvo.setClosing_no((int)imap.get("closing_no"));
-			cvo.setClosing_code(vo.getInvestment_code());
-			cvo.setClosing_debtor(vo.getInvestment_price());
-			cvo.setClosing_creditor(vo.getInvestment_price());
-			cvo.setComcode_no(vo.getComcode_no());
-			cvo.setDebtor_no(vo.getDebtor_no());
-			cvo.setCreditor_no(vo.getCreditor_no());
-			
-			int cupdate = a4.updateClosing(cvo);
-			if(cupdate != 0) {
-				return "redirect:/a/a4/a42/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
-			}else {
-				msg = "수정 실패";
-				url = "redirect:/a/a4/a42/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
-			}
-		}else {
-			msg = "수정 실패";
-			url = "redirect:/a/a4/a42/updateForm?bs3_no1="+b11+"&bs3_no2="+b21+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
-		}
+		a4.updateClosing(cvo);
 		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		
-		return ViewPath.RESULT + "loginresult";
+		return "redirect:/a/a4/a42/updateForm?bs3_no1="+b12+"&bs3_no2="+b22+"&investment_no="+vo.getInvestment_no()+"&comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping("/a42/delete")
 	@Transactional
 	public String deleteLease(int investment_no, String bs3_no1, String bs3_no2, Model model, String comcode_code) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("investment_no", investment_no);
 		
@@ -768,48 +808,32 @@ public class A4Controller {
 		map.put("bs3_no2", b2);
 		Map<String, Object> imap = a4.selectInvestment(map);
 		
-		int delete = a4.deleteInvestment(investment_no);
+		a4.deleteInvestment(investment_no);
 		
-		String url = null;
-		String msg = null;
+		a4.deleteClosing((int)imap.get("closing_no"));
 		
-		if(delete != 0) {
-				
-			int cdelete = a4.deleteClosing((int)imap.get("closing_no"));
-			if(cdelete != 0) {
-				Map<String, Object> dmap = a4.getBsNo(b1);
-				Map<String, Object> cmap = a4.getBsNo(b2);
-				
-				map.put("bs3_amount", (-(int)imap.get("investment_price")));
-				map.put("bs3_no", dmap.get("bs3_no"));
-				map.put("bs2_no", dmap.get("bsno2"));
-				map.put("bs1_no", dmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-				
-				map.put("bs3_amount", ((int)imap.get("investment_price")));
-				map.put("bs3_no", cmap.get("bs3_no"));
-				map.put("bs2_no", cmap.get("bsno2"));
-				map.put("bs1_no", cmap.get("bs1_no"));
-				
-				a4.updateBs3Amount(map);
-				a4.updateBs2Amount(map);
-				a4.updateBs1Amount(map);
-				return "redirect:/a/a4/a42?comcode_code="+comcode_code;
-			}else {
-				msg = "삭제 실패";
-				url = "redirect:/a/a4/a42/updateForm?bs3_no1="+bs3_no1+"&bs3_no2="+bs3_no2+"&investment_no="+investment_no+"&comcode_code="+comcode_code;
-				return ViewPath.RESULT + "loginresult";
-			}
-		}else {
-			msg = "삭제 실패";
-			url = "redirect:/a/a4/a42/updateForm?bs3_no1="+bs3_no1+"&bs3_no2="+bs3_no2+"&investment_no="+investment_no+"&comcode_code="+comcode_code;
-			model.addAttribute("url", url);
-			model.addAttribute("msg", msg);
-			return ViewPath.RESULT + "loginresult";
-		}
+		Map<String, Object> dmap = a4.getBsNo(b1);
+		Map<String, Object> cmap = a4.getBsNo(b2);
+		
+		map.put("bs3_amount", (-(int)imap.get("investment_price")));
+		map.put("bs3_no", dmap.get("bs3_no"));
+		map.put("bs2_no", dmap.get("bsno2"));
+		map.put("bs1_no", dmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
+		
+		map.put("bs3_amount", ((int)imap.get("investment_price")));
+		map.put("bs3_no", cmap.get("bs3_no"));
+		map.put("bs2_no", cmap.get("bsno2"));
+		map.put("bs1_no", cmap.get("bs1_no"));
+		
+		a4.updateBs3Amount(map);
+		a4.updateBs2Amount(map);
+		a4.updateBs1Amount(map);
+		
+		return "redirect:/a/a4/a42?comcode_code="+comcode_code;
 	}
 	
 	
@@ -836,6 +860,27 @@ public class A4Controller {
 		return ViewPath.WINDOW + "a/a4/teamList";
 	}
 	
+	@RequestMapping("/searchtAjax")
+	@ResponseBody
+	public List<Erp_TeamVO> searchtAjax(String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Erp_TeamVO> list = a3.teamList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
 	@RequestMapping("/searchim")
 	public String searchim(Model model) {
 		List<Erp_ImkindVO> list = a4.imkindList();
@@ -851,7 +896,6 @@ public class A4Controller {
 	@RequestMapping("/acList")
 	public String acList(String comcode_code, Model model, String type, String word, String team_code) {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println(team_code);
 		if(type == null || word == null) {
 			type = null;
 			word = null;
@@ -868,6 +912,27 @@ public class A4Controller {
 		model.addAttribute("list", list);
 		
 		return ViewPath.WINDOW + "a/a4/acList";
+	}
+	
+	@RequestMapping("/acListAjax")
+	@ResponseBody
+	public List<Map<String, Object>> acListAjax(String comcode_code, String type, String word, String team_code) {
+		Map<String, Object> map = new HashMap<>();
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("team_code", team_code);
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.accountList(map);
+		
+		return list;
 	}
 	
 	@RequestMapping("/clList")
@@ -889,6 +954,26 @@ public class A4Controller {
 		model.addAttribute("list", list);
 		
 		return ViewPath.WINDOW + "a/a4/clList";
+	}
+	
+	@RequestMapping("/clListAjax")
+	@ResponseBody
+	public List<Map<String, Object>> clListAjax(String comcode_code, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = a4.clientList(map);
+		
+		return list;
 	}
 	
 	@RequestMapping("/imkind")

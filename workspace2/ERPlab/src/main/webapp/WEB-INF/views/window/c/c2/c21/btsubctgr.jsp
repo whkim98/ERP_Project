@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ERP_Businesstype List</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 </head>
 <body>
 <div>
 	<select name="btype">
-		<option value="businesstype_subctgr">업종</option>
-		<option value="businesstype_ctgr">분류</option>
+		<option value="businesstype_subctgr" ${param.type == 'businesstype_subctgr' ? 'selected' : '' }>업종</option>
+		<option value="businesstype_ctgr" ${param.type == 'businesstype_ctgr' ? 'selected' : '' }>분류</option>
 	</select>
 	<input type="text" name="bword" id="bword" onkeyup="bsajax(this.value)" onblur="bsajax(this.value)">
 	<input type="button" onclick="bsajax('')" value="전체목록">
@@ -23,7 +26,9 @@
 			<td>설명</td>
 		</tr>
 		<c:if test="${list == null }">
-			<td colspan="3">정보가 존재하지 않습니다.</td>
+		<tr>
+			<td colspan="4">정보가 존재하지 않습니다.</td>
+		</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
 				<tr onclick="setParentText(${vo.businesstype_no }, '${vo.businesstype_subctgr}', '${vo.businesstype_name }')">
@@ -69,6 +74,9 @@
 					newTr.setAttribute("onclick", "setParentText("+map.businesstype_no+", '"+map.businesstype_subctgr+"', '"+map.businesstype_name+"')");
 					procode.appendChild(newTr);
 					newTd = document.createElement("td");
+					newTd.innerHTML = map.businesstype_name;
+					newTr.appendChild(newTd);
+					newTd = document.createElement("td");
 					newTd.innerHTML = map.businesstype_ctgr;
 					newTr.appendChild(newTd);
 					newTd = document.createElement("td");
@@ -79,7 +87,7 @@
 					newTr.appendChild(newTd);
 				});
 			}else {
-				procode.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
+				procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
 			}
 		}
 	}

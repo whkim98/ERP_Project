@@ -223,6 +223,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and date_format(o.order_end, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
+		order by o.order_code asc
 	</select>
 	
 	<select id="selectOrder" parameterType="int" resultType="map">
@@ -339,6 +340,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and date_format(p.purchase_date, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
+		order by p.purchase_code asc
 	</select>
 	
 	<select id="selectPurchase" parameterType="int" resultType="map">
@@ -485,6 +487,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and pt.producttest_pnp like if ('불합격' = ${word},0,1)
 			</if>
 		</if>
+		order by p.purchase_code asc
 	</select>
 	
 	<select id="selectProductTest" parameterType="int" resultType="map">
@@ -560,7 +563,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-						c.client_name like '%${word}%' or cp.comptype_code like '%${word}%' 
+						co.company_addr1 like '%${word}%' or cp.comptype_code like '%${word}%' 
 						or t.team_name like '%${word}%' 
 						or e.employee1_name like '%${word}%' 
 					)
@@ -568,8 +571,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="type == 'team_name'">
 				and t.team_name like '%${word}%'
 			</if>
-			<if test="type == 'client_name'">
-				and c.client_name like '%${word}%'
+			<if test="type == 'company_addr1'">
+				and co.company_addr1 like '%${word}%'
 			</if>
 			<if test="type == 'comptype_code'">
 				and cp.comptype_code like '%${word}%'
@@ -578,6 +581,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and e.employee1_name like '%${word}%'
 			</if>
 		</if>
+		order by co.company_name asc
 	</select>
 	
 	<select id="selectInventory" parameterType="int" resultType="map">

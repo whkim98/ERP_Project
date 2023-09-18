@@ -1444,7 +1444,7 @@ public class D3Controller {
 	
 	@RequestMapping("/d32/goodsListAjax")
 	@ResponseBody
-	public List<Map<String, Object>> goodsListAjaxd22(String btype, String bnword, String comcode_code, Model model, String client_name) {
+	public List<Map<String, Object>> goodsListAjaxd22(String btype, String bnword, String comcode_code, String client_name) {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -1581,7 +1581,6 @@ public class D3Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
-		System.out.println(vo);
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -1669,6 +1668,7 @@ public class D3Controller {
 	}
 	
 	@RequestMapping("/d34/purchaseAjax")
+	@ResponseBody
 	public List<Map<String, Object>> purchaseAjax(String type, String word, String comcode_code) {
 		if(type == null || word == null) {
 			type = null;
@@ -1690,10 +1690,12 @@ public class D3Controller {
 	}
 	
 	@RequestMapping("/d34/goodsList")
-	public String goodsListd24(Model model, Erp_PurchaseVO vo) {
+	public String goodsListd24(Model model, Erp_PurchaseVO vo, String btype, String bnword) {
 		
 		Map<String, Object> map = new HashMap<>();
 		
+		map.put("btype", btype);
+		map.put("bnword", bnword);
 		map.put("goodssort_name1", "상품");
 		map.put("goodssort_name2", "반제품");
 		map.put("purchase_no", vo.getPurchase_no());
@@ -1706,6 +1708,30 @@ public class D3Controller {
 		model.addAttribute("list", list);
 		
 		return ViewPath.WINDOW + "d/d2/d24/goodsList";
+	}
+	
+	@RequestMapping("/d34/goodsListAjax")
+	@ResponseBody
+	public List<Map<String, Object>> goodsListd24Ajax(Erp_PurchaseVO vo, String btype, String bnword) {
+		if(btype == null || bnword == null) {
+			btype = null;
+			bnword = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("btype", btype);
+		map.put("bnword", bnword);
+		map.put("goodssort_name1", "상품");
+		map.put("goodssort_name2", "반제품");
+		map.put("purchase_no", vo.getPurchase_no());
+		
+		List<Map<String, Object>> list = d2.selectPurchaseGoods(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
 	}
 	
 	
@@ -1865,11 +1891,13 @@ public class D3Controller {
 		List<Erp_InvenconnectVO> iclist = ivo.getIclist();
 		List<Erp_InvenconnectVO> iclist1 = ivo.getIclist1();
 		
-		for(Erp_InvenconnectVO icvo : iclist1) {
-			d2.updateInvenConnect(icvo);
+		if(iclist1 != null) {
+			for(Erp_InvenconnectVO icvo : iclist1) {
+				d2.updateInvenConnect(icvo);
+			}
 		}
 		
-		if(!iclist.isEmpty()) {
+		if(iclist != null) {
 			for(Erp_InvenconnectVO icvo : iclist) {
 				icvo.setInventory_no(vo.getInventory_no());
 				d2.createInvenConnect(icvo);
@@ -1949,6 +1977,7 @@ public class D3Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("btype", btype);
 		map.put("bnword", bnword);
+		map.put("purchase_type", 0);
 		
 		List<Map<String, Object>> list = d2.purchaseGoods(map);
 		if(list.isEmpty()) {
@@ -1988,6 +2017,7 @@ public class D3Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("btype", btype);
 		map.put("bnword", bnword);
+		map.put("purchase_type", 0);
 		
 		List<Map<String, Object>> list = d2.purchaseGoods(map);
 		if(list.isEmpty()) {
@@ -2018,6 +2048,7 @@ public class D3Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("btype", btype);
 		map.put("bnword", bnword);
+		map.put("purchase_type", 0);
 		
 		List<Map<String, Object>> list = d2.purchaseGoods(map);
 		

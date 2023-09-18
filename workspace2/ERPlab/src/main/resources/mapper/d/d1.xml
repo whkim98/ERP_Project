@@ -276,6 +276,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and r.requestproduct_content like '%${word}%'
 			</if>
 		</if>
+		order by r.requestproduct_code asc
 	</select>
 	
 	<select id="selectRequestProduct" parameterType="int" resultType="map">
@@ -430,14 +431,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and p.product_code = cl.closing_code 
 		and p.comcode_no = #{comcode_no} 
 		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					e.employee1_name like '%${word}%' or r.requestproduct_name like '%${word}%' 
+					or p.product_lot like '%${word}%' or p.product_code like '%${word}%' 
+					or p.product_name like '%${word}%'
+				)
+			</if>
 			<if test="type == 'employee1_name'">
 				and e.employee1_name like '%${word}%'
 			</if>
 			<if test="type == 'requestproduct_name'">
 				and r.requestproduct_name like '%${word}%'
-			</if>
-			<if test="type == 'team_name'">
-				t.team_name like '%${word}%'
 			</if>
 			<if test="type == 'product_lot'">
 				p.product_lot like '%${word}%'
@@ -449,6 +454,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				p.product_name like '%${word}%'
 			</if>
 		</if>
+		order by p.product_code asc
 	</select>
 	
 	<select id="getProductCode" parameterType="String" resultType="int">
@@ -478,10 +484,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="defectiveList" parameterType="map" resultType="map">
-		select p.product_name, d.* 
-		from erp_product p, erp_defective d  
+		select p.*, d.*, g.*, gl.*, r.*
+		from erp_product p, erp_defective d, erp_goodslot gl, erp_goods g, erp_requestproduct r
 		where p.requestproduct_no = d.requestproduct_no 
-		and p.comcode_no = #{comcode_no}
+		and gl.goodslot_no = d.goodslot_no 
+		and gl.goods_no = g.goods_no 
+		and p.requestproduct_no = r.requestproduct_no 
+		and p.comcode_no = #{comcode_no} 
+		order by d.defective_no asc
 	</select>
 	<select id="defectiveListAll" parameterType="map" resultType="map">
 		select * 
@@ -498,7 +508,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and d.requestproduct_no = ev.requestproduct_no 
 		and d.goodslot_no = gl.goodslot_no 
 		and g.goods_no = gl.goods_no 
-		order by defective_no
+		order by d.defective_no asc
 	</select>
 	
 	<select id="selectDefective" parameterType="int" resultType="map">
@@ -551,6 +561,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and (
 					date_format(ev.evaluation_date, '%m월 %d일') like '%${word}%' or p.product_code like '%${word}%' 
 					or p.product_name like '%${word}%' or e.employee1_name like '%${word}%' 
+					or ev.evaluation_status like '%${word == '미완'? 0 : 1}%'
 					)
 			</if>
 			<if test="type == 'evaluation_date'">
@@ -569,6 +580,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and ev.evaluation_status like '%${word == '미완'? 0 : 1}%'
 			</if>
 		</if>
+		order by ev.evaluation_no asc
 	</select>
 	
 	<select id="selectEvaluation" parameterType="int" resultType="map">
@@ -617,6 +629,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and (
 					date_format(ev.evaluation_date, '%m월 %d일') like '%${word}%' or p.product_code like '%${word}%' 
 					or p.product_name like '%${word}%' or e.employee1_name like '%${word}%' 
+					or ev.evaluation_status like '%${word == '미완'? 0 : 1}%'
 					)
 			</if>
 			<if test="type == 'evaluation_date'">
@@ -635,6 +648,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and ev.evaluation_status like '%${word == '미완'? 0 : 1}%'
 			</if>
 		</if>
+		order by em.evaluemng_no asc
 	</select>
 	
 	<select id="selectEvmng" parameterType="int" resultType="map">
@@ -751,7 +765,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and g.client_no1 = c1.client_no 
 		and g.client_no2 = c2.client_no 
 		and i.proinventory_no = #{proinventory_no}
-		order by goods_name asc
+		order by g.goods_name asc
 	</select>
 	
 	<select id="selectProInventoryGoods" parameterType="int" resultType="map">
@@ -835,6 +849,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and gs.goodssort_no = gk.goodssort_no 
 		and g.comcode_no = #{comcode_no} 
 		and (gs.goodssort_name = #{goodssort_name1} or gs.goodssort_name = #{goodssort_name}) 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+					g.goods_code '%${word}%' or g.goods_barcode like '%${word}%'
+					or g.goods_name like '%${word}%' or c1.client_name like '%${word}%' 
+					or gk.goodskind_name like '%${word}%' or gl.goodslev_grade like '%${word}%'
+				)
+			</if>
+			<if test="type == 'goods_code'">
+				and g.goods_code '%${word}%'
+			</if>
+			<if test="type == 'goods_barcode'">
+				and g.goods_barcode like '%${word}%'
+			</if>
+			<if test="type == 'goods_name'">
+				and g.goods_name like '%${word}%'
+			</if>
+			<if test="type == 'client_name1'">
+				and c1.client_name like '%${word}%'
+			</if>
+			<if test="type == 'goodskind_name'">
+				and gk.goodskind_name like '%${word}%'
+			</if>
+			<if test="type == 'goodslev_grade'">
+				and gl.goodslev_grade like '%${word}%'
+			</if>
+		</if>
+		order by g.goods_no asc
 	</select>
 	
 	<select id="selectItem" parameterType="int" resultType="map">

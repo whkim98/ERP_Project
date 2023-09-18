@@ -1,104 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-.ffff{
-	display: flex;
-	align-items: center;
-}
-.addr {
-	
-	float: left;
-	width: 40%;
-}
-
-.sssss {
-	float: left;
-	margin: 5px;
-}
-
-.wwww > td{
-	margin: 0;
-	padding: 10 0 0 0;
-}
-
-.dddd{
-	padding-bottom: 10px;
-}
-
-.wwww > th {
-	margin: 0;
-	padding:10 0 0 10;
-}
-
-
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
-	<div class="taxinvoice-container">
-    <h1>발주 등록(원부자재)</h1>
+<div class="notosanskr">
+	<div class="dh_aligncenter">
+    	<h1>발주 등록(원부자재)</h1>
+    </div>
     
-    <div class="taxinvoice-lower">
+    <div class="warning_box">
+		<span class="red bigger">* </span>
+		<div class="yellow_box"></div>
+		<span class="red">는 필수 입력란입니다.</span>
+	</div>
+    
+    <div>
         <c:if test="${inmap != null }">
         <form action="${pageContext.request.contextPath}/d/d2/d21/update">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
@@ -121,7 +36,7 @@ border: 0;
         	</tr>
         	<tr>
         		<th>발주코드</th>
-        		<td><input type="text" name="order_code" id="order_code" value="${inmap.order_code }" readonly="readonly" class="required"></td>
+        		<td><input type="text" name="order_code" id="order_code" value="${inmap.order_code }" readonly="readonly" class="required" maxlength="30"></td>
         		<th>입고 요청일</th>
         		<td><input type="date" name="order_schedule" id="order_schedule" value="${inmap.order_schedule }"></td>
         		<th>거래처</th>
@@ -135,7 +50,7 @@ border: 0;
         	</tr>
         	<tr>
         		<th>발주상태</th>
-        		<td><input type="text" name="order_status" id="order_status" value="${inmap.order_status }"></td>
+        		<td><input type="text" name="order_status" id="order_status" value="${inmap.order_status }" maxlength="30"></td>
         		<th>승인여부</th>
         		<td>
         			<select name="order_approval" id="order_approval">
@@ -171,6 +86,7 @@ border: 0;
         		<td>
 	        		<div class="dddd">
 	        			<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeyup="team(event, this.value)">
+	        			<input type="button" onclick="searcht()" value="조회">
 	        		</div>
         		</td>
         		<th>금액</th>
@@ -220,12 +136,12 @@ border: 0;
         	</tr>
          </table>
          
-         <div class="taxinvoice-contentItem">
+         <div>
          	<p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
          	</p>
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                     <th>조회</th>
                     <th>상품명</th>
@@ -302,7 +218,7 @@ border: 0;
         	<input type="hidden" name="order_type" id="order_type" value="1">
         	<input type="hidden" name="bs3_no1" id="bs3_no1">
         	<input type="hidden" name="bs3_no2" id="bs3_no2">
-        	<div class="taxinvoice-body">
+        	<div>
 	        <table>
         	<tr>
         		<th colspan="4">발주 등록</th>
@@ -314,7 +230,7 @@ border: 0;
         	<tr>
         		<th>발주코드</th>
         		<td>
-	        		<input type="text" name="order_code" id="order_code" onblur="code(this.value)" class="required">
+	        		<input type="text" name="order_code" id="order_code" onblur="code(this.value)" class="required" maxlength="30">
 	        		<h6 id="ocode" style="color:red;"></h6>
         		</td>
         		<th>입고 요청일</th>
@@ -330,7 +246,7 @@ border: 0;
         	</tr>
         	<tr>
         		<th>발주상태</th>
-        		<td><input type="text" name="order_status" id="order_status"></td>
+        		<td><input type="text" name="order_status" id="order_status" maxlength="30"></td>
         		<th>승인여부</th>
         		<td>
         			<select name="order_approval" id="order_approval">
@@ -364,6 +280,7 @@ border: 0;
         		<td colspan="2">
         		<div class="dddd">
         			<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
+        			<input type="button" onclick="searcht()" value="조회">
         		</div>
         		</td>
         		<th>주소</th>
@@ -414,13 +331,13 @@ border: 0;
 		        </table>
          	</div>
            
-        <div class="taxinvoice-contentItem">
+        <div>
             <p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
             </p>
     
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                 	<th>조회</th>
                     <th>상품명</th>
@@ -811,7 +728,7 @@ function goodsList1(code, h){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/goodsList1?comcode_code="+code+"&i="+h+"&client_name="+cv, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=500");
 }
 function searcht(){
-	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	let openWin = window.open("${pageContext.request.contextPath}/a/a4/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 function clList(code){
 	let openWin = window.open("${pageContext.request.contextPath}/d/d2/d21/clList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");

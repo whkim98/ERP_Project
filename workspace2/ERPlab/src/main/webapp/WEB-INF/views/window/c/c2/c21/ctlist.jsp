@@ -5,13 +5,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ERP_Country List</title>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 </head>
 <body>
 <div>
 	<select name="ctype">
-		<option value="country_name">국가</option>
-		<option value="country_code">코드</option>
+		<option value="country_name" ${param.type == 'country_name' ? 'selected' : '' }>국가</option>
+		<option value="country_code" ${param.type == 'country_code' ? 'selected' : '' }>코드</option>
 	</select>
 	<input type="text" name="cword" id="cword" onkeyup="cajax(this.value)" onblur="cajax(this.value)">
 	<input type="button" onclick="cajax('')" value="전체목록">
@@ -44,9 +46,10 @@
 	function cajax(v){
 		var type = document.getElementsByName("ctype")[0].value;
 		if(v == ''){
+			type = null;
 			v = null;
 		}
-		var url = "${pageContext.request.contextPath}/c/c2/c21/ctlistajax";
+		var url = "${pageContext.request.contextPath}/c/c2/c21/ctlistAjax";
 		var param = "cword="+v+"&ctype="+type;
 		
 		sendRequest(url,param,getlist,"POST");

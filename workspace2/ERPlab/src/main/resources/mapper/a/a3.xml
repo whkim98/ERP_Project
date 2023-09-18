@@ -74,7 +74,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from erp_employee1 e1, erp_employee2 e2, erp_comcode c 
 		where e1.employee1_no = e2.employee1_no 
 		and c.comcode_code = #{comcode_code} 
-		and c.comcode_no = e2.comcode_no
+		and c.comcode_no = e2.comcode_no 
+		<if test="type != null">
+			<if test="type == 'employee1_name'">
+				and e.employee1_name like '%${word}%'
+			</if>
+			<if test="type == 'employee2_position'">
+				and e2.employee2_position like '%${word}%'
+			</if>
+			<if test="type == 'employee1_code'">
+				and e.employee1_code = '%${word}%'
+			</if>
+		</if>
 		order by e1.employee1_no asc
 	</select>
 	
@@ -167,7 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</if>
 				p.team_no = t.team_no and p.employee1_no = e.employee1_no and p.comcode_no = #{comcode_no} 
 				and p.projectkind_no = pk.projectkind_no 
-				order by p.project_no asc
+				order by p.project_name asc
 	</select>
 	
 	<select id="getTotal" resultType="int" parameterType="map">
@@ -275,7 +286,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and cl.client_name like '%${word}%' 
 			</if>
 		</if>
-		order by c.contract_no asc
+		order by c.contract_name asc
 	</select>
 	
 	<select id="selectContract" resultType="map" parameterType="int">

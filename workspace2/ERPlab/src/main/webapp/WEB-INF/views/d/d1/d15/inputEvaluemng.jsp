@@ -1,67 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -144,8 +83,8 @@ function teamname(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">작업 실적 관리</h1>
+		<div class="dh_aligncenter">
+			<h1>작업 실적 관리</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -169,7 +108,7 @@ function teamname(){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_overflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -193,8 +132,8 @@ function teamname(){
 					<tr><td>목록이 비어있습니다</td></tr>
 				</c:if>
 				</table>
-				<div align="right">
-					<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d15/add?comcode_code=${comcode_code }'" value="add">
+				<div class="dh_alignright">
+					<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d15/add?comcode_code=${comcode_code }'" value="ADD">
 				</div>
 			</div>
 	
@@ -306,7 +245,7 @@ function teamname(){
 						<div>
 							<label>담당팀 </label>
 							<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeyup="team(event, this.value)">
-							<input type="button" onclick="searcht()" value="search">
+							<input type="button" onclick="searcht()" value="조회">
 						</div>
 						
 						<div align="right">
@@ -320,7 +259,6 @@ function teamname(){
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="evaluation_no" id="evaluation_no" value="${imap.evaluation_no }">
 						<input type="hidden" name="team_no" id="team_no">
-						<h3>작업 실적 등록</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -402,7 +340,7 @@ function teamname(){
 						<div>
 							<label>담당팀 </label>
 							<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
-							<input type="button" onclick="searcht()" value="search">
+							<input type="button" onclick="searcht()" value="조회">
 						</div>
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)">

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -8,7 +7,7 @@ function surf(v, code){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax";
+	var url = "${pageContext.request.contextPath}/c/c2/c23/returnAjax";
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
@@ -20,28 +19,31 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>코드</td><td>금액</td><td>여부</td><td>만기일</td></tr>';
+		procode.innerHTML += '<tr><td>코드</td><td>로트</td><td>바코드</td><td>품명</td><td>반품일자</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.client_no+")");
+				newTr.setAttribute("onclick", "selectForm("+map.return_no+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
+				newTd.innerHTML = map.return_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
+				newTd.innerHTML = map.goodslot_lot;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_collected == 0 ? '미수금' : '수금' ;
+				newTd.innerHTML = map.goods_barcode;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_expiry;
+				newTd.innerHTML = map.goods_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.return_date;
 				newTr.appendChild(newTd);
 			});
 		}else {
-			procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+			procode.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
 		}
 	}
 }
@@ -59,8 +61,8 @@ function clList(code){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">반품</h1>
+		<div class="dh_aligncenter">
+			<h1>반품 관리</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -69,12 +71,11 @@ function clList(code){
 						<td>
 							<select name="type">
 								<option value="all">전체</option>
-								<option value="investment_code" ${param.type == 'investment_code' ? 'selected' : '' }>코드</option>
-								<option value="imkind_name" ${param.type == 'imkind_name' ? 'selected' : '' }>종류</option>
-								<option value="investment_content" ${param.type == 'investment_content' ? 'selected' : '' }>적요</option>
-								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>거래처</option>
-								<option value="closing_date" ${param.type == 'closing_date' ? 'selected' : '' }>작성날짜</option>
-								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당팀</option>
+								<option value="goods_name" ${param.type == 'goods_name' ? 'selected' : '' }>품명</option>
+								<option value="goods_barcode" ${param.type == 'goods_barcode' ? 'selected' : '' }>바코드</option>
+								<option value="goodssort_name" ${param.type == 'goodssort_name' ? 'selected' : '' }>구분</option>
+								<option value="goodskind_name" ${param.type == 'goodskind_name' ? 'selected' : '' }>종류</option>
+								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>제조사</option>
 							</select>
 						</td>
 						<td>
@@ -92,16 +93,16 @@ function clList(code){
 						<td>코드</td>
 						<td>로트</td>
 						<td>바코드</td>
-						<td>상품</td>
+						<td>품명</td>
 						<td>반품일자</td>
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.return_no})" class="filter">
-						<td class="code">${map.return_code }</td>
-						<td class="price">${map.goodslot_lot }</td>
-						<td class="price">${map.goods_barcode }</td>
-						<td class="price">${map.goods_name }</td>
-						<td class="cont">${map.return_date }</td>
+						<td>${map.return_code }</td>
+						<td>${map.goodslot_lot }</td>
+						<td>${map.goods_barcode }</td>
+						<td>${map.goods_name }</td>
+						<td>${map.return_date }</td>
 					</tr>
 					</c:forEach>
 				</c:if>
@@ -110,8 +111,8 @@ function clList(code){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c23/inputReturn?comcode_code=${comcode_code }'" value="add">
+			<div class="dh_alignright">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c23/inputReturn?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -168,7 +169,7 @@ function clList(code){
 						
 						<div>
 							<label>사유 </label>
-							<input type="text" name="return_comment" id="return_comment" value="${inmap.return_comment }">
+							<input type="text" name="return_comment" id="return_comment" value="${inmap.return_comment }" maxlength="100">
 						</div>
 						
 						<div>
@@ -201,7 +202,7 @@ function clList(code){
 							<input type="text" name="return_total" id="return_total" value="${inmap.return_total }" class="required" readonly="readonly">
 						</div>
 						
-						<div align="right">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${inmap.return_code }', ${inmap.return_no }, '${comcode_code }')">
 						</div>
@@ -253,7 +254,7 @@ function clList(code){
 						
 						<div>
 							<label>사유 </label>
-							<input type="text" name="return_comment" id="return_comment">
+							<input type="text" name="return_comment" id="return_comment" maxlength="100">
 						</div>
 						
 						<div>

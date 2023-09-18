@@ -1,67 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-.A31 input{
-	width:
-}
-
-.divform1 {
-	width: 100%;
-	height: 20%;
-}
-
-.divform2 {
-	float: left;
-	margin-left: 5%; 
-	width:35%;
-}
-
-.divform3 {
-	float: left;
-	margin-left: 5%; 
-	width:45%;
-}
-
-.divform4 {
-	float: left;
-	margin-left: 5%;
-}
-
-.hr {
-	height: 100vh;
-	width: 0.1vw;
-	border-width: 0;
-	color: rgba(160, 160, 160, 0.3);
-	background-color: rgba(160, 160, 160, 0.3);
-	
-}
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-</style>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -121,18 +59,18 @@ function getlist(){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">구매 재고 관리(원부자재)</h1>
+		<div class="dh_aligncenter">
+			<h1>구매 재고 관리(원부자재)</h1>
 		</div>
-		<div class="divform2">
-			<div>
+		<div>
+			<div class="inputdivform2">
 				<table>
 					<tr>
 						<td>
 							<select name="type">
 								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
 								<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>담당팀</option>
-								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>거래처</option>
+								<option value="company_addr1" ${param.type == 'company_addr1' ? 'selected' : '' }>주소지</option>
 								<option value="comptype_code" ${param.type == 'comptype_code' ? 'selected' : '' }>지점코드</option>
 								<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>담당자</option>
 							</select>
@@ -145,7 +83,7 @@ function getlist(){
 				</table>
 			</div>
 			
-			<div style="overflow: scroll;">
+			<div class="dh_inputoverflow">
 				<table id="procode">
 				<c:if test="${list != null }">
 					<tr>
@@ -176,8 +114,8 @@ function getlist(){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d23/addInventory?comcode_code=${comcode_code }'" value="add">
+			<div class="dh_inputalignright">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d23/addInventory?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	

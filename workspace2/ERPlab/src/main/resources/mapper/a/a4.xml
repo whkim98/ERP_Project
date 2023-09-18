@@ -131,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and i.investment_content like '%${word}%'
 			</if>
 		</if>
+		order by i.investment_code asc
 	</select>
 	
 	<select id="selectInvestment" parameterType="map" resultType="map">

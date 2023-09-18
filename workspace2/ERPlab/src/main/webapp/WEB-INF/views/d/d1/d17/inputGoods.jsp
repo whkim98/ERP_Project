@@ -1,40 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-
-<link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/a/a_company.css" />
-<style type="text/css">
-.notosanskr * { 
- font-family: 'Noto Sans KR', sans-serif;
- font-size:10px;
-
-}
-
-.notosanskr{ 
- 	margin-top: 70px;
-}
-
-
-
-input#search {
-background:url(/image/search-glass.png);
-background-repeat: no-repeat;
-width:20px;
-height:20px;
-border: 0;
-}
-
-</style>
 
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
-	<div class="taxinvoice-container">
-    <h1>공정 재고 관리</h1>
+<div class="notosanskr">
+	<div class="dh_aligncenter">
+    	<h1>공정 재고 등록</h1>
+    </div>
     
-    <div class="taxinvoice-lower">
+    <div class="warning_box">
+		<span class="red bigger">* </span>
+		<div class="yellow_box"></div>
+		<span class="red">는 필수 입력란입니다.</span>
+	</div>
+    
+    <div>
         <c:if test="${inmap != null }">
         <form action="${pageContext.request.contextPath}/d/d1/d17/update">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
@@ -73,17 +52,17 @@ border: 0;
         		<th>구분</th>
         		<td><input type="text" name="comptype_name" id="comptype_name" value="${inmap.comptype_name }" readonly="readonly"></td>
         	</tr>
-        	<tr align="center">
+        	<tr>
         		<td colspan="6"><input type="button" value="회사조회" onclick="coList('${comcode_code}')"></td>
         	</tr>
          </table>
          
-         <div class="taxinvoice-contentItem">
+         <div>
          	<p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
          	</p>
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                     <th>제품조회</th>
                     <th>상품명</th>
@@ -157,7 +136,7 @@ border: 0;
         <form action="${pageContext.request.contextPath}/d/d1/d17/createProinventory">
         	<input type="hidden" name="comcode_code" id="comcode_code" value="${comcode_code }">
         	<input type="hidden" name="company_no" id="company_no" value="1">
-        	<div class="taxinvoice-body">
+        	<div>
 		        <table>
 		        	<tr>
 		        		<th>회사명</th>
@@ -191,19 +170,19 @@ border: 0;
 		        		<th>구분</th>
 		        		<td><input type="text" name="comptype_name" id="comptype_name" readonly="readonly"></td>
 		        	</tr>
-		        	<tr align="center">
+		        	<tr>
 		        		<td colspan="6"><input type="button" value="회사조회" onclick="coList('${comcode_code}')"></td>
 		        	</tr>
 		        </table>
          	</div>
            
-        <div class="taxinvoice-contentItem">
+        <div>
             <p>
                <input type="button" id="addRow" value="행추가">
                <input type="button" id="deleteRow" value="행삭제">
             </p>
     
-            <table class="taxinvoice-contentsBody" id="itemTable">
+            <table id="itemTable">
                 <tr id="itemTableTitle">
                     <th>제품조회</th>
                     <th>상품명</th>

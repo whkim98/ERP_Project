@@ -108,7 +108,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 
-        const username = `${login}`;
+        const username = `${chatNickName}`;
 
         $("#disconn").on("click", (e) => {
             disconnect();

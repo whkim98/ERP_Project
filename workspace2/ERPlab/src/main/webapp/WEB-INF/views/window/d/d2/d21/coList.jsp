@@ -5,20 +5,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ERP_Company List</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 </head>
 <body>
 <div>
 	<select name="type">
-		<option value="all">전체검색</option>
-		<option value="company_name">상호</option>
-		<option value="company_businesstype">형태</option>
-		<option value="company_use">용도</option>
-		<option value="businesstype_name">업태</option>
-		<option value="businesstype_subctgr">업종</option>
-		<option value="comptype_name">구분</option>
+		<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체검색</option>
+		<option value="company_name" ${param.type == 'company_name' ? 'selected' : '' }>상호</option>
+		<option value="company_businesstype" ${param.type == 'company_businesstype' ? 'selected' : '' }>형태</option>
+		<option value="company_use" ${param.type == 'company_use' ? 'selected' : '' }>용도</option>
+		<option value="businesstype_name" ${param.type == 'businesstype_name' ? 'selected' : '' }>업태</option>
+		<option value="businesstype_subctgr" ${param.type == 'businesstype_subctgr' ? 'selected' : '' }>업종</option>
+		<option value="comptype_name" ${param.type == 'comptype_name' ? 'selected' : '' }>구분</option>
 	</select>
 	<input type="text" name="word" id="word" onkeyup="bnajax(this.value, '${comcode_code}')" onblur="bnajax(this.value, '${comcode_code}')">
 	<input type="button" onclick="bnajax('', '${comcode_code}')" value="전체목록">
@@ -37,7 +37,7 @@
 		</tr>
 		<c:if test="${list == null }">
 			<tr>
-				<td>정보가 존재하지 않습니다.</td>
+				<td colspan="10">정보가 존재하지 않습니다.</td>
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
@@ -89,7 +89,7 @@ function setParentText(no,name, rep, addr1, addr2, rno, bname, bsub, dno){
 			let newTr = document.createElement("tr");
 			let newTd = document.createElement("td");
 			procode.innerHTML = '';
-			procode.innerHTML += '<tr><td>상호</td><td>사업자등록번호</td><td>대표</td><td>형태</td><td>주소</td><td>용도</td><td>업태</td><td>업종</td><td>지점코드</td><td>구분</td><td>';
+			procode.innerHTML += '<tr><td>상호</td><td>사업자등록번호</td><td>대표</td><td>형태</td><td>주소</td><td>용도</td><td>업태</td><td>업종</td><td>지점코드</td><td>구분</td><tr>';
 			if(data != "")
 				var data2 = JSON.parse(data);
 				data2.forEach(function(map){

@@ -180,7 +180,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					ct.country_name like '%${word}%' or cl.clientsort_name like '%${word}%' 
 					or b.businesstype_name like '%${word}%' or b.businesstype_subctgr like '%${word}%' 
 					or c.client_businesstype like '%${word}%' or c.client_name like '%${word}%' 
-					)
+					) 
 			</if>
 			<if test="type == 'country_name'">
 				and ct.country_name like '%${word}%'
@@ -198,9 +198,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and c.client_businesstype like '%${word}%'
 			</if>
 			<if test="type == 'client_name'">
-				and c.client_name like '%${word}%'
+				and c.client_name like '%${word}%' 
 			</if>
 		</if>
+		order by c.client_name asc
 	</select>
 	
 	<select id="selectClient" parameterType="int" resultType="map">
@@ -295,6 +296,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
+		order by r.receivable_cino asc
 	</select>
 	
 	<select id="selectReceivable" parameterType="int" resultType="map">
@@ -369,6 +371,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and date_format(b.bondbills_date, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
+		order by b.bondbills_code asc
 	</select>
 	
 	<select id="receiveBondbills" parameterType="map" resultType="map">
@@ -473,8 +476,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and (
 					g.goods_name like '%${word}%' or g.goods_barcode like '%${word}%' 
 					or gs.goodssort_name like '%${word}%' or gk.goodskind_name like '%${word}%' 
-					or c.client_name like '%${word}%' or gt.goodsst_spec like '%${word}%' 
-					or gl.goodslot_production like '%${word}%'
+					or c.client_name like '%${word}%' 
 					)
 			</if>
 			<if test="type == 'goods_name'">
@@ -492,13 +494,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="type == 'client_name'">
 				and c.client_name like '%${word}%'
 			</if>
-			<if test="type == 'goodsst_spec'">
-				and gt.goodsst_spec like '%${word}%'
-			</if>
-			<if test="type == 'goodslot_production'">
-				and gl.goodslot_production like '%${word}%'
-			</if>
 		</if>
+		order by r.return_code asc
 	</select>
 	
 	<select id="selectReturn" parameterType="int" resultType="map">
@@ -625,6 +622,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and date_format(l.localsales_date, '%m월 %d일') like '%${word}%'
 			</if>
 		</if>
+		order by l.localsales_cino asc
 	</select>
 	
 	<select id="selectLocalSales" parameterType="int" resultType="map">

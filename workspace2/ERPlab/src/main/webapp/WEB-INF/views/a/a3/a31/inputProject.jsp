@@ -128,7 +128,7 @@ function getlist(){
 	<div class="notosanskr">
 	
 		<div class="dh_aligncenter">
-			<h2>프로젝트 등록</h2>
+			<h2>프로젝트 관리</h2>
 		</div>
 		<br>
 		<div class="divform2">
@@ -190,7 +190,7 @@ function getlist(){
 				</c:choose>
 			</div>
 			<div class="dh_alignright">
-				<input type="button" value="등록" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code }'">
+				<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code }'">
 			</div>
 		</div>
 		
@@ -210,10 +210,14 @@ function getlist(){
 				<input type="hidden" name="comcode_code" value="${comcode_code}">
 				<input type="hidden" name="project_no" id="project_no" value="${inmap.project_no}">
 				<input type="hidden" name="projectkind_no" id="projectkind_no" value="${inmap.projectkind_no}">
-					<h3>프로젝트</h3>
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
 					<div>
 						<label>프로젝트명 </label>
-						<input type="text" name="project_name" id="project_name" value="${inmap.project_name }">
+						<input type="text" name="project_name" id="project_name" value="${inmap.project_name }" maxlength="30" class="required">
 					</div>
 					<div>
 						<label>프로젝트 기간 </label>
@@ -222,24 +226,24 @@ function getlist(){
 					</div>
 					<div>
 						<label>원청 회사 </label>
-						<input type="text" name="project_contractor" id="project_contractor" value="${inmap.project_contractor }">
+						<input type="text" name="project_contractor" id="project_contractor" value="${inmap.project_contractor }" maxlength="40" class="required">
 					</div>
 					<div>
 						<label>프로젝트 예산 </label>
-						<input type="text" name="project_budget" id="project_budget" value="${inmap.project_budget }">
+						<input type="text" name="project_budget" id="project_budget" value="${inmap.project_budget }" class="required">
 					</div>
 					<div>
 						<label>프로젝트 종류 </label>
-						<input type="text" name="projectkind_name" id="projectkind_name" value="${inmap.projectkind_name }" onkeypress="kind(event, this.value)">
+						<input type="text" name="projectkind_name" id="projectkind_name" value="${inmap.projectkind_name }" onkeypress="kind(event, this.value)" class="required">
 						<input type="button" onclick="searchpk()" value="조회">
 					</div>
 					<div>
 						<label>내용 </label>
-						<input type="text" name="project_content" id="project_content" value="${inmap.project_content }">
+						<input type="text" name="project_content" id="project_content" value="${inmap.project_content }" class="required">
 					</div>
 					<div>
 						<label>프로젝트 담당자 </label>
-						<input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="searchemp('${comcode_code}')" readonly="readonly">
+						<input type="text" name="employee1_name" id="employee1_name" value="${inmap.employee1_name }" onclick="searchemp('${comcode_code}')" readonly="readonly" class="required">
 						<input type="hidden" name="employee1_no" id="employee1_no" value="${inmap.employee1_no }">
 					</div>
 					<div>
@@ -252,7 +256,7 @@ function getlist(){
 					</div>
 					<div>
 						<label>프로젝트 담당팀 </label>
-						<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeypress="team(event, this.value)">
+						<input type="text" name="team_name" id="team_name" value="${inmap.team_name }" onkeypress="team(event, this.value)" class="required">
 						<input type="button" onclick="searcht()" value="조회">
 						<input type="hidden" name="team_no" id="team_no" value="${inmap.team_no }">
 					</div>
@@ -277,10 +281,14 @@ function getlist(){
 				<form action="${pageContext.request.contextPath }/a/a3/a31/createProject" method="POST" name="project">
 				<input type="hidden" name="comcode_code" value="${comcode_code }">
 				<input type="hidden" name="projectkind_no" id="projectkind_no">
-					<h3>프로젝트 등록 사항</h3>
+					<div class="warning_box">
+						<span class="red bigger">* </span>
+						<div class="yellow_box"></div>
+						<span class="red">는 필수 입력란입니다.</span>
+					</div>
 					<div>
 						<label>프로젝트명 </label>
-						<input type="text" name="project_name" id="project_name">
+						<input type="text" name="project_name" id="project_name" maxlength="30" class="required">
 					</div>
 					<div>
 						<label>프로젝트 기간 </label>
@@ -289,24 +297,24 @@ function getlist(){
 					</div>
 					<div>
 						<label>원청 회사 </label>
-						<input type="text" name="project_contractor" id="project_contractor">
+						<input type="text" name="project_contractor" id="project_contractor" maxlength="40" class="required">
 					</div>
 					<div>
 						<label>프로젝트 예산 </label>
-						<input type="text" name="project_budget" id="project_budget">
+						<input type="text" name="project_budget" id="project_budget" class="required">
 					</div>
 					<div>
 						<label>프로젝트 종류 </label>
-						<input type="text" name="projectkind_name" id="projectkind_name" onkeypress="kind(event, this.value)">
+						<input type="text" name="projectkind_name" id="projectkind_name" onkeypress="kind(event, this.value)" class="required">
 						<input type="button" onclick="searchpk()" value="조회">
 					</div>
 					<div>
 						<label>내용 </label>
-						<input type="text" name="project_content" id="project_content">
+						<input type="text" name="project_content" id="project_content" class="required">
 					</div>
 					<div>
 						<label>프로젝트 담당자 </label>
-						<input type="text" name="employee1_name" id="employee1_name" onclick="searchemp('${comcode_code}')" readonly="readonly">
+						<input type="text" name="employee1_name" id="employee1_name" onclick="searchemp('${comcode_code}')" readonly="readonly" class="required">
 						<input type="hidden" name="employee1_no" id="employee1_no">
 					</div>
 					<div>
@@ -319,7 +327,7 @@ function getlist(){
 					</div>
 					<div>
 						<label>프로젝트 담당팀 </label>
-						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)">
+						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" class="required">
 						<input type="button" onclick="searcht()" value="조회">
 						<input type="hidden" name="team_no" id="team_no">
 					</div>
@@ -356,34 +364,59 @@ function getlist(){
 		document.getElementById("project_end").setAttribute("max", end+"-12-31");
 	}
 	
+	
 	function sub(f){
 		if(f.project_name.value == ""){
-			alert("프로젝트명을 입력하십시오!");
 			f.project_name.focus();
-		}else if(f.project_start.value == ""){
-			alert("실행 날짜를 입력하십시오!");
-			f.project_start.focus();
-		}else if(f.project_end.value == ""){
-			alert("종료 날짜를 입력하십시오!");
-			f.project_end.focus();
+			return;
 		}else if(f.project_contractor.value == ""){
-			alert("원천회사명을 입력하십시오!");
 			f.project_contractor.focus();
+			return;
 		}else if(f.project_budget.value == ""){
-			alert("예산을 입력하십시오!");
 			f.project_budget.focus();
+			return;
 		}else if(f.projectkind_name.value == ""){
-			alert("프로젝트 종류를 입력하십시오!");
 			f.projectkind_name.focus();
+			return;
 		}else if(f.employee1_name.value == ""){
-			alert("담당자를 입력하십시오!");
 			f.employee1_name.focus();
+			return;
 		}else if(f.team_name.value == ""){
-			alert("담당팀을 입력하십시오!");
 			f.team_name.focus();
-		}else{
-			f.submit();
+			return;
 		}
+		
+		if(f.project_start.value == ""){
+			let cc = confirm("프로젝트 기간이 입력되지 않았습니다. 계속하시겠습니까?");
+			if(cc){
+				f.project_start.value = today;
+			}else {
+				f.project_start.focus();
+				return;
+			}
+		}
+		
+		if(f.project_end.value == ""){
+			let cc = confirm("프로젝트 기간이 입력되지 않았습니다. 계속하시겠습니까?");
+			if(cc){
+				if(f.project_start.value != ""){
+					f.project_end.value = f.project_start.value + 1;
+				}else {
+					f.project_end.value = today;
+				}
+			}else {
+				f.project_end.focus();
+				return;
+			}
+		}
+		
+		var ch = confirm("등록하시겠습니까?");
+		if(ch){
+			f.submit();
+		}else {
+			return;
+		}
+		
 	}
 	
 	function put(name){

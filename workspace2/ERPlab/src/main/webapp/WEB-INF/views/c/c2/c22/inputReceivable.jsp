@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
@@ -60,7 +59,7 @@ function bills(no, code){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div class="dh_aligncenter">
-			<h1 style="font-size: 20pt;">채권 관리</h1>
+			<h1>채권 관리</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -107,7 +106,7 @@ function bills(no, code){
 				</table>
 			</div>
 			<div class="dh_alignright">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -129,7 +128,6 @@ function bills(no, code){
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="receivable_no" id="receivable_no" value="${inmap.receivable_no }">
 						<input type="hidden" name="client_no" id="client_no" value="${inmap.client_no }">
-							<h3>채권</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -143,7 +141,7 @@ function bills(no, code){
 						
 						<div>
 							<label>CI NUMBER </label>
-							<input type="text" name="receivable_cino" id="receivable_cino" value="${inmap.receivable_cino }" readonly="readonly" class="required">
+							<input type="text" name="receivable_cino" id="receivable_cino" value="${inmap.receivable_cino }" readonly="readonly" class="required" maxlength="30">
 						</div>
 						
 						<div>
@@ -191,11 +189,9 @@ function bills(no, code){
 							<input type="date" name="receivable_collect" id="receivable_collect" value="${inmap.receivable_collect}">
 						</div>
 						
-						<div class="dh_alignright">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei(${inmap.receivable_no }, '${inmap.receivable_cino }', '${comcode_code }')">
-						</div>
-						<div align="left">
 							<input type="button" value="bills" onclick="bills(${inmap.receivable_no}, '${comcode_code }')">
 						</div>
 					</form>
@@ -208,7 +204,12 @@ function bills(no, code){
 					<form action="${pageContext.request.contextPath }/c/c2/c22/createReceivable" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="client_no" id="client_no" value="17">
-							<h3>채권 등록 사항</h3>
+						<div class="warning_box">
+							<span class="red bigger">* </span>
+							<div class="yellow_box"></div>
+							<span class="red">는 필수 입력란입니다.</span>
+						</div>
+						
 						<div>
 							<label>코드 </label>
 							<input type="text" name="receivable_code" id="receivable_code" maxlength="30" onblur="code(this.value)" class="required">
@@ -217,7 +218,7 @@ function bills(no, code){
 						
 						<div>
 							<label>CI NUMBER </label>
-							<input type="text" name="receivable_cino" id="receivable_cino" class="required" onblur="cino(this.value)">
+							<input type="text" name="receivable_cino" id="receivable_cino" class="required" onblur="cino(this.value)" maxlength="30">
 							<h6 id="receivecino" style="color:red;"></h6>
 						</div>
 						

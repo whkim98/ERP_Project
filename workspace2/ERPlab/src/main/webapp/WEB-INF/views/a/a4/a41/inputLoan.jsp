@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <script type="text/javascript" charset="UTF-8">
 
 function surf(v, code){		// list ajax 함수 > A4Controller, a4.xml(investmentList select문)
@@ -122,7 +121,7 @@ function teamname(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div class="dh_aligncenter">
-			<h1 style="font-size: 20pt;">자금 조달</h1>
+			<h1>자금 조달</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -169,7 +168,7 @@ function teamname(){
 				</table>
 			</div>
 			<div class="dh_alignright">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -322,7 +321,11 @@ function teamname(){
 						<input type="hidden" name="bs3_no2" id="bs3_no2">
 						<input type="hidden" name="account_no" id="account_no" value="1">
 						<input type="hidden" name="investment_status" id="investment_status" value="1">
-							<h3>차입 등록 사항</h3>
+						<div class="warning_box">
+							<span class="red bigger">* </span>
+							<div class="yellow_box"></div>
+							<span class="red">는 필수 입력란입니다.</span>
+						</div>
 						<div>
 							<label>코드 </label>
 							<input type="text" name="investment_code" id="investment_code" onblur="imcode(this.value)" maxlength="30" class="required">

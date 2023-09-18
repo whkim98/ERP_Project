@@ -31,6 +31,9 @@
 	margin-left: 5%; 
 	width:35%;
 }
+.inputdivform2 {
+	width:45%;
+}
 
 .divform3 {
 	float: left;
@@ -55,11 +58,19 @@
 	position: absolute;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	font-size:large;
+	margin-bottom: 5%; 
 }
 
 .dh_alignright {
 	position: absolute;
 	left: 38%;
+	transform: translate(-50%, -50%);
+}
+
+.dh_inputalignright {
+	position: absolute;
+	left: 95%;
 	transform: translate(-50%, -50%);
 }
 
@@ -74,11 +85,67 @@
 }
 
 .dh_overflow {
+	margin-bottom: 5%;
+	overflow: scroll;
+}
+
+.dh_inputoverflow {
+	margin-bottom: 25px;
 	overflow: scroll;
 }
 
 
 
+.ffff{
+	display: flex;
+	align-items: center;
+}
+.addr {
+	
+	float: left;
+	width: 40%;
+}
+
+.sssss {
+	float: left;
+	margin: 5px;
+}
+
+.wwww > td{
+	margin: 0;
+	padding: 10 0 0 0;
+}
+
+.dddd{
+	padding-bottom: 10px;
+}
+
+.wwww > th {
+	margin: 0;
+	padding:10 0 0 10;
+}
+
+.warning_box {
+	display:flex;
+	justify-content: end;
+}
+
+.yellow_box {
+	width: 25px;
+	height : 15px;
+	background-color: yellow;
+	line-height : 10pt;
+	margin-top : 2.5pt;
+}
+
+.red {
+	font-size: 10pt;
+	color: red;
+}
+
+.bigger {
+	font-size : 13pt;
+}
 
 
 

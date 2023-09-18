@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <script type="text/javascript" charset="UTF-8">
-function surf(v, code, no){
+function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
 	if(v == ''){
 		type = null;
 		v = null;
 	}
-	var url = "${pageContext.request.contextPath}/c/c2/c22/billsAjax";
-	var param = "comcode_code="+code+"&word="+v+"&type="+type+"&receivable_no="+no;
+	var url = "${pageContext.request.contextPath}/d/d1/d11/productAjax";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;
 	
 	sendRequest(url,param,getlist,"POST");
 }
@@ -20,24 +19,24 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>채권코드</td><td>수금액</td><td>수금일자</td><td>채권 총액</td></tr>';
+		procode.innerHTML += '<tr><td>코드</td><td>생산명</td><td>의뢰명</td><td>담당자</td></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+","+map.bondbills_no+","+map.bs3_no1+","+map.bs3_no2+")");
+				newTr.setAttribute("onclick", "selectForm("+map.product_no+",'"+map.product_code+"')");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_cino;
+				newTd.innerHTML = map.product_code;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_total;
+				newTd.innerHTML = map.product_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.bondbills_date;
+				newTd.innerHTML = map.requestproduct_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = map.receivable_total;
+				newTd.innerHTML = map.employee1_name;
 				newTr.appendChild(newTd);
 			});
 		}else {
@@ -60,8 +59,8 @@ function requestpr(no,code){
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
-		<div align="center">
-			<h1 style="font-size: 20pt;">생산 등록</h1>
+		<div class="dh_aligncenter">
+			<h1>생산 관리</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -69,8 +68,9 @@ function requestpr(no,code){
 					<tr>
 						<td>
 							<select name="type">
-								<option value="all">전체</option>
+								<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
 								<option value="product_code" ${param.type == 'product_code' ? 'selected' : '' }>코드</option>
+								<option value="product_lot" ${param.type == 'product_lot' ? 'selected' : '' }>로트번호</option>
 								<option value="product_name" ${param.type == 'product_name' ? 'selected' : '' }>생산명</option>
 								<option value="requestproduct_name" ${param.type == 'requestproduct_name' ? 'selected' : '' }>의뢰명</option>
 								<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>담당자</option>
@@ -95,9 +95,9 @@ function requestpr(no,code){
 					</tr>
 					<c:forEach var="map" items="${list }">
 					<tr onclick="selectForm(${map.product_no}, '${map.product_code }')" class="filter">
-						<td class="code">${map.product_code }</td>
-						<td class="price">${map.product_name }</td>
-						<td class="cont">${map.requestproduct_name}</td>
+						<td>${map.product_code }</td>
+						<td>${map.product_name }</td>
+						<td>${map.requestproduct_name}</td>
 						<td>${map.employee1_name}</td>
 					</tr>
 					</c:forEach>
@@ -107,8 +107,8 @@ function requestpr(no,code){
 				</c:if>
 				</table>
 			</div>
-			<div align="right">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d11/inputProduct?comcode_code=${comcode_code }'" value="add">
+			<div class="dh_alignright">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d11/inputProduct?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -155,7 +155,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>생산명 </label>
-							<input type="text" name="product_name" id="product_name" maxlength="30" class="required" value="${inmap.product_name }">
+							<input type="text" name="product_name" id="product_name" maxlength="40" class="required" value="${inmap.product_name }">
 						</div>
 						
 						<div>
@@ -170,7 +170,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>공정 경로 </label>
-							<input type="text" name="product_path" id="product_path" value="${inmap.product_path }">
+							<input type="text" name="product_path" id="product_path" value="${inmap.product_path }" maxlength="50">
 						</div>
 						
 						<div>
@@ -205,7 +205,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>비고 </label>
-							<input type="text" name="product_content" id="product_content" class="required" value="${inmap.product_content }">
+							<input type="text" name="product_content" id="product_content" class="required" value="${inmap.product_content }" maxlength="100">
 						</div>
 						
 						<div>
@@ -240,7 +240,7 @@ function requestpr(no,code){
 							</select>
 						</div>
 						
-						<div align="right">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${cmap.bs3_no1}', '${cmap.bs3_no2 }', ${inmap.product_no }, '${comcode_code }', '${inmap.product_code }')">
 							<input type="button" value="의뢰서 정보" onclick="requestpr(${inmap.requestproduct_no }, '${comcode_code }')">
@@ -254,7 +254,6 @@ function requestpr(no,code){
 						<input type="hidden" name="requestproduct_no" id="requestproduct_no">
 						<input type="hidden" name="bs3_no1" id="bs3_no1">
 						<input type="hidden" name="bs3_no2" id="bs3_no2">
-						<h3>생산 등록 사항</h3>
 						<div class="warning_box">
 							<span class="red bigger">* </span>
 							<div class="yellow_box"></div>
@@ -275,7 +274,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>생산명 </label>
-							<input type="text" name="product_name" id="product_name" maxlength="30" class="required">
+							<input type="text" name="product_name" id="product_name" maxlength="40" class="required">
 						</div>
 						
 						<div>
@@ -290,7 +289,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>공정 경로 </label>
-							<input type="text" name="product_path" id="product_path">
+							<input type="text" name="product_path" id="product_path" maxlength="50">
 						</div>
 						
 						<div>
@@ -324,7 +323,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>비고 </label>
-							<input type="text" name="product_content" id="product_content" class="required">
+							<input type="text" name="product_content" id="product_content" class="required" maxlength="100">
 						</div>
 						
 						<div>

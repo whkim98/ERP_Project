@@ -626,6 +626,26 @@ public class D2Controller {
 		return ViewPath.WINDOW + "d/d2/d21/clList";
 	}
 	
+	@RequestMapping("/d21/clListAjax")
+	@ResponseBody
+	public List<Map<String, Object>> clListAjax(String comcode_code, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = d2.clientList(map);
+		
+		return list;
+	}
+	
 	@RequestMapping("/d21/goodsList")
 	public String goodsList(String btype, String bnword, String comcode_code, Model model, String i, String client_name) {
 		String msg = null;
@@ -1344,6 +1364,27 @@ public class D2Controller {
 		return ViewPath.WINDOW + "d/d2/d22/employee";
 	}
 	
+	@RequestMapping("/d22/employeeAjax")
+	@ResponseBody
+	public List<Map<String, Object>> employeeAjax(String comcode_code, String type, String word) {
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> list = d1.employee(map);
+		
+		return list;
+	}
+	
 	@RequestMapping(value="/d22/getPurchaseCode", produces = "application/text;charset=utf8")
 	@ResponseBody
 	public String getPurchaseCode(String purchase_code) {
@@ -1583,7 +1624,6 @@ public class D2Controller {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
-		System.out.println(vo);
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -1671,6 +1711,7 @@ public class D2Controller {
 	}
 	
 	@RequestMapping("/d24/purchaseAjax")
+	@ResponseBody
 	public List<Map<String, Object>> purchaseAjax(String type, String word, String comcode_code) {
 		if(type == null || word == null) {
 			type = null;
@@ -1692,10 +1733,16 @@ public class D2Controller {
 	}
 	
 	@RequestMapping("/d24/goodsList")
-	public String goodsListd24(Model model, Erp_PurchaseVO vo) {
+	public String goodsListd24(Model model, Erp_PurchaseVO vo, String type, String word) {
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
 		
 		Map<String, Object> map = new HashMap<>();
 		
+		map.put("btype", type);
+		map.put("bnword", word);
 		map.put("goodssort_name1", "원자재");
 		map.put("goodssort_name2", "부자재");
 		map.put("purchase_no", vo.getPurchase_no());
@@ -1706,8 +1753,33 @@ public class D2Controller {
 		}
 		
 		model.addAttribute("list", list);
+		model.addAttribute("purchase_no", vo.getPurchase_no());
 		
 		return ViewPath.WINDOW + "d/d2/d24/goodsList";
+	}
+	
+	@RequestMapping("/d24/goodsListAjax")
+	@ResponseBody
+	public List<Map<String, Object>> goodsListd24Ajax(Erp_PurchaseVO vo, String type, String word) {
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("btype", type);
+		map.put("bnword", word);
+		map.put("goodssort_name1", "원자재");
+		map.put("goodssort_name2", "부자재");
+		map.put("purchase_no", vo.getPurchase_no());
+		
+		List<Map<String, Object>> list = d2.selectPurchaseGoods(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
 	}
 	
 	
@@ -1867,11 +1939,13 @@ public class D2Controller {
 		List<Erp_InvenconnectVO> iclist = ivo.getIclist();
 		List<Erp_InvenconnectVO> iclist1 = ivo.getIclist1();
 		
-		for(Erp_InvenconnectVO icvo : iclist1) {
-			d2.updateInvenConnect(icvo);
+		if(iclist1 != null) {
+			for(Erp_InvenconnectVO icvo : iclist1) {
+				d2.updateInvenConnect(icvo);
+			}
 		}
 		
-		if(!iclist.isEmpty()) {
+		if(iclist != null) {
 			for(Erp_InvenconnectVO icvo : iclist) {
 				icvo.setInventory_no(vo.getInventory_no());
 				d2.createInvenConnect(icvo);
@@ -1896,9 +1970,9 @@ public class D2Controller {
 			return ViewPath.RESULT + "loginresult";
 		}
 		
-		d2.deleteInventory(vo.getInventory_no());
-		
 		d2.deleteInvenConnectAll(vo.getInventory_no());
+		
+		d2.deleteInventory(vo.getInventory_no());
 		
 		return "redirect:/d/d2/d23/inputInventory?comcode_code="+comcode_code;
 	}
@@ -1951,6 +2025,7 @@ public class D2Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("btype", btype);
 		map.put("bnword", bnword);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseGoods(map);
 		if(list.isEmpty()) {
@@ -1990,6 +2065,7 @@ public class D2Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("btype", btype);
 		map.put("bnword", bnword);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseGoods(map);
 		if(list.isEmpty()) {
@@ -2020,6 +2096,7 @@ public class D2Controller {
 		map.put("comcode_no", comcode_no);
 		map.put("btype", btype);
 		map.put("bnword", bnword);
+		map.put("purchase_type", 1);
 		
 		List<Map<String, Object>> list = d2.purchaseGoods(map);
 		

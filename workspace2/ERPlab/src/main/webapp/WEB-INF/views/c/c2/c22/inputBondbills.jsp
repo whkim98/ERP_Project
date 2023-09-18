@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code, no){
 	var type = document.getElementsByName("type")[0].value;
@@ -92,7 +91,7 @@ function getlist(){
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
 	<div class="notosanskr">
 		<div class="dh_aligncenter">
-			<h1 style="font-size: 20pt;">수금</h1>
+			<h1>수금 관리</h1>
 		</div>
 		<div class="divform2">
 			<div>
@@ -105,7 +104,7 @@ function getlist(){
 								<option value="receivable_expiry" ${param.type == 'imkind_name' ? 'selected' : '' }>만기날짜</option>
 								<option value="receivable_collected" ${param.type == 'receivable_collected' ? 'selected' : '' }>수금여부</option>
 								<option value="client_name" ${param.type == 'client_name' ? 'selected' : '' }>거래처</option>
-								<option value="receivable_total" ${param.type == 'receivable_total' ? 'selected' : '' }>금액</option>
+								<option value="bondbills_date" ${param.type == 'bondbills_date' ? 'selected' : '' }>수금일자</option>
 							</select>
 						</td>
 						<c:if test="${rmap.receivable_no != null }">
@@ -148,7 +147,7 @@ function getlist(){
 				</table>
 			</div>
 			<div class="dh_alignright">
-				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22/inputBondbills?comcode_code=${comcode_code }'" value="add">
+				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22/inputBondbills?comcode_code=${comcode_code }'" value="ADD">
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -260,7 +259,7 @@ function getlist(){
 							</select>
 						</div>
 						
-						<div class="dh_alignright">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.bondbills_no }, '${comcode_code }', '${inmap.receivable_cino }')">
 							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
