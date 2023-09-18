@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,17 +90,23 @@ public class B2Controller {
 	        System.out.println("fxrt: " + item.get("fxrt"));
 	        System.out.println("aplyBgnDt: " + item.get("aplyBgnDt"));
 	        System.out.println("currSgn: " + item.get("currSgn"));
+	        
 	        String country_code = item.get("cntySgn");
 	        
 	        int country_no = b2.selectCountryno(country_code);
 	        
 	        System.out.println(country_no);
 
-	        String currency_date = b2.currencyDate(country_no);
+	        List<Erp_CurrencyVO> list = b2.currencyDate(country_no);
+	        
+	        List<String> currencyDates = list.stream()
+	        	    .map(Erp_CurrencyVO::getCurrency_date)
+	        	    .collect(Collectors.toList());
 	       
+	        System.out.println(currencyDates);
+	        
 	        String fxrtString = item.get("fxrt"); // "fxrt"에 해당하는 문자열 값을 가져온다.
 
-	        
 	        double fxrtDouble = Double.parseDouble(fxrtString); // 문자열을 double로 변환한다.
 	           
 	        System.out.println(fxrtDouble);
@@ -114,11 +121,13 @@ public class B2Controller {
 //	        b2.insertCurrency(vo);
 	        
 	        
-	        if(currency_date != item.get("aplyBgnDt")) {
+	        if(!currencyDates.contains(item.get("aplyBgnDt"))) {
 	        	vo.setCountry_no(country_no);
 	        	vo.setCurrency_name(item.get("currSgn"));
 	        	vo.setCurrency_rate(fxrtDouble);
 	        	vo.setCurrency_date(item.get("aplyBgnDt"));
+	        	
+	        	b2.insertCurrency(vo);
 	        	
 	        	try {
 	        		
@@ -148,6 +157,7 @@ public class B2Controller {
 	        
 	     
 	    }
+	    
 
 	   
 	    return "redirect:/account?comcode_code=" + comcode_code;
@@ -166,6 +176,15 @@ public class B2Controller {
 		
 		List<Map<String, Object>> list = b2.closingList(map);
 		model.addAttribute("list", list);
+		
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("comcode_no", comcode_no);
+		map2.put("type", type);
+		map2.put("word", word);
+		
+		List<Map<String, Object>> list2 = b2.moneyList(map2);
+		
+		model.addAttribute("list2", list2);
 		
 		return "/b/b2/b22/fundsList";
 	}
@@ -196,6 +215,27 @@ public class B2Controller {
 	      }
      
 	    System.out.println(list);
+		return list;
+		
+	}
+	
+	@RequestMapping("/money/ajax")
+	@ResponseBody
+	public List<Map<String, Object>> moneyAjax(Model model, String type, String word, String comcode_code) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+	         type = null;
+	         word = null;
+	      }
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		map.put("comcode_no", comcode_no);
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = b2.moneyList(map);
 		return list;
 		
 	}

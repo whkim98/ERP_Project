@@ -94,7 +94,7 @@ public class B2Service {
 	}
 	
 	//계좌관리
-	public String currencyDate(int country_no) {
+	public List<Erp_CurrencyVO> currencyDate(int country_no) {
 		return crdao.currencyDate(country_no);
 	}
 	
@@ -116,6 +116,11 @@ public class B2Service {
 	
 	public double selectRate(int currency_no) {
 		return crdao.selectRate(currency_no);
+	}
+	
+	//자금테이블
+	public List<Map<String, Object>> moneyList(Map<String, Object> map){
+		return mdao.moneyList(map);
 	}
 	
 }

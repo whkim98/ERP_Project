@@ -102,7 +102,7 @@ select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no}
 	select country_no from erp_country where country_code = #{country_code}
 </select>
 
-<select id="currencyDate" parameterType="int" resultType="String">
+<select id="currencyDate" parameterType="int" resultType="com.lab.erp.vo.b.b3.Erp_CurrencyVO">
 	select currency_date from erp_currency where country_no = #{country_no}
 </select>
 
@@ -129,6 +129,20 @@ select bs3_ctgr from erp_bs3 where bs3_no = #{bs3_no}
 
 <select id="selectRate" parameterType="int" resultType="double">
 	select currency_rate from erp_currency where currency_no = #{currency_no}
+</select>
+
+<!-- 자금테이블 -->
+<select id="moneyList" parameterType="map" resultType="map">
+	select * from erp_money
+	where comcode_no = #{comcode_no}
+	<if test="type != null">
+	    <if test="type == 'money_debtor'">
+	       and money_debtor like '%${word}%' 
+	    </if>
+	    <if test="type == 'money_creditor'">
+	       and money_creditor like '%${word}%' 
+	    </if>
+	</if>
 </select>
 
 </mapper>

@@ -11,7 +11,7 @@
 	<table>
 		<tr>
 			<td>퇴직코드</td>
-			<td><input type="text" name="resign_code" id="resign_code"></td>
+			<td><input type="text" name="resign_code" id="resign_code" maxlength="30"></td>
 		</tr>
 		<tr>
 			<td>퇴직날짜</td>

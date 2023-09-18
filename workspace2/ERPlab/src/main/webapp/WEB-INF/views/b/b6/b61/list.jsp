@@ -217,9 +217,8 @@ function teamname(){
             <table id="procode">
             <c:if test="${list != null }">
                <tr>
-                  <td>코드</td>
                   <td>직원명</td>
-                  <td>추가근무종류</td>
+                  <td>근무종류</td>
                   <td>근무날짜</td>
                   <td>시작시간</td>
                   <td>종료시간</td>
@@ -227,7 +226,6 @@ function teamname(){
                </tr>
                <c:forEach var="map" items="${list }">
                <tr onclick="selectForm(${map.salary_no})" class="filter" id="filter">
-                  <td class="code">${map.salary_code }</td>
                   <td class="price">${map.employee1_name }</td>
                   <td class="cont">${map.salarytype_name }</td>
                   <td class="cont">${map.salary_date }</td>
@@ -242,10 +240,6 @@ function teamname(){
             </c:if>
             </table>
          </div>
-         
-<%--          <div align="right">
-            <input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
-         </div> --%>
    
    <!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->   
          <form action="${pageContext.request.contextPath }/greeting/salary/updateForm" id="content" method="post">
@@ -262,7 +256,7 @@ function teamname(){
       
       <div id="add" class="divform3">
          <c:choose>
-            <c:when test="${map != null || map2 != null}">
+            <c:when test="${map != null}">
                <form action="${pageContext.request.contextPath }/greeting/salary/update" method="POST" id="update">
        
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
@@ -282,7 +276,7 @@ function teamname(){
                      
                   <div>
                      <label>정산코드 </label>
-                     <input type="text" name="salary_code" id="salary_code" value="${map.salary_code }" readonly="readonly" maxlength="30" class="required">
+                     <input type="text" name="salary_code" id="salary_code" value="${map.salary_code }" maxlength="30">
                   </div>
                   
                   
@@ -371,7 +365,7 @@ function teamname(){
                      <h3>차입 등록 사항</h3>
                   <div>
                      <label>정산코드 </label>
-                     <input type="text" name="salary_code" id="salary_code" onblur="imcode(this.value)" maxlength="30" class="required">
+                     <input type="text" name="salary_code" id="salary_code" maxlength="30" class="required">
                      <h6 id="imcodecheck" style="color:red;"></h6>
                   </div>
                   
@@ -382,7 +376,7 @@ function teamname(){
                   
                   <div>
                      <label>직원코드 </label>
-                     <input type="text" name="employee1_code" id="employee1_code" value="${employee1_code }">
+                     <input type="text" name="employee1_code" id="employee1_code" value="${employee1_code }" readonly="readonly">
                   </div>
                   
                   <div>

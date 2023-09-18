@@ -1,5 +1,7 @@
 package com.lab.erp.dao.b.b3;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,8 +17,8 @@ private SqlSession sqlSession;
 		this.sqlSession = sqlSession;
 	}
 
-	public String currencyDate(int country_no) {
-		return sqlSession.selectOne("b2.currencyDate", country_no);
+	public List<Erp_CurrencyVO> currencyDate(int country_no) {
+		return sqlSession.selectList("b2.currencyDate", country_no);
 	}
 	
 	public int insertCurrency(Erp_CurrencyVO vo) {

@@ -165,6 +165,8 @@ window.onload = function() {
         // 오늘 날짜를 가져오기
         const today = new Date();
         const getDate = formatDate(today);
+        
+        console.log(getDate);
 
         // 환율 API 호출 (예시)
         var xhr = new XMLHttpRequest();

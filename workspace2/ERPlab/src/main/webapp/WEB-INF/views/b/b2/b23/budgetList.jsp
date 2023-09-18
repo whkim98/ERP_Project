@@ -295,6 +295,10 @@ function teamname(){
             </table>
          </div>
          
+<div>
+<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/budget?comcode_code=${comcode_code }'">
+</div>
+         
 <%--          <div align="right">
             <input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
          </div> --%>
@@ -325,7 +329,7 @@ function teamname(){
                      
                   <div>
                      <label>항목</label>
-                     <input type="text" name="budget_type" id="budget_type" value="${map.budget_type }">
+                     <input type="text" name="budget_type" id="budget_type" value="${map.budget_type }" maxlength="30">
                   </div>
                   <div>
                      <label>팀명 </label>
@@ -349,7 +353,7 @@ function teamname(){
                   
                   <div>
                   	<label>예산내용</label>
-                  	<input type="text" name="budget_contents" id="budget_contents" value="${map.budget_contents }">
+                  	<input type="text" name="budget_contents" id="budget_contents" value="${map.budget_contents }" maxlength="500">
                   </div>
 				  
 				  <div>
@@ -386,7 +390,7 @@ function teamname(){
                      <h3>예산관리 등록 사항</h3>
                   <div>
                      <label>항목 </label>
-                     <input type="text" name="budget_type" id="budget_type">
+                     <input type="text" name="budget_type" id="budget_type" maxlength="30">
                   </div>
                   
                   <div>
@@ -449,6 +453,7 @@ function teamname(){
       </div>
    
 </div>
+
 <script type="text/javascript">
 
 // 삭제버튼 경로 및 넘길 parameter 설정

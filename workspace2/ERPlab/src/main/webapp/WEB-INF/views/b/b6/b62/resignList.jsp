@@ -9,12 +9,8 @@
 			<tr>
 				<th>이름</th>
 				<th>사원코드</th>
-				<th>주소</th>
-				<th>주민등록번호</th>
 				<th>전화번호</th>
 				<th>이메일</th>
-				<th>아이디</th>
-				<th>비밀번호</th>
 				<th>직급</th>
 				<th>연차</th>
 				<th>연봉</th>
@@ -25,12 +21,8 @@
 			<tr>
 				<td>${vo.employee1_name }</td>
 				<td>${vo.employee1_code }</td>
-				<td>${vo.employee1_addr1} ${vo.employee1_addr2 } ${vo.employee1_postal}</td>
-				<td>${vo.employee1_residentno }</td>
 				<td>${vo.employee1_phone }</td>
 				<td>${vo.employee1_email }</td>
-				<td>${vo.employee1_id }</td>
-				<td>${vo.employee1_pw }</td>
 				<td>${vo.employee2_position }</td>
 				<td>${vo.employee2_exp }</td>
 				<td>${vo.employee2_salary }</td>

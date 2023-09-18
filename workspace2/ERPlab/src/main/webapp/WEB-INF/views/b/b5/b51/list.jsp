@@ -295,6 +295,9 @@ function teamname(){
             </c:if>
             </table>
          </div>
+         <div>
+<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/greeting?comcode_code=${comcode_code }'">
+</div>
          
 <%--          <div align="right">
             <input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
@@ -328,37 +331,37 @@ function teamname(){
                      
                   <div>
                      <label>사원코드 </label>
-                     <input type="text" name="employee1_code" id="employee1_code" value=${map.employee1_code }>
+                     <input type="text" name="employee1_code" id="employee1_code" value=${map.employee1_code } maxlength="30">
                   </div>
                   <div>
                      <label>사원명 </label>
-                     <input type="text" name="employee1_name" id="employee1_name" value=${map.employee1_name }>
+                     <input type="text" name="employee1_name" id="employee1_name" value=${map.employee1_name } maxlength="30">
                   </div>
                   <div>
                   	<label>주소</label>
-                  	<input type="text" name="employee1_addr1" id="employee1_addr1" value=${map.employee1_addr1 }>
-                  	<input type="text" name="employee1_addr2" id="employee1_addr2" value=${map.employee1_addr2 }>
-                  	<input type="text" name="employee1_postal" id="employee1_postal" value=${map.employee1_postal }>
+                  	<input type="text" name="employee1_addr1" id="employee1_addr1" value=${map.employee1_addr1 } maxlength="30">
+                  	<input type="text" name="employee1_addr2" id="employee1_addr2" value=${map.employee1_addr2 } maxlength="30">
+                  	<input type="text" name="employee1_postal" id="employee1_postal" value=${map.employee1_postal } maxlength="30">
                   </div>
                   <div>
                   	<label>주민등록번호</label>
-                  	<input type="text" name="employee1_residentno" id="employee1_residentno" value=${map.employee1_residentno }>
+                  	<input type="text" name="employee1_residentno" id="employee1_residentno" value=${map.employee1_residentno } maxlength="30">
                   </div>
                   <div>
                   	<label>전화번호</label>
-                  	<input type="text" name="employee1_phone" id="employee1_phone" value=${map.employee1_phone }>
+                  	<input type="text" name="employee1_phone" id="employee1_phone" value=${map.employee1_phone } maxlength="30">
                   </div>
                   <div>
                   	<label>이메일</label>
-                  	<input type="text" name="employee1_email" id="employee1_email" value=${map.employee1_email }>
+                  	<input type="text" name="employee1_email" id="employee1_email" value=${map.employee1_email } maxlength="30">
                   </div>
                   <div>
                   	<label>아이디</label>
-                  	<input type="text" name="employee1_id" id="employee1_id" value=${map.employee1_id }>
+                  	<input type="text" name="employee1_id" id="employee1_id" value=${map.employee1_id } maxlength="30">
                   </div>
                   <div>
                   	<label>비밀번호</label>
-                  	<input type="text" name="employee1_pw" id="employee1_pw" value=${map.employee1_pw }>
+                  	<input type="text" name="employee1_pw" id="employee1_pw" value=${map.employee1_pw } maxlength="30">
                   </div>
                   <div>
                   	<label>장애여부</label>
@@ -395,7 +398,7 @@ function teamname(){
                   </div>
                   <div>
                   	<label>직급</label>
-                  	<input type="text" name="employee2_position" id="employee2_position" value="${map.employee2_position }">
+                  	<input type="text" name="employee2_position" id="employee2_position" value="${map.employee2_position }" maxlength="30">
                   </div>
                   <div>
                   	<label>경력</label>
@@ -411,7 +414,7 @@ function teamname(){
                   </div>
                   <div>
                   	<label>내선번호</label>
-                  	<input type="text" name="employee2_extension" id="employee2_extension" value="${map.employee2_extension }">
+                  	<input type="text" name="employee2_extension" id="employee2_extension" value="${map.employee2_extension }" maxlength="30">
                   </div>
                   <div>
                   	<label>사대보험 여부</label>
@@ -442,37 +445,37 @@ function teamname(){
                      <h3>인사정보 등록 사항</h3>
                   <div>
                      <label>사원코드 </label>
-                     <input type="text" name="employee1_code" id="employee1_code">
+                     <input type="text" name="employee1_code" id="employee1_code" maxlength="30">
                   </div>
                   <div>
                      <label>사원명 </label>
-                     <input type="text" name="employee1_name" id="employee1_name">
+                     <input type="text" name="employee1_name" id="employee1_name" maxlength="30">
                   </div>
                   <div>
                   	<label>주소</label>
-                  	<input type="text" name="employee1_addr1" id="employee1_addr1">
-                  	<input type="text" name="employee1_addr2" id="employee1_addr2">
-                  	<input type="text" name="employee1_postal" id="employee1_postal">
+                  	<input type="text" name="employee1_addr1" id="employee1_addr1" maxlength="30">
+                  	<input type="text" name="employee1_addr2" id="employee1_addr2" maxlength="30">
+                  	<input type="text" name="employee1_postal" id="employee1_postal" maxlength="30">
                   </div>
                   <div>
                   	<label>주민등록번호</label>
-                  	<input type="text" name="employee1_residentno" id="employee1_residentno">
+                  	<input type="text" name="employee1_residentno" id="employee1_residentno" maxlength="30">
                   </div>
                   <div>
                   	<label>전화번호</label>
-                  	<input type="text" name="employee1_phone" id="employee1_phone">
+                  	<input type="text" name="employee1_phone" id="employee1_phone" maxlength="30">
                   </div>
                   <div>
                   	<label>이메일</label>
-                  	<input type="text" name="employee1_email" id="employee1_email">
+                  	<input type="text" name="employee1_email" id="employee1_email" maxlength="30">
                   </div>
                   <div>
                   	<label>아이디</label>
-                  	<input type="text" name="employee1_id" id="employee1_id">
+                  	<input type="text" name="employee1_id" id="employee1_id" maxlength="30">
                   </div>
                   <div>
                   	<label>비밀번호</label>
-                  	<input type="text" name="employee1_pw" id="employee1_pw">
+                  	<input type="text" name="employee1_pw" id="employee1_pw" maxlength="30">
                   </div>
                   <div>
                   	<label>장애여부</label>
@@ -509,7 +512,7 @@ function teamname(){
                   </div>
                   <div>
                   	<label>직급</label>
-                  	<input type="text" name="employee2_position" id="employee2_position">
+                  	<input type="text" name="employee2_position" id="employee2_position" maxlength="30">
                   </div>
                   <div>
                   	<label>경력</label>
@@ -525,7 +528,7 @@ function teamname(){
                   </div>
                   <div>
                   	<label>내선번호</label>
-                  	<input type="text" name="employee2_extension" id="employee2_extension">
+                  	<input type="text" name="employee2_extension" id="employee2_extension" maxlength="30">
                   </div>
                   <div>
                   	<label>사대보험 여부</label>

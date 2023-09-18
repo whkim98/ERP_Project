@@ -314,7 +314,9 @@ function teamname(){
             </c:if>
             </table>
          </div>
-         
+         <div>
+		<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/internationalsales/list?comcode_code=${comcode_code }'">
+		</div>
 <%--          <div align="right">
             <input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a41?comcode_code=${comcode_code }'" value="add">
          </div> --%>
@@ -389,7 +391,7 @@ function teamname(){
                   
                   <div>
                      <label>거래처명 </label>
-                     <input type="text" name="client_name" id="client_name" value="${map.client_name }">
+                     <input type="text" name="client_name" id="client_name" value="${map.client_name }" maxlength="30">
                   </div>
                   
                   <div>
@@ -410,45 +412,47 @@ function teamname(){
                   
                   <div>
                      <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno" value="${map.client_registeredno }">
+                    <input type="text" name="client_registeredno" id="client_registeredno" value="${map.client_registeredno }" maxlength="30">
                   </div>   
                      
                   <div>
                      <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno" value="${map.client_corporatedno }">
+                    <input type="text" name="client_corporatedno" id="client_corporatedno" value="${map.client_corporatedno }" maxlength="30">
                   </div> 
                     
                   <div>
                      <label>대표자명 </label>
-                     <input type="text" name="client_representative" id="client_representative" value="${map.client_representative }">
+                     <input type="text" name="client_representative" id="client_representative" value="${map.client_representative }" maxlength="30">
                   </div>   
                   <div>
                      <label>사업형태 </label>
-                     <input type="text" name="client_businesstype" id="client_businesstype" value="${map.client_businesstype }">
+                     <input type="text" name="client_businesstype" id="client_businesstype" value="${map.client_businesstype }" maxlength="30">
                   </div>   
                   <div>
                      <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1" value="${map.client_addr1 }"><input type="text" name="client_addr2" id="client_addr2" value="${map.client_addr2 }"><input type="text" name="client_postal" id="client_postal" value="${map.client_postal } ">
+                    <input type="text" name="client_addr1" id="client_addr1" value="${map.client_addr1 }" maxlength="100">
+                    <input type="text" name="client_addr2" id="client_addr2" value="${map.client_addr2 }" maxlength="50">
+                    <input type="text" name="client_postal" id="client_postal" value="${map.client_postal }" maxlength="10">
                   </div>   
                   <div>
                      <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno" value="${map.client_directno }">
+                    <input type="text" name="client_directno" id="client_directno" value="${map.client_directno }" maxlength="30">
                   </div>   
                   <div>
                      <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax" value="${map.client_fax }">
+                     <input type="text" name="client_fax" id="client_fax" value="${map.client_fax }" maxlength="30">
                   </div>   
                   <div>
                      <label>세금계산서이메일 </label>
-                     <input type="text" name="client_email" id="client_email" value="${map.client_email }">
+                     <input type="text" name="client_email" id="client_email" value="${map.client_email }" maxlength="30">
                   </div>   
                   <div>
                      <label>담당자명 </label>
-                     <input type="text" name="client_manager" id="client_manager" value="${map.client_manager }">
+                     <input type="text" name="client_manager" id="client_manager" value="${map.client_manager }" maxlength="30">
                   </div>   
                   <div>
                      <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact" value="${map.client_contact }">
+                     <input type="text" name="client_contact" id="client_contact" value="${map.client_contact }" maxlength="30">
                   </div>   
                                     
                   <div align="right">
@@ -506,7 +510,7 @@ function teamname(){
                   
                   <div>
                      <label>거래처명 </label>
-                     <input type="text" name="client_name" id="client_name">
+                     <input type="text" name="client_name" id="client_name" maxlength="30">
                   </div>
                   
                   <div>
@@ -519,45 +523,47 @@ function teamname(){
                   
                   <div>
                      <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno">
+                    <input type="text" name="client_registeredno" id="client_registeredno" maxlength="30">
                   </div>   
                      
                   <div>
                      <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno">
+                    <input type="text" name="client_corporatedno" id="client_corporatedno" maxlength="30">
                   </div> 
                     
                   <div>
                      <label>대표자명 </label>
-                     <input type="text" name="client_representative" id="client_representative">
+                     <input type="text" name="client_representative" id="client_representative" maxlength="30">
                   </div>   
                   <div>
                      <label>사업형태 </label>
-                     <input type="text" name="client_businesstype" id="client_businesstype" value="법인">
+                     <input type="text" name="client_businesstype" id="client_businesstype" value="법인" maxlength="30">
                   </div>   
                   <div>
                      <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1"><input type="text" name="client_addr2" id="client_addr2"><input type="text" name="client_postal" id="client_postal">
+                    <input type="text" name="client_addr1" id="client_addr1" maxlength="100">
+                    <input type="text" name="client_addr2" id="client_addr2" maxlength="50">
+                    <input type="text" name="client_postal" id="client_postal" maxlength="10">
                   </div>   
                   <div>
                      <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno">
+                    <input type="text" name="client_directno" id="client_directno" maxlength="30">
                   </div>   
                   <div>
                      <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax">
+                     <input type="text" name="client_fax" id="client_fax" maxlength="30">
                   </div>   
                   <div>
                      <label>세금계산서이메일 </label>
-                     <input type="text" name="client_email" id="client_email">
+                     <input type="text" name="client_email" id="client_email" maxlength="30">
                   </div>   
                   <div>
                      <label>담당자명 </label>
-                     <input type="text" name="client_manager" id="client_manager">
+                     <input type="text" name="client_manager" id="client_manager" maxlength="30">
                   </div>   
                   <div>
                      <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact">
+                     <input type="text" name="client_contact" id="client_contact" maxlength="30">
                   </div>   
                   
                   

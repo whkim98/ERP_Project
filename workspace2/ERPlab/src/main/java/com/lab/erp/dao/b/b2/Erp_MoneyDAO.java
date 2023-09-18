@@ -1,5 +1,8 @@
 package com.lab.erp.dao.b.b2;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,10 @@ private SqlSession sqlSession;
 
 	public int insertMoney(Erp_MoneyVO vo) {
 		return sqlSession.insert("b2.insertMoney", vo);
+	}
+	
+	public List<Map<String, Object>> moneyList(Map<String, Object> map){
+		return sqlSession.selectList("b2.moneyList", map);
 	}
 	
 }

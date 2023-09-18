@@ -32,11 +32,11 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 	<table id="lotTable">
 		<tr>
 			<th>상품코드</th>
-			<td><input type="text" name="goods_code"></td>
+			<td><input type="text" name="goods_code" maxlength="30"></td>
 			<th>바코드</th>
-			<td><input type="text" name="goods_barcode"></td>
+			<td><input type="text" name="goods_barcode" maxlength="30"></td>
 			<th>상품명</th>
-			<td><input type="text" name="goods_name"></td>
+			<td><input type="text" name="goods_name" maxlength="100"></td>
 		</tr>
 		<tr>
 			<th>상품종류</th>
@@ -50,7 +50,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 				</select>
 			</td>
 			<th>소비자가</th>
-			<td><input type="text" name="goods_customerprice"></td>
+			<td><input type="number" name="goods_customerprice"></td>
 			<th>규격</th>
 			<td>
 				<select name="goodsst_no">
@@ -113,7 +113,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 		
 		<tr>
 			<th>로트번호</th>
-			<td><input type="text" name="goodslot_lot"></td>
+			<td><input type="text" name="goodslot_lot" maxlength="30"></td>
 			<th>로트별수량</th>
 			<td><input type="number" name="goodslot_qty"></td>
 			<th>제조일자</th>
