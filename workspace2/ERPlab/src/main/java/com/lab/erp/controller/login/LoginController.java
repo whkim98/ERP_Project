@@ -35,7 +35,6 @@ public class LoginController {
 		try {
 			Map<String, Object> map = new HashMap<>();
 			
-			System.out.println(comcode_code);
 			int comcode_no = ls.comNo(comcode_code);
 			
 			System.out.println(comcode_no);
@@ -90,7 +89,6 @@ public class LoginController {
 			default: msg = "신설 팀입니다"; request.getSession().setAttribute("login", su); 
 			url = "/index"; break;
 			}
-			System.out.println(request.getSession().getAttribute("login"));
 			request.getSession().setAttribute("comcode_code", comcode_code);
 			request.setAttribute("msg", msg);
 			request.setAttribute("url", url);

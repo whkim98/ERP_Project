@@ -71,6 +71,6 @@ private SqlSession sqlSession;
 	}
 	
 	public String getComcodeName(String comcode_code) {
-		return sqlSession.selectOne(comcode_code);
+		return sqlSession.selectOne("admin.getComcodeName", comcode_code);
 	}
 }

@@ -19,17 +19,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from erp_admin where team_no = #{team_no} and admin_id = #{admin_id}
 	</select>
 	
+	
 	<!-- employee 계정 로그인 검사 -->
 	<select id="checkEmp" parameterType="map" resultType="int">
-		select employee1_no from erp_employee1 where 
-		employee1_id = #{employee1_id} and employee1_pw = #{employee1_pw}
+		select e.employee1_no 
+		from erp_employee1 e, erp_comcode c 
+		where employee1_id = #{employee1_id} and employee1_pw = #{employee1_pw} and comcode_code = #{comcode_code_intranet}
 	</select>
 	
-	<select id="getEmpName" parameterType="String" resultType="map">
-		select e.*, e2.*, t.* from erp_employee1 e, erp_employee2 e2, erp_team t 
-		where e.employee1_id = #{employee1_id} 
-		and e.employee1_no = e2.employee1_no 
-		and e2.team_no = t.team_no 
+	<select id="getEmpName" parameterType="map" resultType="map">	
+		select e.*, e2.*, t.*, c.* 
+		from erp_employee1 e, erp_employee2 e2, erp_team t, erp_comcode c 
+		where e.employee1_id = #{employee1_id} and comcode_code = #{comcode_code_intranet} 
+		and e.employee1_no = e2.employee1_no and e2.team_no = t.team_no
 	</select>
 	
 	<!-- employee 계정 ID 찾기 -->

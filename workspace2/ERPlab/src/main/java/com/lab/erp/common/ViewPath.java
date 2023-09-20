@@ -4,6 +4,7 @@ public class ViewPath {
 	
 	// erp
 	public static final String LOGIN = "login/";
+	public static final String ADMIN = "admin/";
 	
 	public static final String RESULT = "result/";
 	public static final String WINDOW = "window/";
@@ -21,7 +22,6 @@ public class ViewPath {
 	public static final String D2 = "d/d2";
 	public static final String D3 = "d/d3";
 	
-	public static final String ADMIN = "admin/";
 	
 	// intranet
 	public static final String CHAT = "intranet/chat/";

@@ -20,7 +20,11 @@ public class Erp_EmployeeDAO {
 	}
 	
 	public int checkEmp(Map<String, Object> map) {
-		return sqlSession.selectOne("login.checkEmp", map);
+		Integer ck = sqlSession.selectOne("login.checkEmp", map);
+		if(ck == null) {
+			return 0;
+		}
+		return ck;
 	}
 	
 	public String findEmpId(Map<String, Object> map) {
@@ -31,10 +35,10 @@ public class Erp_EmployeeDAO {
 		return sqlSession.selectOne("login.findEmpPw", map);
 	}
 	
-	public Map<String, Object> getEmpName(String employee1_id) {
-		return sqlSession.selectOne("login.getEmpName", employee1_id);
+	public Map<String, Object> getEmpName(Map<String, Object> map) {
+		return sqlSession.selectOne("login.getEmpName", map);
 	}
-	
+		
 	public int emp1MaxNo() {
 		return sqlSession.selectOne("admin.emp1MaxNo");
 	}

@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lab.erp.common.ViewPath;
@@ -22,28 +24,19 @@ import com.lab.erp.vo.login.Erp_TeamVO;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
-	@Autowired
 	private AdminService as;
 	private LoginService ls;
 	private HttpServletRequest request;
 	
+	@Autowired
 	public AdminController(AdminService as, LoginService ls, HttpServletRequest request) {
 		this.as = as;
 		this.ls = ls;
 		this.request = request;
 	}
 	
-	
-	@RequestMapping("/main")
-	public String adminMain() {
-		return ViewPath.ADMIN + "main";
-	}
-	
-	
-//	admin
-	@RequestMapping("/inputAdmin")
+	@RequestMapping("/admin")
 	public String inputUser(Model model, String type, String word, String comcode_code) {
 		if(type == null || word == null) {
 			type = null;
@@ -87,7 +80,7 @@ public class AdminController {
 		model.addAttribute("teamList", teamList);				// admin계정 등록 시 권한 부여할 때 띄울 erp_team List
 		model.addAttribute("comcode_name", comcode_name);		// 고객사 이름
 		
-		return ViewPath.ADMIN + "inputAdmin";
+		return ViewPath.ADMIN + "admin";
 	}
 	
 	@RequestMapping("/adminAjax")
@@ -181,6 +174,26 @@ public class AdminController {
 		return ViewPath.ADMIN + "inputAdmin";
 	}
 	
+	@RequestMapping("adminInsert")
+	public String adminInsert(String comcode_code, Model model) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		
+		return ViewPath.ADMIN + "adminInsert";
+	}
+	
 	@RequestMapping("/createAdmin")
 	public String createAdmin(Erp_AdminVO vo, String comcode_code, Model model) {
 		String msg = null;
@@ -204,6 +217,8 @@ public class AdminController {
 		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;			// insert되는 순간 admin계정 List에 추가된 상태로 등록창 띄움
 	}
 	
+	
+	
 	@RequestMapping("/updateAdmin")
 	public String updateAdmin(Erp_AdminVO vo, String comcode_code, Model model) {
 		String msg = null;
@@ -222,7 +237,8 @@ public class AdminController {
 		
 		return "redirect:/admin/updateFormAdmin?admin_no="+vo.getAdmin_no()+"&comcode_code="+comcode_code;		// update되는 순간 update된 admin 정보 띄움
 	}
-	
+
+	/*
 	@RequestMapping("/deleteAdmin")
 	public String deleteAdmin(Erp_AdminVO vo, String comcode_code, Model model) {
 		String msg = null;
@@ -236,14 +252,75 @@ public class AdminController {
 			model.addAttribute("url", url);
 			return ViewPath.RESULT + "loginresult";
 		}
-		
+				
 		as.deleteAdmin(vo.getAdmin_no());
 		
 		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;					// delete되는 순간 admin계정 List에 삭제된 상태로 등록창 띄움
 	}
+	*/
+	
+	@RequestMapping("/deleteAdmin")
+	public String deleteAdmin(@RequestParam("admin_no") String adminNo, 
+	                          @RequestParam("comcode_code") String comcodeCode, 
+	                          Model model) {
+	    String msg = null;
+	    String url = null;
+
+	    if (comcodeCode == null || comcodeCode.isEmpty()) {
+	        request.getSession().invalidate();
+	        msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+	        url = "/";
+	        model.addAttribute("msg", msg);
+	        model.addAttribute("url", url);
+	        return ViewPath.RESULT + "loginresult";
+	    }
+
+	    try {
+	        int adminNoInt = Integer.parseInt(adminNo);
+	        as.deleteAdmin(adminNoInt);
+	    } catch (NumberFormatException e) {
+	        // 정수로 변환할 수 없는 경우 처리
+	        // 예외 처리 코드 추가
+	    }
+
+	    return "redirect:/admin/inputAdmin?comcode_code=" + comcodeCode;
+	}
+
+
+	
+	/*
+	@PostMapping("/deleteAdmin")
+    public String deleteAdmin(
+    		@RequestParam("admin_no") int adminNo, 
+            @RequestParam("comcode_code") String comcodeCode, Model model) {
+        String msg = null;
+        String url = null;
+
+        if (comcodeCode == null || comcodeCode.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+        }
+
+        as.deleteAdmin(adminNo);
+
+        return "redirect:/admin/adminList?comcode_code=" + comcodeCode;
+	}
+	*/
 	
 	
 //	employee
+	
+	@RequestMapping("/intranet")
+	public String intranetAdmin() {
+		
+		return ViewPath.ADMIN + "intranet";
+	}
+	
+	
 	@RequestMapping("/inputEmployee")
 	public String inputEmployee(Model model, String type, String word, String comcode_code) {
 		if(type == null || word == null) {
@@ -391,5 +468,28 @@ public class AdminController {
 		
 		return "redirect:/admin/inputEmployee?comcode_code="+comcode_code;
 	}
+	
+	@RequestMapping("/searchERPadminAll")
+	public String searcherpadminall(Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Map<String, Object>> list = as.adminList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.ADMIN + "adminList";
+	}
+	
+	
+	
 	
 }

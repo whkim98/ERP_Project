@@ -32,8 +32,14 @@ public class Erp_Employee1VO {
 	private int employee2_salary;
 	private Double employee2_holiday;
 	private int employee2_four;
-	private String employee2_worktype;
+	private String employee2_worktype;	
+	
+// erp_comecode
+	
 	private int comcode_no;
+	private String comcode_code;
+	private String comcode_name;
+	
 	
 //	퇴직 컬럼 =======================================
 	

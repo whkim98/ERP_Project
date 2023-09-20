@@ -5,11 +5,6 @@
 
 
 <!DOCTYPE HTML>
-<!--
-	Future Imperfect by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 
 <html>
 	<head>
@@ -20,7 +15,7 @@
 		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
 		
 		<!-- 로그인 세션 -->
-		<c:if test="${login == null }">
+		<c:if test="${Intralogin == null }">
 			<script type="text/javascript">
 				alert("세션이 만료되었습니다.");
 				location.href="${pageContext.request.contextPath }/";
@@ -40,9 +35,10 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/index">ERPlab</a></h1>
+						<h1><a href="/intranetMain">ERPlab</a></h1>
 						<nav class="links">
-						<!-- 인트라넷 애들은 로그인을 따로 할 수 있도록 나중에 수정 -->
+						
+						<!-- 인트라넷 헤더 -->
 							<ul>
 								<li><a href="#">조직도</a></li>
 								<li><a href="#">일정</a></li>
@@ -52,40 +48,15 @@
 								<li><a href="#">연차</a></li>								
 							</ul>
 							<ul>
-								<li><a href="#">재고</a></li>
-								<li><a href="#">물류</a></li>
-								<li><a href="#">발주</a></li>
-								<li><a href="#">부서별매출</a></li>
-								<li><a href="#">프로젝트</a></li>
-								<li><a href="#">회사정보</a></li>
-								<li><a href="${pageContext.request.contextPath}/b11main?comcode_code=${comcode_code}">재무제표</a></li>
+								<li><a href="${pageContext.request.contextPath}/index">ERP 페이지로 이동</a></li>
+								<li><a href="${pageContext.request.contextPath}/mypage?comcode_code=${comcode_code}&employee1_no=${employee1_no}">마이페이지</a></li>
 							</ul>
 							
-						</nav>
-						
-						<nav class="loginSessionOutput">
-						    <div class="loginSessionView">
-				        		Remaining Session Time: <span id="sessionTime">Calculating...</span>					        				        
-						    </div>
-						</nav>
-						
-						
-						<nav class="main">
-							<ul>
-								<li class="menu">
-									<a class="fa-bars" href="#menu">Menu</a>
-								</li>
-							</ul>
-						</nav>
-						
-						<nav class="intranetLogout">
-							<ul class="actions stacked">
-								<li><input type="button" onclick="#" value="HOME" /></li>
-							</ul>				
 						</nav>
 
 						<nav class="intranetLogout">
 							<ul class="actions stacked">
+								<li></li>
 								<li><input type="button" onclick="logout()" value="LOGOUT" /></li>
 							</ul>				
 						</nav>
@@ -95,28 +66,6 @@
 </div>
 
 <script type="text/javascript">
-
-//로그아웃까지 남은 시간을 가져오는 함수
-function updateSessionTime() {
-    const sessionStartTime = new Date(${pageContext.session.creationTime});
-    const sessionTimeout = ${pageContext.session.maxInactiveInterval} * 1000;
-    const currentTime = new Date();
-
-    // 세션의 남은 시간 계산
-    const remainingTime = new Date(sessionStartTime.getTime() + sessionTimeout - currentTime.getTime());
-
-    const minutes = remainingTime.getMinutes();
-    const seconds = remainingTime.getSeconds();
-    let min = minutes < 10 ? '0' : '';
-    let sec = seconds < 10 ? '0' : '';
-    const formattedTime = min+minutes+'분'+sec+seconds+'초';
-    
-    document.getElementById('sessionTime').textContent = formattedTime; 
-}
-
-updateSessionTime();
-setInterval(updateSessionTime, 1000);
-
 
 // logout
 function logout() {

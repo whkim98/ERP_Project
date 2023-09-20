@@ -9,7 +9,7 @@
 </head>
 <body>
 <div align="center">
-<form action="${pageContext.request.contextPath}/login/searchcode">
+<form action="${pageContext.request.contextPath}/login/searchcode1">
 	<table>
 		<tr>
 			<td>
@@ -46,7 +46,7 @@
 </body>
 <script type="text/javascript">
 	function setParentText(code){
-    	opener.document.getElementById("comcode_code").value = code;
+    	opener.document.getElementById("comcode_code_intranet").value = code;
     	window.close();
     }
 </script>

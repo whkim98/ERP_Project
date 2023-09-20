@@ -21,8 +21,8 @@ public class IntranetService {
 		return edao.checkEmp(map);
 	}
 	
-	public Map<String, Object> getEmpName(String employee1_id) {
-		return edao.getEmpName(employee1_id);
+	public Map<String, Object> getEmpName(Map<String, Object> map) {
+		return edao.getEmpName(map);
 	}
 	
 	public String findEmpId(Map<String, Object> map) {
@@ -41,3 +41,4 @@ public class IntranetService {
 		return edao.selectEmp(employee2_no);
 	}
 }
+	

@@ -49,10 +49,10 @@
 								<li><a href="#">일정</a></li>
 								<li><a href="#">주소록</a></li>
 								<li><a href="${pageContext.request.contextPath}/erpchat?comcode_code=${comcode_code}" target="_blank">메신저</a></li>
-								<li><a href="#">이메일</a></li>
+								<li><a href="">이메일</a></li>
 								<li><a href="#">연차</a></li>	
 								<c:if test="${login == 1 }">
-									<li><a href="#">관리자</a></li>	
+									<li><a href="${pageContext.request.contextPath}/admin?comcode_code=${comcode_code}">관리자페이지</a></li>	
 								</c:if>					
 							</ul>
 							<ul>
@@ -66,14 +66,7 @@
 							</ul>
 							
 						</nav>
-						
-						<nav class="loginSessionOutput">
-						    <div class="loginSessionView">
-				        		로그아웃까지 남은 시간: <span id="sessionTime">Calculating...</span>					        				        
-						    </div>
-						</nav>
-						
-						
+					
 						<nav class="main">
 							<ul>
 								<li class="menu">
@@ -89,6 +82,11 @@
 						<!-- Links -->
 							<section>
 								<ul class="links">
+
+								<c:if test="${login == 1 }">
+									<li><a href="${pageContext.request.contextPath}/admin?comcode_code=${comcode_code}">관리자페이지</a></li>	
+								</c:if>	
+								
 									<li>
 											<h3>경영기획팀</h3>
 										<a href="#">
@@ -326,51 +324,6 @@
 </div>
 
 <script type="text/javascript">
-
-let sessionTimeout; // 세션 타임아웃을 저장하는 변수
-const maxSessionDuration = ${pageContext.session.maxInactiveInterval} * 1000; // 세션 최대 지속 시간 (밀리초)
-let sessionStartTime = new Date(${pageContext.session.creationTime}); // 세션 시작 시간 초기화
-
-// 세션 타임아웃 타이머 시작
-function startSessionTimeout() {
-    sessionStartTime = new Date(); // 새로운 세션 시작 시간 설정
-    clearTimeout(sessionTimeout); // 이전 인터벌 제거
-
-    // 새로운 세션 타임아웃 인터벌 설정
-    sessionTimeout = setTimeout(logout, maxSessionDuration);
-}
-
-// 클릭, 입력, 마우스 움직임, 새로고침 등 모든 이벤트에 대한 세션 초기화 리스너 추가
-document.addEventListener('click', startSessionTimeout);
-document.addEventListener('input', startSessionTimeout);
-document.addEventListener('mousemove', startSessionTimeout);
-window.addEventListener('beforeunload', startSessionTimeout); // 새로고침 및 탭 닫힘 이벤트
-
-// 남은 세션 시간을 업데이트하고 세션 타임아웃 타이머를 재설정하는 함수
-function updateSessionTime() {
-    const currentTime = new Date();
-    const elapsedTime = currentTime - sessionStartTime;
-    const remainingTime = maxSessionDuration - elapsedTime;
-
-    if (remainingTime <= 0) {
-        // 세션 타임아웃이 0 이하이면 로그아웃
-        logout();
-    } else {
-        const minutes = Math.floor(remainingTime / 60000); // 밀리초를 분으로 변환
-        const seconds = Math.floor((remainingTime % 60000) / 1000); // 밀리초를 초로 변환
-        let min = minutes < 10 ? '0' : '';
-        let sec = seconds < 10 ? '0' : '';
-        const formattedTime = min + minutes + '분' + sec + seconds + '초';
-
-        document.getElementById('sessionTime').textContent = formattedTime;
-    }
-
-    // 다음 프레임에서 업데이트 요청
-    requestAnimationFrame(updateSessionTime);
-}
-
-// 초기 업데이트 호출
-updateSessionTime();
 
 
 // logout
