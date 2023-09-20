@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>		
 				
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
-					
 <div class="button-container">
     <div class="button-group" align="center">
     <h2>기획본부</h2>

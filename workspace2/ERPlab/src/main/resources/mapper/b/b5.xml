@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	left join erp_team et
 	on e2.team_no = et.team_no
 	where e2.comcode_no = #{comcode_no}
+	order by e2.team_no
 	<if test="type != null">
 	    <if test="type == 'employee1_code'">
 	       and e1.employee1_code like '%${word}%' 

@@ -386,6 +386,32 @@ function logout() {
     };
     xhr.send();
 }
+function openWindow(comcode_code) {
+	  // 새 창을 엽니다.
+	  var popup = window.open('', 'popup', 'width=300,height=200');
+	  
+	  // 양식을 생성합니다.
+	  popup.document.write('<form id="myForm" action="${pageContext.request.contextPath}/greeting/list" method="GET">');
+	  popup.document.write('<input type="text" id="inputValue" name="employee1_code" placeholder="사원코드를 입력하세요">');
+	  popup.document.write('<input type="hidden" name="comcode_code" value="' + comcode_code + '">'); // comcode_code 파라미터 추가
+	  popup.document.write('<input type="submit" value="전송">');
+	  popup.document.write('</form>');
+
+	  // 폼 제출 이벤트를 설정합니다.
+	  popup.document.getElementById('myForm').onsubmit = function(event) {
+	    event.preventDefault(); // 기본 제출 동작을 방지
+
+	    // 입력 필드에서 employee1_code 값을 가져옵니다.
+	    var employee1_code = popup.document.getElementById('inputValue').value;
+
+	    // 폼 제출 후에 창을 닫고 원래 페이지로 이동합니다.
+	    popup.close();
+	    // comcode_code와 employee1_code를 함께 전달합니다.
+	    window.location.href = '${pageContext.request.contextPath}/greeting/list?comcode_code=' + comcode_code + '&employee1_code=' + employee1_code;
+	  };
+	}
+
+
 
 
 </script>
