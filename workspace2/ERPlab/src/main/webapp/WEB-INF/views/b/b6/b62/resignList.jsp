@@ -2,7 +2,34 @@
     pageEncoding="UTF-8"%>		
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
-
+<script>
+function resignWindow(employee1_no, employee2_no, comcode_code){
+	var resign = window.open('', 'resign', 'width=300, height=200');
+	
+	
+	
+	resign.document.write('<form id="myForm" action="${pageContext.request.contextPath}/greeting/resign/insert" method="post">');
+	resign.document.write('<input type="hidden" name="employee2_no" id="employee2_no" value="' + employee2_no + '">');
+	resign.document.write('<input type="hidden" name="employee1_no" id="employee1_no" value="' + employee1_no + '">');
+	resign.document.write('<input type="hidden" name="comcode_code" value="' + comcode_code + '">');
+	resign.document.write('<input type="text" name="resign_code" id="resign_code" maxlength="30" placeholder="퇴직코드를 입력해 주세요">');
+	resign.document.write('<input type="date" name="resign_date" id="resign_date" placeholder="퇴직날짜를 입력해 주세요">');
+	resign.document.write('<input type="submit" value="입력">');
+	resign.document.write('</form>');
+	
+	resign.document.getElementById('myForm').onsubmit = function(event) {
+	event.preventDefault();
+	
+	var resign_code = resign.document.getElementById('resign_code').value;
+	var resign_date = resign.document.getElementById('resign_date').value;
+	
+	resign.close();
+	
+	window.location.href = '${pageContext.request.contextPath}/greeting/resign/insert?comcode_code=' + comcode_code + '&employee1_no=' + employee1_no + '&employee2_no=' + employee2_no + '&resign_code=' + resign_code + '&resign_date=' + resign_date
+	
+	}
+}
+</script>
 <div align="center">
 	<form action="${pageContext.request.contextPath }/greeting/resign/insertForm" method="post">
 		<table>
@@ -31,7 +58,7 @@
 				</c:if>
 				<c:if test="${vo.emphistory_resign == null }">
 				<td>N</td>
-				<td><input type="button" value="퇴직등록" onclick="location.href='${pageContext.request.contextPath }/greeting/resign/insertForm?employee2_no=${vo.employee2_no }&employee1_no=${vo.employee1_no }'">
+				<td><input type="button" value="퇴직등록" onclick="resignWindow('${vo.employee1_no}', '${vo.employee2_no }', '${comcode_code }')">
 				</c:if>
 			</tr>
 			</c:forEach>
