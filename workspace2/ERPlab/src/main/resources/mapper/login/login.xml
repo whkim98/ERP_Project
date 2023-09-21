@@ -66,6 +66,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</select>
+	
+	<select id="checkCurrPw" parameterType="com.lab.erp.vo.login.Erp_Employee1VO" resultType="int">
+		select employee1_no from erp_employee1 
+		where employee1_id = #{employee1_id} 
+		and employee1_pw = #{employee1_pw} 
+	</select>
 
 </mapper>
 

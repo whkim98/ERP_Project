@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="intranetchat">
+	
+<!-- 채팅방 CRUD -->	
+	<insert id="createChatRoom" parameterType="com.lab.erp.vo.intranet.Erp_ChatroomVO">
+		insert into erp_chatroom(chatroom_title,chatroom_memo,employee2_no1,employee2_no2,comcode_no) 
+		values(#{chatroom_title},#{chatroom_memo},#{employee2_no1},#{employee2_no2},#{comcode_no})
+	</insert>
+	
+	<update id="updateChatTitle" parameterType="com.lab.erp.vo.intranet.Erp_ChatroomVO">
+		update erp_chatroom set 
+		chatroom_title = #{chatroom_title} 
+		where chatroom_no = #{chatroom_no}
+	</update>
+	
+	<update id="updateChatMemo" parameterType="com.lab.erp.vo.intranet.Erp_ChatroomVO">
+		update erp_chatroom set 
+		chatroom_memo = #{chatroom_memo} 
+		where chatroom_no = #{chatroom_no}
+	</update>
+	
+	<update id="inviteChat" parameterType="com.lab.erp.vo.intranet.Erp_ChatroomVO">
+		update erp_chatroom set 
+		employee2_no2 = #{employee2_no2} 
+		where chatroom_no = #{chatroom_no}
+	</update>
+	
+	<delete id="deleteChatRoom" parameterType="int">
+		delete from erp_chatroom where chatroom_no = #{chatroom_no}
+	</delete>
+	
+	<select id="chatRoomList" parameterType="map" resultType="map">
+		select c.*, 
+		e11.employee1_name e1name, e21.employee2_no e1no, e21.employee2_position e1position, 
+		e12.employee1_name e2name, e22.employee2_no e2no, e22.employee2_position e2position 
+		from erp_chatroom c, erp_employee1 e11, erp_employee2 e21, erp_employee1 e12, erp_employee2 e22 
+		where (c.employee2_no1 = #{employee2_no} or c.employee2_no2 = #{employee2_no}) 
+		and c.employee2_no1 = e21.employee2_no 
+		and c.employee2_no2 = e22.employee2_no 
+		and e11.employee1_no = e21.employee1_no
+		and e12.employee1_no = e22.employee1_no 
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+						(e11.employee1_name like '%${word}%' or e12.employee1_name like '%${word}%') 
+						or c.chatroom_title like '%${word}%'
+					)
+			</if>
+			<if test="type == 'employee1_name'">
+				and (
+						e11.employee1_name like '%${word}%' or e12.employee1_name like '%${word}%'
+					)
+			</if>
+			<if test="type == 'chatroom_title'">
+				and c.chatroom_title like '%${word}%'
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectChatRoom" parameterType="int" resultType="map">
+		select c.*, e.employee1_name, e2.employee2_position from erp_chatroom c, erp_employee1 e, erp_employee2 e2 
+		where c.chatroom_no = #{chatroom_no}
+		and e.employee1_no = e2.employee1_no 
+		and c.employee2_no2 = e2.employee2_no 
+	</select>
+	
+	<select id="getRoomMaxNo" resultType="int">
+		select max(chatroom_no) from erp_chatroom
+	</select>
+	
+	<select id="checkRoomNo" parameterType="map" resultType="int">
+		select chatroom_no from erp_chatroom 
+		where (employee2_no1 = #{employee2_no1} and employee2_no2 = #{employee2_no2}) 
+		or (employee2_no1 = #{employee2_no2} and employee2_no2 = #{employee2_no1}) 
+	</select>
+	
+	
+	<!-- 채팅 메세지 -->
+	<insert id="createChat" parameterType="com.lab.erp.vo.intranet.Erp_ChatVO">
+		insert into erp_chat(chat_text,chat_time,employee2_no,chatroom_no) 
+		values(#{chat_text},now(),#{employee2_no},#{chatroom_no})
+	</insert>
+	
+	<delete id="deleteChat" parameterType="int">
+		delete from erp_chat where chat_no = #{chat_no}
+	</delete>
+	
+	<select id="getChating" parameterType="map" resultType="map">
+		select c.chat_no, e1.*, e2.*, t.*, c.chatroom_no, c.chat_text, date_format(c.chat_time, '%H시 %i분') chat_time, ch.*
+		from erp_employee1 e1, erp_employee2 e2, erp_team t, erp_chat c, (select c.chat_no, date_format(c.chat_time, '%H시 %i분') chat_time,if(lag(date_format(c.chat_time, '%m월 %d일')) over (order by date_format(c.chat_time, '%m월 %d일')) = date_format(c.chat_time, '%m월 %d일'),null,date_format(c.chat_time, '%m월 %d일')) chat_date 
+		from erp_chat c where c.chatroom_no = 1 order by date_format(c.chat_time, '%m월 %d일'), c.chat_no) ch
+		where e1.employee1_no = e2.employee1_no 
+		and e2.team_no = t.team_no
+		and c.employee2_no = e2.employee2_no 
+		and c.chat_no = ch.chat_no 
+		and c.chatroom_no = #{chatroom_no}
+		<if test="word != null">
+			and c.chat_text like '%${word}%'
+		</if>
+		order by date_format(c.chat_time, '%m월 %d일'), c.chat_no
+	</select>
+	
+</mapper>
+
+
+
+
+
+

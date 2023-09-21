@@ -13,6 +13,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="${pageContext.request.contextPath }/webdesign/assets/css/main.css" />
 		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+		<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 		
 		<!-- 로그인 세션 -->
 		<c:if test="${Intralogin == null }">
@@ -43,13 +44,13 @@
 								<li><a href="#">조직도</a></li>
 								<li><a href="#">일정</a></li>
 								<li><a href="#">주소록</a></li>
-								<li><a href="${pageContext.request.contextPath}/erpchat?comcode_code=${comcode_code}" target="_blank">메신저</a></li>
+								<li><a href="${pageContext.request.contextPath}/intranet/chat/erpchat?comcode_code=${comcode_code}&employee2_no=${empNo}" target="_blank">메신저</a></li>
 								<li><a href="#">이메일</a></li>
 								<li><a href="#">연차</a></li>								
 							</ul>
 							<ul>
 								<li><a href="${pageContext.request.contextPath}/">ERP 페이지로 이동</a></li>
-								<li><a href="${pageContext.request.contextPath}/mypage?comcode_code=${comcode_code}&employee1_no=${employee1_no}">마이페이지</a></li>
+								<li><a href="${pageContext.request.contextPath}intranet/inputPw?comcode_code=${comcode_code}&employee2_no=${empNo}">마이페이지</a></li>
 							</ul>
 							
 						</nav>

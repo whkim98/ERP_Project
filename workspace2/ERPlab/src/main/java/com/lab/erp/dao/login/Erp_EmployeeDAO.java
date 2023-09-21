@@ -38,6 +38,10 @@ public class Erp_EmployeeDAO {
 	public Map<String, Object> getEmpName(Map<String, Object> map) {
 		return sqlSession.selectOne("login.getEmpName", map);
 	}
+	
+	public int checkCurrPw(Erp_Employee1VO vo) {
+		return sqlSession.selectOne("login.checkCurrPw", vo);
+	}
 		
 	public int emp1MaxNo() {
 		return sqlSession.selectOne("admin.emp1MaxNo");
