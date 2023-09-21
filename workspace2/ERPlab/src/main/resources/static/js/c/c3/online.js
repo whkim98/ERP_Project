@@ -1,12 +1,21 @@
-let eqkindlist_search_btn = document.getElementById("eqkindlist_search");
-eqkindlist_search_btn.addEventListener('click', () => {
-	window.open("../d4/eqkind_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+let ctgr_search_btn = document.getElementById("ctgrlist_search");
+ctgr_search_btn.addEventListener('click', () => {
+	window.open("../c3/ctgr_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
-// 설비/장비등급목록 조회 버튼
-let eqgradelist_search_btn = document.getElementById("eqgradelist_search");
-eqgradelist_search_btn.addEventListener('click', () => {
-	window.open("../d4/eqgrade_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+let teamlist_search_btn = document.getElementById("teamlist_search");
+teamlist_search_btn.addEventListener('click', () => {
+	window.open("../c3/team_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+});
+
+let customerlist_search_btn = document.getElementById("customerlist_search");
+customerlist_search_btn.addEventListener('click', () => {
+	window.open("../c3/customer_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+});
+
+let settletypelist_search_btn = document.getElementById("settletypelist_search");
+settletypelist_search_btn.addEventListener('click', () => {
+	window.open("../c3/settletype_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
 // 행사 리스트 클릭시 정보출력
@@ -70,19 +79,12 @@ online_container[0].addEventListener('click', (e) => {
 // 입력란 값 제거 함수
 let empty_inputs = () => {
 	document.getElementById("online_no").value="";
-	document.getElementById("online_date").value="";
-	document.getElementById("eqkind_name").value="";
-	document.getElementById("eqkind_no").value="";
+	document.getElementById("ctgr_no").value="";
 	document.getElementById("online_code").value="";
-	document.getElementById("online_name").value="";
-	document.getElementById("online_production").value="";
-	document.getElementById("online_expiry").value="";
-	document.getElementById("online_contents").value="";
-	document.getElementById("eqgrade_name").value="";
-	document.getElementById("eqgrade_no").value="";
-	document.getElementById("online_result").value="";
-	document.getElementById("online_revalue").value="";
-	document.getElementById("online_remark").value="";
+	document.getElementById("team_no").value="";
+	document.getElementById("online_date").value="";
+	document.getElementById("customer_no").value="";
+	document.getElementById("settletype_no").value="";
 }
 
 // 페이지 로딩시 error 문구 여부를 통해 focus 맞추기
@@ -157,7 +159,7 @@ function getlist(list){
 	let newTr = document.createElement("tr");
 	let newTd = document.createElement("td");
 	search_result.innerHTML = '';
-	search_result.innerHTML += '<tr><td>코드</td><td>설비/장비</td><td>설비/장비명</td><td>제조년월</td><td>합/불여부</td></tr>';
+	search_result.innerHTML += '<tr><td>코드</td><td>온라인매출코드</td><td>매출일자</td></tr>';
 	if(list != null || list.length != 0){
 		list.forEach(function(item){
 			newTr = document.createElement("tr");
@@ -169,17 +171,12 @@ function getlist(list){
 			newTd.innerHTML = item.online_code;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_name;
+			newTd.innerHTML = item.online_date;
 			newTr.appendChild(newTd);
-			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_production;
-			newTr.appendChild(newTd);
-			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_result;
-			newTr.appendChild(newTd);
+			
 		});
 	}else {
-		search_result.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
+		search_result.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
 	}
 }
 
@@ -187,7 +184,7 @@ function getlist(list){
 let online_update_btn = document.getElementById("online_update_btn");
 online_update_btn.addEventListener('click', () => {
 	let online_frm = document.getElementById("online_frm");
-	online_frm.action="/d/d42/online_update";
+	online_frm.action="/c/c34/online_update";
 	online_frm.submit();
 });
 
@@ -195,6 +192,81 @@ online_update_btn.addEventListener('click', () => {
 let online_delete_btn = document.getElementById("online_delete_btn");
 online_delete_btn.addEventListener('click', () => {
 	let online_frm = document.getElementById("online_frm");
-	online_frm.action="/d/d42/online_delete";
+	online_frm.action="/c/c34/online_delete";
 	online_frm.submit();
 });
+
+
+let list_result_td_arr = [];
+list_result_td_arr[0]= '<button class="list_result_btn" id="list_result_search0">SEARCH</button>';
+list_result_td_arr[1]= '<input type="text" name="goodslot_no" id="goodslot_no0"/>';
+list_result_td_arr[2]= '<input type="text" name="goodslot_qty" id="goodslot_qty0"/>';
+list_result_td_arr[3]= '<input type="text" name="goodslot_production" id="goodslot_production0"/>';
+list_result_td_arr[4]= '<input type="text" name="goodslot_expiry" id="goodslot_expiry0"/>';
+list_result_td_arr[5]= '<input type="text" name="goodslot_total" id="goodslot_total0"/>';
+list_result_td_arr[6]= '<button class="list_result_btn" id="list_result_del0">품목삭제</button>'
+
+
+// 행추가 버튼
+let addRow_btn = document.getElementById("addRow_btn");
+addRow_btn.addEventListener("click", () => {
+	let listtr = document.getElementsByClassName("list_result_items");
+	let order = listtr[0].className.split(' ')[1].slice(5)
+	console.log("order : " + order);
+	let newTr = document.createElement("tr");
+	let newTd1 = document.createElement("td");
+	newTd1.innerHTML = '<button type="button" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	let newTd2 = document.createElement("td");
+	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	let newTd3 = document.createElement("td");
+	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	let newTd4 = document.createElement("td");
+	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	let newTd5 = document.createElement("td");
+	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	let newTd6 = document.createElement("td");
+	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	let newTd7 = document.createElement("td");
+	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
+	newTr.appendChild(newTd1);
+	
+});
+
+// 예시
+let search_result = document.getElementById("search_result");
+	let newTr = document.createElement("tr");
+	let newTd = document.createElement("td");
+	search_result.innerHTML = '';
+	search_result.innerHTML += '<tr><td>코드</td><td>온라인매출코드</td><td>매출일자</td></tr>';
+	if(list != null || list.length != 0){
+		list.forEach(function(item){
+			newTr = document.createElement("tr");
+			search_result.appendChild(newTr);
+			newTd = document.createElement("td");
+			newTd.innerHTML = item.online_no;
+			newTr.appendChild(newTd);
+			newTd = document.createElement("td");
+			newTd.innerHTML = item.online_code;
+			newTr.appendChild(newTd);
+			newTd = document.createElement("td");
+			newTd.innerHTML = item.online_date;
+			newTr.appendChild(newTd);
+			
+		});
+	}else {
+		search_result.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
+	}
+
+// 행삭제 버튼
+
+// 행조회 버튼
+
+// 품목삭제 버튼
+
+//

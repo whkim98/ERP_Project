@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 온라인매출 -->
 	<select id="findAll_online" resultType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
-	 	SELECT * FROM erp_online ORDER BY event_no DESC
+	 	SELECT * FROM erp_online ORDER BY online_no DESC
 	</select>
 	
 	<insert id="save_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO" keyProperty="online_no" useGeneratedKeys="true" keyColumn="online_no">
@@ -74,5 +74,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회사조회 -->
 	<select id="findCompanyAll" resultType="com.lab.erp.vo.a.a1.Erp_CompanyVO">
 		SELECT * FROM erp_company
+	</select>
+	
+	<!-- 카테고리조회 -->
+	<select id="findCtgrAll" resultType="com.lab.erp.vo.all.Erp_CtgrVO">
+		SELECT * FROM erp_ctgr
 	</select>	
+	
+	<!-- 부서-팀조회 -->
+	<select id="findTeamAll" resultType="com.lab.erp.vo.login.Erp_TeamVO">
+		SELECT * FROM erp_team
+	</select>	
+	
+	<!-- 고객정보조회 -->
+	<select id="findCustomerAll" resultType="com.lab.erp.vo.c.c4.Erp_CustomerVO">
+		SELECT * FROM erp_customer
+	</select>	
+	
+	<!-- 결제구분조회 -->
+	<select id="findSettletypeAll" resultType="com.lab.erp.vo.b.b3.Erp_SettletypeVO">
+		SELECT * FROM erp_settletype
+	</select>		
 </mapper>

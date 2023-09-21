@@ -64,6 +64,9 @@
 						<div class="yellow_box"></div>
 						<span class="red">는 필수 입력란입니다.</span>
 					</div>
+					
+					
+					
                     <form th:action="@{/c/c41/claim}" method="post" id="salesresult_frm">
 						<input type="hidden" name="salesresult_no" id="salesresult_no" th:value="${erp_Salesresult?.salesresult_no}"/>
 						
@@ -183,7 +186,7 @@
                                 th:value="${erp_Salesresult?.salesresult_achieve}"
                             />
                         </div>
-                       
+                          
  						<div class="sec" id="new_btn_sec">
                             <button type="reset">RESET</button>
                             <button type="button" id="salesresult_save_btn">SAVE</button>

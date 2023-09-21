@@ -3,11 +3,16 @@ package com.lab.erp.repository.c3;
 import java.util.List;
 
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
+import com.lab.erp.vo.all.Erp_CtgrVO;
+import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.vo.c.c3.Erp_WarehouseVO;
+import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
+import com.lab.erp.vo.login.Erp_TeamVO;
 
 public interface C3Repository {
 	
@@ -44,4 +49,19 @@ public interface C3Repository {
 	
 	// ---------회사조회--------- 	
 	List<Erp_CompanyVO> findCompanyAll();
+	
+	// ---------카테고리조회---------
+	List<Erp_CtgrVO> findCtgrAll();
+	
+	// ---------팀-부서조회---------
+	List<Erp_TeamVO> findTeamAll();
+	
+	// ---------고객정보조회---------
+	List<Erp_CustomerVO> findCustomerAll();
+	
+	// ---------결제구분조회---------
+	List<Erp_SettletypeVO> findSettletypeAll();
+	
+	// ---------상품로트번호조회---------
+	List<Erp_GoodslotVO> findGoodslotAll();
 }

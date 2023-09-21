@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>고객정보조회</title>
+
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css" />
+    <link rel="stylesheet" href="/css/c/salesresult.css" />
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="main">
+        <table>
+          <thead>
+            <tr>
+              <th class="customer_title">
+                <span>고객정보조회</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="items">
+              <td>
+                <article
+                  class="post"
+                  th:each="customer_item : ${customer_list}"
+                >
+                  <header>
+                    <div class="title">
+                      <h2>[[${customer_item.customer_name}]]</h2>
+                      <p>
+						  등급 : [[${customer_item.csgrade_no}]]
+						  주소 : [[${customer_item.customer_addr1}]]
+						  상세주소 : [[${customer_item.customer_addr2}]]
+						  우편번호 : [[${customer_item.customer_postal}]]
+						  전화번호 : [[${customer_item.customer_phone}]]
+						  비고 : [[${customer_item.customer_comment}]]
+					  </p>
+                      <p class="hidden">[[${customer_item.customer_no}]]</p>
+                    </div>
+                  </header>
+                  <p class="content"></p>
+                  <footer>
+                    <ul class="actions">
+                      <li>
+                        <button
+                          class="button large customer_type_select_btn"
+                        >
+                          SELECT
+                        </button>
+                      </li>
+                    </ul>
+                  </footer>
+                </article>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="/webdesign/assets/js/jquery.min.js"></script>
+    <script src="/webdesign/assets/js/browser.min.js"></script>
+    <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+    <script src="/webdesign/assets/js/util.js"></script>
+    <script src="/webdesign/assets/js/main.js"></script>
+    <script src="/js/c/c3/customer_list.js"></script>
+  </body>
+</html>

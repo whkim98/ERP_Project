@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>카테고리번호조회</title>
+
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css" />
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="main">
+        <table>
+          <thead>
+            <tr>
+              <th class="ctgr_title">
+                <span>카테고리번호조회</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="items">
+              <td>
+                <article
+                  class="post"
+                  th:each="ctgr_item : ${ctgr_list}"
+                >
+                  <header>
+                    <div class="title">
+                      <h2>[[${ctgr_item.ctgr_name}]]</h2>
+                      <p>
+						  분류 : [[${ctgr_item.ctgr_ctgr}]]
+						  테이블 : [[${ctgr_item.ctgr_table}]]
+					  </p>
+                      <p class="hidden">[[${ctgr_item.ctgr_no}]]</p>
+                    </div>
+                  </header>
+                  <p class="content"></p>
+                  <footer>
+                    <ul class="actions">
+                      <li>
+                        <button
+                          class="button large ctgr_type_select_btn"
+                        >
+                          SELECT
+                        </button>
+                      </li>
+                    </ul>
+                  </footer>
+                </article>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="/webdesign/assets/js/jquery.min.js"></script>
+    <script src="/webdesign/assets/js/browser.min.js"></script>
+    <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+    <script src="/webdesign/assets/js/util.js"></script>
+    <script src="/webdesign/assets/js/main.js"></script>
+    <script src="/js/c/c3/ctgr_list.js"></script>
+  </body>
+</html>

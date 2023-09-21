@@ -232,3 +232,60 @@ let salesresult_start = document.getElementById("salesresult_start");
 salesresult_start.addEventListener("change", salesresult_period_calc);
 let salesresult_end = document.getElementById("salesresult_end");
 salesresult_end.addEventListener("change", salesresult_period_calc);
+
+
+const addRowButton = document.getElementById('addRow');
+const deleteRowButton = document.getElementById('deleteRow');
+
+var j = 0;
+addRowButton.addEventListener('click', function() {
+    if (itemTable.rows.length <= 100) {
+        const newRow = itemTable.insertRow(-1);
+        const cells = [];
+        if(document.getElementById("crlist[0].goods_name")){
+       		j += 1;
+        }
+        for (let i = 0; i < 15; i++) {
+            cells.push(newRow.insertCell(i));
+            if (i === 0) {
+                cells[i].innerHTML = '<td><input type="button" onclick="goodsList1(`${comcode_code}`,'+j+')" value="search"></td>';
+            } else if (i === 1) {
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_name" id="crlist['+j+'].goods_name" readonly="readonly"><input type="hidden" name="oclist['+j+'].goods_no" id="oclist['+j+'].goods_no"></td>';
+            } else if (i === 2) {
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_code" id="crlist['+j+'].goods_code" readonly="readonly"></td>';
+            } else if (i === 3){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goods_barcode" id="crlist['+j+'].goods_barcode" readonly="readonly"></td>';
+            } else if (i === 4){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodssort_name" id="crlist['+j+'].goodssort_name" readonly="readonly"></td>';
+            } else if (i === 5){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_unit" id="crlist['+j+'].goodsst_unit" readonly="readonly"></td>';
+            } else if (i === 6){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_size" id="crlist['+j+'].goodsst_size" readonly="readonly"></td>';
+            } else if (i === 7){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].client_name1" id="crlist['+j+'].client_name1" readonly="readonly"></td>';
+            }  else if (i === 8){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].client_name2" id="crlist['+j+'].client_name2" readonly="readonly"></td>';
+            } else if (i === 9){
+                cells[i].innerHTML = '<td><input type="text" name="crlist['+j+'].goodsst_ea" id="crlist['+j+'].goodsst_ea" readonly="readonly"></td>';
+            } else if (i === 10){
+                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_qty" id="oclist['+j+'].orderconnect_qty" maxlength="4" class="required"></td>';
+            } else if (i === 11){
+                cells[i].innerHTML = '<td><input type="text" min="0" name="oclist['+j+'].orderconnect_price" id="oclist['+j+'].orderconnect_price" onblur="conculator11('+j+',this.value)" onkeyup="conculator21('+j+',event, this.value)" class="required"></td>';
+            } else if (i === 12){
+                cells[i].innerHTML = '<td><input type="text" name="oclist['+j+'].orderconnect_tax" id="oclist['+j+'].orderconnect_tax" readonly="readonly"></td>';
+            } else if (i === 13){
+                cells[i].innerHTML = '<td><input type="text" name="oclist['+j+'].orderconnect_total" id="oclist['+j+'].orderconnect_total" readonly="readonly"></td>';
+            } else {
+                cells[i].innerHTML = '<td><input type="button" onclick="clearRow(this)" value="delete"></td>';
+            }
+        }
+        
+        for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
+            itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
+        }
+        
+    } else {
+        alert('품목은 최대 100개까지 추가할 수 있습니다.');
+    }
+    
+});

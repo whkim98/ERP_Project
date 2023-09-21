@@ -19,8 +19,13 @@ import com.lab.erp.vo.c.c3.Erp_EventVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.util.EventValidator;
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
+import com.lab.erp.vo.all.Erp_CtgrVO;
+import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.c3.Erp_WarehouseVO;
+import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
+import com.lab.erp.vo.login.Erp_TeamVO;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -178,7 +183,47 @@ public class C3Controller {
 		model.addAttribute("company_list", company_list);
 		return "thymeleaf/c/company_list";
 	}
-
+	
+	// ---------카테고리조회---------
+	@GetMapping("/c3/ctgr_list")
+	public String ctgr_list (Model model) {
+		List<Erp_CtgrVO> ctgr_list= c3Service.findCtgrAll();
+		model.addAttribute("ctgr_list", ctgr_list);
+		return "thymeleaf/c/ctgr_list";
+	}
+	
+	// ---------부서-팀조회---------
+	@GetMapping("/c3/team_list")
+	public String team_list (Model model) {
+		List<Erp_TeamVO> team_list= c3Service.findTeamAll();
+		model.addAttribute("team_list", team_list);
+		return "thymeleaf/c/team_list";
+	}
+	
+	// ---------고객정보조회---------
+	@GetMapping("/c3/customer_list")
+	public String customer_list (Model model) {
+		List<Erp_CustomerVO> customer_list= c3Service.findCustomerAll();
+		model.addAttribute("customer_list", customer_list);
+		return "thymeleaf/c/customer_list";
+	}
+	
+	// ---------결제구분조회---------
+	@GetMapping("/c3/settletype_list")
+	public String settletype_list (Model model) {
+		List<Erp_SettletypeVO> settletype_list= c3Service.findSettletypeAll();
+		model.addAttribute("settletype_list", settletype_list);
+		return "thymeleaf/c/settletype_list";
+	}
+	
+	// ---------상품로트번호조회---------
+	@GetMapping("/c3/goodslot_list")
+	public String goodslot_list (Model model) {
+		List<Erp_GoodslotVO> goodslot_list= c3Service.findGoodslotAll();
+		model.addAttribute("goodslot_list", goodslot_list);
+		return "thymeleaf/c/goodslot_list";
+	}
+	
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {binder.setValidator(new EventValidator());}
 

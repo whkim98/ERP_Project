@@ -61,7 +61,7 @@ select:focus {
 	border-color: #000b9e;
 }
 
-.online_container>.online_body>.regits_form .sec>.eqkind_regist, .eqgrade_regist  {
+.online_container>.online_body>.regits_form .sec>.ctgr_regist, .team_regist, .customer_regist, .settletype_regist  {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
@@ -73,12 +73,19 @@ select:focus {
 	width: 15%;
 }
 
-.online_container>.online_body>.regits_form .sec>.eqkind_regist>#eqkind_name {
+.online_container>.online_body>.regits_form .sec>.ctgr_regist>#ctgr_name {
 	width: 80%;
 }
-.online_container>.online_body>.regits_form .sec>.eqgrade_regist>#eqgrade_name {
+.online_container>.online_body>.regits_form .sec>.team_regist>#team_name {
 	width: 80%;
 }
+.online_container>.online_body>.regits_form .sec>.customer_regist>#customer_name {
+	width: 80%;
+}
+.online_container>.online_body>.regits_form .sec>.settletype_regist>#settletype_name {
+	width: 80%;
+}
+
 .online_container>.online_body>.regits_form .sec>input[type="number"] {
 	appearance: none;
 	background: rgba(160, 160, 160, 0.075);
@@ -96,19 +103,31 @@ select:focus {
 .post .content {
 	font-size: 1.1rem;
 }
-.online_container>.online_body>.regits_form .sec>.eqkind_regist>#eqkindlist_search {
+.online_container>.online_body>.regits_form .sec>.ctgr_regist>#ctgrlist_search {
 	line-height: 0;
 }
-
-.online_container>.online_body>.regits_form .sec>.eqkind_regist>#eqkindlist_search>img {
+.online_container>.online_body>.regits_form .sec>.ctgr_regist>#ctgrlist_search>img {
 	width: 25px;
 	height: 25px;
 }
-.online_container>.online_body>.regits_form .sec>.eqgrade_regist>#eqgrade_search {
+.online_container>.online_body>.regits_form .sec>.team_regist>#teamlist_search {
 	line-height: 0;
 }
-
-.online_container>.online_body>.regits_form .sec>.eqgrade_regist>#eqgradelist_search>img {
+.online_container>.online_body>.regits_form .sec>.team_regist>#teamlist_search>img {
+	width: 25px;
+	height: 25px;
+}
+.online_container>.online_body>.regits_form .sec>.customer_regist>#customerlist_search {
+	line-height: 0;
+}
+.online_container>.online_body>.regits_form .sec>.customer_regist>#customerlist_search>img {
+	width: 25px;
+	height: 25px;
+}
+.online_container>.online_body>.regits_form .sec>.settletype_regist>#settletypelist_search {
+	line-height: 0;
+}
+.online_container>.online_body>.regits_form .sec>.settletype_regist>#settletypelist_search>img {
 	width: 25px;
 	height: 25px;
 }
@@ -166,4 +185,8 @@ select:focus {
 
 .required {
 	background-color: lightyellow !important;
+}
+
+.list_result_btn {
+	width: 100% !important;
 }

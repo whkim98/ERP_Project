@@ -5,10 +5,15 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import com.lab.erp.repository.c3.C3Repository;
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
+import com.lab.erp.vo.all.Erp_CtgrVO;
+import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.vo.c.c3.Erp_WarehouseVO;
+import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
+import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
+import com.lab.erp.vo.login.Erp_TeamVO;
 
 @Service
 public class C3Service {
@@ -67,4 +72,19 @@ public class C3Service {
 	// ---------회사조회---------
 	// 회사등록 조회용 전체 회사 정보 출력
 	public List<Erp_CompanyVO> findCompanyAll() {return c3Repository.findCompanyAll();}
+	
+	// ---------카테고리조회---------
+	public List<Erp_CtgrVO> findCtgrAll() {return c3Repository.findCtgrAll();}
+	
+	// ---------팀-부서조회---------
+	public List<Erp_TeamVO> findTeamAll() {return c3Repository.findTeamAll();}
+	
+	// ---------고객정보조회---------
+	public List<Erp_CustomerVO> findCustomerAll() {return c3Repository.findCustomerAll();}
+	
+	// ---------결제구분조회---------
+	public List<Erp_SettletypeVO> findSettletypeAll() {return c3Repository.findSettletypeAll();}
+
+	// ---------상품로트번호조회---------
+	public List<Erp_GoodslotVO> findGoodslotAll() {return c3Repository.findGoodslotAll();}
 }

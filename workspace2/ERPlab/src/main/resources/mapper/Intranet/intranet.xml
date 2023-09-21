@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.erp.repository.intranet.IntranetRepository">
+	
+	<select id="findAll_team" resultType="com.lab.erp.vo.login.Erp_TeamVO">
+		SELECT * FROM erp_team
+	</select>
+	
+	<select id="findAll_employee1" resultType="com.lab.erp.vo.login.Erp_Employee1VO">
+		SELECT * FROM erp_employee1
+	</select>
+	
+	<select id="findAll_employee2" resultType="com.lab.erp.vo.login.Erp_Employee2VO">
+		SELECT * FROM erp_employee2
+	</select>
+			
+</mapper>
