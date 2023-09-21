@@ -48,7 +48,7 @@
 								<li><a href="#">연차</a></li>								
 							</ul>
 							<ul>
-								<li><a href="${pageContext.request.contextPath}/index">ERP 페이지로 이동</a></li>
+								<li><a href="${pageContext.request.contextPath}/">ERP 페이지로 이동</a></li>
 								<li><a href="${pageContext.request.contextPath}/mypage?comcode_code=${comcode_code}&employee1_no=${employee1_no}">마이페이지</a></li>
 							</ul>
 							
