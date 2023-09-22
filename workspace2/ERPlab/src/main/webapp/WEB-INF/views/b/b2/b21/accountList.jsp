@@ -112,7 +112,7 @@ function getlist() {
             </table>
          </div>
     
-<div style="overflow: scroll;">
+		<div style="overflow: scroll;">
          <input type="hidden" id="com" value="${comcode_code }">
             <table id="procode">
             	<c:if test="${list != null }">
@@ -131,7 +131,6 @@ function getlist() {
 			    <td>${vo.account_balance}</td>
 			    <td>${vo.account_exchange }</td>
 			</tr>
-
 				</c:forEach>
             </c:if>
             <c:if test="${list == null }">
@@ -139,6 +138,9 @@ function getlist() {
             </c:if>
             </table>
          </div>
+          <div>
+			<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/account/insert?comcode_code=${comcode_code }'">
+			</div>
 
     
 <link rel="stylesheet" href="${pageContext.request.contextPath }/webdesign/assets/css/main.css" />

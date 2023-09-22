@@ -76,6 +76,7 @@
 
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/css/a/a_company.css" />
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -336,61 +337,96 @@ function teamname(){
       <div id="add" class="divform3">
          <c:choose>
             <c:when test="${map != null }">
-               <form action="${pageContext.request.contextPath }/internationalsales/bond/update" method="POST" id="update">
+               <form action="${pageContext.request.contextPath }/internationsales/bond/update" method="POST" id="update">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
                   <input type="hidden" name="client_no" value="${map.client_no }">
-                  <input type="hidden" name="country_no" id="country_no" value="${map.country_no }">
                   <input type="hidden" name="businesstype_no" id="businesstype_no" value="${map.businesstype_no }">
                   <div class="warning_box">
-                     <span class="red bigger">* </span>
+                     <span class="red bigger">* 는 필수 입력란입니다.</span>
                      <div class="yellow_box"></div>
-                     <span class="red">는 필수 입력란입니다.</span>
+                     <span class="red"></span>
                   </div>
                      
                   <div>
                      <label>국가명 </label>
-                     
                      <select name="country_no">
-			  		<option value="1">미국</option>
-			  		<option value="2">캐나다</option>
-			  		<option value="3">버진아일랜드(미)</option>
-			  		<option value="4">북마리아나제도</option>
-			  		<option value="5">괌</option>
-			  		<option value="6">아메리칸사모아</option>
-			  		<option value="7">푸에르토리코</option>
-			  		<option value="8">버뮤다</option>
-			  		<option value="9">바하마</option>
-			  		<option value="10">바베이도스</option>
-			  		<option value="11">앵귈라</option>
-			  		<option value="12">바부다</option>
-			  		<option value="13">버진아일랜드</option>
-			  		<option value="14">케이맨 제도</option>
-			  		<option value="15">그레나다</option>
-			  		<option value="16">케이커스제도</option>
-			  		<option value="17">몬트세렛</option>
-			  		<option value="18">신트마르턴</option>
-			  		<option value="19">세인트루시아</option>
-			  		<option value="20">도미니카 연방</option>
-			  		<option value="21">세인트빈센트 그레나딘</option>
-			  		<option value="22">도미니카 공화국</option>
-			  		<option value="23">트리니다드 토바고</option>
-			  		<option value="24">세인트키츠 네비스</option>
-			  		<option value="25">일본</option>
-			  		<option value="26">대한민국</option>
-			  		<option value="27">베트남</option>
-			  		<option value="28">조선민주주의인민공화국</option>
-			  		<option value="29">홍콩</option>
-			  		<option value="30">마카오</option>
-			  		<option value="31">캄보디아</option>
-			  		<option value="32">라오스</option>
-			  		<option value="33">중화인민공화국</option>
-			  		<option value="34">방글라데시</option>
-			  		<option value="35">중화민국</option>
+			  		<option value="1" ${map.country_no == 1 ? 'selected' : '' }>대한민국</option>
+			  		<option value="2" ${map.country_no == 2 ? 'selected' : '' }>UAE</option>
+			  		<option value="3" ${map.country_no == 3 ? 'selected' : '' }>아르헨티나</option>
+			  		<option value="4" ${map.country_no == 4 ? 'selected' : '' }>오스트레일리아</option>
+			  		<option value="5" ${map.country_no == 5 ? 'selected' : '' }>방글라데시</option>
+			  		<option value="6" ${map.country_no == 6 ? 'selected' : '' }>바레인</option>
+			  		<option value="7" ${map.country_no == 7 ? 'selected' : '' }>브루나이</option>
+			  		<option value="8" ${map.country_no == 8 ? 'selected' : '' }>브라질</option>
+			  		<option value="9" ${map.country_no == 9 ? 'selected' : '' }>캐나다</option>
+			  		<option value="10" ${map.country_no == 10 ? 'selected' : '' }>스위스</option>
+			  		<option value="11" ${map.country_no == 11 ? 'selected' : '' }>칠레</option>
+			  		<option value="12" ${map.country_no == 12 ? 'selected' : '' }>중국</option>
+			  		<option value="13" ${map.country_no == 13 ? 'selected' : '' }>콜롬비아</option>
+			  		<option value="14" ${map.country_no == 14 ? 'selected' : '' }>체코</option>
+			  		<option value="15" ${map.country_no == 15 ? 'selected' : '' }>덴마크</option>
+			  		<option value="16" ${map.country_no == 16 ? 'selected' : '' }>이집트</option>
+			  		<option value="17" ${map.country_no == 17 ? 'selected' : '' }>유럽</option>
+			  		<option value="18" ${map.country_no == 18 ? 'selected' : '' }>프랑스</option>
+			  		<option value="19" ${map.country_no == 19 ? 'selected' : '' }>독일</option>
+			  		<option value="20" ${map.country_no == 20 ? 'selected' : '' }>스페인</option>
+			  		<option value="21" ${map.country_no == 21 ? 'selected' : '' }>이탈리아</option>
+			  		<option value="22" ${map.country_no == 22 ? 'selected' : '' }>네덜란드</option>
+			  		<option value="23" ${map.country_no == 23 ? 'selected' : '' }>벨기에</option>
+			  		<option value="24" ${map.country_no == 24 ? 'selected' : '' }>포르투갈</option>
+			  		<option value="25" ${map.country_no == 25 ? 'selected' : '' }>오스트리아</option>
+			  		<option value="26" ${map.country_no == 26 ? 'selected' : '' }>그리스</option>
+			  		<option value="27" ${map.country_no == 27 ? 'selected' : '' }>핀란드</option>
+			  		<option value="28" ${map.country_no == 28 ? 'selected' : '' }>크로아티아</option>
+			  		<option value="29" ${map.country_no == 29 ? 'selected' : '' }>슬로베니아</option>
+			  		<option value="30" ${map.country_no == 30 ? 'selected' : '' }>아일랜드</option>
+			  		<option value="31" ${map.country_no == 31 ? 'selected' : '' }>모나코</option>
+			  		<option value="32" ${map.country_no == 32 ? 'selected' : '' }>피지</option>
+			  		<option value="33" ${map.country_no == 33 ? 'selected' : '' }>영국</option>
+			  		<option value="34" ${map.country_no == 34 ? 'selected' : '' }>홍콩</option>
+			  		<option value="35" ${map.country_no == 35 ? 'selected' : '' }>헝가리</option>
+			  		<option value="36" ${map.country_no == 36 ? 'selected' : '' }>인도네시아</option>
+			  		<option value="37" ${map.country_no == 37 ? 'selected' : '' }>이스라엘</option>
+			  		<option value="38" ${map.country_no == 38 ? 'selected' : '' }>인도</option>
+			  		<option value="39" ${map.country_no == 39 ? 'selected' : '' }>요르단</option>
+			  		<option value="40" ${map.country_no == 40 ? 'selected' : '' }>일본</option>
+			  		<option value="41" ${map.country_no == 41 ? 'selected' : '' }>케냐</option>
+			  		<option value="42" ${map.country_no == 42 ? 'selected' : '' }>캄보디아</option>
+			  		<option value="43" ${map.country_no == 43 ? 'selected' : '' }>쿠웨이트</option>
+			  		<option value="44" ${map.country_no == 44 ? 'selected' : '' }>카자흐스탄</option>
+			  		<option value="45" ${map.country_no == 45 ? 'selected' : '' }>스리랑카</option>
+			  		<option value="46" ${map.country_no == 46 ? 'selected' : '' }>리비아</option>
+			  		<option value="47" ${map.country_no == 47 ? 'selected' : '' }>미얀마</option>
+			  		<option value="48" ${map.country_no == 48 ? 'selected' : '' }>몽골</option>
+			  		<option value="49" ${map.country_no == 49 ? 'selected' : '' }>마카오</option>
+			  		<option value="50" ${map.country_no == 50 ? 'selected' : '' }>멕시코</option>
+			  		<option value="51" ${map.country_no == 51 ? 'selected' : '' }>말레이시아</option>
+			  		<option value="52" ${map.country_no == 52 ? 'selected' : '' }>노르웨이</option>
+			  		<option value="53" ${map.country_no == 53 ? 'selected' : '' }>네팔</option>
+			  		<option value="54" ${map.country_no == 54 ? 'selected' : '' }>뉴질랜드</option>
+			  		<option value="55" ${map.country_no == 55 ? 'selected' : '' }>오만</option>
+			  		<option value="56" ${map.country_no == 56 ? 'selected' : '' }>필리핀</option>
+			  		<option value="57" ${map.country_no == 57 ? 'selected' : '' }>파키스탄</option>
+			  		<option value="58" ${map.country_no == 58 ? 'selected' : '' }>폴란드</option>
+			  		<option value="59" ${map.country_no == 59 ? 'selected' : '' }>카타르</option>
+			  		<option value="60" ${map.country_no == 60 ? 'selected' : '' }>루마니아</option>
+			  		<option value="61" ${map.country_no == 61 ? 'selected' : '' }>러시아</option>
+			  		<option value="62" ${map.country_no == 62 ? 'selected' : '' }>사우디아라비아</option>
+			  		<option value="63" ${map.country_no == 63 ? 'selected' : '' }>스웨덴</option>
+			  		<option value="64" ${map.country_no == 64 ? 'selected' : '' }>싱가폴</option>
+			  		<option value="65" ${map.country_no == 65 ? 'selected' : '' }>태국</option>
+			  		<option value="66" ${map.country_no == 66 ? 'selected' : '' }>터키</option>
+			  		<option value="67" ${map.country_no == 67 ? 'selected' : '' }>대만</option>
+			  		<option value="68" ${map.country_no == 68 ? 'selected' : '' }>미국</option>
+			  		<option value="69" ${map.country_no == 69 ? 'selected' : '' }>우즈베키스탄</option>
+			  		<option value="70" ${map.country_no == 70 ? 'selected' : '' }>베트남</option>
+			  		<option value="71" ${map.country_no == 71 ? 'selected' : '' }>남아프리카공화국</option>
+			  		<option value="72" ${map.country_no == 72 ? 'selected' : '' }>에티오피아</option>
 				</select>
                   </div>
                   
                   <div>
-                     <label>거래처명 </label>
+                     <label>* 거래처명 </label>
                      <input type="text" name="client_name" id="client_name" value="${map.client_name }" maxlength="30">
                   </div>
                   
@@ -411,13 +447,13 @@ function teamname(){
                   </div>
                   
                   <div>
-                     <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno" value="${map.client_registeredno }" maxlength="30">
+                     <label>* 사업자등록번호 (-를 제외하고 적어주세요.)</label>
+                    <input type="number" name="client_registeredno" id="client_registeredno" value="${map.client_registeredno }" maxlength="30">
                   </div>   
                      
                   <div>
-                     <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno" value="${map.client_corporatedno }" maxlength="30">
+                     <label>* 법인등록번호 (-를 제외하고 적어주세요.)</label>
+                    <input type="number" name="client_corporatedno" id="client_corporatedno" value="${map.client_corporatedno }" maxlength="30">
                   </div> 
                     
                   <div>
@@ -430,17 +466,19 @@ function teamname(){
                   </div>   
                   <div>
                      <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1" value="${map.client_addr1 }" maxlength="100">
-                    <input type="text" name="client_addr2" id="client_addr2" value="${map.client_addr2 }" maxlength="50">
-                    <input type="text" name="client_postal" id="client_postal" value="${map.client_postal }" maxlength="10">
+	                    <input type="text" name="client_postal" id="client_postal" value="${map.client_postal }" placeholder="우편번호">
+	                    <input type="button" onclick="searchAddr()" value="우편번호 찾기"><br>
+	                    <input type="text" name="client_addr1" id="client_addr1" value="${map.client_addr1 }" placeholder="주소"><br>
+	                    <input type="text" name="client_addr2" id="client_addr2" value="${map.client_addr2 }" placeholder="상세주소">
+	                    <input type="text" id="extraAddr" placeholder="참고항목">
                   </div>   
                   <div>
-                     <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno" value="${map.client_directno }" maxlength="30">
+                     <label>대표번호 (-를 제외하고 적어주세요.)</label>
+                    <input type="number" name="client_directno" id="client_directno" value="${map.client_directno }" maxlength="30">
                   </div>   
                   <div>
-                     <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax" value="${map.client_fax }" maxlength="30">
+                     <label>팩스번호 (-를 제외하고 적어주세요.)</label>
+                     <input type="number" name="client_fax" id="client_fax" value="${map.client_fax }" maxlength="30">
                   </div>   
                   <div>
                      <label>세금계산서이메일 </label>
@@ -451,13 +489,13 @@ function teamname(){
                      <input type="text" name="client_manager" id="client_manager" value="${map.client_manager }" maxlength="30">
                   </div>   
                   <div>
-                     <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact" value="${map.client_contact }" maxlength="30">
+                     <label>담당자연락처 (-를 제외하고 적어주세요.)</label>
+                     <input type="number" name="client_contact" id="client_contact" value="${map.client_contact }" maxlength="30">
                   </div>   
                                     
                   <div align="right">
-                     <input type="button" value="update" onclick="sub(this.form)">
-                     <input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
+                     <input type="button" value="update" onclick="submitt(this.form)">
+                     <input type="button" value="delete" onclick="deletei('${map.client_no }', '${comcode_code }')">
                   </div>
                </form>
             </c:when>
@@ -470,46 +508,83 @@ function teamname(){
                   <div>
                      <label>국가명 </label>
                      <select name="country_no">
-			  		<option value="1">미국</option>
-			  		<option value="2">캐나다</option>
-			  		<option value="3">버진아일랜드(미)</option>
-			  		<option value="4">북마리아나제도</option>
-			  		<option value="5">괌</option>
-			  		<option value="6">아메리칸사모아</option>
-			  		<option value="7">푸에르토리코</option>
-			  		<option value="8">버뮤다</option>
-			  		<option value="9">바하마</option>
-			  		<option value="10">바베이도스</option>
-			  		<option value="11">앵귈라</option>
-			  		<option value="12">바부다</option>
-			  		<option value="13">버진아일랜드</option>
-			  		<option value="14">케이맨 제도</option>
-			  		<option value="15">그레나다</option>
-			  		<option value="16">케이커스제도</option>
-			  		<option value="17">몬트세렛</option>
-			  		<option value="18">신트마르턴</option>
-			  		<option value="19">세인트루시아</option>
-			  		<option value="20">도미니카 연방</option>
-			  		<option value="21">세인트빈센트 그레나딘</option>
-			  		<option value="22">도미니카 공화국</option>
-			  		<option value="23">트리니다드 토바고</option>
-			  		<option value="24">세인트키츠 네비스</option>
-			  		<option value="25">일본</option>
-			  		<option value="26">대한민국</option>
-			  		<option value="27">베트남</option>
-			  		<option value="28">조선민주주의인민공화국</option>
-			  		<option value="29">홍콩</option>
-			  		<option value="30">마카오</option>
-			  		<option value="31">캄보디아</option>
-			  		<option value="32">라오스</option>
-			  		<option value="33">중화인민공화국</option>
-			  		<option value="34">방글라데시</option>
-			  		<option value="35">중화민국</option>
+			  		<option value="1" ${map.country_no == 1 ? 'selected' : '' }>대한민국</option>
+			  		<option value="2" ${map.country_no == 2 ? 'selected' : '' }>UAE</option>
+			  		<option value="3" ${map.country_no == 3 ? 'selected' : '' }>아르헨티나</option>
+			  		<option value="4" ${map.country_no == 4 ? 'selected' : '' }>오스트레일리아</option>
+			  		<option value="5" ${map.country_no == 5 ? 'selected' : '' }>방글라데시</option>
+			  		<option value="6" ${map.country_no == 6 ? 'selected' : '' }>바레인</option>
+			  		<option value="7" ${map.country_no == 7 ? 'selected' : '' }>브루나이</option>
+			  		<option value="8" ${map.country_no == 8 ? 'selected' : '' }>브라질</option>
+			  		<option value="9" ${map.country_no == 9 ? 'selected' : '' }>캐나다</option>
+			  		<option value="10" ${map.country_no == 10 ? 'selected' : '' }>스위스</option>
+			  		<option value="11" ${map.country_no == 11 ? 'selected' : '' }>칠레</option>
+			  		<option value="12" ${map.country_no == 12 ? 'selected' : '' }>중국</option>
+			  		<option value="13" ${map.country_no == 13 ? 'selected' : '' }>콜롬비아</option>
+			  		<option value="14" ${map.country_no == 14 ? 'selected' : '' }>체코</option>
+			  		<option value="15" ${map.country_no == 15 ? 'selected' : '' }>덴마크</option>
+			  		<option value="16" ${map.country_no == 16 ? 'selected' : '' }>이집트</option>
+			  		<option value="17" ${map.country_no == 17 ? 'selected' : '' }>유럽</option>
+			  		<option value="18" ${map.country_no == 18 ? 'selected' : '' }>프랑스</option>
+			  		<option value="19" ${map.country_no == 19 ? 'selected' : '' }>독일</option>
+			  		<option value="20" ${map.country_no == 20 ? 'selected' : '' }>스페인</option>
+			  		<option value="21" ${map.country_no == 21 ? 'selected' : '' }>이탈리아</option>
+			  		<option value="22" ${map.country_no == 22 ? 'selected' : '' }>네덜란드</option>
+			  		<option value="23" ${map.country_no == 23 ? 'selected' : '' }>벨기에</option>
+			  		<option value="24" ${map.country_no == 24 ? 'selected' : '' }>포르투갈</option>
+			  		<option value="25" ${map.country_no == 25 ? 'selected' : '' }>오스트리아</option>
+			  		<option value="26" ${map.country_no == 26 ? 'selected' : '' }>그리스</option>
+			  		<option value="27" ${map.country_no == 27 ? 'selected' : '' }>핀란드</option>
+			  		<option value="28" ${map.country_no == 28 ? 'selected' : '' }>크로아티아</option>
+			  		<option value="29" ${map.country_no == 29 ? 'selected' : '' }>슬로베니아</option>
+			  		<option value="30" ${map.country_no == 30 ? 'selected' : '' }>아일랜드</option>
+			  		<option value="31" ${map.country_no == 31 ? 'selected' : '' }>모나코</option>
+			  		<option value="32" ${map.country_no == 32 ? 'selected' : '' }>피지</option>
+			  		<option value="33" ${map.country_no == 33 ? 'selected' : '' }>영국</option>
+			  		<option value="34" ${map.country_no == 34 ? 'selected' : '' }>홍콩</option>
+			  		<option value="35" ${map.country_no == 35 ? 'selected' : '' }>헝가리</option>
+			  		<option value="36" ${map.country_no == 36 ? 'selected' : '' }>인도네시아</option>
+			  		<option value="37" ${map.country_no == 37 ? 'selected' : '' }>이스라엘</option>
+			  		<option value="38" ${map.country_no == 38 ? 'selected' : '' }>인도</option>
+			  		<option value="39" ${map.country_no == 39 ? 'selected' : '' }>요르단</option>
+			  		<option value="40" ${map.country_no == 40 ? 'selected' : '' }>일본</option>
+			  		<option value="41" ${map.country_no == 41 ? 'selected' : '' }>케냐</option>
+			  		<option value="42" ${map.country_no == 42 ? 'selected' : '' }>캄보디아</option>
+			  		<option value="43" ${map.country_no == 43 ? 'selected' : '' }>쿠웨이트</option>
+			  		<option value="44" ${map.country_no == 44 ? 'selected' : '' }>카자흐스탄</option>
+			  		<option value="45" ${map.country_no == 45 ? 'selected' : '' }>스리랑카</option>
+			  		<option value="46" ${map.country_no == 46 ? 'selected' : '' }>리비아</option>
+			  		<option value="47" ${map.country_no == 47 ? 'selected' : '' }>미얀마</option>
+			  		<option value="48" ${map.country_no == 48 ? 'selected' : '' }>몽골</option>
+			  		<option value="49" ${map.country_no == 49 ? 'selected' : '' }>마카오</option>
+			  		<option value="50" ${map.country_no == 50 ? 'selected' : '' }>멕시코</option>
+			  		<option value="51" ${map.country_no == 51 ? 'selected' : '' }>말레이시아</option>
+			  		<option value="52" ${map.country_no == 52 ? 'selected' : '' }>노르웨이</option>
+			  		<option value="53" ${map.country_no == 53 ? 'selected' : '' }>네팔</option>
+			  		<option value="54" ${map.country_no == 54 ? 'selected' : '' }>뉴질랜드</option>
+			  		<option value="55" ${map.country_no == 55 ? 'selected' : '' }>오만</option>
+			  		<option value="56" ${map.country_no == 56 ? 'selected' : '' }>필리핀</option>
+			  		<option value="57" ${map.country_no == 57 ? 'selected' : '' }>파키스탄</option>
+			  		<option value="58" ${map.country_no == 58 ? 'selected' : '' }>폴란드</option>
+			  		<option value="59" ${map.country_no == 59 ? 'selected' : '' }>카타르</option>
+			  		<option value="60" ${map.country_no == 60 ? 'selected' : '' }>루마니아</option>
+			  		<option value="61" ${map.country_no == 61 ? 'selected' : '' }>러시아</option>
+			  		<option value="62" ${map.country_no == 62 ? 'selected' : '' }>사우디아라비아</option>
+			  		<option value="63" ${map.country_no == 63 ? 'selected' : '' }>스웨덴</option>
+			  		<option value="64" ${map.country_no == 64 ? 'selected' : '' }>싱가폴</option>
+			  		<option value="65" ${map.country_no == 65 ? 'selected' : '' }>태국</option>
+			  		<option value="66" ${map.country_no == 66 ? 'selected' : '' }>터키</option>
+			  		<option value="67" ${map.country_no == 67 ? 'selected' : '' }>대만</option>
+			  		<option value="68" ${map.country_no == 68 ? 'selected' : '' }>미국</option>
+			  		<option value="69" ${map.country_no == 69 ? 'selected' : '' }>우즈베키스탄</option>
+			  		<option value="70" ${map.country_no == 70 ? 'selected' : '' }>베트남</option>
+			  		<option value="71" ${map.country_no == 71 ? 'selected' : '' }>남아프리카공화국</option>
+			  		<option value="72" ${map.country_no == 72 ? 'selected' : '' }>에티오피아</option>
 				</select>
                   </div>
                   
                   <div>
-                     <label>거래처명 </label>
+                     <label>* 거래처명 </label>
                      <input type="text" name="client_name" id="client_name" maxlength="30">
                   </div>
                   
@@ -522,13 +597,13 @@ function teamname(){
                   </div>
                   
                   <div>
-                     <label>사업자등록번호 </label>
-                    <input type="text" name="client_registeredno" id="client_registeredno" maxlength="30">
+                     <label>* 사업자등록번호 (-를 제외하고 적어주세요.)</label>
+                    <input type="number" name="client_registeredno" id="client_registeredno" maxlength="30">
                   </div>   
                      
                   <div>
-                     <label>법인등록번호 </label>
-                    <input type="text" name="client_corporatedno" id="client_corporatedno" maxlength="30">
+                     <label>* 법인등록번호 (-를 제외하고 적어주세요.)</label>
+                    <input type="number" name="client_corporatedno" id="client_corporatedno" maxlength="30">
                   </div> 
                     
                   <div>
@@ -541,17 +616,19 @@ function teamname(){
                   </div>   
                   <div>
                      <label>사업장 </label>
-                    <input type="text" name="client_addr1" id="client_addr1" maxlength="100">
-                    <input type="text" name="client_addr2" id="client_addr2" maxlength="50">
-                    <input type="text" name="client_postal" id="client_postal" maxlength="10">
+	                    <input type="text" name="client_postal" id="client_postal" placeholder="우편번호">
+	                    <input type="button" onclick="searchAddr()" value="우편번호 찾기"><br>
+	                    <input type="text" name="client_addr1" id="client_addr1" placeholder="주소"><br>
+	                    <input type="text" name="client_addr2" id="client_addr2" placeholder="상세주소">
+	                    <input type="text" id="extraAddr" placeholder="참고항목">
+	              </div>   
+                  <div>
+                     <label>대표번호 (-를 제외하고 적어주세요.)</label>
+                    <input type="number" name="client_directno" id="client_directno" maxlength="30">
                   </div>   
                   <div>
-                     <label>대표번호 </label>
-                    <input type="text" name="client_directno" id="client_directno" maxlength="30">
-                  </div>   
-                  <div>
-                     <label>팩스번호 </label>
-                     <input type="text" name="client_fax" id="client_fax" maxlength="30">
+                     <label>팩스번호 (-를 제외하고 적어주세요.)</label>
+                     <input type="number" name="client_fax" id="client_fax" maxlength="30">
                   </div>   
                   <div>
                      <label>세금계산서이메일 </label>
@@ -562,8 +639,8 @@ function teamname(){
                      <input type="text" name="client_manager" id="client_manager" maxlength="30">
                   </div>   
                   <div>
-                     <label>담당자연락처 </label>
-                     <input type="text" name="client_contact" id="client_contact" maxlength="30">
+                     <label>담당자연락처 (-를 제외하고 적어주세요.)</label>
+                     <input type="number" name="client_contact" id="client_contact" maxlength="30">
                   </div>   
                   
                   
@@ -583,9 +660,59 @@ function teamname(){
 </div>
 <script type="text/javascript">
 
+//주소 API
+function searchAddr() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+                // 조합된 참고항목을 해당 필드에 넣는다.
+                document.getElementById("extraAddr").value = extraAddr;
+            
+            } else {
+                document.getElementById("client_addr2").value = '';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('client_postal').value = data.zonecode;
+            document.getElementById("client_addr1").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("client_addr2").focus();
+        }
+    }).open();
+        customInput.style.display = "none";
+}
+
 // 삭제버튼 경로 및 넘길 parameter 설정
-function deletei(no1, no2, ino, code){
-   location.href='${pageContext.request.contextPath }/a/a4/a41/delete?investment_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code;
+function deletei(no, code){
+   location.href='${pageContext.request.contextPath }/internationsales/delete?client_no='+no+'&comcode_code='+code;
 }
 
 

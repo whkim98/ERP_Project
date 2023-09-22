@@ -182,6 +182,48 @@ public class C1Controller {
 		return "/c/c1/c11/internationList";
 	}
 	
+	@RequestMapping("/internationsales/bond/update")
+	public String internationsalesUpdate(String comcode_code, 
+			int client_no, int country_no, int businesstype_no,
+			String client_name, int clientsort_no, String client_registeredno
+			, String client_corporatedno, String client_representative,
+			String client_businesstype, String client_postal,
+			String client_addr1, String client_addr2, String client_directno,
+			String client_fax, String client_email, String client_manager,
+			String client_contact) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("country_no", country_no);
+		map.put("client_name", client_name);
+		map.put("clientsort_no", clientsort_no);
+		map.put("client_registeredno", client_registeredno);
+		map.put("client_corporatedno", client_corporatedno);
+		map.put("client_representative", client_representative);
+		map.put("client_businesstype", client_businesstype);
+		map.put("businesstype_no", businesstype_no);
+		map.put("client_addr1", client_addr1);
+		map.put("client_addr2", client_addr2);
+		map.put("client_postal", client_postal);
+		map.put("client_directno", client_directno);
+		map.put("client_fax", client_fax);
+		map.put("client_email", client_email);
+		map.put("client_manager", client_manager);
+		map.put("client_contact", client_contact);
+		map.put("client_no", client_no);
+		
+		c1.updateClient2(map);
+		
+		return "redirect:/internationalsales/list?comcode_code=" + comcode_code;
+	}
+	
+	@RequestMapping("/internationsales/delete")
+	public String deleteInternationsales(String comcode_code, int client_no) {
+		
+		c1.deleteClient2(client_no);
+		
+		return "redirect:/internationalsales/list?comcode_code=" + comcode_code;
+	}
+	
 	
 //수입, 수출 채무 
 	
@@ -379,20 +421,22 @@ public class C1Controller {
 	
 	//수입발주 수정
 	@RequestMapping("/internationsales/income/update")
-	public String incomeupdate(HttpServletRequest request, Erp_ClosingVO cvo, Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, @RequestParam(required = false) Integer import_no, @RequestParam(required = false) Integer importorder_total, @RequestParam(required = false) Integer incoterms_no, @RequestParam(required = false) Integer settletype_no, @RequestParam(required = false) Integer team_no, String importorder_date, @RequestParam(required = false) Integer client_no, @RequestParam(required = false) Integer goods_no, @RequestParam(required = false) Integer importorder_no, String importpay_expiry, @RequestParam(required = false) Integer importpay_no) {
+	public String incomeupdate(String comcode_code, HttpServletRequest request, Erp_ClosingVO cvo, Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, @RequestParam(required = false) Integer import_no, @RequestParam(required = false) Integer incoterms_no, @RequestParam(required = false) Integer settletype_no, @RequestParam(required = false) Integer team_no, String importorder_date, @RequestParam(required = false) Integer client_no, @RequestParam(required = false) Integer goods_no, @RequestParam(required = false) Integer importorder_no, String importpay_expiry, @RequestParam(required = false) Integer importpay_no) {
 		
 		System.out.println("업데이트로 왔어요");
 		
 		int bs3_no = Integer.parseInt(request.getParameter("bs3_no"));
 		int dbs3_no = Integer.parseInt(request.getParameter("dbs3_no"));
 		
-		System.out.println(bs3_no);
-		System.out.println(dbs3_no);
+		System.out.println("bs3_no: "+ bs3_no);
+		System.out.println("dbs3_no: "+ dbs3_no);
+		
+		System.out.println("업데이트payno="+importpay_no);
+		System.out.println("임포트오더no=" + importorder_no);
 		
 		int importorder_price = c1.selectSumprice(goods_no);
 		int importorder_tax = c1.selectTax(goods_no);
 		
-		System.out.println(importorder_total);
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("importorder_no", importorder_no);
@@ -407,6 +451,8 @@ public class C1Controller {
 		
 		c1.updateImportorder(map);
 		
+		
+		System.out.println(importpay_expiry);
 		Map<String, Object> map2 = new HashMap<>();
 		map2.put("client_no", client_no);
 		map2.put("importpay_expiry", importpay_expiry);
@@ -426,9 +472,9 @@ public class C1Controller {
 			b2vo.setBs2_no(bs2_no);
 			b1vo.setBs1_no(bs_no);
 			
-			b3vo.setBs3_amount(-importorder_total);
-			b2vo.setBs2_amount(-importorder_total);
-			b1vo.setBs1_amount(-importorder_total);
+			b3vo.setBs3_amount(-(importorder_price + importorder_tax));
+			b2vo.setBs2_amount(-(importorder_price + importorder_tax));
+			b1vo.setBs1_amount(-(importorder_price + importorder_tax));
 			
 			c1.updateBs(b1vo);
 			c1.updateBs2(b2vo);
@@ -449,9 +495,9 @@ public class C1Controller {
 			b2vo.setBs2_no(bs2_no);
 			b1vo.setBs1_no(bs_no);
 			
-			b3vo.setBs3_amount(importorder_total);
-			b2vo.setBs2_amount(importorder_total);
-			b1vo.setBs1_amount(importorder_total);
+			b3vo.setBs3_amount(importorder_price + importorder_tax);
+			b2vo.setBs2_amount(importorder_price + importorder_tax);
+			b1vo.setBs1_amount(importorder_price + importorder_tax);
 			
 			c1.updateBs(b1vo);
 			c1.updateBs2(b2vo);
@@ -467,7 +513,7 @@ public class C1Controller {
 			
 			int debtor_no = c1.selectDebtor(bs3_no);
 			
-			int creditor_no = c1.selectCreditor(bs3_no);
+			int creditor_no = c1.selectCreditor(dbs3_no);
 			
 			String import_blno = c1.selectImportblno(import_no);
 			
@@ -487,7 +533,7 @@ public class C1Controller {
 			
 		}
 		
-		return "";
+		return "redirect:/internationsales/income?comcode_code=" + comcode_code;
 	}
 	
 	//cino, blno설정 폼

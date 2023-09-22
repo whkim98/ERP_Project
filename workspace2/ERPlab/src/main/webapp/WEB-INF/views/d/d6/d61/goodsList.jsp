@@ -15,11 +15,11 @@ function updateQty(goodsNo, goodslotNo, code) {
     
     var row = event.target.closest("tr");
     
-    var stockInput = row.querySelector('.goods_stockqty');
+    var stockInput = row.querySelector('.goodslot_qty');
     
     var stockQty = stockInput.value;
     
-    var param = "?goods_no=" + goodsNo + "&goodslot_no=" + goodslotNo + "&goods_stockqty=" + stockQty + "&comcode_code=" + code
+    var param = "?goods_no=" + goodsNo + "&goodslot_no=" + goodslotNo + "&goodslot_qty=" + stockQty + "&comcode_code=" + code
     
     alert(stockQty)
 
@@ -213,12 +213,12 @@ function getlist() {
             <table id="procode">
             	<c:if test="${list != null }">
                		<tr>
+               			<th>로트번호</th>
 						<th>상품명</th>
-						<th>로트번호</th>
 						<th>유통기한</th>
 						<th>소비자가</th>
 						<th>폐기여부</th>
-						<th>재고수량</th>
+						<th>로트별수량</th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -226,8 +226,8 @@ function getlist() {
 					</tr>
                <c:forEach var="vo" items="${list }">
 			<tr onclick="selectForm(${vo.goodslot_no})" class="filter" id="filter">
-			    <td>${vo.goods_name}</td>
 			    <td>${vo.goodslot_lot}</td>
+			    <td>${vo.goods_name}</td>
 			    <td>${vo.goodslot_expiry}</td>
 			    <td>${vo.goods_customerprice}</td>
 			    <c:if test="${vo.goodslev_no == 4 }">
@@ -236,9 +236,14 @@ function getlist() {
 			    <c:if test="${vo.goodslev_no != 4 }">
 			    <td>X</td>
 			    </c:if>
-			    <td><input type="number" class="goods_stockqty" name="goods_stockqty" value="${vo.goods_stockqty}"></td>
+			    <td><input type="number" class="goodslot_qty" name="goodslot_qty" value="${vo.goodslot_qty}"></td>
 			    <td><input type="button" value="수량입력" onclick="updateQty(${vo.goods_no}, ${vo.goodslot_no}, '${comcode_code }')"></td>
-			    <td><input type="button" value="폐기처리" onclick="location.href='${pageContext.request.contextPath}/stock/dispose?goods_no=${vo.goods_no }&goodslot_no=${vo.goodslot_no }&comcode_code=${comcode_code }'">
+			    <c:if test="${vo.goodslev_no != 4 }">
+			    <td><input type="button" value="폐기처리" onclick="confirmDispose('${vo.goods_no}', '${vo.goodslot_no}', '${comcode_code}')"></td>
+			    </c:if>
+			    <c:if test="${vo.goodslev_no == 4 }">
+			    <td><input type="button" value="폐기취소" onclick="confirmReverseDispose('${vo.goods_no}', '${vo.goodslot_no}', '${comcode_code}')"></td>
+			    </c:if>
 			    <td><input type="button" value="UPDATE" onclick="location.href='${pageContext.request.contextPath}/stock/updateForm?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&comcode_code=${comcode_code }'"></td>
 			    <td><input type="button" value="DELETE" onclick="location.href='${pageContext.request.contextPath}/stock/delete?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&comcode_code=${comcode_code }'"></td>
 			</tr>
@@ -249,5 +254,26 @@ function getlist() {
                <tr><td>목록이 비어있습니다</td></tr>
             </c:if>
             </table>
-         </div>]
+         </div>
+         
+         <script type="text/javascript">
+         function confirmDispose(goodsNo, goodslotNo, comcodeCode) {
+             // 확인 대화상자를 표시하고 사용자가 확인을 누르면 이동할 URL을 설정합니다.
+             var confirmMessage = "폐기하시겠습니까?";
+             if (confirm(confirmMessage)) {
+                 var redirectUrl = "${pageContext.request.contextPath}/stock/dispose?goods_no=" + goodsNo + "&goodslot_no=" + goodslotNo + "&comcode_code=" + comcodeCode;
+                 window.location.href = redirectUrl; // 주어진 URL로 이동합니다.
+             }
+         }
+         
+         function confirmReverseDispose(goodsNo, goodslotNo, comcodeCode) {
+             // 확인 대화상자를 표시하고 사용자가 확인을 누르면 이동할 URL을 설정합니다.
+             var confirmMessage = "폐기취소시 'A: 새제품' 등급으로 돌아갑니다.";
+             if (confirm(confirmMessage)) {
+                 var redirectUrl = "${pageContext.request.contextPath}/stock/reverseDispose?goods_no=" + goodsNo + "&goodslot_no=" + goodslotNo + "&comcode_code=" + comcodeCode;
+                 window.location.href = redirectUrl; // 주어진 URL로 이동합니다.
+             }
+         }
+         </script>
+         
          <%@ include file="/WEB-INF/views/layout/footer.jsp"%>

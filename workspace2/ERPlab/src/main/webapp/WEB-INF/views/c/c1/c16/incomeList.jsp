@@ -206,7 +206,7 @@ function teamname(){
             <table id="procode">
             	<c:if test="${list != null }">
                		<tr>
-						<th>수입발주코드</th>
+						<th>수입발주코드 (수정하려면 해당코드를 클릭하세요.)</th>
 						<th>팀명</th>
 						<th>거래처명</th>
 						<th>입고여부</th>
@@ -235,7 +235,7 @@ function teamname(){
             </table>
          </div>
          <div>
-		<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/internationalsales/income?comcode_code=${comcode_code }'">
+		<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/internationsales/income?comcode_code=${comcode_code }'">
 		</div>
          
          
@@ -260,7 +260,7 @@ function teamname(){
                <form action="${pageContext.request.contextPath }/internationsales/income/update" method="POST" id="update">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
                   <input type="hidden" name="importorder_no" value="${map.importorder_no }">
-                  <input type="hidden" name="importpay_no" value="${map.importpay_no }">
+                  <input type="hidden" name="importpay_no" value="${map3.importpay_no }">
                   <input type="hidden" name="importorder_total" value="${map.importorder_total }">
                   <input type="hidden" name="import_no" value="${import_no }">
                   <div class="warning_box">
@@ -300,25 +300,66 @@ function teamname(){
                   </div>
                   
                   <div>
-				    <label>거래처명</label>
-						<select id="clientSelect2" name="client_no">
-						    <c:forEach var="vo" items="${cllist}">
-						        <option value="${vo.client_no}" ${map.client_no == vo.client_no ? 'selected' : ''}>${vo.client_name}</option>
-						    </c:forEach>
-						</select>
-				  </div>
+    <div>
+    <label>거래처명</label>
+    <select id="clientSelect2" name="client_no">
+        <c:forEach var="vo" items="${cllist}">
+            <option value="${vo.client_no}" ${map.client_no == vo.client_no ? 'selected' : ''}>${vo.client_name}</option>
+        </c:forEach>
+    </select>
+</div>
+
+<div>
+    <label>상품명</label>
+    <select id="goodsSelect2" name="goods_no">
+        <!-- 상품 목록은 Ajax로 가져올 예정 -->
+    </select>
+</div>
+
+<input type="button" id="addGoodsButton2" value="상품등록" style="display: none;">
+
+<script>
+    document.getElementById("clientSelect2").addEventListener("change", function() {
+        var selectedClientNo = this.value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "${pageContext.request.contextPath}/internationsales/income/updateGoods?client_no2=" + selectedClientNo, true);
+
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var response = JSON.parse(xhr.responseText);
+                var goodsSelect = document.getElementById("goodsSelect2");
+                goodsSelect.innerHTML = ""; 
+
+                if (response.length === 0) {
+                    // 상품 목록이 없는 경우 "상품등록" 버튼 표시
+                    var addGoodsButton = document.getElementById("addGoodsButton2");
+                    addGoodsButton.style.display = "block";
                     
-                    
-                  <!-- 상품명이 불러와지질 않음 --> 
-                  <div>
-				    <label>상품명</label>
-				    <select id="goodsSelect2" name="goods_no">
-				      <!-- 상품 목록은 Ajax로 가져올 예정 -->
-				    </select>
-				  </div>   
-				  
-				  
-				  
+                    addGoodsButton.onclick = function() {
+                        window.location.href = "${pageContext.request.contextPath}/stock/insertForm";
+                    };
+                } else {
+                    response.forEach(function(goods) {
+                        var option = document.createElement("option");
+                        option.value = goods.goods_no;
+                        option.textContent = goods.goods_name;
+                        goodsSelect.appendChild(option);
+                    });
+                }
+            } else {
+                console.error("Request failed with status:", xhr.status);
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error("Request failed");
+        };
+
+        xhr.send();
+    });
+</script>
+
+
                     
                   <div>
                      <label>거래조건 </label>
@@ -406,6 +447,14 @@ function teamname(){
             </c:when>
             
             
+            
+            
+            
+            
+            
+            
+            
+            
             <c:otherwise>
                <form action="${pageContext.request.contextPath }/internationsales/income/insertImportorder" method="POST" id="create">
                   <input type="hidden" name="comcode_code" value="${comcode_code }">
@@ -441,53 +490,65 @@ function teamname(){
                   </div>
                   
                   <div>
-				    <label>거래처명</label>
-				    <select id="clientSelect" name="client_no">
-				      <c:forEach var="vo" items="${clist}">
-				        <option value="${vo.client_no}">${vo.client_name}</option>
-				      </c:forEach>
-				    </select>
-				  </div>
-                  
-                  <div>
-				    <label>상품명</label>
-				    <select id="goodsSelect" name="goods_no">
-				      <!-- 상품 목록은 Ajax로 가져올 예정 -->
-				    </select>
-				  </div>   
-                     
-                  <script>
-    			  document.getElementById("clientSelect").addEventListener("change", function() {
-      			  var selectedClientNo = this.value;
-					
-      			  
-        		  var xhr = new XMLHttpRequest();
-      		   	  xhr.open("GET", "${pageContext.request.contextPath }/internationsales/income/goods?client_no2=" + selectedClientNo, true);
+    <label>거래처명</label>
+    <select id="clientSelect" name="client_no">
+        <c:forEach var="vo" items="${clist}">
+            <option value="${vo.client_no}">${vo.client_name}</option>
+        </c:forEach>
+    </select>
+</div>
 
-      			  xhr.onload = function() {
-    	  		  if (xhr.status >= 200 && xhr.status < 300) {
-	              var response = JSON.parse(xhr.responseText);
-	              var goodsSelect = document.getElementById("goodsSelect");
-              
-	              goodsSelect.innerHTML = ""; // 기존 옵션 제거
-	              
-	              response.forEach(function(goods) {
-	                var option = document.createElement("option");
-	                option.value = goods.goods_no;
-	                option.textContent = goods.goods_name;
-	                goodsSelect.appendChild(option);
-	              });
-	              } else {
-	              console.error("Request failed with status:", xhr.status);
-	              }
-	         	  };
-          		  xhr.onerror = function() {
-              	  console.error("Request failed");
-            	  };
+<div>
+    <label>상품명</label>
+    <select id="goodsSelect" name="goods_no">
+        <!-- 상품 목록은 Ajax로 가져올 예정 -->
+    </select>
+</div>
 
-            	  xhr.send();
-          	  	  });
-        		  </script>
+<input type="button" id="addGoodsButton" onclick="location.href='${pageContext.request.contextPath}/stock/insertForm'" value="상품등록" style="display: none;"> <!-- 초기에는 숨김 상태로 설정 -->
+
+<script>
+    document.getElementById("clientSelect").addEventListener("change", function() {
+        var selectedClientNo = this.value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "${pageContext.request.contextPath }/internationsales/income/goods?client_no2=" + selectedClientNo, true);
+
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var response = JSON.parse(xhr.responseText);
+                var goodsSelect = document.getElementById("goodsSelect");
+                goodsSelect.innerHTML = ""; // 기존 옵션 제거
+
+                if (response.length === 0) {
+                    // 상품 목록이 비어있는 경우 "상품등록" 버튼을 표시
+                    var addGoodsButton = document.getElementById("addGoodsButton");
+                    addGoodsButton.style.display = "block";
+                } else {
+                    response.forEach(function(goods) {
+                        var option = document.createElement("option");
+                        option.value = goods.goods_no;
+                        option.textContent = goods.goods_name;
+                        goodsSelect.appendChild(option);
+                    });
+                }
+            } else {
+                console.error("Request failed with status:", xhr.status);
+            }
+        };
+        
+        xhr.onerror = function() {
+            console.error("Request failed");
+        };
+
+        xhr.send();
+    });
+
+    // "상품등록" 버튼 클릭 이벤트 처리
+    document.getElementById("addGoodsButton").addEventListener("click", function() {
+        // 여기에 상품 등록 동작을 추가할 수 있습니다.
+        alert("상품을 등록하세요."); // 예시로 경고창을 표시
+    });
+</script>
         		  
                   <div>
                      <label>거래조건 </label>

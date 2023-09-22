@@ -76,6 +76,7 @@
 
 <link href="/webdesign/assets/css/main.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="/css/a/a_company.css" />
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style type="text/css">
 .notosanskr * { 
  font-family: 'Noto Sans KR', sans-serif;
@@ -339,17 +340,19 @@ function teamname(){
                   </div>
                   <div>
                   	<label>주소</label>
-                  	<input type="text" name="employee1_addr1" id="employee1_addr1" value=${map.employee1_addr1 } maxlength="30">
-                  	<input type="text" name="employee1_addr2" id="employee1_addr2" value=${map.employee1_addr2 } maxlength="30">
-                  	<input type="text" name="employee1_postal" id="employee1_postal" value=${map.employee1_postal } maxlength="30">
+                  		<input type="text" name="employee1_postal" id="employee1_postal" value="${map.employee1_postal }" placeholder="우편번호">
+	                    <input type="button" onclick="searchAddr()" value="우편번호 찾기"><br>
+	                    <input type="text" name="employee1_addr1" id="employee1_addr1" value="${map.employee1_addr1 }" placeholder="주소"><br>
+	                    <input type="text" name="employee1_addr2" id="employee1_addr2" value="${map.employee1_addr2 }" placeholder="상세주소">
+	                    <input type="text" id="extraAddr" placeholder="참고항목">
                   </div>
                   <div>
-                  	<label>주민등록번호</label>
-                  	<input type="text" name="employee1_residentno" id="employee1_residentno" value=${map.employee1_residentno } maxlength="30">
+                  	<label>주민등록번호 (-를 제외하고 적어주세요.)</label>
+                  	<input type="number" name="employee1_residentno" id="employee1_residentno" value=${map.employee1_residentno } maxlength="30">
                   </div>
                   <div>
-                  	<label>전화번호</label>
-                  	<input type="text" name="employee1_phone" id="employee1_phone" value=${map.employee1_phone } maxlength="30">
+                  	<label>전화번호 (-를 제외하고 적어주세요.)</label>
+                  	<input type="number" name="employee1_phone" id="employee1_phone" value=${map.employee1_phone } maxlength="30">
                   </div>
                   <div>
                   	<label>이메일</label>
@@ -361,7 +364,7 @@ function teamname(){
                   </div>
                   <div>
                   	<label>비밀번호</label>
-                  	<input type="text" name="employee1_pw" id="employee1_pw" value=${map.employee1_pw } maxlength="30">
+                  	<input type="password" name="employee1_pw" id="employee1_pw" value=${map.employee1_pw } maxlength="30">
                   </div>
                   <div>
                   	<label>장애여부</label>
@@ -402,19 +405,19 @@ function teamname(){
                   </div>
                   <div>
                   	<label>경력</label>
-                  	<input type="text" name="employee2_exp" id="employee2_exp" value="${map.employee2_exp }">년차
+                  	<input type="number" name="employee2_exp" id="employee2_exp" value="${map.employee2_exp }">년차
                   </div>
                   <div>
                   	<label>연봉</label>
-                  	<input type="text" name="employee2_salary" id="employee2_salary" value="${map.employee2_salary }">
+                  	<input type="number" name="employee2_salary" id="employee2_salary" value="${map.employee2_salary }">
                   </div>
                   <div>
                   	<label>휴가일수</label>
                   	<input type="number" name="employee2_holiday" id="employee2_holiday" value="${map.employee2_holiday }">
                   </div>
                   <div>
-                  	<label>내선번호</label>
-                  	<input type="text" name="employee2_extension" id="employee2_extension" value="${map.employee2_extension }" maxlength="30">
+                  	<label>내선번호 (-를 제외하고 적어주세요.)</label>
+                  	<input type="number" name="employee2_extension" id="employee2_extension" value="${map.employee2_extension }" maxlength="30">
                   </div>
                   <div>
                   	<label>사대보험 여부</label>
@@ -433,7 +436,6 @@ function teamname(){
                                                       
                   <div align="right">
                      <input type="button" value="update" onclick="submitt(this.form)">
-                     <input type="button" value="delete" onclick="deletei('${bs3_no}', '${dbs3_no }', ${map.forsales_no }, '${comcode_code }')">
                   </div>
                </form>
             </c:when>
@@ -453,17 +455,19 @@ function teamname(){
                   </div>
                   <div>
                   	<label>주소</label>
-                  	<input type="text" name="employee1_addr1" id="employee1_addr1" maxlength="30">
-                  	<input type="text" name="employee1_addr2" id="employee1_addr2" maxlength="30">
-                  	<input type="text" name="employee1_postal" id="employee1_postal" maxlength="30">
+                  		<input type="text" name="employee1_postal" id="employee1_postal" placeholder="우편번호">
+	                    <input type="button" onclick="searchAddr()" value="우편번호 찾기"><br>
+	                    <input type="text" name="employee1_addr1" id="employee1_addr1" placeholder="주소"><br>
+	                    <input type="text" name="employee1_addr2" id="employee1_addr2" placeholder="상세주소">
+	                    <input type="text" id="extraAddr" placeholder="참고항목">
                   </div>
                   <div>
-                  	<label>주민등록번호</label>
-                  	<input type="text" name="employee1_residentno" id="employee1_residentno" maxlength="30">
+                  	<label>주민등록번호 (-를 제외하고 적어주세요.)</label>
+                  	<input type="number" name="employee1_residentno" id="employee1_residentno" maxlength="30">
                   </div>
                   <div>
-                  	<label>전화번호</label>
-                  	<input type="text" name="employee1_phone" id="employee1_phone" maxlength="30">
+                  	<label>전화번호 (-를 제외하고 적어주세요.)</label>
+                  	<input type="number" name="employee1_phone" id="employee1_phone" maxlength="30">
                   </div>
                   <div>
                   	<label>이메일</label>
@@ -516,19 +520,19 @@ function teamname(){
                   </div>
                   <div>
                   	<label>경력</label>
-                  	<input type="text" name="employee2_exp" id="employee2_exp">년차
+                  	<input type="number" name="employee2_exp" id="employee2_exp">년차
                   </div>
                   <div>
                   	<label>연봉</label>
-                  	<input type="text" name="employee2_salary" id="employee2_salary">
+                  	<input type="number" name="employee2_salary" id="employee2_salary">
                   </div>
                   <div>
                   	<label>휴가일수</label>
                   	<input type="number" name="employee2_holiday" id="employee2_holiday" value="15">
                   </div>
                   <div>
-                  	<label>내선번호</label>
-                  	<input type="text" name="employee2_extension" id="employee2_extension" maxlength="30">
+                  	<label>내선번호 (-를 제외하고 적어주세요.)</label>
+                  	<input type="number" name="employee2_extension" id="employee2_extension" maxlength="30">
                   </div>
                   <div>
                   	<label>사대보험 여부</label>
@@ -559,6 +563,55 @@ function teamname(){
    
 </div>
 <script type="text/javascript">
+
+function searchAddr() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+            var addr = ''; // 주소 변수
+            var extraAddr = ''; // 참고항목 변수
+
+            //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                addr = data.roadAddress;
+            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                addr = data.jibunAddress;
+            }
+
+            // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+            if(data.userSelectedType === 'R'){
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraAddr !== ''){
+                    extraAddr = ' (' + extraAddr + ')';
+                }
+                // 조합된 참고항목을 해당 필드에 넣는다.
+                document.getElementById("extraAddr").value = extraAddr;
+            
+            } else {
+                document.getElementById("employee1_addr2").value = '';
+            }
+
+            // 우편번호와 주소 정보를 해당 필드에 넣는다.
+            document.getElementById('employee1_postal').value = data.zonecode;
+            document.getElementById("employee1_addr1").value = addr;
+            // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("employee1_addr2").focus();
+        }
+    }).open();
+        customInput.style.display = "none";
+}
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no1, no2, ino, code){

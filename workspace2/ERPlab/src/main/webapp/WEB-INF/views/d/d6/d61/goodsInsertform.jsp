@@ -26,8 +26,6 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 <form action="${pageContext.request.contextPath }/stock/insert" method="POST" id="create">
 	<input type="hidden" name="comcode_code" value="${comcode_code }">
 	<h3>상품 등록 사항</h3>
-	
-	
 	<div class="lotSet">
 	<table id="lotTable">
 		<tr>
@@ -84,7 +82,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 				</select>
 			</td>
 			<th>재고수량</th>
-			<td><input type="number" name="goods_stockqty" value="0"></td>
+			<td><input type="number" id="goods_stockqty" name="goods_stockqty" value="0"></td>
 		</tr>
 		<tr>
 			<th>상품재고등급</th>
@@ -115,7 +113,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 			<th>로트번호</th>
 			<td><input type="text" name="goodslot_lot" maxlength="30"></td>
 			<th>로트별수량</th>
-			<td><input type="number" name="goodslot_qty"></td>
+			<td><input type="number" id="goodslot_qty" name="goodslot_qty"></td>
 			<th>제조일자</th>
 			<td><input type="date" name="goodslot_production"></td>
 		</tr>
@@ -130,11 +128,9 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 	</table>
 	</div>
 	<div>
-	    <input type="submit" value="등록">
-  	</div>
-                  
+    <input type="button" value="등록" onclick="validateAndSubmit()">
+</div>
 </form>
-
 <script>
   let lotIndex = 1; // 로트 정보 행 인덱스
   const maxLotCount = 3; // 최대 로트 정보 개수
@@ -149,21 +145,21 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
       // 첫 번째 로트 정보 행 추가
       row1.innerHTML = `
         <th>로트번호</th>
-        <td><input type="text" name="goodslot_lot${lotIndex}"></td>
+        <td><input type="text" id="goodslot_lot"` + lotIndex + ` name="goodslot_lot${lotIndex}"></td>
         <th>로트별수량</th>
-        <td><input type="number" name="goodslot_qty${lotIndex}"></td>
+        <td><input type="number" id="goodslot_qty${lotIndex}" name="goodslot_qty${lotIndex}"></td>
         <th>제조일자</th>
-        <td><input type="date" name="goodslot_production${lotIndex}"></td>
+        <td><input type="date" id="goodslot_production${lotIndex}" name="goodslot_production${lotIndex}"></td>
       `;
 
       // 두 번째 로트 정보 행 추가
       row2.innerHTML = `
         <th>세액</th>
-        <td><input type="number" name="goodslot_tax${lotIndex}"></td>
+        <td><input type="number" id="goodslot_tax${lotIndex}" name="goodslot_tax${lotIndex}"></td>
         <th>원가</th>
-        <td><input type="number" name="goodslot_price${lotIndex}"></td>
+        <td><input type="number" id="goodslot_price${lotIndex}" name="goodslot_price${lotIndex}"></td>
         <th>유통기한</th>
-        <td><input type="date" name="goodslot_expiry${lotIndex}"></td>
+        <td><input type="date" id="goodslot_expiry${lotIndex}" name="goodslot_expiry${lotIndex}"></td>
       `;
     } else {
       alert("최대 3개의 로트 정보까지만 추가 가능합니다.");
@@ -173,14 +169,49 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
   function removeLotRow() {
     if (lotIndex > 1) {
       const table = document.getElementById("lotTable");
-      table.deleteRow(table.rows.length - 1); // 마지막 행 삭제
-      table.deleteRow(table.rows.length - 1); // 마지막 행 삭제
+      table.deleteRow(table.rows.length - 1); 
+      table.deleteRow(table.rows.length - 1); 
       lotIndex--;
     } else {
       alert("최소한 한 개의 로트 정보가 필요합니다.");
     }
   }
+
+//등록 버튼 클릭 시 실행되는 함수
+  function validateAndSubmit() {
+    let totalLotQty = 0;
+      const lotQtyInput = document.getElementsByName("goodslot_qty");
+
+    /* for (let i = 1; i <= lotIndex; i++) {
+      const lotQtyValue = parseInt(lotQtyInput.value) || 0;
+      totalLotQty += lotQtyValue;
+    } */
+    
+      var sum = 0;
+      for(var h = 0; h < lotQtyInput.length; h++){
+    	  sum = Number(sum) + Number(lotQtyInput[h].value);
+    	  console.log(sum);
+      }
+    
+
+    const stockQtyInput = document.getElementById("goods_stockqty");
+    const stockQtyValue = parseInt(stockQtyInput.value) || 0;
+
+    if (sum !== stockQtyValue) {
+      alert("재고수량과 로트별수량의 합이 일치해야 합니다.");
+      if (lotIndex >= 1) {
+        const firstLotQtyInput = document.getElementById(`goodslot_qty1`);
+        firstLotQtyInput.focus();
+      }
+      return false;
+    } else {
+      document.getElementById("create").submit();
+    }
+  }
+
 </script>
+
+
 
 
  

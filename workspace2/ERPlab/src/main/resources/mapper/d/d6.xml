@@ -160,8 +160,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from erp_goodslot egl
 		left join erp_goods eg
 		on eg.goods_no = egl.goods_no
-		where comcode_no = #{comcode_no} 
-		and goodslot_no = #{goodslot_no}
+		where eg.comcode_no = #{comcode_no} 
+		and egl.goodslot_no = #{goodslot_no}
 		<if test="type != null">
             <if test="type == 'goods_name'">
                and eg.goods_name like '%${word}%' 
@@ -246,7 +246,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<update id="updateQty" parameterType="map">
-		update erp_goods set goods_stockqty = #{goods_stockqty} where goods_no = #{goods_no}
+		update erp_goodslot set goodslot_qty = #{goodslot_qty} where goodslot_no = #{goodslot_no}
 	</update>
 	
 	<!-- 입출고관리 -->
@@ -353,6 +353,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateGoodslev" parameterType="map">
 		update erp_goods set goodslev_no = #{goodslev_no} where goods_no = #{goods_no}
 	</update>
+	
 	
 	
 </mapper>

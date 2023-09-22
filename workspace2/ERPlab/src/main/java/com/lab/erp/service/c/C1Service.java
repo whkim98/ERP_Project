@@ -375,4 +375,12 @@ public class C1Service {
 		return fdao.deleteForsales(forsales_no);
 	}
 	
+	public int updateClient2(Map<String, Object> map) {
+		return cdao.updateClient2(map);
+	}
+	
+	public int deleteClient2(int client_no) {
+		return cdao.deleteClient2(client_no);
+	}
+	
 }

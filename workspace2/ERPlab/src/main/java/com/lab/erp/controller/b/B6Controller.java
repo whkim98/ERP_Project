@@ -241,7 +241,7 @@ public class B6Controller {
 		b6.updateBs2(b2vo);
 		b6.updateBs3(b3vo);
 		
-		return "redirect:/greeting/privacy";
+		return "redirect:/greeting/list";
 		
 	}
 	

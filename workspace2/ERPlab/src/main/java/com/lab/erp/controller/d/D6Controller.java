@@ -128,7 +128,7 @@ public class D6Controller {
 	    map.put("goodslev_no", goodslev_no);
 	    map.put("comcode_no", comcode_no);
 	    
-	    d6.insertGoods(map);
+	    
 	    
 		int goods_no = d6.selectGoodsno(goods_code);
 	    
@@ -177,14 +177,14 @@ public class D6Controller {
 	}
 
 	@RequestMapping("/stock/updateQty")
-	public String stockUpdateqty(@RequestParam(required = false) String comcode_code, @RequestParam(required = false) Integer goods_no, @RequestParam(required = false) Integer goodslot_no, @RequestParam(required = false) Integer goods_stockqty) {
+	public String stockUpdateqty(@RequestParam(required = false) String comcode_code, @RequestParam(required = false) Integer goods_no, @RequestParam(required = false) Integer goodslot_no, @RequestParam(required = false) Integer goodslot_qty) {
 	    System.out.println("테스"+goods_no);
 	    System.out.println(goodslot_no);
-	    System.out.println(goods_stockqty);
+	    System.out.println(goodslot_qty);
 	    
 	    Map<String, Object> map = new HashMap<>();
-	    map.put("goods_no", goods_no);
-	    map.put("goods_stockqty", goods_stockqty);
+	    map.put("goodslot_no", goodslot_no);
+	    map.put("goodslot_qty", goodslot_qty);
 	    
 	    d6.updateQty(map);
 	    
@@ -330,6 +330,18 @@ public class D6Controller {
 		map.put("goodslev_no", 4);
 		map.put("goods_no", goods_no);
 	
+		d6.updateGoodslev(map);
+		
+		return "redirect:/stock?comcode_code=" + comcode_code;
+	}
+	
+	@RequestMapping("/stock/reverseDispose")
+	public String reverseDispose(Model model, String comcode_code, int goods_no) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("goodslev_no", 1);
+		map.put("goods_no", goods_no);
+		
 		d6.updateGoodslev(map);
 		
 		return "redirect:/stock?comcode_code=" + comcode_code;

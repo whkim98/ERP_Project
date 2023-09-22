@@ -147,6 +147,52 @@ public class B5Controller {
 		
 	}
 	
+	@RequestMapping("/greeting/update")
+	public String greetingUpdate(String comcode_code, int employee1_no, 
+			int employee2_no, String employee1_code, String employee1_name,
+			String employee1_postal, String employee1_addr1,
+			String employee1_addr2, String employee1_residentno,
+			String employee1_phone, String employee1_email,
+			String employee1_id, String employee1_pw,
+			int employee1_disability, int employee1_merit,
+			int team_no, String employee2_position, int employee2_exp,
+			int employee2_salary, double employee2_holiday,
+			String employee2_extension, int employee2_four
+			, String employee2_worktype) {
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("employee1_code", employee1_code);
+		map.put("employee1_name", employee1_name);
+		map.put("employee1_postal", employee1_postal);
+		map.put("employee1_addr1", employee1_addr1);
+		map.put("employee1_addr2", employee1_addr2);
+		map.put("employee1_residentno", employee1_residentno);
+		map.put("employee1_phone", employee1_phone);
+		map.put("employee1_email", employee1_email);
+		map.put("employee1_id", employee1_id);
+		map.put("employee1_pw", employee1_pw);
+		map.put("employee1_disability", employee1_disability);
+		map.put("employee1_merit", employee1_merit);
+		map.put("employee1_no", employee1_no);
+		
+		b5.updateEmployee1(map);
+		
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("team_no", team_no);
+		map2.put("employee2_position", employee2_position);
+		map2.put("employee2_exp", employee2_exp);
+		map2.put("employee2_salary", employee2_salary);
+		map2.put("employee2_holiday", employee2_holiday);
+		map2.put("employee2_extension", employee2_extension);
+		map2.put("employee2_four", employee2_four);
+		map2.put("employee2_worktype", employee2_worktype);
+		map2.put("employee2_no", employee2_no);
+		
+		b5.updateEmployee2(map2);
+		
+		return "redirect:/greeting?comcode_code=" + comcode_code;
+	}
+	
 	@RequestMapping("/greeting/attendance")
 	public String attendance(Model model, String comcode_code, String type, String word) {
 		
@@ -231,7 +277,7 @@ public class B5Controller {
 		evo.setEmployee2_no(employee2_no);
 		evo.setEmployee2_holiday(employee2_holiday);
 		
-		int su2 = b5.updateHoliday(evo);
+		b5.updateHoliday(evo);
 		
 		return "redirect:/greeting/attendance?comcode_code=" + comcode_code;
 		

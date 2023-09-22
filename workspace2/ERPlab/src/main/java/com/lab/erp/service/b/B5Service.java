@@ -71,4 +71,12 @@ public class B5Service {
 		return edao.selectEmployee2(map);
 	}
 	
+	public int updateEmployee1(Map<String, Object> map) {
+		return edao.updateEmployee1(map);
+	}
+	
+	public int updateEmployee2(Map<String, Object> map) {
+		return edao.updateEmployee2(map);
+	}
+	
 }

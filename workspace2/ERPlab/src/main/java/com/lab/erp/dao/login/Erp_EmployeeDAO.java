@@ -107,4 +107,12 @@ public class Erp_EmployeeDAO {
 		return sqlSession.selectOne("b5.selectEmployee2", map);
 	}
 	
+	public int updateEmployee1(Map<String, Object> map) {
+		return sqlSession.update("b5.updateEmployee1", map);
+	}
+	
+	public int updateEmployee2(Map<String, Object> map) {
+		return sqlSession.update("b5.updateEmployee2", map);
+	}
+	
 }

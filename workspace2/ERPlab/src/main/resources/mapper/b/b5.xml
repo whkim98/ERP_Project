@@ -89,7 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     ) seq
     WHERE DATE_ADD(#{attendance_start}, INTERVAL seq.seq DAY) &lt;= #{attendance_end}) from erp_hdkind eh where eh.hdkind_no = #{hdkind_no}
     )
-    FROM erp_employee2 WHERE employee2_no = #{employee2_no};
+    FROM erp_employee2 WHERE employee2_no = #{employee2_no}
 </select>
 
 <update id="updateHoliday" parameterType="com.lab.erp.vo.login.Erp_Employee2VO">
@@ -100,5 +100,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	insert into erp_emphistory(employee1_no, team_no, emphistory_employeed, comcode_no) 
 	values(#{employee1_no}, #{team_no}, now(), #{comcode_no})
 </insert>
+
+<update id="updateEmployee1" parameterType="map">
+	update erp_employee1 set employee1_code = #{employee1_code},
+	employee1_name = #{employee1_name}, employee1_postal = #{employee1_postal},
+	employee1_addr1 = #{employee1_addr1}, employee1_addr2 = #{employee1_addr2},
+	employee1_residentno = #{employee1_residentno}, employee1_phone = #{employee1_phone},
+	employee1_email = #{employee1_email}, employee1_id = #{employee1_id},
+	employee1_pw = #{employee1_pw}, employee1_disability = #{employee1_disability},
+	employee1_merit = #{employee1_merit} 
+	where employee1_no = #{employee1_no}
+</update>
+
+<update id="updateEmployee2" parameterType="map">
+	update erp_employee2 set team_no = #{team_no}, employee2_position = #{employee2_position},
+	employee2_exp = #{employee2_exp}, employee2_salary = #{employee2_salary},
+	employee2_holiday = #{employee2_holiday}, employee2_extension = #{employee2_extension},
+	employee2_four = #{employee2_four}, employee2_worktype = #{employee2_worktype}
+	where employee2_no = #{employee2_no}
+</update>
 
 </mapper>

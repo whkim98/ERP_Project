@@ -109,6 +109,14 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("c1.selectClientlist");
 	}
 	
+	public int updateClient2(Map<String, Object> map) {
+		return sqlSession.update("c1.updateClient2", map);
+	}
+	
+	public int deleteClient2(int client_no) {
+		return sqlSession.delete("c1.deleteClient2", client_no);
+	}
+	
 	//d6
 	public List<Erp_ClientVO> selectClient(){
 		return sqlSession.selectList("d6.selectClient");
