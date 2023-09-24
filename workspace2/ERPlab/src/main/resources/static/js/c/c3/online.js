@@ -211,62 +211,64 @@ list_result_td_arr[6]= '<button class="list_result_btn" id="list_result_del0">�
 let addRow_btn = document.getElementById("addRow_btn");
 addRow_btn.addEventListener("click", () => {
 	let listtr = document.getElementsByClassName("list_result_items");
-	let order = listtr[0].className.split(' ')[1].slice(5)
+	let order = listtr[listtr.length-1].className.split(' ')[1].slice(5)
 	console.log("order : " + order);
-	let newTr = document.createElement("tr");
-	let newTd1 = document.createElement("td");
-	newTd1.innerHTML = '<button type="button" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
-	let newTd2 = document.createElement("td");
-	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
-	let newTd3 = document.createElement("td");
-	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
-	let newTd4 = document.createElement("td");
-	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
-	let newTd5 = document.createElement("td");
-	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
-	let newTd6 = document.createElement("td");
-	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
-	let newTd7 = document.createElement("td");
-	newTd1.innerHTML = '<input type="text" name="goodslot_no" />'
-	newTr.appendChild(newTd1);
+	order = Number(order) + 1;
 	
+	let newTr = document.createElement("tr");
+	newTr.className = "list_result_items order"+order;
+	newTr.innerHTML = '<td><button type="button" class="list_result_btn" id="list_result_search'+order+'">SEARCH</button></td>' +
+	'<td><input type="text" name="goodslot_no" id="goodslot_no'+order+'"/></td>' +
+	'<td><input type="text" name="goodslot_qty" id="goodslot_qty'+order+'"/></td>' + 
+	'<td><input type="text" name="goodslot_production" id="goodslot_production'+order+'"/></td>' +
+	'<td><input type="text" name="goodslot_expiry" id="goodslot_expiry'+order+'"/></td>' +
+	'<td><input type="text" name="goodslot_total" id="goodslot_total'+order+'"/></td>' +
+	'<td><button type="button" class="list_result_btn" id="list_result_del'+order+'">품목삭제</button></td>';
+
+	listtr[0].parentElement.appendChild(newTr);
+	
+	//조회 버튼 등록
+	register_search_btn();
+	
+	//품목삭제 버튼 등록
+	register_del_btn();
 });
 
-// 예시
-let search_result = document.getElementById("search_result");
-	let newTr = document.createElement("tr");
-	let newTd = document.createElement("td");
-	search_result.innerHTML = '';
-	search_result.innerHTML += '<tr><td>코드</td><td>온라인매출코드</td><td>매출일자</td></tr>';
-	if(list != null || list.length != 0){
-		list.forEach(function(item){
-			newTr = document.createElement("tr");
-			search_result.appendChild(newTr);
-			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_no;
-			newTr.appendChild(newTd);
-			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_code;
-			newTr.appendChild(newTd);
-			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_date;
-			newTr.appendChild(newTd);
-			
-		});
-	}else {
-		search_result.innerHTML += '<tr><td colspan="3">목록이 없습니다.</td></tr>';
-	}
-
 // 행삭제 버튼
+let delRow_btn = document.getElementById("delRow_btn");
+delRow_btn.addEventListener("click", ()=>{
+	let list_result_items = document.getElementsByClassName("list_result_items");
+	list_result_items[list_result_items.length-1].remove();
+});
 
-// 행조회 버튼
+// 조회 등록 버튼
+let register_search_btn = () =>{
+	let list_result_btn = document.getElementsByClassName("list_result_btn");
+	for(let i = 0 ; i < list_result_btn.length; i++){
+		if(list_result_btn[i].id.slice(0, -1) == "list_result_search"){
+			list_result_btn[i].addEventListener("click", (e)=>{list_result_search_func(e.target)});
+		}
+	}
+}
+
+// 조회 기능 버튼
+let list_result_search_func = (tag) => {
+	window.open("../c3/goodslot_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+	tag.id.charAt(tag.id.length-1)
+	//TODO
+}
+
+// 품목삭제 등록 버튼
+let register_del_btn = () => {
+	let list_result_btn = document.getElementsByClassName("list_result_btn");
+	for(let i = 0 ; i < list_result_btn.length; i++){
+		if(list_result_btn[i].id.slice(0, -1) == "list_result_del"){
+			list_result_btn[i].addEventListener("click", (e)=>{list_result_del_func(e.target)});
+		}
+	}
+}
 
 // 품목삭제 버튼
-
-//
+let list_result_del_func = (tag) => {
+	document.getElementsByClassName("list_result_items")[tag.id.charAt(tag.id.length-1)].remove();
+}

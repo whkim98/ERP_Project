@@ -78,24 +78,24 @@
 	                        </tr>
                         	<th:block th:if="${goodslot_list != null}">
 								<tr class="list_result_items" th:each="goodslot_item : ${goodslot_list}">
-									<td><button class="list_result_btn" id="list_result_search">SEARCH</button></td>
+									<td><button type="button" class="list_result_btn" id="list_result_search">SEARCH</button></td>
 									<td><input type="text" name="goodslot_no" id="goodslot_no" th:value="${goodslot_item.goodslot_no}" readonly/></td>
 		                            <td><input type="text" name="goodslot_qty" id="goodslot_qty" th:value="${goodslot_item.goodslot_qty}" readonly/></td>
 		                            <td><input type="text" name="goodslot_production" id="goodslot_production" th:value="${goodslot_item.goodslot_production}" readonly/></td>
 		                            <td><input type="text" name="goodslot_expiry" id="goodslot_expiry" th:value="${goodslot_item.goodslot_expiry}" readonly/></td>
 		                            <td><input type="text" name="goodslot_total" id="goodslot_total" th:value="${goodslot_item.goodslot_total}" readonly/></td>
-		                            <td><button class="list_result_btn" id="list_result_del">품목삭제</button></td>
+		                            <td><button type="button" class="list_result_btn" id="list_result_del">품목삭제</button></td>
 								</tr>
 							</th:block>
 							<th:block th:if="${goodslot_list == null}">
 								<tr class="list_result_items order0">
-									<td><button class="list_result_btn" id="list_result_search0">SEARCH</button></td>
+									<td><button type="button" class="list_result_btn" id="list_result_search0">SEARCH</button></td>
 									<td><input type="text" name="goodslot_no" id="goodslot_no0" /></td>
 		                            <td><input type="text" name="goodslot_qty" id="goodslot_qty0"/></td>
 		                            <td><input type="text" name="goodslot_production" id="goodslot_production0" /></td>
 		                            <td><input type="text" name="goodslot_expiry" id="goodslot_expiry0" /></td>
 		                            <td><input type="text" name="goodslot_total" id="goodslot_total0"/></td>
-		                            <td><button class="list_result_btn" id="list_result_del0">품목삭제</button></td>
+		                            <td><button type="button" sclass="list_result_btn" id="list_result_del0">품목삭제</button></td>
 								</tr>
 							</th:block>
 						</table>
