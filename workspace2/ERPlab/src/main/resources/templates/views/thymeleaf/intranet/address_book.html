@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주소록</title>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/intranet/address_book.css"/>  
+    
+</head>
+
+<body>
+    <div class="address_book_container">
+		<div class="address_book_title">직원 주소록</div>
+        <table class="address_book">
+            <tr class="address_book_items" th:each="address_book_item : ${employee1_list}">
+                <td>
+					<form>
+						<div class="sec">
+							<input type="hidden" id="employee1_no" name="employee1_no" th:value="${address_book_item.employee1_no}"/>
+							<table class="tb_left">
+								<tr>
+									<th>부서</th>
+									<th>팀</th>
+									<th>이름</th>
+								</tr>
+								<tr>
+									<td class="employee_dept"></td>
+									<td>[[${address_book_item.team_no}]]</td>
+									<td>[[${address_book_item.employee1_name}]]</td>
+								</tr>
+							</table>
+							<table class="tb_right">
+								<tr>
+									<th>내선번호</th>
+									<th>이메일</th>
+									<th>전화번호</th>
+								</tr>
+								<tr>
+									<td class="employee_extension"></td>
+									<td>[[${address_book_item.employee1_email}]]</td>
+									<td>[[${address_book_item.employee1_phone}]]</td>
+								</tr>
+							</table>
+						</div>
+					</form>
+				</td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script inline="javascript">
+	let team_list = [[${team_list}]];
+	let employee2_list = [[${employee2_list}]];
+	let dept_list = [[${dept_list}]];
+	//부서처리
+	let employee_dept_list = document.getElementsByClassName("employee_dept");
+	for(let i = 0 ; i < employee_dept_list.length; i++){
+		let team_no = employee_dept_list[i].parentElement.children[1].innerHTML;
+		let dept_no = dept_no_finder(team_list, team_no);
+		let dept_name = dept_name_finder(dept_list, dept_no);
+		employee_dept_list[i].innerHTML = dept_name;
+	}
+	
+	//내선번호 처리
+	let employee_extension_list = document.getElementsByClassName("employee_extension");
+	for(let i = 0 ; i < employee_extension_list.length; i++){
+		let employee_no = employee_extension_list.parentElement.parentElement.parentElement.children[0].value;
+		let extension = extension_finder(employee2_list, employee_no);
+		employee_extension_list[i].innerHTML = extension;
+	}
+	//부서코드 조회 함수
+	let dept_no_finder = (list, no)=>{
+		for(let i = 0 ; i < list.length; i++){
+			if(no == list[i].team_no) return list[i].dept_no;
+		}
+		return -1;
+	}
+	
+	//부서명 조회 함수
+	let dept_name_finder = (list, no) => {
+		for(let i = 0 ; i < list.length; i++){
+			if(no == list[i].dept_no) return list[i].dept_name;
+		}
+		return "";
+	}
+	
+	//내선번호 조회 함수
+	let extension_finder = (list, no) => {
+		for(let i = 0 ; i < list.length; i++){
+			if(no == list[i].employee1_no) return list[i].employee2_extension;
+		}
+		return "";
+	}
+	
+</script>
+
+</html>

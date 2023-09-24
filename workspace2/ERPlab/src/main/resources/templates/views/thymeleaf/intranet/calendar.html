@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>달력</title>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/intranet/calendar.css"/>  
+    
+</head>
+
+<body>
+    <div class="Calendar_container">
+        <table class="Calendar">
+            <thead>
+                <tr>
+                    <td onClick="prevCalendar();" style="cursor:pointer;">&#60;</td>
+                    <td colspan="5">
+                        <span id="calYear"></span>년
+                        <span id="calMonth"></span>월
+                    </td>
+                    <td onClick="nextCalendar();" style="cursor:pointer;">&#62;</td>
+            	</tr>
+                <tr>
+                    <td>일</td>
+                    <td>월</td>
+                    <td>화</td>
+                    <td>수</td>
+                    <td>목</td>
+                    <td>금</td>
+                    <td>토</td>
+                </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    
+    <div>
+		<div class="schedule_list_box">
+			<div class="schedule_title">일정 확인하기</div>
+			<table class="erp_CalendarVOult_table">
+				<tr>
+					<th class="calendar_date">날짜</th>
+					<th class="schedule_contents">일별 일정</th>
+				</tr>
+				<tr class="schedule_items">
+					<td id="selected_today" class="calendar_date">[[${#calendars.format(#calendars.createNow(), 'MM월 dd일')}]]</td>
+					<td class="schedule_contents" id="schedule_contents">등록된 일정이 없습니다.</td>
+				</tr>
+			</table>
+		</div>
+		<hr/>
+		<div class="form_box">
+			<form id="calendar_frm" method="post">
+				<input type="hidden" name="calendar_january" id="calendar_january" th:value="${erp_CalendarVO?.calendar_january}"/>
+				<input type="hidden" name="calendar_february" id="calendar_february" th:value="${erp_CalendarVO?.calendar_february}"/>
+				<input type="hidden" name="calendar_march" id="calendar_march" th:value="${erp_CalendarVO?.calendar_march}"/>
+				<input type="hidden" name="calendar_april" id="calendar_april" th:value="${erp_CalendarVO?.calendar_april}"/>
+				<input type="hidden" name="calendar_may" id="calendar_may" th:value="${erp_CalendarVO?.calendar_may}"/>
+				<input type="hidden" name="calendar_june" id="calendar_june" th:value="${erp_CalendarVO?.calendar_june}"/>
+				<input type="hidden" name="calendar_july" id="calendar_july" th:value="${erp_CalendarVO?.calendar_july}"/>
+				<input type="hidden" name="calendar_august" id="calendar_august" th:value="${erp_CalendarVO?.calendar_august}"/>
+				<input type="hidden" name="calendar_september" id="calendar_september" th:value="${erp_CalendarVO?.calendar_september}"/>
+				<input type="hidden" name="calendar_october" id="calendar_october" th:value="${erp_CalendarVO?.calendar_october}"/>
+				<input type="hidden" name="calendar_november" id="calendar_november" th:value="${erp_CalendarVO?.calendar_november}"/>
+				<input type="hidden" name="calendar_december" id="calendar_december" th:value="${erp_CalendarVO?.calendar_december}"/>
+			</form>
+			<div class="sec">
+				<label for="schedule_content">내 일정 추가하기</label>
+				<textarea type="text" name="schedule_content" class="schedule_content" id="schedule_content"></textarea>
+				<button type="button" name="schedule_add_btn" id="schedule_add_btn">추가</button>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="/js/intranet/calendar.js"></script>
+
+<script th:inline="javascript">
+	let schedule_listing = (month) => {
+		let schedule_raw; 
+		let calendarVO = [[${erp_CalendarVO}]];
+		switch (month) {
+			case 1 : schedule_raw = calendarVO!=null? calendarVO.calendar_january : "";
+			case 2 : schedule_raw = calendarVO!=null? calendarVO.calendar_february : "";
+			case 3 : schedule_raw = calendarVO!=null? calendarVO.calendar_march : "";
+			case 4 : schedule_raw = calendarVO!=null? calendarVO.calendar_april : "";
+			case 5 : schedule_raw = calendarVO!=null? calendarVO.calendar_may : "";
+			case 6 : schedule_raw = calendarVO!=null? calendarVO.calendar_june : "";
+			case 7 : schedule_raw = calendarVO!=null? calendarVO.calendar_july : "";
+			case 8 : schedule_raw = calendarVO!=null? calendarVO.calendar_august : "";
+			case 9 : schedule_raw = calendarVO!=null? calendarVO.calendar_september : "";
+			case 10 : schedule_raw = calendarVO!=null? calendarVO.calendar_october : "";
+			case 11 : schedule_raw = calendarVO!=null? calendarVO.calendar_november : "";
+			case 12 : schedule_raw = calendarVO!=null? calendarVO.calendar_december : "";
+		}
+		//if(schedule_raw != null || schedule_raw != undefined || schedule_raw != "") {
+			//console.log("schedule_raw : " + schedule_raw);
+			//return schedule_raw.split("|||");
+		//}
+				
+		
+		
+		return null;
+	}
+</script>
+
+</html>

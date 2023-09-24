@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>조직도</title>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/intranet/organization.css"/>  
+    
+</head>
+
+<body>
+ 
+ 	
+	<div class="organization_box">
+		<div class="organization_title">조직도</div>
+		
+		<div class="degree1_layer layer">
+			<div class="degree1">
+				<p class="position_name">CEO</p>
+				<p class="position_person">정준홍</p>
+			</div>
+		</div>
+		
+		<div class="vertical_line_layer1">
+			<div class="vertical_line"></div>
+		</div>
+		<div class="horizontal_line_layer1">
+			<div class="horizontal_line"></div>
+		</div>
+		<div class="vertical_line_layer2">
+			<div class="vertical_line"></div>
+			<div class="vertical_line"></div>
+			<div class="vertical_line"></div>
+			<div class="vertical_line"></div>
+		</div>
+
+		
+		<div class="degree2_layer layer">
+			<div class="degree2">
+				<p class="position_name">기획본부</p>
+				<p class="position_person"></p>
+			</div>
+			<div class="degree2">
+				<p class="position_name">관리본부</p>
+				<p class="position_person"></p>
+			</div>
+			<div class="degree2">
+				<p class="position_name">영업본부</p>
+				<p class="position_person"></p>
+			</div>
+			<div class="degree2">
+				<p class="position_name">지원본부</p>
+				<p class="position_person"></p>
+			</div>
+		</div>
+		
+		<div class="vertical_line_layer3">
+			<div class="vertical_line"></div>
+			<div class="vertical_line"></div>
+			<div class="vertical_line"></div>
+			<div class="vertical_line"></div>
+		</div>
+		<div class="horizontal_line_layer2">
+			<div class="horizontal_line_helper">
+				<div class="horizontal_line"></div>
+			</div>
+			<div class="horizontal_line_helper">
+				<div class="horizontal_line"></div>
+			</div>
+			<div class="horizontal_line_helper">
+				<div class="horizontal_line"></div>
+			</div>
+			<div class="horizontal_line_helper">
+				<div class="horizontal_line"></div>
+			</div>
+		</div>
+		<div class="vertical_line_layer4">
+			<div class="vertical_line_helper helper2">
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+			</div>
+			<div class="vertical_line_helper helper4">
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+			</div>
+			<div class="vertical_line_helper helper4">
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+			</div>
+			<div class="vertical_line_helper helper4">
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+				<div class="vertical_line"></div>
+			</div>
+			
+
+		</div>
+
+		
+		<div class="degree3_layer layer">
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+			<div class="degree3">
+				<p class="position_name_T"></p>
+				<p class="position_person_T"></p>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+<script th:inline="javascript">
+	let team_list = [[${team_list}]];
+	let employee1_list = [[${employee1_list}]];
+	let employee2_list = [[${employee2_list}]];
+
+	let position_name_T = document.getElementsByClassName("position_name_T");
+	let position_person_T = document.getElementsByClassName("position_person_T");
+	
+	let find_team_member = (employee1_list, employee2_list, team_no) => {
+		console.log("em1_list : " + employee1_list);
+		console.log("em2_list : " + employee2_list);
+		console.log("team_no : " + team_no);
+		let team_list = "";
+		for(let i = 0 ; i < employee1_list.length; i++){
+			for(let j = 0 ; j < employee2_list.length; j++){
+				if(employee2_list[j].team_no == team_no){
+					if(employee2_list[j].employee1_no == employee1_list[i].employee1_no){
+						team_list = team_list + employee1_list[i].employee1_name + "<br/>";
+					}
+				}
+			}
+		}
+		return team_list;
+	}
+	
+	let new_team_list = [];
+	for(let i = 0 ; i < team_list.length; i++){
+		if(team_list[i].team_name.includes("본부장")) continue;
+		if(team_list[i].team_name.includes("관리자")) continue;
+		if(team_list[i].team_name.includes("전사")) continue;
+		
+		new_team_list.push(team_list[i]);
+	}
+	
+	for(let i = 0 ; i < position_name_T.length; i++){
+		position_name_T[i].innerHTML = new_team_list[i].team_name;
+		position_person_T[i].innerHTML = find_team_member(employee1_list, employee2_list, new_team_list[i].team_no);
+	}
+</script>
+
+</html>

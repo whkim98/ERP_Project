@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>달력</title>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+    <link rel="stylesheet" href="/css/intranet/annual_leave.css"/>  
+    
+</head>
+
+<body>
+
+    
+    <div class="annual_leave_box">
+		<div class="annual_leave">연차조회</div>
+		<div class="employee_info">
+			<div class="sec">
+				<div class="label">이름</div>
+				<div class="employee_name"></div>
+			</div>
+			<div class="sec">
+				<div class="label">부서</div>
+				<div class="employee_dept"></div>
+			</div>
+			<div class="sec">
+				<div class="label">팀</div>
+				<div class="employee_team"></div>
+			</div>
+			<div class="sec">
+				<div class="label">남은 연차</div>
+				<div class="employee_holiday"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+
+<script th:inline="javascript">
+	let employee1_list = [[${employee1_list}]];
+	let employee2_list = [[${employee2_list}]];
+	let team_list = [[${team_list}]];
+	let dept_list = [[${dept_list}]];
+	let employee_no = [[${employee_no}]];
+	
+	document.getElementsByClassName("employee_name")[0].innerHTML = ret_name(employee_no, employee1_list);
+	document.getElementsByClassName("employee_dept")[0].innerHTML = ret_dept_name(ret_team_no(employee_no, employee1_list), dept_list);
+	document.getElementsByClassName("employee_team")[0].innerHTML = ret_team_name(ret_team_no(employee_no, employee1_list), team_list);
+	document.getElementsByClassName("employee_holiday")[0].innerHTML = ret_holiday(employee_no, employee2_list);
+	
+	
+	let ret_name = (no, list) => {
+		for(let i = 0 ; i < list.length; i++){
+			if(list[i].employee1_no == no) return list[i].employee1_name;
+		}
+		return "";
+	}
+	
+	let ret_team_no = (employee_no, list) => {
+		for(let i = 0 ; i < list.length; i++){
+			if(list[i].employee1_no == employee_no) return list[i].team_no;
+		}
+		return 0;
+	}
+	
+	let ret_team_name = (team_no, list) => {
+		for(let i = 0 ; i < list.length; i++){
+			if(list[i].team_no == team_no) return list[i].team_name;
+		}
+		return "";
+	}
+	
+	let ret_dept_name = (team_no, list) => {
+		for(let i = 0 ; i < list.length; i++){
+			if(list[i].team_no == team_no) return list[i].dept_name;
+		}
+		return "";
+	}
+	
+	let ret_holiday = (employee_no, list)=>{
+		for(let i = 0 ; i < list.length; i++){
+			if(list[i].employee1_no = employee_no) return list[i].employee2_holiday;
+		}
+		return 0;
+	}
+</script>
+
+</html>

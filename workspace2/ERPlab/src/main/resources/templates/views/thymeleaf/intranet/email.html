@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>이메일</title>
+	<link rel="stylesheet" href="/css/common.css" />
+	<link rel="stylesheet" href="/webdesign/assets/css/main.css" />
+	<link rel="stylesheet" href="/css/intranet/email.css" />
+
+</head>
+
+<body>
+	<div class="Email_container">
+		<div class="Email_title">메일 보내기</div>
+		<form method="post" th:action="@{/intranet/email}">
+			<div class="sec">
+				<label for="sender">FROM</label>
+				<input type="text" name="sender" id="sender" th:value="${email}" disabled/>
+			</div>
+			<div class="sec">
+				<label for="sender">TO</label>
+				<input type="text" name="address" id="address"/>
+			</div>
+			<div class="sec">
+				<label for="title">제목</label>
+				<input type="text" id="title" name="title"/>
+			</div>
+			<div class="sec">
+				<label for="message">내용</label>
+				<textarea type="text" name="message" id="message"></textarea>
+			</div>
+			<div class="btn_layer">
+				<button type="submit" id="send_email_btn">전송</button>
+			</div>
+		</form>
+	</div>
+
+	
+
+</body>
+
+
+</html>

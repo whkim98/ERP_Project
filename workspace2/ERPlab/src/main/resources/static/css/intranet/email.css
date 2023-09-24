@@ -1,0 +1,27 @@
+.Email_title{
+	padding-left: 5%;
+	font-size : 1.5rem;
+	font-weight:bold;
+}
+
+.sec {
+	display: flex;
+	margin-top : 3%;
+	padding-right: 3%;
+}
+.sec > label {
+	text-align: center;
+	width : 15%;
+}
+#message{
+	resize: none;
+	height: 10rem;
+}
+.btn_layer{
+	margin-top: 3%;
+	padding-right: 3%;
+	width: 100vw;
+}
+.btn_layer > #send_email_btn {
+	float:right;
+}

@@ -1,0 +1,23 @@
+.annual_leave{
+	font-size : 1.5rem;
+	font-weight: bold;
+	margin-left : 5%;
+}
+.sec {
+	display: flex;
+	border : 1px solid grey;
+	width: 80%;
+	margin : 0 auto;
+	margin-bottom: 2.5%;
+	height : 100px;
+	padding-top : 1.5%;
+	border-radius : 15px;
+}
+.label{
+	width : 20%;
+	text-align: center;
+	font-weight : bold;
+}
+.sec > .employee_name, .employee_dept, .employee_team, .employee_holiday {
+	width : 70%;
+}
