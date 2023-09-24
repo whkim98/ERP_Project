@@ -53,7 +53,6 @@ public class IntranetController {
 	// 마이페이지
 		@RequestMapping("/mypage")
 		public String intranetMypage() {
-			
 			return ViewPath.INTRANET + "mypage/mypage";
 	}
 	
@@ -72,12 +71,13 @@ public class IntranetController {
 	// ---------일정---------
 	@GetMapping("/calendar")
 	public String calendar(Model model) {
-		Erp_CalendarVO res = intranetPageService.res_calendar();
-		model.addAttribute("erp_CalendarVO", res);
+		Erp_CalendarVO calendarVO = intranetPageService.find_calendar();
+		System.out.println("calendarVO : " + calendarVO);
+		model.addAttribute("calendarVO", calendarVO);
 		return "thymeleaf/intranet/calendar";
 	}
 	
-	@PostMapping("/calendar_update")
+	@PostMapping("/calendar")
 	public String calendar_update(Erp_CalendarVO erp_CalendarVO) {
 		int res = intranetPageService.update_calendar(erp_CalendarVO);
 		return "redirect:/intranet/calendar";

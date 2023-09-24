@@ -23,13 +23,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="find_calendar" resultType="com.lab.erp.vo.intranet.Erp_CalendarVO">
 		SELECT * FROM erp_calendar
 	</select>
-			
-	<insert id="save_calendar" flushCache="true" parameterType="com.lab.erp.vo.intranet.Erp_CalendarVO">
-		INSERT INTO erp_calendar (calendar_january, calendar_february, calendar_march, calendar_april, calendar_may, calendar_june, calendar_july, calendar_august, calendar_september, calendar_october, calendar_november, calendar_december) 
-		VALUES (#{calendar_january}, #{calendar_february}, #{calendar_march}, #{calendar_april}, #{calendar_may}, #{calendar_june}, #{calendar_july}, #{calendar_august}, #{calendar_september}, #{calendar_october}, #{calendar_november}, #{calendar_december})
-	</insert>
 	
 	<update id="update_calendar" flushCache="true" parameterType="com.lab.erp.vo.intranet.Erp_CalendarVO">
-		UPDATE erp_calendar SET calendar_january = #{calendar_february}, calendar_march = #{calendar_march}, calendar_april = #{calendar_april}, calendar_may = #{calendar_may}, calendar_june = #{calendar_june}, calendar_july = #{calendar_july}, calendar_august = #{calendar_august}, calendar_october = #{calendar_october}, calendar_september = #{calendar_september}, calendar_november = #{calendar_november}, calendar_december = #{calendar_december};       
+		UPDATE erp_calendar SET calendar_january = #{calendar_january}, calendar_february = #{calendar_february}, calendar_march = #{calendar_march}, calendar_april = #{calendar_april}, calendar_may = #{calendar_may}, calendar_june = #{calendar_june}, calendar_july = #{calendar_july}, calendar_august = #{calendar_august}, calendar_september = #{calendar_september}, calendar_october = #{calendar_october}, calendar_november = #{calendar_november}, calendar_december = #{calendar_december};       
 	</update>
 </mapper>

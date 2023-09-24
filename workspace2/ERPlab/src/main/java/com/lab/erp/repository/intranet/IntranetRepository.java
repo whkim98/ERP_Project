@@ -23,8 +23,8 @@ public interface IntranetRepository {
 	
 	Erp_CalendarVO find_calendar();
 	
-	int save_calendar(Erp_CalendarVO erp_CalendarVO);
-	
 	int update_calendar(Erp_CalendarVO erp_CalendarVO);
+	
+	String findAll_sample();
 
 }

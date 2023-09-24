@@ -111,3 +111,11 @@ hr{
 	border : 1px solid grey;
 	border-radius : 10px;
 }
+.schedule_sec {
+	display:flex;
+	justify-content: space-between;
+}
+.schedule_sec > p{
+	height : 100%;
+	margin : auto 0;
+}

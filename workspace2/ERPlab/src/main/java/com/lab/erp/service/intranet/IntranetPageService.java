@@ -35,10 +35,8 @@ public class IntranetPageService {
 	
 	public List<Erp_Employee2VO> list_employee2() {return intranetRepository.findAll_employee2();}
 	
-	public Erp_CalendarVO res_calendar() {return intranetRepository.find_calendar();}
-	
-	public int save_calendar(Erp_CalendarVO erp_CalendarVO) {return intranetRepository.save_calendar(erp_CalendarVO);}
-	
+	public Erp_CalendarVO find_calendar() {return intranetRepository.find_calendar();}
+		
 	public int update_calendar(Erp_CalendarVO erp_CalendarVO) {return intranetRepository.update_calendar(erp_CalendarVO);}
 
 	public int emailSend(Erp_EmailVO erp_EmailVO, String sender_email) {
@@ -54,6 +52,5 @@ public class IntranetPageService {
 			System.out.println(e.toString());
 			return 0;
 		}
-	
 	}
 }

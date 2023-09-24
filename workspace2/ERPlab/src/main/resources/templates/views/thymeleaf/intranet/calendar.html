@@ -55,7 +55,7 @@
 		</div>
 		<hr/>
 		<div class="form_box">
-			<form id="calendar_frm" method="post">
+			<form id="calendar_frm" method="post" action="/intranet/calendar">
 				<input type="hidden" name="calendar_january" id="calendar_january" th:value="${erp_CalendarVO?.calendar_january}"/>
 				<input type="hidden" name="calendar_february" id="calendar_february" th:value="${erp_CalendarVO?.calendar_february}"/>
 				<input type="hidden" name="calendar_march" id="calendar_march" th:value="${erp_CalendarVO?.calendar_march}"/>
@@ -81,9 +81,11 @@
 <script src="/js/intranet/calendar.js"></script>
 
 <script th:inline="javascript">
+	
 	let schedule_listing = (month) => {
-		let schedule_raw; 
-		let calendarVO = [[${erp_CalendarVO}]];
+		let schedule_raw=""; 
+		let calendarVO = [[${calendarVO}]]
+		console.log("calendarVO : "+calendarVO);
 		switch (month) {
 			case 1 : schedule_raw = calendarVO!=null? calendarVO.calendar_january : "";
 			case 2 : schedule_raw = calendarVO!=null? calendarVO.calendar_february : "";
@@ -98,14 +100,11 @@
 			case 11 : schedule_raw = calendarVO!=null? calendarVO.calendar_november : "";
 			case 12 : schedule_raw = calendarVO!=null? calendarVO.calendar_december : "";
 		}
-		//if(schedule_raw != null || schedule_raw != undefined || schedule_raw != "") {
-			//console.log("schedule_raw : " + schedule_raw);
-			//return schedule_raw.split("|||");
-		//}
-				
-		
-		
-		return null;
+		schedule_raw = "[[1]]:|||[[2]]:|||[[3]]:|||[[4]]:|||[[5]]:|||[[6]]:|||[[7]]:|||[[8]]:|||[[9]]:|||[[10]]:|||[[11]]:|||[[12]]:|||[[13]]:|||[[14]]:|||[[15]]:|||[[16]]:|||[[17]]:|||[[18]]:|||[[19]]:|||[[20]]:|||[[21]]:|||[[22]]:|||[[23]]:|||[[24]]:|||[[25]]:양치하기|-|씻기|-|세수하기|-|샤워하기|||[[26]]:퀴즈준비하기|-|숙제확인하기|||[[27]]:|||[[28]]:|||[[29]]:|||[[30]]:";
+		if(schedule_raw != null || schedule_raw != undefined) {
+			return schedule_raw.split("|||");
+		}
+		return [];
 	}
 </script>
 

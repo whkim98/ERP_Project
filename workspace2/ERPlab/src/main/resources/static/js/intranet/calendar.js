@@ -1,13 +1,5 @@
 window.onload = function () {
 	buildCalendar(); // 웹 페이지가 로드되면 buildCalendar 실행 
-	 
-	// 캘린더 생성 후 clickable 하게 만듬
-	let futureDay_list = document.getElementsByClassName("futureDay");
-	for(let i = 0 ; i < futureDay_list.length; i++){
-		futureDay_list[i].addEventListener("click", (e)=>{
-			day_selected(e.target);
-		});
-	}
 }    
 
 let nowMonth = new Date();  // 현재 달을 페이지를 로드한 날의 달로 초기화
@@ -59,6 +51,13 @@ function buildCalendar() {
             newDIV.onclick = function () { choiceDate(this); }
         }
     }
+    // 캘린더 생성 후 clickable 하게 만듬
+	let futureDay_list = document.getElementsByClassName("futureDay");
+	for(let i = 0 ; i < futureDay_list.length; i++){
+		futureDay_list[i].addEventListener("click", (e)=>{
+			day_selected(e.target);
+		});
+	}
 }
 
 // 날짜 선택
@@ -96,6 +95,7 @@ function leftPad(value) {
 let day_selected = (day_tag)=>{
 	// "일정 확인하기"란의 날짜 섹션값 변경
 	let month = document.getElementById("calMonth").innerHTML;
+	month = Number(month);
 	let date = day_tag.innerHTML;
 	document.getElementById("selected_today").innerHTML = month + "월 " + date + "일";
 	
@@ -107,76 +107,73 @@ let day_selected = (day_tag)=>{
 
 // 해당 날짜의 일정 불러오기
 let schedule_onDay = (month, day) => {
-	let schedule_list = schedule_listing();
-
-	schedule_list.push("testing...1");
-	schedule_list.push("testing...2");
-	schedule_list.push("testing...3");
-	console.log("schedule_list : " + schedule_list);
-
-	
+	let schedule_list = schedule_listing(month);
 	let text = "";
-	for(let i = 0 ; i < schedule_list.length; i++){
-		text = text +"<p>"+schedule_list[i]+"</p>" + '<button id="schedule_del_btn" onClick="delete_schedule(' + i + ')">일정삭제</button> <br/>';
-		console.log("schedule_onDay() text : " + text);
-		console.log("--------------");		
+
+	let schedule_list_content = schedule_list[day-1].split(":")[1].split("|-|");
+	for(let i = 0 ; i < schedule_list_content.length; i++){
+		text = text +'<div class="schedule_sec"><p>'+schedule_list_content[i]+"</p>" + '<button id="schedule_del_btn" onClick="delete_schedule(' + month + ',' + day +',' + i + ')">일정삭제</button> </div> <br/>';		
 	}
-	document.getElementById("schedule_contents").innerHTML = text;
+	return text;
 }
 
 // 일정 삭제 기능
-let delete_schedule = (idx) => {
-	let schedule_list = schedule_listing();
+let delete_schedule = (month, day, idx) => {
+	let schedule_list = schedule_listing(month);
 
 	let deleted_schedule_list = [];
-	deleted_schedule_list.shift();
-	schedule_list.filter((index,element)=>{
-		if(index!=idx) deleted_schedule_list.push(element);
-	})
+	
+	let schedule_list_content = schedule_list[day-1].split(":")[1].split("|-|");
+	for(let i = 0 ; i < schedule_list_content.length; i++){
+		if(idx != i) deleted_schedule_list.push(schedule_list_content[i]);
+	}
 	console.log("deleted_schedule_list : " + deleted_schedule_list);
 	
 	//vo에 정리된 텍스트화 된 값 넣기
-	let text = listToText(schedule_list);
-	textToVO(text);
+	let text = listToText(day, deleted_schedule_list);
+	textToVO(month, text);
 	
 	// 보내기
 	let calendar_frm = document.getElementById("calendar_frm");
-	calendar_frm.action="/intranet/calendar_delete";
 	calendar_frm.submit();
 }
 
 // 일정 추가 기능	
 let schedule_add_btn = document.getElementById("schedule_add_btn");
 schedule_add_btn.addEventListener("click", ()=>{
-	let schedule_list = schedule_listing();
-	
+	let month = document.getElementById("calMonth").innerHTML;
+	let date = document.getElementById("selected_today").innerHTML.split(" ")[1]
+	let day = Number(date.substr(0,2));
+
+	let schedule_list = schedule_listing(month);
+
 	let content = document.getElementById("schedule_content").value;
-	schedule_list.push(content);
+	let schedule_list_content = schedule_list[day-1].split(":")[1].split("|-|");
+	schedule_list_content.push(content);
 	
 	//vo에 정리된 텍스트화 된 값 넣기
-	let text = listToText(schedule_list);
+	let text = listToText(day, schedule_list_content);
 	textToVO(text);
 	
 	//보내기
 	let calendar_frm = document.getElementById("calendar_frm");
-	calendar_frm.action="/intranet/calendar_update";
 	calendar_frm.submit();
 });
 
 // 일정 리스트 -> 텍스트화 함수
-let listToText = (list) => {
-	let text="";
+let listToText = (day , list) => {
+	let text= "[[" + day +"]]:";
 	for (let i = 0 ; i < list.length ; i++){
 		text = text + list[i]; 
-		if(i+1) text= text + "|||";
+		if(i+1 != list.length) text= text + "|-|";
 	}
-	console.log("text : " + text);
+	console.log("listToText text : " + text);
 	return text;
 }
 
-let textToVO = (text)=>{
-	let TodayMonth = document.getElementById("calendar_date").innerHTML.charAt(0);
-	switch (TodayMonth) {
+let textToVO = (month, text)=>{
+	
+	switch (month) {
 		case 1 : document.getElementById("calendar_jaunary").value = text;
 		case 2 : document.getElementById("calendar_february").value = text;
 		case 3 : document.getElementById("calendar_march").value = text;
