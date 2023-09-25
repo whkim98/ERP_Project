@@ -3,9 +3,9 @@ ctgr_search_btn.addEventListener('click', () => {
 	window.open("../c3/ctgr_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
-let teamlist_search_btn = document.getElementById("teamlist_search");
-teamlist_search_btn.addEventListener('click', () => {
-	window.open("../c3/team_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
+let companylist_search_btn = document.getElementById("companylist_search");
+companylist_search_btn.addEventListener('click', () => {
+	window.open("../c3/company_list", "_blank", "scrollbars=yes, top=200, left=450, width=1000, height=600");
 });
 
 let customerlist_search_btn = document.getElementById("customerlist_search");
@@ -19,12 +19,12 @@ settletypelist_search_btn.addEventListener('click', () => {
 });
 
 // 행사 리스트 클릭시 정보출력
-let online_items = document.getElementsByClassName("online_items");
-for(let i = 0; i < online_items.length; i++){
-	online_items[i].addEventListener('click', (e) => {
+let storesales_items = document.getElementsByClassName("storesales_items");
+for(let i = 0; i < storesales_items.length; i++){
+	storesales_items[i].addEventListener('click', (e) => {
 		//클릭된 행사 색변경
-		reset(online_items, online_items.length, "online_items");
-		e.target.parentElement.className="online_items selected_online_items";
+		reset(storesales_items, storesales_items.length, "storesales_items");
+		e.target.parentElement.className="storesales_items selected_storesales_items";
 		
 		//클릭시 하단부 버튼 RESET/SAVE -> DELETE/UPDATE로 변경
 		buttonController(true);
@@ -54,9 +54,9 @@ let buttonController = (status) => {
 }
 
 // input, label, 리스트 제외한 다른 영역 클릭시 DELETE/UPDATE -> RESET/SAVE 로 변경
-let online_container = document.getElementsByClassName("online_container");
-online_container[0].addEventListener('click', (e) => {
-	let listarea = document.getElementsByClassName("online_regist");
+let storesales_container = document.getElementsByClassName("storesales_container");
+storesales_container[0].addEventListener('click', (e) => {
+	let listarea = document.getElementsByClassName("storesales_regist");
 	let labelarea = document.getElementsByTagName("label");
 	let inputarea = document.getElementsByTagName("input");
 	
@@ -70,7 +70,7 @@ online_container[0].addEventListener('click', (e) => {
 			
 		if(flag) {
 			buttonController(false);
-			reset(online_items, online_items.length, "online_items");
+			reset(storesales_items, storesales_items.length, "storesales_items");
 			empty_inputs();
 		}
 	}
@@ -78,11 +78,11 @@ online_container[0].addEventListener('click', (e) => {
 
 // 입력란 값 제거 함수
 let empty_inputs = () => {
-	document.getElementById("online_no").value="";
+	document.getElementById("storesales_no").value="";
 	document.getElementById("ctgr_no").value="";
-	document.getElementById("online_code").value="";
-	document.getElementById("team_no").value="";
-	document.getElementById("online_date").value="";
+	document.getElementById("storesales_code").value="";
+	document.getElementById("company_no").value="";
+	document.getElementById("storesales_date").value="";
 	document.getElementById("customer_no").value="";
 	document.getElementById("settletype_no").value="";
 }
@@ -90,7 +90,7 @@ let empty_inputs = () => {
 // 페이지 로딩시 error 문구 여부를 통해 focus 맞추기
 window.onload = () => {
 	let errormsg = document.getElementById("errormsg").innerHTML;
-	errormsg = errormsg == "ctgr_no" ? "ctgr_name" : errormsg == "team_no" ? "team_name" : errormsg == "customer_no" ? "customer_name" : errormsg == "settletype_no" ? "settletype_name" : errormsg;
+	errormsg = errormsg == "ctgr_no" ? "ctgr_name" : errormsg == "company_no" ? "company_name" : errormsg == "customer_no" ? "customer_name" : errormsg == "settletype_no" ? "settletype_name" : errormsg;
 	if (errormsg != null) document.getElementById(errormsg).focus();
 }
 
@@ -101,7 +101,7 @@ let empty_input_confirm = () => {
 	let flag = false;
 	let tagName = "";
 	for(let i = 0 ; i < inputboxes.length ; i++){
-		if(inputboxes[i].id=="online_no" || inputboxes[i].id=="search_word") continue;
+		if(inputboxes[i].id=="storesales_no" || inputboxes[i].id=="search_word") continue;
 		else{
 			if (inputboxes[i].value == "" || inputboxes[i].value == null) {
 				flag = true;
@@ -129,10 +129,10 @@ let empty_input_confirm = () => {
 }
 
 // SAVE 버튼 클릭 기능
-let online_save_btn = document.getElementById("online_save_btn");
-online_save_btn.addEventListener('click', () => {
+let storesales_save_btn = document.getElementById("storesales_save_btn");
+storesales_save_btn.addEventListener('click', () => {
 	let res = empty_input_confirm();
-	if (res) document.getElementById("online_frm").submit();
+	if (res) document.getElementById("storesales_frm").submit();
 });
 
 // 설비/장비리스트 검색조회
@@ -165,13 +165,13 @@ function getlist(list){
 			newTr = document.createElement("tr");
 			search_result.appendChild(newTr);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_no;
+			newTd.innerHTML = item.storesales_no;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_code;
+			newTd.innerHTML = item.storesales_code;
 			newTr.appendChild(newTd);
 			newTd = document.createElement("td");
-			newTd.innerHTML = item.online_date;
+			newTd.innerHTML = item.storesales_date;
 			newTr.appendChild(newTd);
 			
 		});
@@ -181,19 +181,19 @@ function getlist(list){
 }
 
 // 설비/장비 수정 버튼
-let online_update_btn = document.getElementById("online_update_btn");
-online_update_btn.addEventListener('click', () => {
-	let online_frm = document.getElementById("online_frm");
-	online_frm.action="/c/c34/online_update";
-	online_frm.submit();
+let storesales_update_btn = document.getElementById("storesales_update_btn");
+storesales_update_btn.addEventListener('click', () => {
+	let storesales_frm = document.getElementById("storesales_frm");
+	storesales_frm.action="/c/c31/storesales_update";
+	storesales_frm.submit();
 });
 
 // 설비/장비 삭제 버튼
-let online_delete_btn = document.getElementById("online_delete_btn");
-online_delete_btn.addEventListener('click', () => {
-	let online_frm = document.getElementById("online_frm");
-	online_frm.action="/c/c34/online_delete";
-	online_frm.submit();
+let storesales_delete_btn = document.getElementById("storesales_delete_btn");
+storesales_delete_btn.addEventListener('click', () => {
+	let storesales_frm = document.getElementById("storesales_frm");
+	storesales_frm.action="/c/c31/storesales_delete";
+	storesales_frm.submit();
 });
 
 

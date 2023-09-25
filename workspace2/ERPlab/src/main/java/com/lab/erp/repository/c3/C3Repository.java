@@ -8,6 +8,7 @@ import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
+import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
 import com.lab.erp.vo.c.c3.Erp_WarehouseVO;
 import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
@@ -15,6 +16,15 @@ import com.lab.erp.vo.d.d6.Erp_GoodslotVO;
 import com.lab.erp.vo.login.Erp_TeamVO;
 
 public interface C3Repository {
+	// ---------매장매출---------
+	List<Erp_StoresalesVO> findAll_storesales();
+	
+	int save_storesales(Erp_StoresalesVO erp_StoresalesVO);
+		
+	int update_storesales(Erp_StoresalesVO erp_StoresalesVO);
+	
+	int delete_storesales(int storesales_no);
+	
 	
 	// ---------창고관리(재고관리)---------
 	List<Erp_WarehouseVO> findAll_warehouse();

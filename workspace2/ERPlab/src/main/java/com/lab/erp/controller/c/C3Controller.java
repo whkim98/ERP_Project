@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lab.erp.service.c.C3Service;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
+import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
 import com.lab.erp.util.EventValidator;
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
 import com.lab.erp.vo.all.Erp_CtgrVO;
@@ -40,7 +42,46 @@ public class C3Controller {
 		this.c3Service = c3Service;
 	}
 	// ---------매장매출---------
-
+	@GetMapping("/c31/storesales")
+	public String storsales(Model model) {
+		List<Erp_StoresalesVO> list_res = c3Service.list_storesales();
+		model.addAttribute("storesales_list", list_res);
+		return "thymeleaf/c/storesales";
+	}
+	
+	@PostMapping("/c31/storesales")
+	public String storesales (HttpSession session, @Valid @ModelAttribute("erp_StoresalesVO") Erp_StoresalesVO erp_StoresalesVO, BindingResult result, RedirectAttributes redirectAttributes) {
+		// 에러있다면, 적힌 내용들 담고 해당 페이지 redirect 시킴
+		if(result.hasErrors()) {
+			if (!result.getFieldErrors().get(0).getField().equals("storesales_no")) {
+				redirectAttributes.addFlashAttribute("erp_StoresalesVO", erp_StoresalesVO);
+			    redirectAttributes.addFlashAttribute("error", result.getFieldErrors().get(0).getField());	
+			}
+			// 에러가 없다며 일반적 저장기능 실행
+			else {
+//				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+//				erp_StoresalesVO.setComcode_no(comcode_no);
+				erp_StoresalesVO.setComcode_no(1); //temporary TODO 삭제할것
+				c3Service.save_storesales(erp_StoresalesVO);
+			}
+		} 
+		return "redirect:/c/c3/c31/storesales";
+	}
+	
+	
+	@PostMapping("/c31/storesales_update")
+	public String storesales_update (HttpSession session, Erp_StoresalesVO erp_StoresalesVO) {
+		int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+		erp_StoresalesVO.setComcode_no(comcode_no); 
+		int res = c3Service.update_storesales(erp_StoresalesVO);
+		return "redirect:/c/c3/c32/warehouse";
+	}
+	
+	@PostMapping("/c31/storesales_delete")
+	public String event_delete (Erp_StoresalesVO erp_StoresalesVO) {
+		int res = c3Service.delete_storesales(erp_StoresalesVO.getStoresales_no());
+		return "redirect:/c/c3/c31/storesales";
+	}
 	
 	// ---------창고관리(재고관리)---------
 	@GetMapping("/c32/warehouse")
@@ -60,9 +101,9 @@ public class C3Controller {
 			}
 			// 에러가 없다며 일반적 저장기능 실행
 			else {
-//				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
-//				erp_WarehouseVO.setComcode_no(comcode_no);
-				erp_WarehouseVO.setComcode_no(1); //temporary TODO 삭제할것
+				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
+				erp_WarehouseVO.setComcode_no(comcode_no);
+//				erp_WarehouseVO.setComcode_no(1); //temporary TODO 삭제할것
 				c3Service.save_warehouse(erp_WarehouseVO);
 			}
 		} 
@@ -218,9 +259,10 @@ public class C3Controller {
 	
 	// ---------상품로트번호조회---------
 	@GetMapping("/c3/goodslot_list")
-	public String goodslot_list (Model model) {
+	public String goodslot_list (Model model, @RequestParam int order) {
 		List<Erp_GoodslotVO> goodslot_list= c3Service.findGoodslotAll();
 		model.addAttribute("goodslot_list", goodslot_list);
+		model.addAttribute("order", order);
 		return "thymeleaf/c/goodslot_list";
 	}
 	

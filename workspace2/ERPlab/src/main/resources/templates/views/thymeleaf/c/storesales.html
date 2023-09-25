@@ -6,25 +6,25 @@
         <title>ERP lab 온라인</title>
         <link rel="stylesheet" href="/css/common.css" />
         <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
-        <link rel="stylesheet" href="/css/c/online.css" />
+        <link rel="stylesheet" href="/css/c/storesales.css" />
     </head>
     <body>
 		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
 
-        <div class="online_container">
-            <h2 class="online_title"><a th:href="@{/c/c34/online}">온라인매출</a></h2>
-            <div class="online_body">
-                <div class="online_regist">
-					<table class="online_search">
+        <div class="storesales_container">
+            <h2 class="storesales_title"><a th:href="@{/c/c31/storesales}">온라인매출</a></h2>
+            <div class="storesales_body">
+                <div class="storesales_regist">
+					<table class="storesales_search">
 						<tr>
 							<td>
 								<select name="search_type" id="search_type">
 									<option value="all" selected}>전체</option>
-									<option value="online_no">코드</option>
+									<option value="storesales_no">코드</option>
 									<option value="ctgr_no">카테고리코드</option>
-									<option value="online_code">온라인매출코드</option>
-									<option value="team_no">팀코드</option>
-									<option value="online_date">매출일자</option>
+									<option value="storesales_code">매장매출코드</option>
+									<option value="company_no">회사코드</option>
+									<option value="storesales_date">매출일자</option>
 									<option value="customer_no">고객정보코드</option>
 									<option value="settletype_no">결제구분코드</option>	
 								</select>
@@ -36,16 +36,16 @@
 						</tr>
 					</table>
 					<table id="search_result">
-                    <table class="online_list">
-                        <tr class="online_top">
+                    <table class="storesales_list">
+                        <tr class="storesales_top">
 							<th class="sec1">코드</th>
                             <th class="sec2">온라인매출코드</th>
                             <th class="sec3">매출일자</th>
                         </tr>
-                        <tr class="online_items" th:each="online_item : ${online_list}">
-							<td>[[${online_item.online_no}]]</td>
-                            <td>[[${online_item.online_code}]]</td>
-                            <td>[[${online_item.online_date}]]</td>
+                        <tr class="storesales_items" th:each="storesales_item : ${storesales_list}">
+							<td>[[${storesales_item.storesales_no}]]</td>
+                            <td>[[${storesales_item.storesales_code}]]</td>
+                            <td>[[${storesales_item.storesales_date}]]</td>
                         </tr>
                     </table>
                 </div>
@@ -58,7 +58,7 @@
 						<div class="yellow_box"></div>
 						<span class="red">는 필수 입력란입니다.</span>
 					</div>
-                    <form th:action="@{/d/d51/claim}" method="post" id="online_frm">
+                    <form th:action="@{/d/d51/claim}" method="post" id="storesales_frm">
 						<div class="sec">
 							<button type="button" id="addRow_btn">행추가</button>
 							<button type="button" id="delRow_btn">행삭제</button>
@@ -110,7 +110,7 @@
 							</th:block>
 						</table>
 						
-						<input type="hidden" name="online_no" id="online_no" th:value="${erp_OnlineVO?.online_no}"/>
+						<input type="hidden" name="storesales_no" id="storesales_no" th:value="${erp_StoresalesVO?.storesales_no}"/>
 						
             			<div class="sec">
                             <label for="ctgr_name">카테고리 조회</label>
@@ -130,46 +130,46 @@
                             </div>
                         </div>
                         
-						<input type="hidden" name="ctgr_no" id="ctgr_no" th:value="${erp_OnlineVO?.ctgr_no}">
+						<input type="hidden" name="ctgr_no" id="ctgr_no" th:value="${erp_StoresalesVO?.ctgr_no}">
 
   						<div class="sec">
-                            <label for="online_code">온라인매출코드</label>
+                            <label for="storesales_code">온라인매출코드</label>
                             <input
                                 type="text"
-                                name="online_code"
-                                id="online_code"
+                                name="storesales_code"
+                                id="storesales_code"
                                 class="required"
-                                th:value="${erp_OnlineVO?.online_code}"
+                                th:value="${erp_StoresalesVO?.storesales_code}"
                             />
                         </div>
 
             			<div class="sec">
-                            <label for="team_name">부서 조회</label>
-                            <div class="team_regist">
+                            <label for="company_name">회사 조회</label>
+                            <div class="company_regist">
                                 <input
                                     type="text"
-                                    name="team_name"
-                                    id="team_name"
+                                    name="company_name"
+                                    id="company_name"
                                     placeholder=" 우측 조회버튼으로 확인해주세요."
                                     class="required"
                                     readonly
                                     disabled
                                 />
-                               <button type="button" id="teamlist_search">                        
+                               <button type="button" id="companylist_search">                        
 									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
 								</button>
                             </div>
                         </div>
                         
-						<input type="hidden" name="team_no" id="team_no" th:value="${erp_OnlineVO?.team_no}">
+						<input type="hidden" name="company_no" id="company_no" th:value="${erp_StoresalesVO?.company_no}">
 
 						<div class="sec">
-                            <label for="online_date">일자</label>
+                            <label for="storesales_date">일자</label>
                             <input
                                 type="date"
-                                name="online_date"
-                                id="online_date"
-                                th:value="${erp_OnlineVO?.online_date}"
+                                name="storesales_date"
+                                id="storesales_date"
+                                th:value="${erp_StoresalesVO?.storesales_date}"
                             />
                         </div>
                         
@@ -191,9 +191,7 @@
                             </div>
                         </div>
 
-						<input type="hidden" name="customer_no" id="customer_no" th:value="${erp_OnlineVO?.customer_no}">
-
-                	
+						<input type="hidden" name="customer_no" id="customer_no" th:value="${erp_StoresalesVO?.customer_no}">
 
        		 			<div class="sec">
                             <label for="settletype_name">결제구분 조회</label>
@@ -213,15 +211,15 @@
                             </div>
                         </div>
 
-						<input type="hidden" name="settletype_no" id="settletype_no" th:value="${erp_OnlineVO?.settletype_no}">
+						<input type="hidden" name="settletype_no" id="settletype_no" th:value="${erp_StoresalesVO?.settletype_no}">
                        
  						<div class="sec" id="new_btn_sec">
                             <button type="reset">RESET</button>
-                            <button type="button" id="online_save_btn">SAVE</button>
+                            <button type="button" id="storesales_save_btn">SAVE</button>
                         </div>
                         <div class="sec" id="old_btn_sec">
-							<button type="button" id="online_delete_btn">DELETE</button>
-							<button type="button" id="online_update_btn">UPDAET</button>
+							<button type="button" id="storesales_delete_btn">DELETE</button>
+							<button type="button" id="storesales_update_btn">UPDAET</button>
 						</div>
 						
 						<div id="errormsg" th:text="${error}"></div>
@@ -237,13 +235,13 @@
         <script src="/webdesign/assets/js/breakpoints.min.js"></script>
         <script src="/webdesign/assets/js/util.js"></script>
         <script src="/webdesign/assets/js/main.js"></script>
-        <script src="/js/c/c3/online.js"></script>
+        <script src="/js/c/c3/storesales.js"></script>
         <script th:inline="javascript">
 			// 설비/장비 리스트 검색 필터링 기능
 			let search_filter = (type,word) => {
 				if(word=="" || word==undefined || word==null) return null;
 				let searched_list = [];
-				let list = [[${online_list}]];
+				let list = [[${storesales_list}]];
 				
 				for(let i = 0 ; i < list.length; i++){
 					let json_data = JSON.stringify(list[i]);
@@ -265,15 +263,15 @@
 			
 			// 설비/장비리스트중 창고 클릭시 데이터값 전달 함수
 				let selected_vo = (tag) => {
-				let list = [[${online_list}]];
+				let list = [[${storesales_list}]];
 				let vo_no = tag.innerHTML;
 				for(let i = 0 ; i < list.length; i ++){
-					if (list[i].online_no == vo_no){
-						document.getElementById("online_no").value=list[i].online_no;
+					if (list[i].storesales_no == vo_no){
+						document.getElementById("storesales_no").value=list[i].storesales_no;
 						document.getElementById("ctgr_no").value=list[i].ctgr_no;
-						document.getElementById("online_code").value=list[i].online_code;
-						document.getElementById("team_no").value=list[i].team_no;
-						document.getElementById("online_date").value=list[i].online_date;
+						document.getElementById("storesales_code").value=list[i].storesales_code;
+						document.getElementById("company_no").value=list[i].company_no;
+						document.getElementById("storesales_date").value=list[i].storesales_date;
 						document.getElementById("customer_no").value=list[i].customer_no;
 						document.getElementById("settletype_no").value=list[i].settletype_no;						
 					}

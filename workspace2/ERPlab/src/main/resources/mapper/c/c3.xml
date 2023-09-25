@@ -4,6 +4,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.c3.C3Repository">
 	<!-- 매장매출 -->
+		<select id="findAll_storesales" resultType="com.lab.erp.vo.c.c3.Erp_StoresalesVO">
+	 	SELECT * FROM erp_storesales ORDER BY storesales_no DESC
+	</select>
+	
+	<insert id="save_storesales" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_StoresalesVO" keyProperty="warehouse_no" useGeneratedKeys="true" keyColumn="storesales_no">
+		INSERT INTO erp_storsales (ctgr_no, storesales_code, company_no, storesales_date, customer_no, settletype_no, comcode_no) 
+		VALUES (#{ctgr_no}, #{storesales_code}, #{company_no}, #{storesales_date}, #{customer_no}, #{settletype_no}, #{comcode_no})
+	</insert>
+	
+	<update id="update_storesales" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_StoresalesVO">
+		UPDATE erp_warehouse SET ctgr_no = #{ctgr_no}, storesales_code = #{storesales_code}, company_no = #{company_no}, storesales_date = #{storesales_date}, customer_no = #{customer_no}, settletype_no = #{settletype_no}, comcode_no = #{comcode_no}
+		WHERE storsales_no = #{storesales_no}
+	</update>
+	
+	<delete id="delete_storesales" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_StoresalesVO">
+		DELETE FROM erp_storesales WHERE storesales_no = #{storesales_no}
+	</delete>
 	
 	
 	<!-- 창고관리 -->
@@ -94,5 +111,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 결제구분조회 -->
 	<select id="findSettletypeAll" resultType="com.lab.erp.vo.b.b3.Erp_SettletypeVO">
 		SELECT * FROM erp_settletype
-	</select>		
+	</select>	
+	
+		
+	<!-- 멀티상품조회 -->
+	<select id="findGoodslotAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
+		SELECT * FROM erp_goodslot
+	</select>			
 </mapper>

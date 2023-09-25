@@ -14,11 +14,6 @@ public class Erp_StoresalesVO {
 	private int company_no;
 	private String storesales_date;
 	private int customer_no;
-	private int goods_no;
-	private int storesales_qty;
-	private int storesales_price;
-	private int storesales_tax;
-	private int storesales_total;
 	private String settletype_no;
 	private int comcode_no;
 

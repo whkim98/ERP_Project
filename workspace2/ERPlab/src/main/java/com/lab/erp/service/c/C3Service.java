@@ -9,6 +9,7 @@ import com.lab.erp.vo.all.Erp_CtgrVO;
 import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
+import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
 import com.lab.erp.vo.c.c3.Erp_WarehouseVO;
 import com.lab.erp.vo.c.c4.Erp_CustomerVO;
 import com.lab.erp.vo.d.d6.Erp_GoodsVO;
@@ -24,7 +25,13 @@ public class C3Service {
 		c3Repository = sqlSession.getMapper(C3Repository.class);
 	}
 	// ---------매장매출---------
+	public List<Erp_StoresalesVO> list_storesales() {return c3Repository.findAll_storesales();}
 	
+	public int save_storesales(Erp_StoresalesVO erp_StoresalesVO) {return c3Repository.save_storesales(erp_StoresalesVO);}
+		
+	public int update_storesales(Erp_StoresalesVO erp_StoresalesVO) {return c3Repository.update_storesales(erp_StoresalesVO);}
+	
+	public int delete_storesales(int storesales_no) {return c3Repository.delete_storesales(storesales_no);}
 	
 	// ---------창고관리(재고관리)---------
 	// 전체 재고 정보 출력

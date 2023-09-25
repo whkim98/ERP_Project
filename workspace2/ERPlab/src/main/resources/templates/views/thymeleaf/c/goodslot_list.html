@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,22 +15,21 @@
           <thead>
             <tr>
               <th class="goodslot_title">
-                <span>상품로트번호조회</span>
+                <span>상품로트번호조회 [<span id="order_value">[[${order}]]</span>]</span>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr class="items">
-              <td>
+              <td>          
                 <article
                   class="post"
                   th:each="goodslot_item : ${goodslot_list}"
                 >
                   <header>
                     <div class="title">
-                      <h2>상품번호 : [[${goodslot_item.goods_no}]]</h2>
+                      <h2>로트 : [[${goodslot_item.goodslot_lot}]]</h2>
                       <p>
-						  로트 : [[${goodslot_item.goodslot_lot}]] <br/>
 						  수량 : [[${goodslot_item.goodslot_qty}]] <br/>
 						  생산일자 : [[${goodslot_item.goodslot_production}]] <br/>
 						  유통기한 : [[${goodslot_item.goodslot_expiry}]] <br/>
@@ -39,6 +38,7 @@
 						  총원가 : [[${goodslot_item.goodslot_total}]] 
 					  </p>
                       <p class="hidden">[[${goodslot_item.goodslot_no}]]</p>
+                      <p class="hidden">[[${goodslot_item.goods_no}]]</p>
                     </div>
                   </header>
                   <p class="content"></p>

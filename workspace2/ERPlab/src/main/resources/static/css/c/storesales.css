@@ -1,23 +1,23 @@
-.online_container {
+.storesales_container {
 	padding: 2%;
 }
 
-.online_container>.online_title {
+.storesales_container>.storesales_title {
 	text-align: center;
 }
 
-.online_container>.online_body {
+.storesales_container>.storesales_body {
 	display: flex;
 	justify-content: space-between;
 }
 
-.online_container>.online_body>.online_regist {
+.storesales_container>.storesales_body>.storesales_regist {
 	width: 45%;
 	height: 100%;
 	overflow: hidden;
 }
 
-.online_container>.online_body .vertical_line {
+.storesales_container>.storesales_body .vertical_line {
 	height: 100vh;
 	width: 0.075vw;
 	border-width: 0;
@@ -25,17 +25,17 @@
 	background-color: rgba(160, 160, 160, 0.4);
 }
 
-.online_container>.online_body>.regits_form {
+.storesales_container>.storesales_body>.regits_form {
 	width: 50%;
 	height: 100%;
 }
 
-.online_container>.online_body>.regits_form .sec {
+.storesales_container>.storesales_body>.regits_form .sec {
 	display: flex;
 	margin: 2%;
 }
 
-.online_container>.online_body>.regits_form .sec>#online_date{
+.storesales_container>.storesales_body>.regits_form .sec>#storesales_date{
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	-ms-appearance: none;
@@ -52,41 +52,41 @@
 	width: 100%;
 }
 
-.online_container>.online_body>.regits_form .sec>label {
+.storesales_container>.storesales_body>.regits_form .sec>label {
 	width: 40%;
 }
 
-.online_container>.online_body>.regits_form .sec>input:focus,
+.storesales_container>.storesales_body>.regits_form .sec>input:focus,
 select:focus {
 	border-color: #000b9e;
 }
 
-.online_container>.online_body>.regits_form .sec>.ctgr_regist, .team_regist, .customer_regist, .settletype_regist  {
+.storesales_container>.storesales_body>.regits_form .sec>.ctgr_regist, .company_regist, .customer_regist, .settletype_regist  {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
 }
 
-.online_container>.online_body>.regits_form button {
+.storesales_container>.storesales_body>.regits_form button {
 	border-color: #000b9e;
 	height: 100%;
 	width: 15%;
 }
 
-.online_container>.online_body>.regits_form .sec>.ctgr_regist>#ctgr_name {
+.storesales_container>.storesales_body>.regits_form .sec>.ctgr_regist>#ctgr_name {
 	width: 80%;
 }
-.online_container>.online_body>.regits_form .sec>.team_regist>#team_name {
+.storesales_container>.storesales_body>.regits_form .sec>.company_regist>#company_name {
 	width: 80%;
 }
-.online_container>.online_body>.regits_form .sec>.customer_regist>#customer_name {
+.storesales_container>.storesales_body>.regits_form .sec>.customer_regist>#customer_name {
 	width: 80%;
 }
-.online_container>.online_body>.regits_form .sec>.settletype_regist>#settletype_name {
+.storesales_container>.storesales_body>.regits_form .sec>.settletype_regist>#settletype_name {
 	width: 80%;
 }
 
-.online_container>.online_body>.regits_form .sec>input[type="number"] {
+.storesales_container>.storesales_body>.regits_form .sec>input[type="number"] {
 	appearance: none;
 	background: rgba(160, 160, 160, 0.075);
 	border: solid 1px rgba(160, 160, 160, 0.3);
@@ -96,38 +96,38 @@ select:focus {
 	width: 100%;
 }
 
-.online_container>.online_body>.regits_form button {
+.storesales_container>.storesales_body>.regits_form button {
 	border-color: #000b9e;
 }
 
 .post .content {
 	font-size: 1.1rem;
 }
-.online_container>.online_body>.regits_form .sec>.ctgr_regist>#ctgrlist_search {
+.storesales_container>.storesales_body>.regits_form .sec>.ctgr_regist>#ctgrlist_search {
 	line-height: 0;
 }
-.online_container>.online_body>.regits_form .sec>.ctgr_regist>#ctgrlist_search>img {
+.storesales_container>.storesales_body>.regits_form .sec>.ctgr_regist>#ctgrlist_search>img {
 	width: 25px;
 	height: 25px;
 }
-.online_container>.online_body>.regits_form .sec>.team_regist>#teamlist_search {
+.storesales_container>.storesales_body>.regits_form .sec>.company_regist>#companylist_search {
 	line-height: 0;
 }
-.online_container>.online_body>.regits_form .sec>.team_regist>#teamlist_search>img {
+.storesales_container>.storesales_body>.regits_form .sec>.company_regist>#companylist_search>img {
 	width: 25px;
 	height: 25px;
 }
-.online_container>.online_body>.regits_form .sec>.customer_regist>#customerlist_search {
+.storesales_container>.storesales_body>.regits_form .sec>.customer_regist>#customerlist_search {
 	line-height: 0;
 }
-.online_container>.online_body>.regits_form .sec>.customer_regist>#customerlist_search>img {
+.storesales_container>.storesales_body>.regits_form .sec>.customer_regist>#customerlist_search>img {
 	width: 25px;
 	height: 25px;
 }
-.online_container>.online_body>.regits_form .sec>.settletype_regist>#settletypelist_search {
+.storesales_container>.storesales_body>.regits_form .sec>.settletype_regist>#settletypelist_search {
 	line-height: 0;
 }
-.online_container>.online_body>.regits_form .sec>.settletype_regist>#settletypelist_search>img {
+.storesales_container>.storesales_body>.regits_form .sec>.settletype_regist>#settletypelist_search>img {
 	width: 25px;
 	height: 25px;
 }
@@ -143,7 +143,7 @@ select:focus {
 	width: 80%;
 }
 
-.selected_online_items {
+.selected_storesales_items {
 	background-color: #FDECC5 !important;
 	color: #000b9e;
 	border-left: 1px solid #000b9e !important;
