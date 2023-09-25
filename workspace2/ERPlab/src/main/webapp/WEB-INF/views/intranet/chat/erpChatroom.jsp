@@ -10,113 +10,52 @@
 
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-<style>
-    body, html {
-        width: 100%; height: 100%;
-        min-width: 380px;
-        min-height: 480px;
-        padding: 0%; margin: 0%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #erpChatroom-container {
-        display: flex;
-        width: 100%; height: 100%;
-        flex-direction: column;
-        padding: 0%; margin: 0%;
-    }
-
-    #erpChatroomHead {
-        background-color: greenyellow;
-        padding: 0; margin: 0;
-    }
-    
-    #erpChatroomMain {
-        background-color: rgb(208, 255, 113);
-        padding: 0; margin: 0;
-        flex-grow: 1;
-        overflow: auto;
-    }
-    
-    #erpChatroomBottom {
-        background-color: white;
-        padding: 0; margin: 0;
-    }
-
-    #msgInput {
-        width: 100%;
-        height: 100px;
-        resize: none;
-        background-color: transparent;
-        border: none; outline: none;
-        overflow-y: auto;
-    }
-
-    #msgSend {
-        background-color: rgb(208, 255, 113);
-        border: 1px solid rgb(208, 255, 113);
-        color: dimgray;
-        cursor: pointer;
-        border-radius: 3px;
-        width: 55px; height: 35px;
-        float: right;
-    }
-
-    #msgSend:hover {
-        background-color: limegreen;
-        border: 1px solid limegreen;
-    }
-    
-    .dh_outline {
-    	outline: none;
-    }
-    
-    .hidden{
-    	display: none;
-    }
-</style>
+<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/chat/common.css">
 
 </head>
 <body>
 
 <c:if test="${selectRoom.employee2_no1 == empNo || selectRoom.employee2_no2 == empNo}">
-<div id="erpChatroom-container">
+<div class="erpChatroom-container">
 
-    <div id="erpChatroomHead">
+    <div class="erpChatroomHead">
     	<c:if test="${selectRoom.chatroom_title == null }">
        		<h2><input type="text" name="chatroom_title" value="${selectRoom.employee2_position } ${employee1_name }" onkeypress="chattitle(event, ${selectRoom.chatroom_no}, this.value)" class="dh_outline"></h2>
     	</c:if>
     	<c:if test="${selectRoom.chatroom_title != null }">
 	        <h2><input type="text" name="chatroom_title" value="${selectRoom.chatroom_title }" onkeypress="chattitle(event, ${selectRoom.chatroom_no}, this.value)" class="dh_outline"></h2>
-    	</c:if>
+    	</c:if> 		
     </div>
+
+	<div class="erpChatSearchSet">
+	    <div id="inputWord" class="hidden">
+	  		<input type="text" name="chatSearchWord" id="chatSearchWord" placeholder="채팅 내 검색" autocomplete="off">
+	        <a onclick="searchMsg()"><i class="input-icon uil-search"></i></a>
+	    </div>
+		<a id="erpSearchIcon" ><i class="input-icon uil-comment-search"></i></a>    		       		
+	</div>
     
-    <div>
-    	<input type="button" value="▼" onclick="hiddenDel()">
-    	<input type="button" value="▲" onclick="hiddenOn()">
-    </div>
-    <div id="inputWord" class="hidden">
-  		<input type="text" name="word" id="word" placeholder="검색" autocomplete="off">
-  		<input type="button" value="조회" onclick="searchMsg()">
-  		<input type="text" id="searchNumber">
-    </div>
-    
-    <div id="erpChatroomMemo">
-	   	<c:choose>
-	   		<c:when test="${selectRoom.chatroom_memo != null }">
-	   			<input type="text" name="chatroom_memo" value="${selectRoom.chatroom_memo }" onkeypress="chatmemo(event,${selectRoom.chatroom_no},this.value)" class="dh_outline">
-	   		</c:when>
-	   		<c:otherwise>
-	   			<input type="text" name="chatroom_memo" placeholder="메모를 적어주세요" autocomplete="off" onkeypress="chatmemo(event,${selectRoom.chatroom_no},this.value)" class="dh_outline">
-	   		</c:otherwise>
-	   	</c:choose>
-    </div>
+    <div class="erpUpperMenu">
+	    <div class="erpUpperSet">
+		    <div id="erpChatroomMemo">
+		    	<i class="input-icon uil-megaphone"></i>
+			   	<c:choose>
+			   		<c:when test="${selectRoom.chatroom_memo != null }">
+			   			<input type="text" name="chatroom_memo" value="${selectRoom.chatroom_memo }" onkeypress="chatmemo(event,${selectRoom.chatroom_no},this.value)" class="dh_outline">
+			   		</c:when>
+			   		<c:otherwise>
+			   			<input type="text" name="chatroom_memo" placeholder="공지사항을 적어주세요" autocomplete="off" onkeypress="chatmemo(event,${selectRoom.chatroom_no},this.value)" class="dh_outline">
+			   		</c:otherwise>
+			   	</c:choose>
+		    </div>
+		</div>
+	</div>
+	       
     <input type="hidden" id="chatroom_no" value="${selectRoom.chatroom_no }">
     <input type="hidden" id="employee2_no" value="${empNo }">
     
-    <div id="erpChatroomMain">
-        
+    <div class="erpChatroomMain">
         <table id="erpChatroomText">
             <c:if test="${chatlist != null }">
             <c:forEach var="map" items="${chatlist }" varStatus="status">
@@ -133,20 +72,22 @@
             </c:forEach>
         	</c:if>
         	<c:if test="${chatlist == null }">
-        		<tr><td>대화를 시작해주세요.</td></tr>
+        		<tr><td>대화를 시작할 수 있습니다.</td></tr>
         	</c:if>
         </table>
-    
     </div>
     
-    <div id="erpChatroomBottom">
+    <div class="erpChatroomBottom">
     
         <div>
             <textarea id="msgInput" placeholder="전송할 메세지를 입력하세요"></textarea>
         </div>
         
-        <div>
-            이모티콘/달력/파일/캡쳐/채팅창투명도설정/... 
+        <div class="chatBtmSet">
+            <a onclick="searchMsg()"><i class="input-icon uil-grin"></i></a>
+            <a onclick="searchMsg()"><i class="input-icon uil-eye-slash"></i></a>
+            <input type="range" min="0" max="1" step="0.01" value="1" id="opacityRange">
+            <a onclick="searchMsg()"><i class="input-icon uil-eye"></i></a>
             <input type="button" id="msgSend" value="전송">
         </div>
     
@@ -157,6 +98,41 @@
 
 
 <script type="text/javascript">
+
+// 창 크기와 콘텐츠 영역의 크기를 일치시키는 함수
+function adjustContentSize() {
+    const content = document.querySelector('.erpChatroom-container');
+    const windowHeight = window.innerHeight;
+    content.style.height = windowHeight + 'px';
+}
+
+// 페이지 로드 시와 창 크기 변경 시에 크기 조정 함수를 호출
+window.addEventListener('load', adjustContentSize);
+window.addEventListener('resize', adjustContentSize);
+
+// 투명도 조절
+document.addEventListener("DOMContentLoaded", function () {
+    const range = document.getElementById("opacityRange");
+    const content = document.querySelector("html");
+
+    range.addEventListener("input", function () {
+        content.style.opacity = range.value;
+    });
+});
+
+
+// 검색창 활성화
+document.addEventListener("DOMContentLoaded", function () {
+    const toggleButton = document.getElementById("erpSearchIcon");
+    const inputWord = document.getElementById("inputWord");
+
+    toggleButton.addEventListener("click", function () {
+        inputWord.classList.toggle("hidden");
+    });
+});
+
+
+
 var idx = 0;
 
 	$(document).ready(function(){

@@ -1,0 +1,165 @@
+   body, html {
+        width: 100%; height: 100%;
+        min-width: 380px;
+        min-height: 480px;
+        padding: 0%; margin: 0%;
+        display: flex;
+        flex-direction: column;
+        opacity: 1; /* 초기 투명도 설정 */
+        overflow-x: hidden;
+		overflow-y: hidden;
+    }
+
+    .erpChatroom-container {
+        display: flex;
+        width: 100%; height: 100%;
+        flex-direction: column;
+        padding: 0%; margin: 0%;
+    }
+
+    .erpChatroomHead {
+        background-color: limegreen;
+        padding: 1%; margin: 0;
+        height: 50px;
+        align-items: center;
+    }	
+	.erpChatroomHead input {
+        height: 100%;
+        resize: none;
+        background-color: transparent;
+		border: none; outline: none;
+	}
+	
+	.erpChatSearchSet {
+		height: 30px;
+		display: flex;
+		justify-content: right;
+		background-color: limegreen;
+		padding: 1%; margin: 0;
+	}
+	.erpChatSearchSet input {
+        height: 100%;
+        resize: none;
+        background-color: transparent;
+		border: none; outline: none;
+	}
+    
+    .erpUpperMenu {
+		background-color: greenyellow;
+        padding: 1%; margin: 0;
+	}
+    
+    .erpChatroomMain {
+        background-color: rgb(208, 255, 113);
+        padding: 1%; margin: 0;
+        flex-grow: 1;
+        overflow: auto;
+    }
+    
+    .erpChatroomBottom {
+        background-color: white;
+        padding: 1%; margin: 0;
+    }
+
+	#erpChatroomMemo {
+		width: 100%;
+        height: 100%;
+        resize: none;
+        background-color: transparent;
+	}
+	
+    #msgInput {
+        width: 100%;
+        height: 100px;
+        resize: none;
+        background-color: transparent;
+        border: none; outline: none;
+        overflow-y: auto;
+    }
+
+    #msgSend {
+        background-color: rgb(208, 255, 113);
+        border: 1px solid rgb(208, 255, 113);
+        color: dimgray;
+        cursor: pointer;
+        border-radius: 3px;
+        width: 55px; height: 35px;
+        float: right;
+    }
+
+    #msgSend:hover {
+        background-color: limegreen;
+        border: 1px solid limegreen;
+    }
+    
+    .dh_outline {
+    	outline: none;
+    }
+    
+    .hidden{
+    	display: none;
+    }
+
+	
+	/*하단 메뉴 그룹*/
+    .chatBtmSet {
+        white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+    }
+
+    .chatBtmSet a, .chatBtmSet input {
+        display: inline-block;
+    }
+    
+    /*투명도 조절 바*/
+    input[type="range"] {
+    width: 50px;
+    }
+
+    /* 투명도 조절 바 스타일 */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 5px;
+        height: 15px;
+        background-color: limegreen;
+        border: 2px solid #ffffff;
+        border-radius: 30%;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 3px;
+        background-color: rgb(208, 255, 113);
+    }
+
+    /* 투명도 조절 바 스타일 - Firefox용 */
+    input[type="range"]::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        background-color: limegreen;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-track {
+        width: 100%;
+        height: 3px;
+        background-color: #bdc3c7;
+    }
+
+    /* 투명도 조절 바 스타일 - IE/Edge용 */
+    input[type="range"]::-ms-thumb {
+        width: 15px;
+        height: 15px;
+        background-color: limegreen;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-ms-track {
+        width: 100%;
+        height: 3px;
+        background-color: #bdc3c7;
+    }
