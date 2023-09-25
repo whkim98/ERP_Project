@@ -120,9 +120,9 @@ function getlist() {
                 // input 엘리먼트 생성
                 var inputElement = document.createElement("input");
                 inputElement.type = "text";
-                inputElement.name = "goods_stockqty";
-                inputElement.value = map.goods_stockqty;
-                inputElement.className = "goods_stockqty";
+                inputElement.name = "goodslot_qty";
+                inputElement.value = map.goodslot_qty;
+                inputElement.className = "goodslot_qty";
 
                 // "수량입력" 버튼
                 var button1 = document.createElement("input");
@@ -244,8 +244,8 @@ function getlist() {
 			    <c:if test="${vo.goodslev_no == 4 }">
 			    <td><input type="button" value="폐기취소" onclick="confirmReverseDispose('${vo.goods_no}', '${vo.goodslot_no}', '${comcode_code}')"></td>
 			    </c:if>
-			    <td><input type="button" value="UPDATE" onclick="location.href='${pageContext.request.contextPath}/stock/updateForm?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&comcode_code=${comcode_code }'"></td>
-			    <td><input type="button" value="DELETE" onclick="location.href='${pageContext.request.contextPath}/stock/delete?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&comcode_code=${comcode_code }'"></td>
+			    <td><input type="button" value="UPDATE" onclick="location.href='${pageContext.request.contextPath}/stock/updateForm?goods_no=${vo.goods_no}&goodslot_no=${vo.goodslot_no}&goodsst_no=${vo.goodsst_no }&comcode_code=${comcode_code }'"></td>
+			    <td><input type="button" value="DELETE" onclick="checkDelete('${vo.goods_no}', '${vo.goodslot_no }', '${comcode_code }')">
 			</tr>
 
 				</c:forEach>
@@ -273,6 +273,14 @@ function getlist() {
                  var redirectUrl = "${pageContext.request.contextPath}/stock/reverseDispose?goods_no=" + goodsNo + "&goodslot_no=" + goodslotNo + "&comcode_code=" + comcodeCode;
                  window.location.href = redirectUrl; // 주어진 URL로 이동합니다.
              }
+         }
+         
+         function checkDelete(goodsNo, goodslotNo, comcodeCode){
+        	 var confirmMessage = "삭제하시겠습니까?";
+        	 if(confirm(confirmMessage)){
+        		 var redirectUrl = "${pageContext.request.contextPath}/stock/delete?goods_no=" + goodsNo + "&goodslot_no=" + goodslotNo + "&comcode_code=" + comcodeCode;
+        		 window.location.href = redirectUrl;
+        	 }
          }
          </script>
          

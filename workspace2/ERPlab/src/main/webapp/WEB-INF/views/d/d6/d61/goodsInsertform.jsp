@@ -30,11 +30,11 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 	<table id="lotTable">
 		<tr>
 			<th>상품코드</th>
-			<td><input type="text" name="goods_code" maxlength="30"></td>
+			<td><input type="text" id="goods_code" name="goods_code" maxlength="30"></td>
 			<th>바코드</th>
-			<td><input type="text" name="goods_barcode" maxlength="30"></td>
+			<td><input type="text" id="goods_barcode" name="goods_barcode" maxlength="30"></td>
 			<th>상품명</th>
-			<td><input type="text" name="goods_name" maxlength="100"></td>
+			<td><input type="text" id="goods_name" name="goods_name" maxlength="100"></td>
 		</tr>
 		<tr>
 			<th>상품종류</th>
@@ -48,17 +48,8 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 				</select>
 			</td>
 			<th>소비자가</th>
-			<td><input type="number" name="goods_customerprice"></td>
-			<th>규격</th>
-			<td>
-				<select name="goodsst_no">
-					<c:forEach var="vo" items="${gslist }">
-						<option value="${vo.goodsst_no }">
-							${vo.goodsst_size }
-						</option>
-					</c:forEach>
-				</select>
-			</td>
+			<td><input type="number" id="goods_customerprice" name="goods_customerprice"></td>
+			
 		</tr>
 		<tr>
 			<th>제조사</th>
@@ -95,12 +86,29 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 					</c:forEach>
 				</select>
 			</td>
+			
 		</tr>
+		<tr>
+		<th colspan="6">상품규격</th>
+		</tr>
+		<tr>
+		<th>단위</th>
+			<td><input type="text" id="goodsst_unit" name="goodsst_unit"></td>
+		<th>상품사양</th>
+		<td><input type="text" id="goodsst_spec" name="goodsst_spec"></td>
+		<th>상품사이즈</th>
+		<td><input type="text" id="goodsst_size" name="goodsst_size" placeholder="ex) 108*70*71"></td>
+		</tr>
+		<tr>
+		<th>포장사이즈</th>
+		<td><input type="text" id="goodsst_package" name="goodsst_package" placeholder="ex) 108*70*71"></td>
+		<th>상품사입량</th>
+		<td><input type="number" id="goodsst_ea" name="goodsst_ea"></td>
 		<tr>
 			<th colspan="6">상품설명</th>
 		</tr>
 		<tr>
-			<td colspan="6"><input type="text" name="goods_description" maxlength="500"></td>
+			<td colspan="6"><input type="text" id="goods_description" name="goods_description" maxlength="500"></td>
 		</tr>
 		
 		<tr>
@@ -111,7 +119,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 		
 		<tr>
 			<th>로트번호</th>
-			<td><input type="text" name="goodslot_lot" maxlength="30"></td>
+			<td><input type="text" id="goodslot_lot" name="goodslot_lot" maxlength="30"></td>
 			<th>로트별수량</th>
 			<td><input type="number" id="goodslot_qty" name="goodslot_qty"></td>
 			<th>제조일자</th>
@@ -119,9 +127,9 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 		</tr>
 		<tr>
 			<th>세액</th>
-			<td><input type="number" name="goodslot_tax" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')"></td>
+			<td><input type="number" id="goodslot_tax" name="goodslot_tax" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')"></td>
 			<th>원가</th>
-			<td><input type="number" name="goodslot_price" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')"></td>
+			<td><input type="number" id="goodslot_price" name="goodslot_price" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')"></td>
 			<th>유통기한</th>
 			<td><input type="date" name="goodslot_expiry"></td>
 		</tr>
@@ -179,20 +187,74 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 
 //등록 버튼 클릭 시 실행되는 함수
   function validateAndSubmit() {
+	
+	const goodsCode = document.getElementById("goods_code").value;
+	const goodsBarcode = document.getElementById("goods_barcode").value;
+	const goodsName = document.getElementById("goods_name").value;
+	const goodsStockqty = document.getElementById("goods_stockqty").value;
+	const goodsstUnit = document.getElementById("goodsst_unit").value;
+	const goodsstSpec = document.getElementById("goodsst_spec").value;
+	const goodsstSize = document.getElementById("goodsst_size").value;
+	const goodsstPackage = document.getElementById("goodsst_package").value;
+	const goodsstEa = document.getElementById("goodsst_ea").value;
+	const goodsCustomerprice = document.getElementById("goods_customerprice").value;
+	
+	
+	
+	console.log(goodsCode);
+	console.log(goodsBarcode);
+	
+	if(goodsCode == ""){
+		alert("상품코드를 입력해 주세요.");
+		document.getElementById('goods_code').focus();
+	    return false;
+	}else if(goodsBarcode == ""){
+		alert("바코드를 입력해 주세요.");
+		document.getElementById('goods_barcode').focus();
+		return false;
+	}else if(goodsName == ""){
+		alert("상품명을 입력해 주세요.");
+		document.getElementById('goods_name').focus();
+		return false;
+	}else if(goodsCustomerprice == ""){
+		alert("소비자가를 입력해 주세요.");
+		document.getElementById("goods_customerprice").focus();
+		return false;
+	}else if(goodsStockqty <= 0){
+		alert("재고수량을 입력해 주세요.")
+		document.getElementById('goods_stockqty').focus();
+		return false;
+	}else if(goodsstUnit == ""){
+		alert("단위를 입력해 주세요.");
+		document.getElementById('goodsst_unit').focus();
+		return false;
+	}else if(goodsstSpec == ""){
+		alert("상품사양을 입력해 주세요.");
+		document.getElementById('goodsst_spec').focus();
+		return false;
+	}else if(goodsstSize == ""){
+		alert("상품사이즈를 입력해 주세요.");
+		document.getElementById('goodsst_size').focus();
+		return false;
+	}else if(goodsstPackage == ""){
+		alert("포장사이즈를 입력해 주세요.");
+		document.getElementById('goodsst_package').focus();
+		return false;
+	}else if(goodsstEa == ""){
+		alert("상품 사입량을 입력해 주세요.");
+		document.getElementById('goodsst_ea').focus();
+		return false
+	}
+	
     let totalLotQty = 0;
-      const lotQtyInput = document.getElementsByName("goodslot_qty");
+    const lotQtyInput = document.getElementsByName("goodslot_qty");
+    const goodslotProductionInput = document.getElementsByName("goodslot_production");
+    const goodslotExpiryInput = document.getElementsByName("goodslot_expiry");
 
-    /* for (let i = 1; i <= lotIndex; i++) {
-      const lotQtyValue = parseInt(lotQtyInput.value) || 0;
-      totalLotQty += lotQtyValue;
-    } */
-    
-      var sum = 0;
-      for(var h = 0; h < lotQtyInput.length; h++){
-    	  sum = Number(sum) + Number(lotQtyInput[h].value);
-    	  console.log(sum);
-      }
-    
+    var sum = 0;
+    for (var h = 0; h < lotQtyInput.length; h++) {
+      sum = Number(sum) + Number(lotQtyInput[h].value);
+    }
 
     const stockQtyInput = document.getElementById("goods_stockqty");
     const stockQtyValue = parseInt(stockQtyInput.value) || 0;
@@ -204,10 +266,23 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
         firstLotQtyInput.focus();
       }
       return false;
-    } else {
-      document.getElementById("create").submit();
     }
+
+    // 제조일자와 유통기한 비교
+    for (var i = 0; i < lotQtyInput.length; i++) {
+      const productionDate = new Date(goodslotProductionInput[i].value);
+      const expiryDate = new Date(goodslotExpiryInput[i].value);
+
+      if (expiryDate < productionDate) {
+        alert("유통기한이 제조일자보다 빠릅니다. 유통기한을 다시 입력해 주세요.");
+        goodslotExpiryInput[i].focus();
+        return false;
+      }
+    }
+
+    document.getElementById("create").submit();
   }
+
 
 </script>
 

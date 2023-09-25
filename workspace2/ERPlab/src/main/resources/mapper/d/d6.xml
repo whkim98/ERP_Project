@@ -220,7 +220,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		goodskind_no = #{goodskind_no},
 		goods_customerprice = #{goods_customerprice},
 		goods_description = #{goods_description},
-		goodsst_no = #{goodsst_no},
 		client_no1 = #{client_no1},
 		client_no2 = #{client_no2},
 		goods_stockqty = #{goods_stockqty},
@@ -354,6 +353,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update erp_goods set goodslev_no = #{goodslev_no} where goods_no = #{goods_no}
 	</update>
 	
+	<insert id="insertGoodsst" parameterType="map">
+		insert into erp_goodsst(goodsst_unit, goodsst_spec, 
+		goodsst_size, goodsst_package, goodsst_ea) value(#{goodsst_unit},
+		#{goodsst_spec}, #{goodsst_size}, #{goodsst_package}, 
+		#{goodsst_ea})
+	</insert>
 	
+	<select id="selectGoodsstno" parameterType="map" resultType="int">
+		select goodsst_no from erp_goodsst where
+		goodsst_unit = #{goodsst_unit} and goodsst_spec = #{goodsst_spec} and
+		goodsst_size = #{goodsst_size} and goodsst_package = #{goodsst_package} and
+		goodsst_ea = #{goodsst_ea}
+	</select>
+	
+	<select id="selectGoodsst2" parameterType="map" resultType="map">
+		select * from erp_goodsst where goodsst_no = #{goodsst_no}
+	</select>
+	
+	<update id="updateGoodsst2" parameterType="map">
+		update erp_goodsst set goodsst_unit = #{goodsst_unit},
+		goodsst_spec = #{goodsst_spec}, goodsst_size = #{goodsst_size},
+		goodsst_package = #{goodsst_package}, goodsst_ea = #{goodsst_ea}
+		where goodsst_no = #{goodsst_no}
+	</update>
 	
 </mapper>

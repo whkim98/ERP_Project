@@ -69,7 +69,7 @@ public class D6Controller {
 		         list = null;
 		      }
 	      
-	      System.out.println(list);
+	      System.out.println("ajax:"+list);
 		  return list;
 	}
 	
@@ -97,11 +97,32 @@ public class D6Controller {
 			@RequestParam("goodslot_tax") Integer[] goodslot_tax,
 			String goods_code, String goods_barcode, String goods_name,
 			int goodskind_no, int goods_customerprice,
-			String goods_description, int goodsst_no, int client_no1,
+			String goods_description, int client_no1,
 			int client_no2, int goods_stockqty, int goodslev_no,
-			String comcode_code) {
+			String comcode_code, String goodsst_unit, String goodsst_spec,
+			String goodsst_size, String goodsst_package,
+			int goodsst_ea) {
 		
 		int comcode_no = ls.comNo(comcode_code);
+		
+		Map<String, Object> map11 = new HashMap<>();
+		map11.put("goodsst_unit", goodsst_unit);
+		map11.put("goodsst_spec", goodsst_spec);
+		map11.put("goodsst_size", goodsst_size);
+		map11.put("goodsst_package", goodsst_package);
+		map11.put("goodsst_ea", goodsst_ea);
+		
+		d6.insertGoodsst(map11);
+		
+		Map<String, Object> map12 = new HashMap<>();
+		map12.put("goodsst_unit", goodsst_unit);
+		map12.put("goodsst_spec", goodsst_spec);
+		map12.put("goodsst_size", goodsst_size);
+		map12.put("goodsst_package", goodsst_package);
+		map12.put("goodsst_ea", goodsst_ea);
+		
+		int goodsst_no = d6.selectGoodsstno(map12);
+		
 		
 	    for (String lot : goodslot_lot) {
 	        System.out.println(lot);
@@ -112,7 +133,6 @@ public class D6Controller {
 	        System.out.println("첫 번째 로트번호: " + firstLot);
 	    }
 	    
-	    System.out.println(goodslot_lot[1]);
 	    
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("goods_code", goods_code);
@@ -128,8 +148,8 @@ public class D6Controller {
 	    map.put("goodslev_no", goodslev_no);
 	    map.put("comcode_no", comcode_no);
 	    
-	    
-	    
+	    int su = d6.insertGoods(map);
+	    System.out.println("1번 배열:" + su);
 		int goods_no = d6.selectGoodsno(goods_code);
 	    
 		System.out.println(goods_no);
@@ -146,6 +166,8 @@ public class D6Controller {
 	    
 	    d6.insertGoodslot(map2);
 	    
+	    
+	    try {
 	    if(goodslot_price[1] != 0) {
 	    	Map<String, Object> map3 = new HashMap<>();
 		    map3.put("goodslot_lot", goodslot_lot[1]);
@@ -159,7 +181,8 @@ public class D6Controller {
 		    
 		    d6.insertGoodslot(map3);
 		    
-	    }else if(goodslot_price[2] != 0) {
+	    }
+	    if(goodslot_price[2] != 0) {
 	    	Map<String, Object> map4 = new HashMap<>();
 		    map4.put("goodslot_lot", goodslot_lot[2]);
 		    map4.put("goodslot_qty", goodslot_qty[2]);
@@ -171,6 +194,9 @@ public class D6Controller {
 		    map4.put("goods_no", goods_no);
 		    
 		    d6.insertGoodslot(map4);
+	    }
+	    }catch(Exception e) {
+	    	e.printStackTrace();
 	    }
 	    
 	    return "redirect:/stock?comcode_code=" + comcode_code;
@@ -193,7 +219,7 @@ public class D6Controller {
 	}
 	
 	@RequestMapping("/stock/updateForm")
-	public String stockupdateForm(Model model, String type, String word, String comcode_code, int goods_no, int goodslot_no) {
+	public String stockupdateForm(Model model, int goodsst_no, String type, String word, String comcode_code, int goods_no, int goodslot_no) {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -216,6 +242,10 @@ public class D6Controller {
 		List<Erp_GoodslevVO> gllist = d6.selectGoodslev();
 		List<Erp_ClientVO> clist = d6.selectClient();
 		
+		Map<String, Object> map2 = new HashMap<>();
+		map2.put("goodsst_no", goodsst_no);
+		
+		map2 = d6.selectGoodsst2(map2);
 		
 		model.addAttribute("gslist", gslist);
 		model.addAttribute("gllist", gllist);
@@ -225,6 +255,7 @@ public class D6Controller {
 		model.addAttribute("goods_no", goods_no);
 		model.addAttribute("goodslot_no", goodslot_no);
 		model.addAttribute("map", map);
+		model.addAttribute("map2", map2);
 		
 		return "/d/d6/d61/updateForm";
 	}
@@ -239,7 +270,9 @@ public class D6Controller {
 			String goods_description, String goodslot_lot, 
 			int goodslot_qty, String goodslot_production, 
 			int goodslot_tax, int goodslot_price, 
-			String goodslot_expiry) {
+			String goodslot_expiry, String goodsst_unit,
+			String goodsst_spec, String goodsst_size,
+			String goodsst_package, int goodsst_ea) {
 		
 		int comcode_no = ls.comNo(comcode_code);
 		
@@ -251,7 +284,6 @@ public class D6Controller {
 		map.put("goodskind_no", goodskind_no);
 		map.put("goods_customerprice", goods_customerprice);
 		map.put("goods_description", goods_description);
-		map.put("goodsst_no", goodsst_no);
 		map.put("client_no1", client_no1);
 		map.put("client_no2", client_no2);
 		map.put("goods_stockqty", goods_stockqty);
@@ -272,6 +304,16 @@ public class D6Controller {
 		map2.put("goods_no", goods_no);
 		
 		d6.updateGoodslot(map2);
+		
+		Map<String, Object> map3 = new HashMap<>();
+		map3.put("goodsst_unit", goodsst_unit);
+		map3.put("goodsst_spec", goodsst_spec);
+		map3.put("goodsst_size", goodsst_size);
+		map3.put("goodsst_package", goodsst_package);
+		map3.put("goodsst_ea", goodsst_ea);
+		map3.put("goodsst_no", goodsst_no);
+		
+		d6.updateGoodsst2(map3);
 		
 		return "redirect:/stock?comcode_code=" + comcode_code;
 		

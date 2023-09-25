@@ -138,4 +138,20 @@ public class D6Service {
 		return gdao.updateGoodslev(map);
 	}
 	
+	public int insertGoodsst(Map<String, Object> map) {
+		return gsdao.insertGoodsst(map);
+	}
+	
+	public int selectGoodsstno(Map<String, Object> map) {
+		return gsdao.selectGoodsstno(map);
+	}
+	
+	public Map<String, Object> selectGoodsst2(Map<String, Object> map){
+		return gsdao.selectGoodsst2(map);
+	}
+	
+	public int updateGoodsst2(Map<String, Object> map) {
+		return gsdao.updateGoodsst2(map);
+	}
+	
 }

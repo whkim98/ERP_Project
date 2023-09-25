@@ -27,6 +27,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 	<input type="hidden" name="comcode_code" value="${comcode_code }">
 	<input type="hidden" name="goods_no" value="${goods_no }">
 	<input type="hidden" name="goodslot_no" value="${goodslot_no }">
+	<input type="hidden" name="goodsst_no" value="${map2.goodsst_no }">
 	<h3>상품 등록 사항</h3>
 	
 	
@@ -53,16 +54,6 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 			</td>
 			<th>소비자가</th>
 			<td><input type="number" name="goods_customerprice" value="${map.goods_customerprice }"></td>
-			<th>규격</th>
-			<td>
-				<select name="goodsst_no">
-					<c:forEach var="vo" items="${gslist }">
-						<option value="${vo.goodsst_no }" ${vo.goodsst_no == map.goodsst_no ? 'selected' : "" }>
-							${vo.goodsst_size }
-						</option>
-					</c:forEach>
-				</select>
-			</td>
 		</tr>
 		<tr>
 			<th>제조사</th>
@@ -86,7 +77,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 				</select>
 			</td>
 			<th>재고수량</th>
-			<td><input type="number" name="goods_stockqty" value="${map.goods_stockqty }"></td>
+			<td><input type="number" id="goods_stockqty" name="goods_stockqty" value="${map.goods_stockqty }"></td>
 		</tr>
 		<tr>
 			<th>상품재고등급</th>
@@ -99,6 +90,23 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 					</c:forEach>
 				</select>
 			</td>
+		</tr>
+		<tr>
+			<th colspan="6">상품규격</th>
+		</tr>
+		<tr>
+		<th>단위</th>
+		<td><input type="text" id="goodsst_unit" name="goodsst_unit" value="${map2.goodsst_unit }"></td>
+		<th>상품사양</th>
+		<td><input type="text" id="goodsst_spec" name="goodsst_spec" value="${map2.goodsst_spec }"></td>
+		<th>상품사이즈</th>
+		<td><input type="text" id="goodsst_size" name="goodsst_size" placeholder="ex) 108*70*71" value="${map2.goodsst_size }"></td>
+		</tr>
+		<tr>
+		<th>포장사이즈</th>
+		<td><input type="text" id="goodsst_package" name="goodsst_package" placeholder="ex) 108*70*71" value="${map2.goodsst_package }"></td>
+		<th>상품사입량</th>
+		<td><input type="number" id="goodsst_ea" name="goodsst_ea" value="${map2.goodsst_ea }"></td>
 		</tr>
 		<tr>
 			<th colspan="6">상품설명</th>
@@ -115,7 +123,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 			<th>로트번호</th>
 			<td><input type="text" name="goodslot_lot" value="${map.goodslot_lot }"></td>
 			<th>로트별수량</th>
-			<td><input type="number" name="goodslot_qty" value="${map.goodslot_qty }"></td>
+			<td><input type="number" id="goodslot_qty" name="goodslot_qty" value="${map.goodslot_qty }"></td>
 			<th>제조일자</th>
 			<td><input type="date" name="goodslot_production" value="${map.goodslot_production }"></td>
 		</tr>
@@ -130,10 +138,45 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 	</table>
 	</div>
 	<div>
-	    <input type="submit" value="수정">
+	        <input type="button" value="수정" onclick="validateAndSubmit()">
   	</div>
                   
 </form>
+
+<script>
+//등록 버튼 클릭 시 실행되는 함수
+function validateAndSubmit() {
+  let totalLotQty = 0;
+    const lotQtyInput = document.getElementsByName("goodslot_qty");
+
+  /* for (let i = 1; i <= lotIndex; i++) {
+    const lotQtyValue = parseInt(lotQtyInput.value) || 0;
+    totalLotQty += lotQtyValue;
+  } */
+  
+    var sum = 0;
+    for(var h = 0; h < lotQtyInput.length; h++){
+  	  sum = Number(sum) + Number(lotQtyInput[h].value);
+  	  console.log(sum);
+    }
+  
+
+  const stockQtyInput = document.getElementById("goods_stockqty");
+  const stockQtyValue = parseInt(stockQtyInput.value) || 0;
+
+  if (sum !== stockQtyValue) {
+    alert("재고수량과 로트별수량의 합이 일치해야 합니다.");
+    if (lotIndex >= 1) {
+      const firstLotQtyInput = document.getElementById(`goodslot_qty1`);
+      firstLotQtyInput.focus();
+    }
+    return false;
+  } else {
+    document.getElementById("create").submit();
+  }
+}
+	
+</script>
 
 
 
