@@ -173,3 +173,25 @@ select:focus {
 .required {
 	background-color: lightyellow !important;
 }
+
+.list_result_btn {
+	width: 100% !important;
+}
+
+input[type=number]{
+		-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	background: rgba(160, 160, 160, 0.075);
+	border: none;
+	border: solid 1px rgba(160, 160, 160, 0.3);
+	border-radius: 0;
+	color: inherit;
+	display: block;
+	outline: 0;
+	padding: 0 1em;
+	text-decoration: none;
+	width: 100%;
+	height: 2.75em;
+}

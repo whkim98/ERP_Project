@@ -197,16 +197,6 @@ online_delete_btn.addEventListener('click', () => {
 });
 
 
-let list_result_td_arr = [];
-list_result_td_arr[0]= '<button class="list_result_btn" id="list_result_search0">SEARCH</button>';
-list_result_td_arr[1]= '<input type="text" name="goodslot_no" id="goodslot_no0"/>';
-list_result_td_arr[2]= '<input type="text" name="goodslot_qty" id="goodslot_qty0"/>';
-list_result_td_arr[3]= '<input type="text" name="goodslot_production" id="goodslot_production0"/>';
-list_result_td_arr[4]= '<input type="text" name="goodslot_expiry" id="goodslot_expiry0"/>';
-list_result_td_arr[5]= '<input type="text" name="goodslot_total" id="goodslot_total0"/>';
-list_result_td_arr[6]= '<button class="list_result_btn" id="list_result_del0">품목삭제</button>'
-
-
 // 행추가 버튼
 let addRow_btn = document.getElementById("addRow_btn");
 addRow_btn.addEventListener("click", () => {

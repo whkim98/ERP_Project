@@ -69,6 +69,56 @@
 						<span class="red">는 필수 입력란입니다.</span>
 					</div>
                     <form th:action="@{/c/c33/event}" method="post" id="event_frm">
+						<div class="sec">
+							<button type="button" id="addRow_btn">행추가</button>
+							<button type="button" id="delRow_btn">행삭제</button>
+						</div>
+						
+						<table class="item_list_result">
+							 <tr>
+								<th class="sec1">조회</th>
+								<th class="hidden">코드</th>
+								<th class="sec2">로트번호</th>
+	                            <th class="sec3">수량</th>
+	                            <th class="sec4">제조일자</th>
+	                            <th class="sec5">유통기한</th>
+	                            <th class="sec6">원가</th>
+	                            <th class="hidden">세액</th>
+	                            <th class="hidden">총원가</th>
+	                            <th class="hidden">상품코드</th>
+	                            <th class="sec7">품목삭제</th>
+	                        </tr>
+                        	<th:block th:if="${goodslot_list != null}">
+								<tr class="list_result_items" th:each="goodslot_item : ${goodslot_list}">
+									<td><button type="button" class="list_result_btn" id="list_result_search">SEARCH</button></td>
+									<td class="hidden"><input type="hidden" name="goodslot_no" th:value="${goodslot_item.goodslot_no}" readonly/></td>
+									<td><input type="text" name="goodslot_lot" th:value="${goodslot_item.goodslot_lot}" readonly/></td>
+		                            <td><input type="number" name="goodslot_qty" th:value="${goodslot_item.goodslot_qty}" readonly/></td>
+		                            <td><input type="text" name="goodslot_production" th:value="${goodslot_item.goodslot_production}" readonly/></td>
+		                            <td><input type="text" name="goodslot_expiry" th:value="${goodslot_item.goodslot_expiry}" readonly/></td>
+		                            <td><input type="number" name="goodslot_price" th:value="${goodslot_item.goodslot_price}" readonly/></td>
+		                            <td class="hidden"><input type="hidden" name="goodslot_tax" th:value="${goodslot_item.goodslot_tax}" readonly/></td>
+		                            <td class="hidden"><input type="hidden" name="goodslot_total" th:value="${goodslot_item.goodslot_total}" readonly/></td>
+		                            <td class="hidden"><input type="hidden" name="goods_no" th:value="${goodslot_item.goods_no}" readonly/></td>
+		                            <td><button type="button" class="list_result_btn" id="list_result_del">품목삭제</button></td>
+								</tr>
+							</th:block>
+							<th:block th:if="${goodslot_list == null}">
+								<tr class="list_result_items order0">
+									<td><button type="button" class="list_result_btn" id="list_result_search0">SEARCH</button></td>
+									<td class="hidden"><input type="hidden" name="goodslot_no" id="goodslot_no0" /></td>
+									<td><input type="text" name="goodslot_lot" id="goodslot_lot0" /></td>
+		                            <td><input type="number" name="goodslot_qty" id="goodslot_qty0"/></td>
+		                            <td><input type="text" name="goodslot_production" id="goodslot_production0" /></td>
+		                            <td><input type="text" name="goodslot_expiry" id="goodslot_expiry0" /></td>
+		                            <td><input type="number" name="goodslot_price" id="goodslot_price0"/></td>
+		                            <td class="hidden"><input type="hidden" name="goodslot_tax" id="goodslot_tax0"/></td>
+		                            <td class="hidden"><input type="hidden" name="goodslot_total" id="goodslot_total0"/></td>
+		                            <td class="hidden"><input type="hidden" name="goods_no" id="goods_no0"/></td>
+		                            <td><button type="button" class="list_result_btn" id="list_result_del0">품목삭제</button></td>
+								</tr>
+							</th:block>
+						</table>
 						<input type="hidden" name="event_no" id="event_no" th:value="${erp_EventVO?.event_no}"/>
 						
 						<div class="sec">
