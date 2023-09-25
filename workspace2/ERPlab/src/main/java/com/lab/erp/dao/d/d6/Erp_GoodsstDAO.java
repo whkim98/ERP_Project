@@ -1,6 +1,7 @@
 package com.lab.erp.dao.d.d6;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,22 @@ private SqlSession sqlSession;
 	
 	public List<Erp_GoodsstVO> selectGoodsst(){
 		return sqlSession.selectList("d6.selectGoodsst");
+	}
+	
+	public int insertGoodsst(Map<String, Object> map) {
+		return sqlSession.insert("d6.insertGoodsst", map);
+	}
+	
+	public int selectGoodsstno(Map<String, Object> map) {
+		return sqlSession.selectOne("d6.selectGoodsstno", map);
+	}
+	
+	public Map<String, Object> selectGoodsst2(Map<String, Object> map){
+		return sqlSession.selectOne("d6.selectGoodsst2", map);
+	}
+	
+	public int updateGoodsst2(Map<String, Object> map) {
+		return sqlSession.update("d6.updateGoodsst2", map);
 	}
 	
 }
