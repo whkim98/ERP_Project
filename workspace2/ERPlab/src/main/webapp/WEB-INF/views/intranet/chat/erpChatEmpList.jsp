@@ -9,7 +9,7 @@
 <title>ERP LAB CHAT</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/intranet/chat/chatList.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/intranet/chat/empList.css">
 </head>
 <body>
 
@@ -23,27 +23,28 @@
 	<input type="hidden" name="employee2_no" id="employee2_no" value="${empNo }">
 
     <div class="erpChat-empList-title">
-    	<select name="type">
-			<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
-			<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>이름</option>
-			<option value="employee2_position" ${param.type == 'employee2_position' ? 'selected' : '' }>직급</option>
-			<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>팀</option>
-			<option value="dept_name" ${param.type == 'dept_name' ? 'selected' : '' }>부서</option>
-		</select>
-        <input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${empNo}')">
-       	<i class="input-icon uil-search"></i>
+    	<div class="erpChat-empList-searchBar">
+	    	<select name="type">
+				<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
+				<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>이름</option>
+				<option value="employee2_position" ${param.type == 'employee2_position' ? 'selected' : '' }>직급</option>
+				<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>팀</option>
+				<option value="dept_name" ${param.type == 'dept_name' ? 'selected' : '' }>부서</option>
+			</select>
+	        <input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${empNo}')">
+	       	<i class="input-icon uil-search"></i>
+    	</div>
     </div>
 
     <div class="erpChat-empList-main">
-        <!-- 부서별 출력 할 것인지??? 직원 리스트 -->
         <table id="erpChat-friendList">
         	<c:forEach var="map" items="${list }">
             <tr>
-                <th>${map.team_name}</th>
-                <th>${map.employee1_name }</th>
-                <th>${map.employee2_position }</th>
-                <th>    </th>
-                <th><a onclick="openChatroom(${empNo},${map.employee2_no },'${map.employee1_name }','${comcode_code }')"><i class="input-icon uil-comments"></i></a>
+                <th class="erpChat-friendList-team">${map.team_name}</th>
+                <th class="erpChat-friendList-name">${map.employee1_name }</th>
+                <th class="erpChat-friendList-position">${map.employee2_position }</th>
+                <th class="">    </th>
+                <th class="erpChat-friendList-chatStart"><a onclick="openChatroom(${empNo},${map.employee2_no },'${map.employee1_name }','${comcode_code }')"><i class="input-icon uil-comments"></i></a>
             </tr>
             </c:forEach>
         </table>

@@ -100,11 +100,6 @@ public class IntranetLoginController {
 				return "result/loginresult";
 			}
 		}
-			
-	@RequestMapping("/")
-	public String intranetMain() {
-		return ViewPath.INTRANET + "chat/erpChat";
-	}
 	
 	@RequestMapping("/check")
 	public String check(HttpServletRequest request, Erp_Employee1VO vo, String comcode_code) {

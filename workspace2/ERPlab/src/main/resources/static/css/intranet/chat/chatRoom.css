@@ -53,6 +53,7 @@
         background-color: rgb(208, 255, 113);
         padding: 1%; margin: 0;
         flex-grow: 1;
+        font-size: 7px;
         overflow: auto;
     }
     

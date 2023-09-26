@@ -1,51 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>ERP LAB CHAT</title>
-<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
-    <style>
-        body, html {
-            width: 100%; height: 100%;
-            padding: 0%; margin: 0%;
-            align-items: center;
-            min-width: 300px;
-            min-height: 800px;
-        }   
-    
-        #erpChatList-selectOption {
-            height: 100%;
-            float: left; width: 70px;
-            background-color: yellow;
-            display: flex;
-            flex-direction: column;
-        }
-        #erpChatList-selected {
-            height: 100%;
-            flex: 1;
-            background-color: lightblue;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .chat-roomstyle{
-        	width: 200px;
-        	height: 50px;
-        	border: 1px solid blue;
-        	border-radius: 30px;
-        	text-align: center;
-        	text-decoration: none; 
-        }
-
-
-    </style>
-</head>
-
-<%@taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 <html>
@@ -68,23 +23,24 @@
 	<input type="hidden" name="employee2_no" id="employee2_no" value="${empNo }">
 
     <div class="erpChat-empList-title">
-    	<select name="type">
-			<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
-			<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>이름</option>
-			<option value="chatroom_title" ${param.type == 'chatroom_title' ? 'selected' : '' }>채팅방명</option>
-		</select>
-		<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${empNo}')">
-       	<i class="input-icon uil-search"></i>
+        <div class="erpChat-empList-searchBar">
+	    	<select name="type">
+				<option value="all" ${param.type == 'all' ? 'selected' : '' }>전체</option>
+				<option value="employee1_name" ${param.type == 'employee1_name' ? 'selected' : '' }>이름</option>
+				<option value="chatroom_title" ${param.type == 'chatroom_title' ? 'selected' : '' }>채팅방명</option>
+			</select>
+			<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${empNo}')">
+	       	<i class="input-icon uil-search"></i>
+       	</div>
     </div>
 
     <div class="erpChat-empList-main">
-        <!-- 부서별 출력 할 것인지??? 직원 리스트 -->
         <table id="erpChat-chatList">
         	<c:forEach var="map" items="${list }">
         		<c:if test="${empNo == map.e1no }">
 		            <tr>
 		            	<c:if test="${map.chatroom_title == null }">
-			                <th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.e2position } ${map.e2name }</th>
+			                <th onclick="openChatroom(${map.chatroom_no }, '${map.team_name}', '${map.e2name }','${comcode_code }')">${map.team_name} ${map.e2position } ${map.e2name }</th>
 			            </c:if>
 			            <c:if test="${map.chatroom_title != null }">
 		                	<th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.chatroom_title }</th>
@@ -95,7 +51,7 @@
         		<c:if test="${empNo == map.e2no }">
 		            <tr>
 		            	<c:if test="${map.chatroom_title == null }">
-			                <th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.e1position } ${map.e1name }</th>
+			                <th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.team_name} ${map.e1position } ${map.e1name }</th>
 			            </c:if>
 			            <c:if test="${map.chatroom_title != null }">
 		                	<th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.chatroom_title }</th>

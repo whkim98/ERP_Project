@@ -44,7 +44,7 @@
 								<li><a href="#">조직도</a></li>
 								<li><a href="#">일정</a></li>
 								<li><a href="#">주소록</a></li>
-								<li><a href="${pageContext.request.contextPath}/intranet/chat/erpchat?comcode_code=${comcode_code}&employee2_no=${empNo}" target="_blank">메신저</a></li>
+								<li><a href="javascript:void(0);" onclick="msgWindow()">메신저</a></li>
 								<li><a href="#">이메일</a></li>
 								<li><a href="#">연차</a></li>								
 							</ul>
@@ -81,6 +81,15 @@ function logout() {
     };
     xhr.send();
 }
+
+// 메신저
+function msgWindow() {
+    var url = "${pageContext.request.contextPath}/intranet/chat/erpchat?comcode_code=${comcode_code}&employee2_no=${empNo}";
+    var windowFeatures = 'width=380,height=480';
+
+    window.open(url, '_blank', windowFeatures);
+}
+
 
 </script>
 

@@ -32,7 +32,7 @@ html, body {
 	border: none;
 }
 .erpChat-empList-title input {
-	width: 180px;
+	width: 200px;
     height: 100%;
     resize: none;
     background-color: transparent;
@@ -58,11 +58,11 @@ html, body {
     overflow-x: hidden;
 }
 
-
 #empList-empListBtn {
-    background-color:limegreen;
-    border: 1px solid limegreen;
+    background-color: rgb(208, 255, 113);
+    border: 1px solid rgb(208, 255, 113);
     color: dimgray;
+    font-weight: bold;
     cursor: pointer;
     border-radius: 5px 5px 0px 0px;
     width: 75px; height: 35px;
@@ -71,11 +71,11 @@ html, body {
     font-weight: bold;
     color: red;
 }
+
 #empList-chatListBtn {
-    background-color: rgb(208, 255, 113);
-    border: 1px solid rgb(208, 255, 113);
+    background-color:limegreen;
+    border: 1px solid limegreen;
     color: dimgray;
-    font-weight: bold;
     cursor: pointer;
     border-radius: 5px 5px 0px 0px;
     width: 75px; height: 35px;
