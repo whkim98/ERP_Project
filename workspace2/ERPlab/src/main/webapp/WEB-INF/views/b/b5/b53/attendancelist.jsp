@@ -2,7 +2,9 @@
     pageEncoding="UTF-8"%>		
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
-
+      <div align="center">
+         <h1 style="font-size: 20pt;">근태관리</h1>
+      </div>
 <div align="center">
 	<table>
 		<tr>

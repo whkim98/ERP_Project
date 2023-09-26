@@ -28,7 +28,7 @@ function surf(v, code){      // list ajax 함수 > A4Controller, a4.xml(investme
 	<input type="hidden" name="goods_no" value="${goods_no }">
 	<input type="hidden" name="goodslot_no" value="${goodslot_no }">
 	<input type="hidden" name="goodsst_no" value="${map2.goodsst_no }">
-	<h3>상품 등록 사항</h3>
+	<h3>상품 수정 사항</h3>
 	
 	
 	<div class="lotSet">

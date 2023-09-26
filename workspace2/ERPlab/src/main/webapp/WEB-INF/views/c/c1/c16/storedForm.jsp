@@ -8,6 +8,9 @@
 <form action="${pageContext.request.contextPath }/internationsales/income/stored">
 <input type="hidden" name="importorder_no" value="${importorder_no }">
 <input type="hidden" name="comcode_code" value=${comcode_code }>
+      <div align="center">
+         <h1 style="font-size: 20pt;">입고처리</h1>
+      </div>
 <div>
 CINO<input type="text" name="import_cino">
 BLNO<input type="text" name="import_blno">

@@ -479,7 +479,7 @@ function teamname(){
                   </div>
                   <div>
                   	<label>비밀번호</label>
-                  	<input type="text" name="employee1_pw" id="employee1_pw" maxlength="30">
+                  	<input type="password" name="employee1_pw" id="employee1_pw" maxlength="30">
                   </div>
                   <div>
                   	<label>장애여부</label>
@@ -692,6 +692,19 @@ function imcodecheck(){      // imcode의 sendRequest에서 지정한 콜벡함�
 	   var employee1_code = document.getElementById("employee1_code").value;
 	   var employee1_name = document.getElementById("employee1_name").value;
 	   var employee1_residentno = document.getElementById("employee1_residentno").value;
+	   var employee1_postal = document.getElementById("employee1_postal").value;
+	   var employee1_addr1 = document.getElementById("employee1_addr1").value;
+	   var employee1_addr2 = document.getElementById("employee1_addr2").value;
+	   var employee1_phone = document.getElementById("employee1_phone").value;
+	   var employee1_email = document.getElementById("employee1_email").value;
+	   var employee2_position = document.getElementById("employee2_position").value;
+	   var employee1_id = document.getElementById("employee1_id").value;
+	   var employee1_pw = document.getElementById("employee1_pw").value;
+	   var employee2_exp = document.getElementById("employee2_exp").value;
+	   var employee2_salary = document.getElementById("employee2_salary").value;
+	   var employee2_holiday = document.getElementById("employee2_holiday").value;
+	   var employee2_extension = document.getElementById("employee2_extension").value;
+	   
 	   
 	   if(employee1_code == ""){
 		   alert('사원코드를 입력해 주세요');
@@ -701,11 +714,51 @@ function imcodecheck(){      // imcode의 sendRequest에서 지정한 콜벡함�
 	     alert("사원명을 입력해 주세요");
 	     document.getElementById("employee1_name").focus();
 	     return false; // 폼 제출 방지
+	   }else if(employee1_postal == "" || employee1_addr1 == "" || employee1_addr2 == ""){
+			 alert("주소를 입력해 주세요.")
+			 document.getElementById("employee1_postal").focus();
+			 return false;
 	   }else if (employee1_residentno == "") {
 		 alert("주민등록번호를 입력해 주세요");
 		 document.getElementById("employee1_residentno").focus();
 		 return false; // 폼 제출 방지
-	   }else {
+	   }else if(employee1_phone == ""){
+		 alert("전화번호를 입력해 주세요.");
+		 document.getElementById("employee1_phone").focus();
+		 return false;
+	   }else if(employee1_email == ""){
+		 alert("이메일을 입력해 주세요.");
+		 document.getElementById("employee1_email").focus();
+		 return false;
+	   }else if(employee1_id == ""){
+		   alert("아이디를 입력해 주세요.");
+		   document.getElementById("employee1_id").focus();
+		   return false;
+	   }else if(employee1_pw == ""){
+		   alert("비밀번호를 입력해 주세요");
+		   document.getElementById("employee1_pw").focus();
+		   return false;
+	   }else if(employee2_position == ""){
+		   alert("직급을 입력해 주세요.");
+		   document.getElementById("employee2_position").focus();
+		   return false;
+	   }else if(employee2_exp == ""){
+		   alert("경력을 입력해 주세요.");
+		   document.getElementById("employee2_exp").focus();
+		   return false;
+	   }else if(employee2_salary == ""){
+		   alert("연봉을 입력해 주세요.");
+		   document.getElementById("employee2_salary").focus();
+		   return false;
+	   }else if(employee2_holiday == ""){
+		   alert("휴가일수를 입력해 주세요.");
+		   document.getElementById("employee2_holiday").focus();
+		   return false;
+	   }else if(employee2_extension == ""){
+		   alert("내선번호를 입력해 주세요.");
+		   document.getElementById("employee2_extension").focus();
+		   return false;
+	   }else{
 		      var ch = confirm("등록하시겠습니까?");
 		      if(ch){
 		         f.submit();

@@ -192,7 +192,7 @@ function teamname(){
 
    <div class="notosanskr">
       <div align="center">
-         <h1 style="font-size: 20pt;">정산</h1>
+         <h1 style="font-size: 20pt;">정산관리</h1>
       </div>
       <div class="divform2">
          <div>

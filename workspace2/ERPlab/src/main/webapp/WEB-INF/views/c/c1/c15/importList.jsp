@@ -259,7 +259,7 @@ function teamname(){
 
    <div class="notosanskr">
       <div align="center">
-         <h1 style="font-size: 20pt;">거래처 관리</h1>
+         <h1 style="font-size: 20pt;">수입 관리</h1>
       </div>
       <div class="divform2">
          <div>

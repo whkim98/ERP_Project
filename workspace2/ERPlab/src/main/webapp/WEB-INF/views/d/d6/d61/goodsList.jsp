@@ -182,7 +182,7 @@ function getlist() {
 
  <div class="notosanskr">
       <div align="center">
-         <h1 style="font-size: 20pt;">수출관리</h1>
+         <h1 style="font-size: 20pt;">통합재고관리</h1>
       </div>
       <div class="divform2">
          <div>

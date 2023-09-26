@@ -30,6 +30,9 @@ function resignWindow(employee1_no, employee2_no, comcode_code){
 	}
 }
 </script>
+      <div align="center">
+         <h1 style="font-size: 20pt;">퇴직 관리</h1>
+      </div>
 <div align="center">
 	<form action="${pageContext.request.contextPath }/greeting/resign/insertForm" method="post">
 		<table>

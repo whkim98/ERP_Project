@@ -3,6 +3,10 @@
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ include file="/WEB-INF/views/layout/header.jsp" %>
 
+      <div align="center">
+         <h1 style="font-size: 20pt;">근태등록</h1>
+      </div>
+
 <div align="center">
     <form action="${pageContext.request.contextPath }/greeting/attendance/insert" method="post" name="privacy">
         <input type="hidden" name="employee2_no" value="${employee2_no }">
@@ -38,7 +42,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="입력">
+                    <input type="button" value="입력" onclick="checkSubmit(this.form)">
                 </td>
             </tr>
         </table>
@@ -74,7 +78,39 @@
 </div>
 
 <script>
+
+function checkSubmit(f) {
+    var attendance_start = document.getElementById("attendance_start").value;
+    var attendance_end = document.getElementById("attendance_end").value;
+
+    if (attendance_start == "") {
+        alert("시작날짜를 입력해 주세요.");
+        document.getElementById("attendance_start").focus();
+        return false;
+    } else if (attendance_end == "") {
+        alert("종료날짜를 입력해 주세요.");
+        document.getElementById("attendance_end").focus();
+        return false;
+    } else {
+        // Confirm dialog for submission
+        var ch = confirm("등록하시겠습니까?");
+        if (ch) {
+            // Call the date validation function
+            if (!validateDates()) {
+                return false; // 날짜가 유효하지 않으면 제출 중단
+            }
+            f.submit();
+        } else {
+            return false;
+        }
+    }
+
+    return true; // 폼 제출 허용
+}
+
+
 function validateDates() {
+	
     var startDate = new Date(document.getElementById("attendance_start").value);
     var endDate = new Date(document.getElementById("attendance_end").value);
 
