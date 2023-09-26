@@ -36,7 +36,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="/intranetMain">ERPlab</a></h1>
+						<h1><a href="/intranet/intranetMain">ERPlab</a></h1>
 						<nav class="links">
 						
 						<!-- 인트라넷 헤더 -->

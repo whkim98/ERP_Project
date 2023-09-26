@@ -59,7 +59,7 @@ public class IntranetLoginController {
 				String url = null;
 				
 				msg = name.get("employee1_name") + "님이 로그인 하셨습니다.";
-				url = "/intranetMain";
+				url = "/intranet/intranetMain";
 				
 				request.setAttribute("msg", msg);
 				request.setAttribute("url", url);

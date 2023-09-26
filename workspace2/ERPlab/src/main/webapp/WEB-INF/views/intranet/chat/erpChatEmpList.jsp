@@ -12,32 +12,32 @@
 </head>
 <body>
 
-<div class="erpChatEmpList-container">
+<div class="erpChat-empList-container">
+    <div class="erpChat-empList-head">
+        <input type="button" onclick="" id="empList-empListBtn" value="직원목록">
+        <input type="button" onclick="" id="empList-chatListBtn" value="채팅목록">
+    </div>
 
-	<div class="erpChatEmpList-head">
-		직원목록 | 채팅목록
-	
-	</div>
-	
-	<div class="erpChatEmpList-body">
-		
-		<table>
-			<tr>
-				<th>
-					본부
-				</th>
-				<td>
-					팀
-				</td>
-				<td>
-					김개발
-				</td>
-			</tr>
-		
-		</table>
-	
-	</div>
+    <div class="erpChat-empList-title">
+        <input type="text" placeholder="직원검색" />
+        <a onclick="searchEmp()"><i class="input-icon uil-search"></i></a>
+    </div>
 
+    <div class="erpChat-empList-main">
+        main part
+        <!-- 부서별 출력 할 것인지??? 직원 리스트 -->
+        <table>
+            <tr>
+                <th>${팀}</th>
+                <th>${이름}</th>
+                <th>${직급}</th>
+                <th>    </th>
+                <th><a onclick="chatStart()"><i class="input-icon uil-comments"></i></a>
+            </tr>
+        </table>
+        main part end
+    </div>
+    
 </div>
 
 <script type="text/javascript">

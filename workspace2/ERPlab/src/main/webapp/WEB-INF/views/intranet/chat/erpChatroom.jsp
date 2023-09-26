@@ -11,7 +11,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
 <script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/chat/common.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/intranet/chat/chatRoom.css">
 
 </head>
 <body>
