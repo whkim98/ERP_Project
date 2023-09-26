@@ -11,12 +11,12 @@
 			<nav class="links">
 			<!-- 인트라넷 애들은 로그인을 따로 할 수 있도록 나중에 수정 -->
 				<ul>
-					<li><a href="#">조직도</a></li>
-					<li><a href="#">일정</a></li>
-					<li><a href="#">주소록</a></li>
+					<li><a th:href="@{/intranet/organization}">조직도</a></li>
+					<li><a th:href="@{/intranet/calendar}">일정</a></li>
+					<li><a th:href="@{/intranet/address_book}">주소록</a></li>
 					<li><a href="${#httpServletRequest.getContextPath()}/erpchat?comcode_code=${comcode_code}" target="_blank">메신저</a></li>
-					<li><a href="#">이메일</a></li>
-					<li><a href="#">연차</a></li>								
+					<li><a th:href="@{/intranet/email}">이메일</a></li>
+					<li><a href="@{/intranet/annual_leave}">연차</a></li>								
 				</ul>
 				<ul>
 					<li><a href="#">재고</a></li>
@@ -57,22 +57,22 @@
 						<a th:href="@{/a/a1/a11/company}">
 							<p>회사정보</p>
 						</a>
-						<a href="#">
+						<a th:href="@{/a/a1/a11/company}">
 							<p>사업자정보</p>
 						</a>
-						<a href="#">
+						<a th:href="@{/a/a1/a11/company}">
 							<p>지점관리</p>
 						</a>
 					</li>
 					<li>
 							<h3>전략기획팀</h3>
-						<a href="#">
+						<a th:href="@{/a/a3/a31/inputProject}">
 							<p>프로젝트</p>
 						</a>
-						<a href="#">
+						<a th:href="@{/a/a3/a31/inputContract}">
 							<p>계약관리</p>
 						</a>
-						<a href="#">
+						<a th:href="@{/a/a3/a33/inputEstimate}">
 							<p>실적 / 평가</p>
 						</a>
 					</li>
@@ -90,13 +90,13 @@
 					</li>
 					<li>
 							<h3>재무팀</h3>
-						<a href="#">
+						<a th:href="@{/account}">
 							<p>계좌현황 및 관리</p>
 						</a>
-						<a href="#">
+						<a th:href="@{/funds}">
 							<p>자금관리</p>
 						</a>
-						<a href="#">
+						<a th:href="@{/budget}">
 							<p>예산관리</p>
 						</a>
 						<a href="${#httpServletRequest.getContextPath()}/b31main?comcode_code=${comcode_code}">
@@ -108,25 +108,25 @@
 						<a href="${#httpServletRequest.getContextPath()}/b33main">
 							<p>외화관리</p>
 						</a>
-						<a href="#">
+						<a th:href="@{b/b4/b41}">
 							<p>마감 / 결산</p>
 						</a>
-						<a href="#">
+						<a th:href="">
 							<p>원가분석</p>
 						</a>
 					</li>
 					<li>
 						<h3>인사팀</h3>
-							<a href="#">
+							<a th:href="@{/greeting}">
 								<p>인사정보</p>
 							</a>
-							<a href="#">
+							<a href="">
 								<p>조직관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/greeting/attendance}">
 								<p>근태관리</p>
 							</a>
-							<a href="#">
+							<a href="">
 								<p>정산</p>
 							</a>
 							<a href="#">
@@ -135,40 +135,40 @@
 					</li>
 					<li>
 						<h3>총무팀</h3>
-							<a href="#">
+							<a th:href="@{/tools}">
 								<p>기자재</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/supplies}">
 								<p>비품 / 소모품</p>
 							</a>
 					</li>
 					<li>
 						<h3>해외영업팀</h3>
-							<a href="#">
+							<a th:href="@{/international/list}">
 								<p>해외거래처관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/internationalsales/export}">
 								<p>수출관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/internationalsales/income}">
 								<p>수입(매입)</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/internationalsales/income}">
 								<p>수입발주관리</p>
 							</a>
 					</li>
 					<li>
 						<h3>국내영업팀</h3>
-							<a href="#">
+							<a th:href="@{/c21}">
 								<p>국내거래처관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c22}">
 								<p>채권관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c23}">
 								<p>반품관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c25}">
 								<p>영업전표</p>
 							</a>
 							<a href="#">
@@ -177,28 +177,28 @@
 					</li>
 					<li>
 						<h3>매장영업팀</h3>
-							<a href="#">
+							<a th:href="@{/c/c3/c31/storesales}">
 								<p>매장관리</p>
 							</a>
-							<a href="#">
+							<a th:href="">
 								<p>발주관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c/c4/c43/customer}">
 								<p>고객관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c/c3/c32/warehouse}">
 								<p>창고관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c/c/3/c33/event}">
 								<p>행사관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/c/c3/c34/online}">
 								<p>온라인</p>
 							</a>
 					</li>
 					<li>
 						<h3>영업관리팀</h3>
-							<a href="#">
+							<a th:href="@{/c/c4/c41/salesresult}">
 								<p>영업실적관리</p>
 							</a>
 							<a href="#">
@@ -207,76 +207,76 @@
 					</li>
 					<li>
 						<h3>생산팀</h3>
-							<a href="#">
+							<a th:href="@{/d/d1/d11/inputProduct}">
 								<p>생산 / 제조</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d1/d12/inputRequestProduct}">
 								<p>생산의뢰</p>
 							</a>
 							<a href="#">
 								<p>작업지시서</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d1/d14/inputEvaluation}">
 								<p>생산실적관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d1/d15/inputEvaluemng}">
 								<p>작업실적관리</p>
 							</a>
 							<a href="#">
 								<p>불량분석</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d1/d17/inputProinventory}">
 								<p>공정재고관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{d/d2/d21/inputOrder}">
 								<p>발주관리</p>
 							</a>
-							<a href="#">
+							<a href="@{/d/d2/d22/inputPurchase}">
 								<p>매입관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d2/d23/inputInventory}">
 								<p>재고관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d2/d24/inputProductTest}">
 								<p>재고평가</p>
 							</a>
 					</li>
 					<li>
 						<h3>구매팀</h3>
-							<a href="#">
+							<a th:href="@{/d/d3/d31/inputOrder}">
 								<p>발주관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d3/d32/inputPurchase}">
 								<p>매입관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d3/d33/inputInventory}">
 								<p>재고관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d3/d34/inputProductTest}">
 								<p>재고평가</p>
 							</a>
 					</li>
 					<li>
 						<h3>품질관리팀</h3>
-							<a href="#">
+							<a th:href="@{/d/d4/d41/qc}">
 								<p>품질검사</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d4/d42/equipment}">
 								<p>설비 / 장비 관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d5/d51/claim}">
 								<p>클레임(기업)</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/d/d5/d52/cs}">
 								<p>CS(소비자)</p>
 							</a>
 					</li>
 					<li>
 						<h3>물류팀</h3>
-							<a href="#">
+							<a th:href="@{/stock}">
 								<p>재고관리</p>
 							</a>
-							<a href="#">
+							<a th:href="@{/management}">
 								<p>입출고관리</p>
 							</a>
 							<a href="#">
