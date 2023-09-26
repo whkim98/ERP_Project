@@ -144,34 +144,12 @@ public class AdminController {
 		
 		String comcode_name = as.getComcodeName(comcode_code);
 		
-		int comcode_no = ls.comNo(comcode_code);
-		
-		Map<String, Object> map = new HashMap<>();
-		
-		map.put("type", type);
-		map.put("word", word);
-		map.put("comcode_no", comcode_no);
-		
-		List<Erp_TeamVO> teamList = as.teamList(map);
-		
-		if(teamList.isEmpty()) {
-			teamList = null;
-		}
-		
 		Map<String, Object> selectAdmin = as.selectAdmin(vo.getAdmin_no());
 		
-		List<Map<String, Object>> list = as.adminList(map);
-		
-		if(list.isEmpty()) {
-			list = null;
-		}
-		
-		model.addAttribute("list", list);							// inputAdmin과 같은 페이지에서 띄울 admin계정 List
-		model.addAttribute("teamList", teamList);					// 같은 페이지에서 권한 부여할 때 선택할 erp_team List
 		model.addAttribute("selectAdmin", selectAdmin);				// admin List에서 선택한 사람의 정보
 		model.addAttribute("comcode_name", comcode_name);			// 고객사 이름
 		
-		return ViewPath.ADMIN + "inputAdmin";
+		return ViewPath.ADMIN + "adminUpdate";
 	}
 	
 	@RequestMapping("adminInsert")
@@ -194,6 +172,40 @@ public class AdminController {
 		return ViewPath.ADMIN + "adminInsert";
 	}
 	
+	@RequestMapping("/searcht")
+	public String searcht(Model model, String type, String word) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		map.put("type", type);
+		map.put("word", word);
+		
+		List<Erp_TeamVO> list = as.teamList(map);
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		model.addAttribute("list", list);
+		
+		return ViewPath.WINDOW + "admin/teamList";
+	}
+	
+	@RequestMapping("/checkAdminId")
+	@ResponseBody
+	public String checkAdminId(Erp_AdminVO vo) {
+		try {
+			int no = as.checkAdminId(vo.getAdmin_id());
+			
+			return "중복된 ID 입니다.";
+		}catch(Exception e) {
+			return "사용 가능한 ID 입니다.";
+		}
+	}
+	
 	@RequestMapping("/createAdmin")
 	public String createAdmin(Erp_AdminVO vo, String comcode_code, Model model) {
 		String msg = null;
@@ -214,7 +226,7 @@ public class AdminController {
 		
 		as.createAdmin(vo);
 		
-		return "redirect:/admin/inputAdmin?comcode_code="+comcode_code;			// insert되는 순간 admin계정 List에 추가된 상태로 등록창 띄움
+		return "redirect:/admin?comcode_code="+comcode_code;			// insert되는 순간 admin계정 List에 추가된 상태로 등록창 띄움
 	}
 	
 	
@@ -235,7 +247,7 @@ public class AdminController {
 		
 		as.updateAdmin(vo);
 		
-		return "redirect:/admin/updateFormAdmin?admin_no="+vo.getAdmin_no()+"&comcode_code="+comcode_code;		// update되는 순간 update된 admin 정보 띄움
+		return "redirect:/updateFormAdmin?admin_no="+vo.getAdmin_no()+"&comcode_code="+comcode_code;		// update되는 순간 update된 admin 정보 띄움
 	}
 
 	/*
@@ -283,7 +295,7 @@ public class AdminController {
 	        // 예외 처리 코드 추가
 	    }
 
-	    return "redirect:/admin/inputAdmin?comcode_code=" + comcodeCode;
+	    return "redirect:/admin?comcode_code=" + comcodeCode;
 	}
 
 

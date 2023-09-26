@@ -30,6 +30,10 @@ private SqlSession sqlSession;
 		return sqlSession.update("c2.updateReceiveTotal", vo);
 	}
 	
+	public int finishCollect(Erp_ReceivableVO vo) {
+		return sqlSession.update("c2.finishCollect", vo);
+	}
+	
 	public int deleteReceivable(int receivable_no) {
 		return sqlSession.delete("c2.deleteReceivable", receivable_no);
 	}

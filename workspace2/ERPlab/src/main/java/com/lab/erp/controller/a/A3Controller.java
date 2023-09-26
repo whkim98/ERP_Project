@@ -862,7 +862,7 @@ public class A3Controller {
 		
 		model.addAttribute("inmap", inmap);
 		
-		return ViewPath.A3 + "/a33/updateForm";
+		return ViewPath.A3 + "/a33/inputEstimate";
 	}
 	
 	@RequestMapping("/a33/update")

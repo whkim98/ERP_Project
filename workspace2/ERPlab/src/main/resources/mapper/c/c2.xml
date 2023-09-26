@@ -260,6 +260,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where receivable_no = #{receivable_no}
 	</update>
 	
+	<update id="finishCollect" parameterType="com.lab.erp.vo.c.Erp_ReceivableVO">
+		update erp_receivable set 
+		receivable_collected = #{receivable_collected},
+		receivable_collect = sysdate() 
+		where receivable_no = #{receivable_no}
+	</update>
+	
 	<update id="updateReceiveTotal" parameterType="com.lab.erp.vo.c.Erp_ReceivableVO">
 		update erp_receivable set 
 		receivable_price = #{receivable_price},
@@ -273,14 +280,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="receivableList" parameterType="map" resultType="map">
-		select r.*, c.client_name from erp_receivable r, erp_client c 
-		where r.comcode_no = #{comcode_no} 
-		and r.client_no = c.client_no
+		select r.*, c.debtor_no, c.creditor_no, d.bs3_no bs3_no1, cr.bs3_no bs3_no2, cl.client_name, cl.client_registeredno, cl.client_manager 
+		from erp_receivable r, erp_closing c, erp_debtor d, erp_creditor cr, erp_client cl 
+		where r.client_no = cl.client_no 
+		and r.receivable_cino = c.closing_code  
+		and d.debtor_no = c.debtor_no 
+		and c.creditor_no = cr.creditor_no 
+		and r.comcode_no = #{comcode_no} 
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
 					r.receivable_cino like '%${word}%' or r.receivable_collected = #{word} 
-					or c.client_name like '%${word}%' or date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
+					or cl.client_name like '%${word}%' or date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
 					)
 			</if>
 			<if test="type == 'receivable_cino'">
@@ -290,7 +301,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				and r.receivable_collected = #{word}
 			</if>
 			<if test="type == 'client_name'">
-				and c.client_name like '%${word}%'
+				and cl.client_name like '%${word}%'
 			</if>
 			<if test="type == 'receivable_expiry'">
 				and date_format(r.receivable_expiry, '%m월 %d일') like '%${word}%'
@@ -342,11 +353,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="bondbillsList" parameterType="map" resultType="map">
-		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.* 
-		from erp_bondbills b, erp_receivable r, erp_client c 
+		select r.receivable_cino, r.receivable_total, r.receivable_expiry, r.receivable_collected, c.client_name, b.*, 
+		cl.*, d.bs3_no bs3_no1, cr.bs3_no bs3_no2 
+		from erp_bondbills b, erp_receivable r, erp_client c, erp_closing cl, erp_debtor d, erp_creditor cr 
 		where r.comcode_no = #{comcode_no} 
 		and r.receivable_no = b.receivable_no 
-		and r.client_no = c.client_no
+		and r.client_no = c.client_no 
+		and b.bondbills_code = cl.closing_code 
+		and cl.debtor_no = d.debtor_no 
+		and cl.creditor_no = cr.creditor_no 
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
@@ -462,7 +477,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="returnList" parameterType="map" resultType="map">
-		select g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, c.client_registeredno, c.client_manager, gt.goodsst_spec, r.* 
+		select gl.*, g.goods_name, g.goods_barcode, gs.goodssort_name, gk.goodskind_name, c.client_name, c.client_registeredno, c.client_manager, gt.goodsst_spec, r.* 
 		from erp_return r, erp_goods g, erp_goodssort gs, erp_goodsst gt, erp_goodskind gk, erp_goodslot gl, erp_client c 
 		where r.goodslot_no = gl.goodslot_no 
 		and g.goods_no = gl.goods_no 

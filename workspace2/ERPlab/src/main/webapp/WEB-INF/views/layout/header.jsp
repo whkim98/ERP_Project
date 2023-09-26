@@ -18,6 +18,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="${pageContext.request.contextPath }/webdesign/assets/css/main.css" />
 		<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+		<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 
 <style>
 	/* input type="number"일 떄 위/아래 화살표 버튼 제거*/

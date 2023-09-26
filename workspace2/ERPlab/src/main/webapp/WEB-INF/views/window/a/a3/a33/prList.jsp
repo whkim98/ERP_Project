@@ -29,7 +29,7 @@
 			<td colspan="3">정보가 존재하지 않습니다.</td>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.project_no }, '${vo.project_name}', ${vo.project_budget }, '${vo.project_content }', '${vo.project_start }', '${vo.project_end }')">
+				<tr onclick="setParentText(${vo.project_no }, '${vo.project_name}', ${vo.project_status }, '${vo.project_content }', '${vo.project_start }', '${vo.project_end }')">
 					<td>${vo.project_name}</td>
 					<td>${vo.project_budget }</td>
 					<td>${vo.project_content }</td>
@@ -42,10 +42,18 @@
 	function setParentText(no, name, budget, content, start, end){
     	opener.document.getElementById("project_no").value = no;
     	opener.document.getElementById("project_name").value = name;
-    	opener.document.getElementById("project_budget").value = budget;
     	opener.document.getElementById("project_content").value = content;
     	opener.document.getElementById("project_start").value = start;
     	opener.document.getElementById("project_end").value = end;
+    	if(budget == 0){
+    		opener.document.getElementById("project_status").value = "미완료";
+		}else if(budget == 1){
+			opener.document.getElementById("project_status").value = "완료";
+		}else if(budget == 2){
+			opener.document.getElementById("project_status").value = "진행중";
+		}else {
+			opener.document.getElementById("project_status").value = "default";
+		}
     	window.close();
     }
 	

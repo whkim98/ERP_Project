@@ -13,5 +13,8 @@ public class Erp_TeamVO {
 	private String team_code;
 	private String team_name;
 	private int comcode_no;
+	
+	
+	private String dept_name;
 
 }

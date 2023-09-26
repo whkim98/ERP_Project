@@ -189,7 +189,7 @@ function getlist(){
 						</div>
 						<div>
 							<label>계약 내용 </label>
-							<input type="text" name="contract_content" id="contract_content" value="${inmap.contract_content }" class="required">
+							<input type="text" name="contract_content" id="contract_content" maxlength="1000" value="${inmap.contract_content }" class="required">
 						</div>
 						<div>
 							<input type="button" value="수정" onclick="sub(this.form)">
@@ -257,7 +257,7 @@ function getlist(){
 						</div>
 						<div>
 							<label>계약 내용 </label>
-							<input type="text" name="contract_content" id="contract_content" class="required">
+							<input type="text" name="contract_content" id="contract_content" maxlength="1000" class="required">
 						</div>
 						<div>
 							<input type="button" value="등록" onclick="sub(this.form)">
@@ -268,6 +268,7 @@ function getlist(){
 		</c:if>
 	</div>
 	<script type="text/javascript">
+	var pat = /^[0-9]{0,8}$/;
 	
 	var now_utc = Date.now() // 지금 날짜를 밀리초로
 	//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
@@ -277,6 +278,10 @@ function getlist(){
 	var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
 	document.getElementById("contract_start").setAttribute("min", end+"-01-01");
 	document.getElementById("contract_start").setAttribute("max", end+"-12-31");
+	if(document.getElementById("contract_start").value != ""){
+		document.getElementById("contract_end").setAttribute("min", document.getElementById("contract_start").value);
+		document.getElementById("contract_end").setAttribute("max", end+"-12-31");
+	}
 
 	function startcheck(v){
 		document.getElementById("contract_end").value = v;
@@ -319,7 +324,7 @@ function getlist(){
 			let cc = confirm("계약기간이 입력되지 않았습니다. 계속하시겠습니까?");
 			if(cc){
 				if(f.contract_start.value != ""){
-					f.contract_end.value = f.contract_start.value + 1;
+					f.contract_end.value = f.contract_start.value;
 				}else {
 					f.contract_end.value = today;
 				}

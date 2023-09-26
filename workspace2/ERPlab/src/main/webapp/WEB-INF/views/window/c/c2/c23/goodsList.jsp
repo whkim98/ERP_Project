@@ -39,7 +39,7 @@
 			</tr>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
-				<tr onclick="setParentText(${vo.goodslot_no}, '${vo.goods_name }', '${vo.goodslot_lot }', '${vo.goods_barcode }', ${vo.goodslot_total })">
+				<tr onclick="setParentText(${vo.goodslot_no}, '${vo.goods_name }', '${vo.goodslot_lot }', '${vo.goods_barcode }', ${vo.goodslot_total },'${vo.client_name }')">
 					<td>${vo.goodslot_lot}</td>
 					<td>${vo.goods_barcode}</td>
 					<td>${vo.goods_name}</td>
@@ -53,12 +53,13 @@
 </div>
 
 <script type="text/javascript">
-	function setParentText(no, name, lot, barcode, total){
+	function setParentText(no, name, lot, barcode, total, cname){
     	opener.document.getElementById("goodslot_no").value = no;
     	opener.document.getElementById("goodslot_total").value = total;
     	opener.document.getElementById("goods_barcode").value = barcode;
     	opener.document.getElementById("goods_name").value = name;
     	opener.document.getElementById("goodslot_lot").value = lot;
+    	opener.document.getElementById("client_name").value = cname;
     	window.close();
     }
 	
@@ -114,7 +115,7 @@
 				procode.innerHTML += '<tr><td colspan="7">목록이 없습니다.</td></tr>';
 			}
 		}
-	}
+	
 </script>
 </body>
 </html>

@@ -77,8 +77,8 @@ function requestpr(no,code){
 							</select>
 						</td>
 						<td>
-							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}', ${rmap.receivable_no })">
-							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}', ${rmap.receivable_no })">
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
+							<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
 						</td>
 					</tr>
 				</table>
@@ -165,7 +165,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>기간 </label>
-							<input type="date" name="product_install" id="product_install" value="${inmap.product_install }"> - <input type="date" name="product_end" id="product_end" value="${inmap.product_end }">
+							<input type="date" name="product_install" id="product_install" value="${inmap.product_install }" onchange="startcheck(this.value)"> - <input type="date" name="product_end" id="product_end" value="${inmap.product_end }">
 						</div>
 						
 						<div>
@@ -196,7 +196,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>생산 수량 </label>
-							<input type="text" name="product_qty" id="product_qty" class="required" value="${inmap.product_qty }">
+							<input type="text" name="product_qty" id="product_qty" class="required" value="${inmap.product_qty }" readonly="readonly">
 							<input type="button" onclick="goodsList()" value="목록보기">
 						</div>
 						
@@ -284,7 +284,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>기간 </label>
-							<input type="date" name="product_install" id="product_install"> - <input type="date" name="product_end" id="product_end">
+							<input type="date" name="product_install" id="product_install" onchange="startcheck(this.value)"> - <input type="date" name="product_end" id="product_end">
 						</div>
 						
 						<div>
@@ -315,6 +315,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>생산 수량 </label>
+							<input type="text" name="product_qty" id="product_qty" class="required" readonly="readonly">
 							<input type="button" onclick="goodsList()" value="목록보기">
 						</div>
 						
@@ -357,6 +358,26 @@ function requestpr(no,code){
 	
 </div>
 <script type="text/javascript">
+
+var now_utc = Date.now() // 지금 날짜를 밀리초로
+//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
+var timeOff = new Date().getTimezoneOffset()*60000; // 분단위를 밀리초로 변환
+//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
+var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
+var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
+document.getElementById("product_install").setAttribute("min", end+"-01-01");
+document.getElementById("product_install").setAttribute("max", end+"-12-31");
+
+if(document.getElementById("product_install").value != ""){
+	document.getElementById("product_end").setAttribute("min", document.getElementById("product_install").value);
+	document.getElementById("product_end").setAttribute("max", end+"-12-31");
+}
+
+function startcheck(v){
+	document.getElementById("product_end").value = v;
+	document.getElementById("product_end").setAttribute("min", v);
+	document.getElementById("product_end").setAttribute("max", end+"-12-31");
+}
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no1, no2, ino, code, rcode){
@@ -425,6 +446,14 @@ function conculator1(v){
 // submit 유효성 검사
 function sub(f, total){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
+	if(!pat.test(f.product_budget.value)){
+		alert("100,000,000원 미만, 숫자만 입력 가능합니다.");
+		f.product_budget.value = "";
+		f.product_tax.value = "";
+		f.product_totalbudget.value = "";
+		f.product_budget.focus();
+		return;
+	}
 	if(f.product_budget.value == ""){
 		f.product_budget.focus();
 		return;
@@ -441,17 +470,25 @@ function sub(f, total){
 	}else if(f.product_end.value == ""){
 		f.product_end.focus();
 		return;
-	}else if(!pat.test(f.product_budget.value)){
-		alert("100,000,000원 미만, 숫자만 입력 가능합니다.");
-		f.product_budget.focus();
+	}else if(f.product_name.value == ""){
+		f.product_name.focus();
 		return;
+	}else if(f.requestproduct_no.value == ""){
+		f.requestproduct_code.focus();
+		return;
+	}else if(f.product_content.value == ""){
+		f.product_content.focus();
+		return;
+	}else if(f.employee1_no.value == ""){
+		f.employee1_name.focus();
+		return;
+	}
+	
+	var ch = confirm("등록하시겠습니까?");
+	if(ch){
+		f.submit();
 	}else {
-		var ch = confirm("등록하시겠습니까?");
-		if(ch){
-			f.submit();
-		}else {
-			return;
-		}
+		return;
 	}
 }
 
@@ -489,7 +526,7 @@ function lotcheck(){
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.responseText;
 		if(data != ""){	
-			if(data == "사용 가능한 코드입니다."){
+			if(data == "사용 가능한 로트입니다."){
 				document.getElementById("lot").innerText = data;
 				document.getElementById("lot").style.color = "blue";
 				document.getElementById("register").disabled = false;
@@ -524,6 +561,7 @@ function goodsList(){
 	sendRequest(url,param,goodsCheck,"POST");
 }
 function goodsCheck(){
+	var sum = 0;
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.response;
 		let g = document.getElementById("goodsList");
@@ -560,10 +598,12 @@ function goodsCheck(){
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.connectrequest_qty;
 				newTr.appendChild(newTd);
+				sum += Number(map.connectrequest_qty);
 			});
 		}else {
 			g.innerHTML += '<tr><td colspan="5">목록이 없습니다.</td></tr>';
 		}
+		document.getElementById("product_qty").value = sum;
 	}
 }
 

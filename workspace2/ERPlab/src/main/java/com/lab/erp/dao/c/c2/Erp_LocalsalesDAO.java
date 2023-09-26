@@ -32,7 +32,7 @@ private SqlSession sqlSession;
 	}
 	
 	public int deleteLocalSales(int localsales_no) {
-		return sqlSession.delete("c2.deleteLocasSales", localsales_no);
+		return sqlSession.delete("c2.deleteLocalSales", localsales_no);
 	}
 	
 	public List<Map<String, Object>> localSalesList(Map<String, Object> map){

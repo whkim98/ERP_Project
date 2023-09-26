@@ -14,13 +14,12 @@ import com.lab.erp.vo.login.Erp_TeamVO;
 @Component
 public class Erp_AdminDAO {
 private SqlSession sqlSession;
-	
 	@Autowired
 	public Erp_AdminDAO(SqlSession sqlSession) {
 		this.sqlSession = sqlSession;
 	}
 	
-//	login
+	//login
 	public int checkAdmin(Map<String, Object> map) {
 		return sqlSession.selectOne("login.checkAdmin", map);
 	}
@@ -33,7 +32,7 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("login.findAdminPw", map);
 	}
 	
-//	admin
+	//admin
 	public int adminMaxNo() {
 		return sqlSession.selectOne("admin.adminMaxNo");
 	}
@@ -72,5 +71,9 @@ private SqlSession sqlSession;
 	
 	public String getComcodeName(String comcode_code) {
 		return sqlSession.selectOne("admin.getComcodeName", comcode_code);
+	}
+	
+	public int checkAdminId(String admin_id) {
+		return sqlSession.selectOne("admin.checkAdminId", admin_id);
 	}
 }

@@ -392,6 +392,9 @@ function clientsortname(){
 </div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+	var regRno =  /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
+	var regExp = /^\d{2,3}-\d{3,4}-\d{4}$/;
+	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no, code){
@@ -401,6 +404,15 @@ function deletei(no, code){
 
 // 사업자등록번호 UNIQUE 검사 AJAX
 function registeredno(v){
+	if(v == ""){
+		alert("공백은 불가합니다.");
+		return;
+	}
+	if(!regRno.test(v)){
+		alert("알맞은 사업자등록번호 형식이 아닙니다.");
+		document.getElementById("client_registeredno").value = "";
+		return;
+	}
 	var url = "${pageContext.request.contextPath }/c/c2/c21/registeredno";
 	var param = "client_registeredno="+encodeURIComponent(v);			
 	
@@ -410,7 +422,7 @@ function registerednocheck(){
 	if(xhr.readyState==4 && xhr.status==200) {		
 		var data = xhr.responseText;	
 		if(data != ""){		
-			if(data == "사용 가능한 코드입니다."){		
+			if(data == "사용 가능한 사업자등록번호입니다."){		
 				document.getElementById("registeredno").innerText = data;
 				document.getElementById("registeredno").style.color = "blue";
 				document.getElementById("register").disabled = false;		
@@ -425,6 +437,15 @@ function registerednocheck(){
 
 function registeredno1(e,v){
 	if(e.keyCode == 13){
+		if(v == ""){
+			alert("공백은 불가합니다.");
+			return;
+		}
+		if(!regRno.test(v)){
+			alert("알맞은 사업자등록번호 형식이 아닙니다.");
+			document.getElementById("client_registeredno").value = "";
+			return;
+		}
 		var url = "${pageContext.request.contextPath }/c/c2/c21/registeredno";
 		var param = "client_registeredno="+encodeURIComponent(v);			
 		
@@ -451,9 +472,6 @@ function registerednocheck1(){
 
 // submit 유효성 검사
 function sub(f){
-	var regRno =  /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
-	var regExp = /^\d{2,3}-\d{3,4}-\d{4}$/;
-	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
 	let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
 	if(f.client_registeredno.value == ""){
 		f.client_registeredno.focus();

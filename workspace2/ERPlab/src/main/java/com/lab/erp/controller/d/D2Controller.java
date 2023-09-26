@@ -180,6 +180,7 @@ public class D2Controller {
 		int comcode_no = ls.comNo(comcode_code);
 		
 		List<Erp_OrderconnectVO> oclist = ovo.getOclist();
+		
 		int sum = 0;
 		
 		for(Erp_OrderconnectVO ocvo : oclist) {

@@ -30,8 +30,8 @@ public class IntranetLoginController {
 
 	@Autowired
 	public IntranetLoginController(LoginService ls, IntranetService is, HttpServletRequest request) {
-		this.ls = ls;
 		this.is = is;
+		this.ls = ls;
 		this.request = request;
 	}
 	
@@ -83,9 +83,55 @@ public class IntranetLoginController {
 			}
 					
 		}catch(Exception e) {
+				
+				e.printStackTrace();
+				
+				String msg = null;
+				String url = null;
+				
+				msg = "아이디 또는 비밀번호가 틀렸습니다."; 
+				url = "/";
+				
+				request.getSession().invalidate();
+				
+				request.setAttribute("msg", msg);
+				request.setAttribute("url", url);
+				
+				return "result/loginresult";
+			}
+		}
 			
+	@RequestMapping("/")
+	public String intranetMain() {
+		return ViewPath.INTRANET + "chat/erpChat";
+	}
+	
+	@RequestMapping("/check")
+	public String check(HttpServletRequest request, Erp_Employee1VO vo, String comcode_code) {
+		try {
+			Map<String, Object> map = new HashMap<>();
+			map.put("employee1_id", vo.getEmployee1_id());
+			map.put("employee1_pw", vo.getEmployee1_pw());
+			
+			int no = ls.checkEmp(map);
+			Map<String, Object> name = is.getEmpName(map);
+			String msg = null;
+			String url = null;
+			
+			msg = name.get("employee1_name") + "님이 로그인 하셨습니다.";
+			url = "intranet/";
+			
+			request.getSession().setAttribute("chatNickName", name.get("team_name") + " " + name.get("employee1_name"));
+			request.getSession().setAttribute("empNo", name.get("employee2_no"));
+			
+			System.out.println(request.getSession().getAttribute("chatNickName"));
+			request.getSession().setAttribute("comcode_code", comcode_code);
+			request.setAttribute("msg", msg);
+			request.setAttribute("url", url);
+			return "result/loginresult";
+			
+		}catch(Exception e) {
 			e.printStackTrace();
-			
 			String msg = null;
 			String url = null;
 			
@@ -121,8 +167,11 @@ public class IntranetLoginController {
 		
 	@GetMapping("/intranet/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("empNo");
-		session.removeAttribute("chatNickName");
+		request.getSession().removeAttribute("Intralogin");
+		request.getSession().removeAttribute("chatNickName");
+		request.getSession().removeAttribute("empNo");
+		request.getSession().removeAttribute("Intranetlogin");
+		request.getSession().removeAttribute("comcode_code");
 		
 	    return "redirect:/"; 
 	}

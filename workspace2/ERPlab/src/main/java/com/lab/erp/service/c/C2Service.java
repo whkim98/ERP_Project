@@ -134,7 +134,7 @@ public class C2Service {
 	}
 	
 	public List<Map<String, Object>> clientListb4(Map<String, Object> map){
-		return cdao.clientList(map);
+		return cdao.clientListb4(map);
 	}
 	
 	public Map<String, Object> selectClientb4(int client_no){
@@ -201,6 +201,10 @@ public class C2Service {
 	
 	public int updateReceiveTotal(Erp_ReceivableVO vo) {
 		return rdao.updateReceiveTotal(vo);
+	}
+	
+	public int finishCollect(Erp_ReceivableVO vo) {
+		return rdao.finishCollect(vo);
 	}
 	
 	public int deleteReceivable(int receivable_no) {

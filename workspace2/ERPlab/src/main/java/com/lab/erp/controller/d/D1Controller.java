@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lab.erp.common.ViewPath;
@@ -371,9 +372,10 @@ public class D1Controller {
 	
 //	생산 / 제조 
 	@RequestMapping("/d11/inputProduct")
-	public String inputProduct(String comcode_code, String type, String word, Model model) {
+	public String inputProduct(@RequestParam("comcode_code") String comcode_code, String type, String word, Model model) {
 		String msg = null;
 		String url = null;
+		System.out.println(comcode_code);
 		
 		if(comcode_code == null || comcode_code.isEmpty()) {
 			request.getSession().invalidate();
@@ -578,8 +580,9 @@ public class D1Controller {
 		d1.updateBs2Amount(map);
 		d1.updateBs3Amount(map);
 		
+		System.out.println("coed = "+comcode_code);
 		
-		return "redirect:/d/d1/d11/inputProduct?comcode_code"+comcode_code;
+		return "redirect:/d/d1/d11/inputProduct?comcode_code="+comcode_code;
 	}
 	
 	@RequestMapping(value="/d11/update", produces = "application/text;charset=utf8")
@@ -905,9 +908,9 @@ public class D1Controller {
 				throw new Exception();
 			}
 			
-			return "이미 존재하는 코드입니다.";
+			return "이미 존재하는 로트입니다.";
 		}catch(Exception e) {
-			return "사용 가능한 코드입니다.";
+			return "사용 가능한 로트입니다.";
 		}
 	}
 	
@@ -996,6 +999,8 @@ public class D1Controller {
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);	
+		
+		System.out.println("no = " + vo.getEvaluation_no());
 		
 		List<Map<String, Object>> list = d1.evaluationList(map);
 		Map<String, Object> inmap = d1.selectEvaluation(vo.getEvaluation_no());
@@ -1089,7 +1094,7 @@ public class D1Controller {
 			int lotprice = (int)list.get(i).get("goodslot_price");
 			double tax = lotprice * 0.1;
 			int total = lotprice + (int)tax;
-			if(lotconnev_qty[i] != null) {
+			if(lotconnev_qty[i] != "") {
 				lotqty = Integer.parseInt(lotconnev_qty[i]);
 			}else {
 				lotqty = 0;

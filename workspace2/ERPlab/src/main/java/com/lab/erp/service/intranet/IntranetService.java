@@ -106,6 +106,10 @@ public class IntranetService {
 		return cdao.deleteChat(chat_no);
 	}
 	
+	public int deleteAllChat(int chatroom_no) {
+		return cdao.deleteAllChat(chatroom_no);
+	}
+	
 	public List<Map<String, Object>> getChating(Map<String, Object> map){
 		return cdao.getChating(map);
 	}

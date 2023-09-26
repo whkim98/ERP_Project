@@ -15,32 +15,6 @@ function searchemp(code){
 	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 
-//자동완성
-function kind(e, name){
-	if(e.keyCode == 13){
-		if(name == ""){
-			alert("종류를 입력해주세요.");
-			document.getElementById("projectkind_name").focus();
-			return;
-		}
-		var url = "${pageContext.request.contextPath}/a/a3/a31/kind";
-		var param = "projectkind_name=" + encodeURIComponent(name);
-		
-		sendRequest(url, param, projectkind, "POST");
-	}
-}
-function projectkind(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.response;
-		if(data != ""){
-			var data2 = JSON.parse(data);
-			document.getElementById("projectkind_name").value = data2.projectkind_name;
-			document.getElementById("projectkind_no").value = data2.projectkind_no;
-		}else {
-			alert("조회된 종류가 없습니다. 조회 버튼을 클릭하여 목록에서 종류를 선택해주세요.");
-		}
-	}
-}
 
 function team(e, name){
 	if(e.keyCode == 13){
@@ -234,7 +208,7 @@ function getlist(){
 					</div>
 					<div>
 						<label>프로젝트 종류 </label>
-						<input type="text" name="projectkind_name" id="projectkind_name" value="${inmap.projectkind_name }" onkeypress="kind(event, this.value)" class="required">
+						<input type="text" name="projectkind_name" id="projectkind_name" value="${inmap.projectkind_name }" readonly="readonly" class="required">
 						<input type="button" onclick="searchpk()" value="조회">
 					</div>
 					<div>
@@ -305,7 +279,7 @@ function getlist(){
 					</div>
 					<div>
 						<label>프로젝트 종류 </label>
-						<input type="text" name="projectkind_name" id="projectkind_name" onkeypress="kind(event, this.value)" class="required">
+						<input type="text" name="projectkind_name" id="projectkind_name" readonly="readonly" class="required">
 						<input type="button" onclick="searchpk()" value="조회">
 					</div>
 					<div>
@@ -348,6 +322,7 @@ function getlist(){
 		</c:if>
 	</div>
 	<script type="text/javascript">
+	var pat = /^[0-9]{0,8}$/;
 	
 	var now_utc = Date.now() // 지금 날짜를 밀리초로
 	//getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환
@@ -357,6 +332,10 @@ function getlist(){
 	var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
 	document.getElementById("project_start").setAttribute("min", end+"-01-01");
 	document.getElementById("project_start").setAttribute("max", end+"-12-31");
+	if(document.getElementById("project_start").value != ""){
+		document.getElementById("project_end").setAttribute("min", document.getElementById("project_start").value);
+		document.getElementById("project_end").setAttribute("max", end+"-12-31");
+	}
 
 	function startcheck(v){
 		document.getElementById("project_end").value = v;
@@ -386,6 +365,12 @@ function getlist(){
 			return;
 		}
 		
+		if(!pat.test(f.project_budget.value)){
+			alert("예산은 숫자만 입력 가능합니다.");
+			f.project_budget.value = "";
+			return;
+		}
+		
 		if(f.project_start.value == ""){
 			let cc = confirm("프로젝트 기간이 입력되지 않았습니다. 계속하시겠습니까?");
 			if(cc){
@@ -400,7 +385,7 @@ function getlist(){
 			let cc = confirm("프로젝트 기간이 입력되지 않았습니다. 계속하시겠습니까?");
 			if(cc){
 				if(f.project_start.value != ""){
-					f.project_end.value = f.project_start.value + 1;
+					f.project_end.value = f.project_start.value;
 				}else {
 					f.project_end.value = today;
 				}

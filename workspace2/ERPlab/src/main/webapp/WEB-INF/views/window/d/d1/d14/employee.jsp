@@ -45,7 +45,7 @@
 
 <script type="text/javascript">
 	function setParentText(no, name, position){
-    	opener.document.getElementById("employee1_no").value = no;
+    	opener.document.getElementById("employee2_no").value = no;
     	opener.document.getElementById("employee1_name").value = name;
     	opener.document.getElementById("employee2_position").value = position;
     	window.close();

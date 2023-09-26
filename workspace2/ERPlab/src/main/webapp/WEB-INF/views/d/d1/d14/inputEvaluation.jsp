@@ -304,7 +304,7 @@ function deletei(no, code, rno){
 // submit 유효성 검사
 function sub(f, total){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
-	if(f.product_code.value == ""){
+	if(f.product_no.value == ""){
 		f.product_code.focus();
 		return;
 	}else if(f.evaluation_paperend.value == ""){
@@ -313,7 +313,38 @@ function sub(f, total){
 	}else if(f.evaluation_actualend.value == ""){
 		f.evaluation_actualend.focus();
 		return;
-	}else if(f.evaluation_content.value == ""){
+	}else if(f.employee2_no.value == ""){
+		f.employee1_name.focus();
+		return;
+	}
+	
+	if(document.getElementsByName("lotconnev_qty")[0]){
+		for(let c = 0; c < document.getElementsByName("lotconnev_qty").length; c++;){
+			if(document.getElementById("lotconnev_qty").value == ""){
+				document.getElementsByName("lotconnev_qty")[c].value = 0;
+			}else if(!pat.test(document.getElementsByName("lotconnev_qty")[c].value)){
+				alert("수량은 숫자만 입력 가능합니다.");
+				document.getElementsByName("lotconnev_qty")[c].value = "";
+				document.getElementsByName("lotconnev_qty")[c].focus();
+				return;
+			}
+		}
+	}
+	
+	if(document.getElementsByName("defective_number")[0]){
+		for(let c = 0; c < document.getElementsByName("defective_number").length; c++;){
+			if(document.getElementById("defective_number").value == ""){
+				document.getElementsByName("defective_number")[c].value = 0;
+			}else if(!pat.test(document.getElementsByName("defective_number")[c].value)){
+				alert("수량은 숫자만 입력 가능합니다.");
+				document.getElementsByName("defective_number")[c].value = "";
+				document.getElementsByName("defective_number")[c].focus();
+				return;
+			}
+		}
+	}
+	
+	if(f.evaluation_content.value == ""){
 		var ch = confirm("내용이 입력되지 않았습니다. 등록하시겠습니까?");
 		if(ch){
 			f.submit();
@@ -430,13 +461,13 @@ function goodsCheck(){
 				newTd.innerHTML = map.goods_name;
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" name="defective_comment">';
+				newTd.innerHTML = '<input type="text" name="defective_comment" id="defective_comment">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" name="defective_number">';
+				newTd.innerHTML = '<input type="text" name="defective_number" id="defective_number">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<input type="text" name="lotconnev_qty">';
+				newTd.innerHTML = '<input type="text" name="lotconnev_qty" id="lotconnev_qty">';
 				newTr.appendChild(newTd);
 			});
 		}else {

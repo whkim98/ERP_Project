@@ -123,11 +123,14 @@ public class C2Controller {
 		
 		Map<String, Object> map = new HashMap<>();
 		
+		System.out.println(type);
+		
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
 		
 		List<Map<String, Object>> list = c2.clientListb4(map);
+		System.out.println(list);
 		
 		return list;
 	}
@@ -830,8 +833,18 @@ public class C2Controller {
 		
 		c2.inputBills(vo);
 		
+		Map<String, Object> inmap = c2.selectReceivable(vo.getReceivable_no());
+		Erp_BondbillsVO bills = c2.getBillsTotal(vo.getReceivable_no());
+		
+		if(bills.getBondbills_total() == (int)inmap.get("receivable_total")) {
+			Erp_ReceivableVO rvo = new Erp_ReceivableVO();
+			rvo.setReceivable_no(vo.getReceivable_no());
+			rvo.setReceivable_collected(1);
+			c2.finishCollect(rvo);
+		}
+		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
-		cvo.setClosing_code(receivable_cino);
+		cvo.setClosing_code(vo.getBondbills_code());
 		cvo.setCtgr_no(36);
 		cvo.setComcode_no(comcode_no);
 		cvo.setDebtor_no(deptno);
@@ -871,10 +884,12 @@ public class C2Controller {
 	@ResponseBody
 	public String billsTotalCheck(Erp_ReceivableVO vo, String total) {
 		Map<String, Object> inmap = c2.selectReceivable(vo.getReceivable_no());
-		if(Integer.parseInt(total) > (int)inmap.get("receivable_total")) {
+		Erp_BondbillsVO bills = c2.getBillsTotal(vo.getReceivable_no());
+		if(bills.getBondbills_total() + Integer.parseInt(total) > (int)inmap.get("receivable_total")) {
 			
 			return "총 채권 금액을 초과합니다. 다시 입력해주세요.";
 		}else {
+			
 			return "";
 		}
 	}
@@ -989,6 +1004,16 @@ public class C2Controller {
 		
 		c2.updateBills(vo);
 		
+		Map<String, Object> inmap = c2.selectReceivable(vo.getReceivable_no());
+		Erp_BondbillsVO bills = c2.getBillsTotal(vo.getReceivable_no());
+		
+		if(bills.getBondbills_total() == (int)inmap.get("receivable_total")) {
+			Erp_ReceivableVO rvo = new Erp_ReceivableVO();
+			rvo.setReceivable_no(vo.getReceivable_no());
+			rvo.setReceivable_collected(1);
+			c2.finishCollect(rvo);
+		}
+		
 		Erp_ClosingVO cvo = new Erp_ClosingVO();
 		cvo.setClosing_code(vo.getBondbills_code());
 		cvo.setDebtor_no(deptno);
@@ -1048,7 +1073,7 @@ public class C2Controller {
 	@RequestMapping("/c22/deleteBondbills")
 	@Transactional
 	public String deleteBondbills(String comcode_code, Model model, Erp_BondbillsVO vo, 
-			String bs3_no1, String bs3_no2, String receivable_cino) {
+			String bs3_no1, String bs3_no2) {
 		int b1 = 0;
 		int b2 = 0;
 		
@@ -1152,6 +1177,40 @@ public class C2Controller {
 		}catch(NullPointerException e) {
 			return "사용 가능한 코드입니다.";
 		}
+	}
+	
+	@RequestMapping("/c22/receivableList")
+	public String receivableList(String comcode_code, Model model, String type, String word) {
+		String msg = null;
+		String url = null;
+		
+		if(comcode_code == null || comcode_code.isEmpty()) {
+			request.getSession().invalidate();
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
+			url = "/";
+			model.addAttribute("msg", msg);
+			model.addAttribute("url", url);
+			return ViewPath.RESULT + "loginresult";
+		}
+		
+		int comcode_no = ls.comNo(comcode_code);
+		
+		if(type == null || word == null) {
+			type = null;
+			word = null;
+		}
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("comcode_no", comcode_no);
+		
+		List<Map<String, Object>> rlist = c2.receivableList(map);
+		
+		model.addAttribute("list", rlist);
+		
+		return ViewPath.WINDOW + "c/c2/c22/receivableList";
 	}
 	
 	

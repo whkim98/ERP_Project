@@ -24,7 +24,7 @@ function getlist(){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.client_no+")");
+				newTr.setAttribute("onclick", "selectForm("+map.receivable_no+")");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.receivable_cino;

@@ -432,6 +432,7 @@ document.getElementById("investment_start").setAttribute("min", end+"-01-01");
 document.getElementById("investment_start").setAttribute("max", end+"-12-31");
 
 function startcheck(v){
+	document.getElementById("investment_end").value = v;
 	document.getElementById("investment_end").setAttribute("min", v);
 	document.getElementById("investment_end").setAttribute("max", end+"-12-31");
 }
@@ -543,6 +544,7 @@ function sub(f){
 	
 	if(!pat.test(f.investment_price.value)){
 		alert("100,000,000미만, 숫자만 입력 가능합니다.");
+		f.investment_price.value = "";
 		f.investment_price.focus();
 		return;
 	}

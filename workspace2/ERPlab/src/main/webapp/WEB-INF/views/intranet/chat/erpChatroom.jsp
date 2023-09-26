@@ -146,8 +146,15 @@ var idx = 0;
         $("#msgSend").on("click", (e) => {
             send();
         });
+        
+//      엔터 누를 때도 전송  
+        $("#msgInput").on("keyup", (e) => {
+        	if(e.keyCode == 13){
+	            send();
+        	}
+        });
 
-        const websocket = new WebSocket("ws://192.168.123.14:10000/ws/chat");
+        const websocket = new WebSocket("ws://localhost:10000/ws/chat");
 
         websocket.onmessage = onMessage;
         websocket.onopen = onOpen;
@@ -321,6 +328,7 @@ var idx = 0;
 		}
 	}
 	
+//	채팅 삭제
 	function deleteChat(no, cno){
 		var ch = confirm("대화내용을 삭제하시겠습니까?");
 		if(ch){

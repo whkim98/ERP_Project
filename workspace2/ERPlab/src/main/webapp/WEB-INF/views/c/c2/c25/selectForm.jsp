@@ -146,8 +146,8 @@
         </div>
         <div>
            <input type="button" value="update" onclick="sub(this.form)">
-           <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d2/d21/delete?order_code=${inmap.order_code }&order_no=${inmap.order_no }&comcode_code=${comcode_code }&bs3_no1=${cmap.bs3_no1}&bs3_no2=${cmap.bs3_no2 }'">
-           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d2/d21/inputOrder?comcode_code=${comcode_code }'">
+           <input type="button" value="delete" onclick="deleteLocal(${inmap.localsales_no },'${inmap.localsales_cino }',${inmap.localsales_total },'${comcode_code }')">
+           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/c/c2/c25/inputLocalSales?comcode_code=${comcode_code }'">
         </div>
         </form>
         </c:if>
@@ -285,6 +285,12 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <script type="text/javascript">
+
+function deleteLocal(no, cino, total, code){
+	let b1 = document.getElementById("bs3_no11").value;
+	let b2 = document.getElementById("bs3_no21").value;
+	location.href='${pageContext.request.contextPath}/c/c2/c25/delete?localsales_no='+no+'&localsales_cino='+cino+'&comcode_code='+code+'&bs3_no1='+b1+'&bs3_no2='+b2;
+}
 
 var now_utc = Date.now() // 지금 날짜를 밀리초로
 //getTimezoneOffset()은 현재 시간과의 차이를 분 단위로 반환

@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 function searcht(){
-	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
+	let openWin = window.open("${pageContext.request.contextPath}/searcht", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 }
 
 function team(e, name){
@@ -18,15 +18,7 @@ function team(e, name){
         var url = "${pageContext.request.contextPath}/a/a3/a31/team";
         var param = "team_name=" + encodeURIComponent(name);
         
-        sendRequest(url, param, function(responseText) {
-            var data = JSON.parse(responseText);
-            if (data && data.team_name && data.dept_name) {
-                document.getElementById("team_name").value = data.team_name;
-                document.getElementById("dept_name").value = data.dept_name;
-            } else {
-                alert("팀 또는 부서를 찾을 수 없습니다.");
-            }
-        }, "POST");
+        sendRequest(url, param, teamname, "POST");
     }
 }
 
@@ -36,6 +28,8 @@ function teamname(){
 		var data = xhr.response;
 		if(data != ""){
 			var data2 = JSON.parse(data);
+			console.log(data2);
+			document.getElementById("dept_name").value = data2.dept_name;
 			document.getElementById("team_name").value = data2.team_name;
 			document.getElementById("team_no").value = data2.team_no;
 		}else {
@@ -67,7 +61,6 @@ function teamname(){
 	
 	<form action="${pageContext.request.contextPath}/createAdmin" method="POST" name="createAdmin">
 		<input type="hidden" name="comcode_code" value="${comcode_code}">
-		<input type="hidden" name="admin_no" id="admin_no">
 		
 		<h1>ERP 신규 계정 생성</h1>
 		
@@ -77,7 +70,8 @@ function teamname(){
 					아이디
 				</td>
 				<td>
-					<input type="text" name="admin_id" id="admin_id">
+					<input type="text" name="admin_id" id="admin_id" onblur="checkId(this.value)">
+					<h6 id="idcheck" style="color:red;"></h6>
 				</td>
 				<td>
 					<input type="button" onclick="" value="중복확인">
@@ -113,7 +107,7 @@ function teamname(){
 					부서
 				</td>
 				<td>
-					<input type="text" name="dept_name" id="dept_name" onkeypress="team(event, this.value)">
+					<input type="text" name="dept_name" id="dept_name" readonly="readonly">
 				</td>
 				<td>
 				</td>
@@ -122,7 +116,7 @@ function teamname(){
 		</table>
 		
 		<div>
-			<input type="button" value="저장" onclick="sub(this.form)">
+			<input type="button" value="저장" id="ifcheck" onclick="sub(this.form)" disabled="disabled">
 			<input type="reset" value="내용지우기">
 		</div>
 	</form>
@@ -140,11 +134,33 @@ function sub(f){
 	}else if(f.admin_pw.value == ""){
 		alert("비밀번호를 입력하세요");
 		f.admin_pw.focus();
-	}else if(f.team_name.value == ""){
+	}else if(f.team_no.value == ""){
 		alert("팀을 선택하세요");
 		f.team_name.focus();
 	}else{
 		f.submit();
+	}
+}
+
+function checkId(v){
+	var url = '${pageContext.request.contextPath}/checkAdminId';
+	var param = 'admin_id='+encodeURIComponent(v);
+	
+	sendRequest(url,param,checkIdResult,"POST");
+}
+
+function checkIdResult(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.responseText;
+		if(data == "사용 가능한 ID 입니다."){
+			document.getElementById("idcheck").innerText = data;
+			document.getElementById("idcheck").style.color = "blue";
+			document.getElementById("ifcheck").disabled = false;
+		}else {
+			document.getElementById("idcheck").innerText = data;
+			document.getElementById("idcheck").style.color = "red";
+			document.getElementById("ifcheck").disabled = true;
+		}
 	}
 }
 

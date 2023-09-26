@@ -107,18 +107,10 @@ function getlist(){
 								<option value="bondbills_date" ${param.type == 'bondbills_date' ? 'selected' : '' }>수금일자</option>
 							</select>
 						</td>
-						<c:if test="${rmap.receivable_no != null }">
-							<td>
-								<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}', ${rmap.receivable_no })">
-								<input type="button" value="전체목록" onclick="surf('', '${comcode_code}', ${rmap.receivable_no })">
-							</td>
-						</c:if>
-						<c:if test="${rmap.receivable_no == null }">
-							<td>
-								<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf1(this.value, '${comcode_code}')">
-								<input type="button" value="전체목록" onclick="surf1('', '${comcode_code}')">
-							</td>
-						</c:if>
+						<td>
+							<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf1(this.value, '${comcode_code}')">
+							<input type="button" value="전체목록" onclick="surf1('', '${comcode_code}')">
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -171,7 +163,7 @@ function getlist(){
 					<form action="${pageContext.request.contextPath }/c/c2/c22/updateBondbills" method="POST" id="update">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="bondbills_no" value="${inmap.bondbills_no }">
-						<input type="hidden" name="receivable_no" value="${inmap.receivable_no }">
+						<input type="hidden" name="receivable_no" id="receivable_no" value="${inmap.receivable_no }">
 						<input type="hidden" name="bs3_no11" id="bs3_no11" value="${bs3_no1 }">
 						<input type="hidden" name="bs3_no21" id="bs3_no21" value="${bs3_no2 }">
 						<input type="hidden" name="bs3_no12" id="bs3_no12">
@@ -189,7 +181,7 @@ function getlist(){
 							
 						<div>
 							<label>CI NUMBER </label>
-							<input type="text" name="receivable_cino" id="receivable_cino" value="${inmap.receivable_cino }" readonly="readonly" class="required">
+							<input type="text" name="receivable_cino" id="receivable_cino" value="${inmap.receivable_cino }" readonly="readonly" class="required" onclick="receivableList('${comcode_code}')">
 						</div>
 						
 						<div>
@@ -261,7 +253,7 @@ function getlist(){
 						
 						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
-							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.bondbills_no }, '${comcode_code }', '${inmap.receivable_cino }')">
+							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.bondbills_no }, '${comcode_code }', '${inmap.bondbills_code }')">
 							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
 						</div>
 					</form>
@@ -269,7 +261,7 @@ function getlist(){
 				<c:otherwise>
 					<form action="${pageContext.request.contextPath }/c/c2/c22/createBondbills" method="POST" id="create">
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
-						<input type="hidden" name="receivable_no" value="${rmap.receivable_no }">
+						<input type="hidden" name="receivable_no" id="receivable_no" value="${rmap.receivable_no }">
 						<input type="hidden" name="bs3_no1" id="bs3_no1">
 						<input type="hidden" name="bs3_no2" id="bs3_no2">
 						<h3>수금 등록 사항</h3>
@@ -287,7 +279,7 @@ function getlist(){
 						
 						<div>
 							<label>CI NUMBER </label>
-							<input type="text" name="receivable_cino" id="receivable_cino" value="${rmap.receivable_cino }" readonly="readonly" maxlength="30" class="required">
+							<input type="text" name="receivable_cino" id="receivable_cino" value="${rmap.receivable_cino }" readonly="readonly" maxlength="30" class="required" onclick="receivableList('${comcode_code}')">
 						</div>
 						
 						<div>
@@ -367,15 +359,27 @@ var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
 let expiry = document.getElementById("receivable_expiry").value;
 document.getElementById("bondbills_date").setAttribute("min", end+"-01-01");
-document.getElementById("bondbills_date").setAttribute("max", expiry);
+if(expiry != ""){
+	document.getElementById("bondbills_date").setAttribute("max", expiry);
+}else {
+	document.getElementById("bondbills_date").setAttribute("max", end+"-12-31");
+}
 
 // 삭제버튼 경로 및 넘길 parameter 설정
 function deletei(no1, no2, ino, code, rcode){
-	location.href='${pageContext.request.contextPath }/c/c2/c22/deleteBondbills?bondbills_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code+"&receivable_cino="+rcode;
+	location.href='${pageContext.request.contextPath }/c/c2/c22/deleteBondbills?bondbills_no='+ino+'&bs3_no1='+no1+'&bs3_no2='+no2+'&comcode_code='+code+"&bondbills_code="+rcode;
 }
 
 function conculator(e, v, no){
 	if(e.keyCode == 13){
+		if(document.getElementById("receivable_no").value != ""){
+			no = document.getElementById("receivable_no").value;
+		}else {
+			alert("채권을 먼저 선택해주세요.");
+			document.getElementById("bondbills_price").value = "";
+			document.getElementById("receivable_cino").focus();
+			return;
+		}
 		var url = "${pageContext.request.contextPath }/c/c2/c22/billsTotalCheck";
 		var param = "total="+encodeURIComponent(v)+"&receivable_no="+encodeURIComponent(no);
 		
@@ -383,6 +387,14 @@ function conculator(e, v, no){
 	}
 }
 function conculator1(v, no){
+	if(document.getElementById("receivable_no").value != ""){
+		no = document.getElementById("receivable_no").value;
+	}else {
+		alert("채권을 먼저 선택해주세요.");
+		document.getElementById("bondbills_price").value = "";
+		document.getElementById("receivable_cino").focus();
+		return;
+	}
 	var url = "${pageContext.request.contextPath }/c/c2/c22/billsTotalCheck";
 	var param = "total="+encodeURIComponent(v)+"&receivable_no="+encodeURIComponent(no);
 	
@@ -458,7 +470,10 @@ function billsCheck(){
 // submit 유효성 검사
 function sub(f, total){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
-	if(f.bondbills_price.value == ""){
+	if(f.bondbills_code.value == ""){
+		f.bondbills_code.focus();
+		return;
+	}else if(f.bondbills_price.value == ""){
 		f.bondbills_price.focus();
 		return;
 	}else if(f.debtor_no.value == 0){
@@ -477,6 +492,9 @@ function sub(f, total){
 	}
 	if(!pat.test(f.bondbills_price.value)){
 		alert("숫자만 입력 가능합니다.");
+		f.bondbills_price.value = "";
+		f.bondbills_tax.value = "";
+		f.bondbills_total.value = "";
 		f.bondbills_price.focus();
 		return;
 	}
@@ -512,6 +530,10 @@ function codecheck(){
 			}
 		}
 	}
+}
+
+function receivableList(code){
+	let openWin = window.open("${pageContext.request.contextPath}/c/c2/c22/receivableList?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=1000, height=800");
 }
 
 

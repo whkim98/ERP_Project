@@ -4,24 +4,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="admin">
 
+	
 	<!-- 팀 no 선택 후 insert 할 때 -->
 	<select id="teamList" resultType="com.lab.erp.vo.login.Erp_TeamVO" parameterType="map">
-		select * from erp_team 
+		select t.*, d.dept_name from erp_team t, erp_dept d 
+		where t.dept_no = d.dept_no 
 		<if test="type != null">
 			<if test="type == 'team_name'">
-				where team_name like '%${word}%'
-			</if>
+				and t.team_name like '%${word}%'
+			</if>S
 			<if test="type == 'team_no'">
-				where team_no = #{word} 
+				and t.team_no = #{word} 
 			</if>
 			<if test="type == 'team_code'">
-				where team_code like '%${word}%' 
+				and t.team_code like '%${word}%' 
 			</if>
 		</if>
 	</select>
 	
 	<select id="teamName" resultType="com.lab.erp.vo.login.Erp_TeamVO" parameterType="String">
-		select * from erp_team where team_name like '%${team_name}%'
+		select t.*, d.dept_name from erp_team t, erp_dept d 
+		where t.dept_no = d.dept_no 
+		and t.team_name like '%${team_name}%'
 	</select>
 	
 	<!-- 팀 name으로 no 추출 -->
@@ -46,15 +50,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 계정 생성해주기 -->
 	<insert id="createAdmin" parameterType="com.lab.erp.vo.login.Erp_AdminVO">
-		insert into erp_admin values(#{admin_no}, #{team_no}, #{admin_id}, #{admin_pw}, #{authority_no})
+		insert into erp_admin(team_no, admin_id, admin_pw, comcode_no) 
+		values(#{team_no}, #{admin_id}, #{admin_pw}, #{comcode_no})
 	</insert>
 	
 	<update id="updateAdmin" parameterType="com.lab.erp.vo.login.Erp_AdminVO">
-		update erp_admin set team_no = #{team_no}, admin_id = #{admin_id}, admin_pw = #{admin_pw}, authority_no = #{authority_no} where admin_no = #{admin_no}
+		update erp_admin set team_no = #{team_no}, admin_id = #{admin_id}, admin_pw = #{admin_pw} where admin_no = #{admin_no}
 	</update>
 	
 	<delete id="deleteAdmin" parameterType="int">
-		delete erp_admin where admin_no = #{admin_no}
+		delete from erp_admin where admin_no = #{admin_no}
 	</delete>
 	
 	<!-- 전체 admin 계정 리스트 -->
@@ -63,6 +68,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where d.dept_no = t.dept_no 
 		and a.team_no = t.team_no 
 		and a.comcode_no = #{comcode_no} 
+		<if test="type != null">
+			<if test="type == 'admin_id'">
+				and a.admin_id like '%${word}%'
+			</if>
+			<if test="type == 'dept_name'">
+				and d.dept_name like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+		</if>
 	</select>
 	
 	<select id="getComcodeName" parameterType="String" resultType="String">
@@ -84,6 +100,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 계정 생성 후 아이디, 비밀번호 알려주기 -->
 	<select id="giveAdmin" resultType="com.lab.erp.vo.login.Erp_AdminVO" parameterType="int">
 		select admin_id, admin_pw from erp_admin where admin_no = #{admin_no}
+	</select>
+	
+	<select id="checkAdminId" parameterType="String" resultType="int">
+		select admin_no from erp_admin where admin_id = #{admin_in}
 	</select>
 	
 	<!-- employee -->
@@ -188,6 +208,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and e2.comcode_no = #{comcode_no} 
 		<if test="employee2_no != null">
 			and e2.employee2_no != #{employee2_no}
+		</if>
+		<if test="type != null">
+			<if test="type == 'all'">
+				and (
+						e1.employee1_name like '%${word}%' or e2.employee2_position like '%${word}%' 
+						or t.team_name like '%${word}%' or d.dept_name like '%${word}%'
+					)
+			</if>
+			<if test="type == 'employee1_name'">
+				and e1.employee1_name like '%${word}%'
+			</if>
+			<if test="type == 'employee2_position'">
+				and e2.employee2_position like '%${word}%'
+			</if>
+			<if test="type == 'team_name'">
+				and t.team_name like '%${word}%'
+			</if>
+			<if test="type == 'dept_name'">
+				and d.dept_name like '%${word}%'
+			</if>
 		</if>
 	</select>
 	

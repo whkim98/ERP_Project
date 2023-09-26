@@ -48,7 +48,7 @@
 
                 <th rowspan="6">의뢰 담당자</th>
                 <th>* 사원코드</th>
-                <td><input type="text" value="${inmap.employee1_code}" name="employee1_code" id="employee1_code" onkeypress="searchecode(event, '${comcode_code}')"><input type="button" value="확인"/></td>
+                <td><input type="text" value="${inmap.employee1_code}" name="employee1_code" id="employee1_code" onkeypress="searchecode(event, '${comcode_code}')" onblur="searchecode1('${comcode_code}')"></td>
                 <th>전화번호</th>
                 <td id="employee1_phone">${inmap.employee1_phone }</td>
             </tr>
@@ -187,7 +187,7 @@
 
                 <th rowspan="6">의뢰 담당자</th>
                 <th>* 사원코드</th>
-                <td id="employee1_code"><input type="text" name="employee1_code" id="employee1_code" onkeypress="searchecode(event, '${comcode_code}')"></td>
+                <td id="employee1_code"><input type="text" name="employee1_code" id="employee1_code" onkeypress="searchecode(event, '${comcode_code}')" onblur="searchecode1('${comcode_code}')"></td>
                 <th>전화번호</th>
                 <td id="employee1_phone"></td>
             </tr>
@@ -306,7 +306,13 @@ var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
 document.getElementById("requestproduct_start").setAttribute("min", end+"-01-01");
 document.getElementById("requestproduct_start").setAttribute("max", end+"-12-31");
 
+if(document.getElementById("requestproduct_start").value != ""){
+	document.getElementById("requestproduct_end").setAttribute("min", document.getElementById("requestproduct_start").value);
+	document.getElementById("requestproduct_end").setAttribute("max", end+"-12-31");
+}
+
 function startcheck(v){
+	document.getElementById("requestproduct_end").value = v;
 	document.getElementById("requestproduct_end").setAttribute("min", v);
 	document.getElementById("requestproduct_end").setAttribute("max", end+"-12-31");
 }
@@ -555,8 +561,7 @@ function clName(){
 function searchecode(e, code){
 	if(e.keyCode == 13){
 		var ecode1 = document.getElementById("employee1_code").value;
-		console.log(ecode1);
-		if(ecode == ""){
+		if(ecode1 == ""){
 			alert("조회할 직원 코드를 입력해주세요.");
 			document.getElementById("employee1_code").focus();
 			return;
@@ -564,10 +569,47 @@ function searchecode(e, code){
 		var url = "${pageContext.request.contextPath}/d/d1/d12/searchecode";
 		var param = "employee1_code="+encodeURIComponent(ecode1);
 		
-		sendRequest(url, param, ecode, "POST");
+		sendRequest(url, param, ecodec, "POST");
 	}
 }
-function ecode(){
+function ecodec(){
+	if(xhr.readyState==4 && xhr.status==200) {
+		var data = xhr.response;
+		if(data != ""){
+			var data2 = JSON.parse(data);	// ajax로 받아온 데이터를 json으로 변형
+			document.getElementById("employee1_no").value = data2.employee1_no;
+			document.getElementById("employee1_code").value = data2.employee1_code;
+			document.getElementById("employee1_phone").innerText = data2.employee1_phone;
+			document.getElementById("employee1_name").innerText = data2.employee1_name;
+			document.getElementById("employee2_position").innerText = data2.employee2_position;
+			document.getElementById("employee1_email").innerText = data2.employee1_email;
+			document.getElementById("team_name").innerText = data2.team_name;
+		}else {
+			document.getElementById("employee1_no").value = 1;
+			document.getElementById("employee1_code").value = '';
+			document.getElementById("employee1_phone").innerText = '';
+			document.getElementById("employee1_name").innerText = '';
+			document.getElementById("employee2_position").innerText = '';
+			document.getElementById("employee1_email").innerText = '';
+			document.getElementById("team_name").innerText = '';
+			alert("조회된 직원이 없거나 중복된 코드입니다. 조회 버튼을 클릭하여 직원을 선택해주세요.");
+		}
+	}
+}
+
+function searchecode1(code){
+	var ecode1 = document.getElementById("employee1_code").value;
+	if(ecode1 == ""){
+		alert("조회할 직원 코드를 입력해주세요.");
+		document.getElementById("employee1_code").focus();
+		return;
+	}
+	var url = "${pageContext.request.contextPath}/d/d1/d12/searchecode";
+	var param = "employee1_code="+encodeURIComponent(ecode1);
+	
+	sendRequest(url, param, ecode1c, "POST");
+}
+function ecode1c(){
 	if(xhr.readyState==4 && xhr.status==200) {
 		var data = xhr.response;
 		if(data != ""){
@@ -628,7 +670,6 @@ function codecheck(){
 }
 
 var t = 0;
-console.log(t);
 function deleteGoods(rno, cno){
 	var list = document.getElementById("itemTable");
 	var arr = list.getElementsByTagName('input');

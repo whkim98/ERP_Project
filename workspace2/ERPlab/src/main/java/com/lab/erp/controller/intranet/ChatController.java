@@ -24,6 +24,7 @@ import com.lab.erp.vo.intranet.Erp_ChatroomVO;
 import com.lab.erp.vo.login.Erp_Employee1VO;
 import com.lab.erp.vo.login.Erp_Employee2VO;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 
@@ -32,20 +33,28 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequestMapping("/intranet/chat")
 public class ChatController {
+	@Autowired
 	private LoginService login;
 	private IntranetService is;
 	private HttpServletRequest request;
+	private ServletContext application;
 		
-	@Autowired
-	public ChatController(LoginService login, IntranetService is, HttpServletRequest request) {
+	public ChatController(LoginService login, IntranetService is, HttpServletRequest request, ServletContext application) {
 		this.login = login;
 		this.is = is;
 		this.request = request;
+		this.application = application;
 	}
 	
 	
-	// Friend List > 친구목록
-	@RequestMapping("/erpchat")		// 메신저 메인페이지
+	public static String blobToString(final byte[] blob) throws Exception{
+		 
+		 return new String(blob);
+		 
+	}
+	
+	// Friend List > 직원 목록
+	@RequestMapping("/erpchat")		
 	public String erpChat(String comcode_code, String type, String word, Model model, Erp_Employee2VO vo) {
 		if(type == null || word == null) {
 			type = null;
@@ -77,10 +86,10 @@ public class ChatController {
 		
 		model.addAttribute("list", list);
 		
-		return ViewPath.CHAT + "erpChat";
+		return ViewPath.CHAT + "erpChatEmpList";
 	}
 	
-	@RequestMapping("/erpchatAjax")			// 직원목록 검색 Ajax
+	@RequestMapping("/erpchatAjax")			// 직원목록 Ajax
 	@ResponseBody
 	public List<Map<String, Object>> erpchatAjax(String comcode_code, String type, String word, Erp_Employee2VO vo){
 		if(type == null || word == null) {
@@ -152,14 +161,14 @@ public class ChatController {
 	
 	
 //	chatroom List
-	@RequestMapping("/erpchatlist")		// 채팅방 리스트
+	@RequestMapping("/erpchatlist")		// 채팅방 목록
 	public String erpChatList(String comcode_code, Model model, Erp_Employee2VO vo) {
 		String msg = null;
 		String url = null;
 		
 		if(comcode_code == null || comcode_code.isEmpty()) {
 			request.getSession().invalidate();
-			msg = "세션이 만료되었습니다. 다시 로그인해주세요..";
+			msg = "세션이 만료되었습니다. 다시 로그인해주세요.";
 			url = "/";
 			model.addAttribute("msg", msg);
 			model.addAttribute("url", url);
@@ -182,9 +191,28 @@ public class ChatController {
 		return ViewPath.CHAT + "erpChatList";
 	}
 	
+	@RequestMapping("/erpchatlistAjax")		// 채팅방 목록 검색
+	@ResponseBody
+	public List<Map<String, Object>> erpchatlistAjax(String comcode_code, Model model, Erp_Employee2VO vo, String type, String word) {
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("type", type);
+		map.put("word", word);
+		map.put("employee2_no", vo.getEmployee2_no());
+		
+		List<Map<String, Object>> list = is.chatRoomList(map);
+		
+		if(list.isEmpty()) {
+			list = null;
+		}
+		
+		return list;
+	}
+	
 	
 // 	chat
-	@RequestMapping("/erpchatroom")			// 채팅방 입장
+	@RequestMapping("/erpchatroom")			// 채팅방
 	public String erpchatroom(Erp_ChatroomVO vo, Model model, String comcode_code, Erp_Employee1VO evo) {
 		String msg = null;
 		String url = null;
@@ -216,18 +244,18 @@ public class ChatController {
 		
 		Map<String, Object> selectRoom = is.selectChatRoom(vo.getChatroom_no());
 		
-		model.addAttribute("chatlist", chatlist);					// 메세지 리스트
+		model.addAttribute("chatlist", chatlist);					
 		model.addAttribute("employee1_name", evo.getEmployee1_name());
 		model.addAttribute("selectRoom", selectRoom);
 		
 		return ViewPath.CHAT + "erpChatroom";
 	}
 	
-	@RequestMapping("/createChatAjax")			// 메시지 입력 시 바로바로 insert Ajax
+	@RequestMapping("/createChatAjax")			//  insert Ajax
 	@Transactional
 	@ResponseBody
 	public List<Map<String, Object>> createChatAjax(Erp_ChatVO vo){
-		System.out.println("eno = " + vo.getEmployee2_no());
+
 		is.createChat(vo);
 		
 		Map<String, Object> map = new HashMap<>();
@@ -236,10 +264,14 @@ public class ChatController {
 		
 		List<Map<String, Object>> chatlist = is.getChating(map);
 		
+		if(chatlist.isEmpty()) {
+			chatlist = null;
+		}
+		
 		return chatlist;
 	}
 	
-	@RequestMapping("/deleteChatAjax")			// 메세지 삭제 Ajax
+	@RequestMapping("/deleteChatAjax")			// 대화 내용 Ajax
 	@Transactional
 	@ResponseBody
 	public List<Map<String, Object>> deleteChatAjax(Erp_ChatVO vo){
@@ -254,7 +286,7 @@ public class ChatController {
 		return chatlist;
 	}
 	
-	@RequestMapping(value = "/updateChatTitle", produces = "application/text;charset=utf8")		// 채팅방 명 변경 ajax
+	@RequestMapping(value = "/updateChatTitle", produces = "application/text;charset=utf8")	
 	@Transactional
 	@ResponseBody
 	public String updateChatTitle(Erp_ChatroomVO vo) {
@@ -268,7 +300,7 @@ public class ChatController {
 		return vo.getChatroom_title();
 	}
 	
-	@RequestMapping(value = "/updateChatMemo", produces = "application/text;charset=utf8")		// 채팅방 메모 변경 ajax
+	@RequestMapping(value = "/updateChatMemo", produces = "application/text;charset=utf8")		
 	@Transactional
 	@ResponseBody
 	public String updateChatMemo(Erp_ChatroomVO vo) {
@@ -282,9 +314,11 @@ public class ChatController {
 		return vo.getChatroom_memo();
 	}
 	
-	@RequestMapping("/deleteChatRoom")		// 채팅방 나가기
+	@RequestMapping("/deleteChatRoom")	
 	@Transactional
 	public String deleteChatRoom(Erp_ChatroomVO vo, String comcode_code) {
+		is.deleteAllChat(vo.getChatroom_no());
+		
 		is.deleteChatRoom(vo.getChatroom_no());
 		
 		return "redirect:/intranet/chat/erpchatlist?comcode_code="+comcode_code+"&employee2_no="+vo.getEmployee2_no1();
@@ -306,5 +340,4 @@ public class ChatController {
 		
 		return chatlist;
 	}
-	
 }

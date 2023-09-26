@@ -30,10 +30,10 @@
 					</select>
 				</td>
 				<td>
-					<input type="text" placeholder="검색어를 입력하세요" />
+					<input type="text" name="word" placeholder="검색어를 입력하세요" value="${param.word }" autocomplete="off" onkeyup="surf(this.value, '${comcode_code}')">
 				</td>
 				<td>
-					<input type="button" onclick="" value="검색" />
+					<input type="button" value="전체목록" onclick="surf('', '${comcode_code}')">
 				</td>
 			</tr>
 		</table>
@@ -63,8 +63,8 @@
 				<td name="adminERPteam">${map.team_name}</td>
 				<td name="adminERPid">${map.admin_id}</td>
 				<td name="adminERPpw">${map.admin_pw}</td>
-				<td name="adminERPrevisebtn"><input type="button" onclick="location.href='${pageContext.request.contextPath}/updateFormAdmin?admin_no=${vo.admin_no}&comcode_code=${comcode_code}'" value="수정" /></td>
-				<td name="adminERPdeletebtn"><input type="button" onclick="location.href='${pageContext.request.contextPath}/deleteAdmin?admin_no=${vo.admin_no}&comcode_code=${comcode_code}'" value="삭제" /></td>								
+				<td name="adminERPrevisebtn"><input type="button" onclick="location.href='${pageContext.request.contextPath}/updateFormAdmin?admin_no=${map.admin_no}&comcode_code=${comcode_code}'" value="수정" /></td>
+				<td name="adminERPdeletebtn"><input type="button" onclick="location.href='${pageContext.request.contextPath}/deleteAdmin?admin_no=${map.admin_no}&comcode_code=${comcode_code}'" value="삭제" /></td>								
 			</tr>
 		</c:forEach>
 		</c:if>
@@ -82,7 +82,55 @@
 
 <script type="text/javascript">
 
-
+function surf(v, code){
+	var type = document.getElementsByName("type")[0].value;
+	if(v == ''){
+		type = null;
+		v = null;
+	}
+	var url = "${pageContext.request.contextPath}/adminAjax";
+	var param = "comcode_code="+code+"&word="+v+"&type="+type;
+	
+	sendRequest(url,param,getlist,"POST");
+}
+function getlist(){
+	if(xhr.readyState==4 && xhr.status==200) {	
+		var data = xhr.response;
+		let procode = document.getElementById("adminERPList");
+		let newTr = document.createElement("tr");
+		let newTd = document.createElement("td");
+		procode.innerHTML = '';
+		procode.innerHTML += '<tr><td>부서</td><td>팀</td><td>아이디</td><td>비밀번호</td><td>수정</td><td>삭제</td></tr>';
+		if(data != ""){
+			var data2 = JSON.parse(data);
+			data2.forEach(function(map){
+				newTr = document.createElement("tr");
+				newTr.setAttribute("onclick", "selectForm("+map.product_no+",'"+map.product_code+"')");
+				procode.appendChild(newTr);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.dept_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.team_name;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.admin_id;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = map.admin_pw;
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="button" onclick="location.href=`${pageContext.request.contextPath}/updateFormAdmin?admin_no='+map.admin_no+'&comcode_code=${comcode_code}`" value="수정" />';
+				newTr.appendChild(newTd);
+				newTd = document.createElement("td");
+				newTd.innerHTML = '<input type="button" onclick="location.href=`${pageContext.request.contextPath}/deleteAdmin?admin_no='+map.admin_no+'&comcode_code=${comcode_code}`" value="삭제" />';
+				newTr.appendChild(newTd);
+			});
+		}else {
+			procode.innerHTML += '<tr><td colspan="6">목록이 없습니다.</td></tr>';
+		}
+	}
+}
 
 
 </script>

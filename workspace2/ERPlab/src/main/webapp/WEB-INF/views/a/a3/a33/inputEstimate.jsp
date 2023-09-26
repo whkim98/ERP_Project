@@ -148,17 +148,21 @@ function getlist(){
 						<input type="text" name="estimate_result" id="estimate_result" value="${inmap.estimate_result }" class="required" maxlength="500">
 					</div>
 					<div>
-						<label>최종마감일 </label>
-						<input type="date" name="estimate_fact" id="estimate_fact" value="${inmap.estimate_fact }" class="required">
-					</div>
-					<div>
 						<label>프로젝트명 </label>
 						<input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" value="${inmap.project_name }" class="required">
 						<input type="button" onclick="prList('${comcode_code}')" value="조회">
 					</div>
 					<div>
 						<label>상태 </label>
-						<input type="text" name="project_status" id="project_status" value="${inmap.project_status }" readonly="readonly">
+						<c:if test="${inmap.project_status == 0}">
+							<input type="text" name="project_status" id="project_status" value="미완료" readonly="readonly">
+						</c:if>
+						<c:if test="${inmap.project_status == 1}">
+							<input type="text" name="project_status" id="project_status" value="완료" readonly="readonly">
+						</c:if>
+						<c:if test="${inmap.project_status == 2}">
+							<input type="text" name="project_status" id="project_status" value="진행중" readonly="readonly">
+						</c:if>
 					</div>
 					<div>
 						<label>프로젝트 내용 </label>
@@ -169,13 +173,17 @@ function getlist(){
 						<input type="date" name="project_start" id="project_start" value="${inmap.project_start }" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" value="${inmap.project_end }" readonly="readonly">
 					</div>
 					<div>
+						<label>최종마감일 </label>
+						<input type="date" name="estimate_fact" id="estimate_fact" value="${inmap.estimate_fact }" class="required">
+					</div>
+					<div>
 						<label>평가 담당팀 </label>
 						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" value="${inmap.team_name }" class="required">
 						<input type="button" onclick="searcht()" value="조회">
 					</div>
 					<div>
 						<label>담당자 </label>
-						<input type="text" name="employee1_name" id="employee1_name" value="${inmap.team_name }" onkeypress="searchemp(event, '${comcode_code}')" class="required">
+						<input type="text" name="employee1_name" id="employee1_name" value="${inmap.team_name }" onclick="searchemp(event, '${comcode_code}')" class="required" readonly="readonly">
 					</div>
 					<div>
 						<label>전화번호 </label>
@@ -213,10 +221,6 @@ function getlist(){
 						<input type="text" name="estimate_result" id="estimate_result" class="required" maxlength="500">
 					</div>
 					<div>
-						<label>최종마감일 </label>
-						<input type="date" name="estimate_fact" id="estimate_fact" class="required">
-					</div>
-					<div>
 						<label>프로젝트명 </label>
 						<input type="text" name="project_name" id="project_name" onkeypress="searchpr(event, '${comcode_code}')" class="required">
 						<input type="button" onclick="prList('${comcode_code}')" value="조회">
@@ -234,13 +238,17 @@ function getlist(){
 						<input type="date" name="project_start" id="project_start" readonly="readonly"> ~ <input type="date" name="project_end" id="project_end" readonly="readonly">
 					</div>
 					<div>
+						<label>최종마감일 </label>
+						<input type="date" name="estimate_fact" id="estimate_fact" class="required">
+					</div>
+					<div>
 						<label>평가 담당팀 </label>
 						<input type="text" name="team_name" id="team_name" onkeypress="team(event, this.value)" class="required">
 						<input type="button" onclick="searcht()" value="조회">
 					</div>
 					<div>
 						<label>담당자 </label>
-						<input type="text" name="employee1_name" id="employee1_name" onkeypress="searchemp(event, '${comcode_code}')" class="required">
+						<input type="text" name="employee1_name" id="employee1_name" onclick="searchemp(event, '${comcode_code}')" readonly="readonly" class="required">
 					</div>
 					<div>
 						<label>전화번호 </label>
@@ -263,14 +271,15 @@ function getlist(){
 	//new Date(now_utc-timeOff).toISOString()은 '2022-05-11T18:09:38.134Z'를 반환
 	var today = new Date(now_utc-timeOff).toISOString().split("T")[0];
 	var end = new Date(now_utc-timeOff).toISOString().split("-")[0];
-	document.getElementById("estimate_fact").setAttribute("min", end+"-01-01");
+	let pend = document.getElementById("project_end").value;
+	document.getElementById("estimate_fact").setAttribute("min", pend);
 	document.getElementById("estimate_fact").setAttribute("max", end+"-12-31");
 	
 	var pat = /^[0-9]{0,8}$/;
 
 	function sub(f){
-		if(!pat.test(f.estimate_score.value)){
-			alert("숫자로만 입력 가능합니다.");
+		if(!pat.test(f.estimate_score.value) || f.estimate_score.value > 100){
+			alert("100 이하, 숫자로만 입력 가능합니다.");
 			f.estimate_score.value = '';
 			f.estimate_score.focus();
 			return;
@@ -285,10 +294,10 @@ function getlist(){
 		}else if(f.estimate_result.value == ""){
 			f.estimate_result.focus();
 			return;
-		}else if(f.project_name.value == ""){
+		}else if(f.project_no.value == ""){
 			f.project_name.focus();
 			return;
-		}else if(f.team_name.value == ""){
+		}else if(f.team_no.value == ""){
 			f.team_name.focus();
 			return;
 		}else if(f.employee1_name.value == ""){
@@ -296,7 +305,7 @@ function getlist(){
 			return;
 		}
 		
-		if(f.estimate_fact.value = ""){
+		if(f.estimate_fact.value == ""){
 			var ch = confirm("최종마감일이 입력되지 않았습니다. 계속하시겠습니까?");
 			if(ch){
 				f.estimate_fact.value = today;
@@ -363,15 +372,7 @@ function getlist(){
 
 	// 입력 시 그에 맞는 리스트 오픈
 	function searchemp(e, code){
-		if(e.keyCode == 13){
-			var empname = document.getElementById("employee1_name").value;
-			if(empname == ""){
-				alert("조회할 담당자 이름을 입력해주세요.");
-				document.getElementById("employee1_name").focus();
-				return;
-			}
-			let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp?employee1_name="+empname+"&comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
-		}
+		let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchemp?comcode_code="+code, "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
 	}
 	
 	function team(e, name){

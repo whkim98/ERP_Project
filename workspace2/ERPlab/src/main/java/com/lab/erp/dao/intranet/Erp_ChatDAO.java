@@ -25,6 +25,9 @@ public class Erp_ChatDAO {
 	public int deleteChat(int chat_no) {
 		return sqlSession.delete("intranetchat.deleteChat", chat_no);
 	}
+	public int deleteAllChat(int chatroom_no) {
+		return sqlSession.delete("intranetchat.deleteAllChat", chatroom_no);
+	}
 	
 	public List<Map<String, Object>> getChating(Map<String, Object> map){
 		return sqlSession.selectList("intranetchat.getChating", map);

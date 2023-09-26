@@ -67,6 +67,10 @@ private Erp_EmployeeDAO edao;
 		return dao.getComcodeName(comcode_code);
 	}
 	
+	public int checkAdminId(String admin_id) {
+		return dao.checkAdminId(admin_id);
+	}
+	
 	
 //	employee
 	public List<Map<String, Object>> EmpList(Map<String, Object> map){

@@ -16,7 +16,7 @@
 				<select name="type">
 					<option value="" selected>검색</option>
 					<option value="code" ${param.type == 'code' ? 'selected' : '' }>코드</option>
-					<option value="name" ${param.type == 'name' ? 'selected' : '' }>회사명</option>
+					<option value="name" ${param.type == 'name' ? 'selected' : '' }>이름</option>
 				</select>
 				<input type="text" name="word">
 			</td>
@@ -46,7 +46,7 @@
 </body>
 <script type="text/javascript">
 	function setParentText(code){
-    	opener.document.getElementsByName("comcode_code")[0].value = code;
+    	opener.document.getElementsByName("comcode_code")[1].value = code;
     	window.close();
     }
 </script>
