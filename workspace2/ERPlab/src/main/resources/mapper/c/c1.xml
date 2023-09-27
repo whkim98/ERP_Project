@@ -543,4 +543,24 @@ where ecc.closing_code = #{closing_code}
 	delete from erp_client where client_no = #{client_no}
 </delete>
 
+<update id="updateStored2" parameterType="map">
+	update erp_importorder set importorder_stored = #{importorder_stored} where importorder_no = #{importorder_no}
+</update>
+
+<select id="selectDebtorno2" parameterType="String" resultType="int">
+	select closing_debtor from erp_closing where closing_code = #{closing_code}
+</select>
+
+<select id="selectCreditorno2" parameterType="String" resultType="int">
+	select closing_creditor from erp_closing where closing_code = #{closing_code}
+</select>
+
+<select id="selectBs3Nod" parameterType="int" resultType="int">
+	select bs3_no from erp_debtor where debtor_no = #{debtor_no}
+</select>
+
+<select id="selectBs3Noc" parameterType="int" resultType="int">
+	select bs3_no from erp_creditor where creditor_no = #{creditor_no}
+</select>
+
 </mapper>

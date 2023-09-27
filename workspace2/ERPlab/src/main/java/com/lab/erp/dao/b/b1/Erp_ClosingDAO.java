@@ -113,6 +113,14 @@ private SqlSession sqlSession;
 			return sqlSession.insert("b7.insertToolclosing", vo);
 		}
 		
+		public int selectDebtorno2(String closing_code) {
+			return sqlSession.selectOne("c1.selectDebtorno2", closing_code);
+		}
+		
+		public int selectCreditorno2(String closing_code) {
+			return sqlSession.selectOne("c1.selectCreditorno2", closing_code);
+		}
+		
 		//b2
 		public List<Map<String, Object>> closingList(Map<String, Object> map){
 			return sqlSession.selectList("b2.closingList", map);

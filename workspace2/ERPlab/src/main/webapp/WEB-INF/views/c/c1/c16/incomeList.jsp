@@ -224,7 +224,12 @@ function teamname(){
 					<td>O</td>
 					</c:if>
 					<td>${vo.importorder_date }</td>
-					<td><input type="button" value="입고처리" onclick="location.href='${pageContext.request.contextPath}/internationsales/income/storedform?importorder_no=${vo.importorder_no }'">
+					<c:if test="${vo.importorder_stored == 0 }">
+					<td><input type="button" value="입고처리" onclick="location.href='${pageContext.request.contextPath}/internationsales/income/storedform?importorder_no=${vo.importorder_no }'"></td>
+					</c:if>
+					<c:if test="${vo.importorder_stored != 0 }">
+					<td><input type="button" value="입고취소" onclick="location.href='${pageContext.request.contextPath}/internationsales/income/stored2?importorder_no=${vo.importorder_no }&importorder_blno=${vo.importorder_blno }&importorder_total=${vo.importorder_total }&comcode_code=${comcode_code }'"></td>
+					</c:if>
 				</tr>
 				
 				</c:forEach>

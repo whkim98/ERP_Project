@@ -383,4 +383,24 @@ public class C1Service {
 		return cdao.deleteClient2(client_no);
 	}
 	
+	public int updateStored2(Map<String, Object> map) {
+		return iodao.updateStored2(map);
+	}
+	
+	public int selectDebtorno2(String closing_code) {
+		return csdao.selectDebtorno2(closing_code);
+	}
+	
+	public int selectCreditorno2(String closing_code) {
+		return csdao.selectCreditorno2(closing_code);	
+	}
+	
+	public int selectBs3Nod(int debtor_no) {
+		return ddao.selectBs3Nod(debtor_no);
+	}
+	
+	public int selectBs3Noc(int creditor_no) {
+		return cddao.selectBs3Noc(creditor_no);
+	}
+	
 }

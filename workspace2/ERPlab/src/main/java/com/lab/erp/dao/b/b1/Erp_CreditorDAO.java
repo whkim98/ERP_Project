@@ -39,4 +39,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("b2.moneyBs3noc", creditor_no);
 	}
 	
+	public int selectBs3Noc(int creditor_no) {
+		return sqlSession.selectOne("c1.selectBs3Noc", creditor_no);
+	}
+	
 }

@@ -70,8 +70,8 @@
 								</c:if>					
 							</ul>
 							<ul>
-								<li><a href="#">재고</a></li>
-								<li><a href="#">물류</a></li>
+								<li><a href="${pageContext.request.contextPath}/stock?comcode_code=${comcode_code }">재고</a></li>
+								<li><a href="${pageContext.request.contextPath}/management?comcode_code=${comcode_code }">물류</a></li>
 								<li><a href="${pageContext.request.contextPath}/d/d3/d31/inputOrder?comcode_code=${comcode_code}">발주</a></li>
 								<li><a href="#">부서별매출</a></li>
 								<li><a href="${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code}">프로젝트</a></li>
@@ -139,13 +139,13 @@
 									</li>
 									<li>
 											<h3>재무팀</h3>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/account?comcode_code=${comcode_code}">
 											<p>계좌현황 및 관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/funds?comcode_code=${comcode_code}">
 											<p>자금관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/budget?comcode_code=${comcode_code}">
 											<p>예산관리</p>
 										</a>
 										<a href="${pageContext.request.contextPath }/b31main?comcode_code=${comcode_code}">
@@ -166,43 +166,40 @@
 									</li>
 									<li>
 										<h3>인사팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/greeting?comcode_code=${comcode_code }">
 												<p>인사정보</p>
 											</a>
-											<a href="#">
-												<p>조직관리</p>
-											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/greeting/attendance?comcode_code=${comcode_code }">
 												<p>근태관리</p>
 											</a>
-											<a href="#">
-												<p>정산</p>
+											<a href="javascript:void(0);" onclick="openWindow('${comcode_code}')">
+											    <p>정산</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/greeting/resignList?comcode_code=${comcode_code }">
 												<p>퇴직</p>
 											</a>
 									</li>
 									<li>
 										<h3>총무팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/tools?comcode_code=${comcode_code }">
 												<p>기자재</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/supplies?comcode_code=${comcode_code }">
 												<p>비품 / 소모품</p>
 											</a>
 									</li>
 									<li>
 										<h3>해외영업팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationalsales/list?comcode_code=${comcode_code }">
 												<p>해외거래처관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationalsales/export?comcode_code=${comcode_code }">
 												<p>수출관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationsales/import?comcode_code=${comcode_code }">
 												<p>수입(매입)</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationsales/income?comcode_code=${comcode_code }">
 												<p>수입발주관리</p>
 											</a>
 									</li>
@@ -313,14 +310,11 @@
 									</li>
 									<li>
 										<h3>물류팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/stock?comcode_code=${comcode_code }">
 												<p>재고관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/management?comcode_code=${comcode_code }">
 												<p>입출고관리</p>
-											</a>
-											<a href="#">
-												<p>폐기 / 물류 감소</p>
 											</a>
 									</li>
 								</ul>

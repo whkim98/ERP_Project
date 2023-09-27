@@ -50,4 +50,8 @@ private SqlSession sqlSession;
 		return sqlSession.delete("c1.deleteImportorder", importorder_no);
 	}
 	
+	public int updateStored2(Map<String, Object> map) {
+		return sqlSession.update("c1.updatestored2", map);
+	}
+	
 }

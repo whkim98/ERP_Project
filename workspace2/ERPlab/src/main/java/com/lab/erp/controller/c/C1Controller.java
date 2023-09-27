@@ -646,6 +646,37 @@ public class C1Controller {
 		return "redirect:/internationsales/income?comcode_code="+comcode_code;
 	}
 	
+	@RequestMapping("/internationsales/income/stored2")
+	public String stored2(String comcode_code, int importorder_total, Erp_Bs1VO b1vo, Erp_Bs2VO b2vo, Erp_Bs3VO b3vo, int importorder_no, String importorder_blno) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("importorder_stored", 0);
+		map.put("importorder_no", importorder_no);
+		c1.updateStored2(map);
+		
+		int debtor_no = c1.selectDebtorno2(importorder_blno);
+		int creditor_no = c1.selectCreditorno2(importorder_blno);
+		
+		int bs3_no = c1.selectBs3Nod(debtor_no);
+		int dbs3_no = c1.selectBs3Noc(creditor_no);
+		
+		int bs_no = c1.selectBsno(bs3_no);
+		int bs2_no = c1.selectBsno2(bs3_no);
+		
+		b3vo.setBs3_no(bs3_no);
+		b2vo.setBs2_no(bs2_no);
+		b1vo.setBs1_no(bs_no);
+		
+		b3vo.setBs3_amount(-importorder_total);
+		b2vo.setBs2_amount(-importorder_total);
+		b1vo.setBs1_amount(-importorder_total);
+		
+		c1.updateBs(b1vo);
+		c1.updateBs2(b2vo);
+		c1.updateBs3(b3vo);
+		
+		return "redirect:/internationsales/income?comcode_code="+comcode_code;
+	}
+	
 	@RequestMapping("/internationsales/income/delete")
 	public String incomeDelete(@RequestParam(required = false) Integer importorder_no, @RequestParam(required = false) Integer bs3_no, @RequestParam(required = false) String comcode_code) {
 		System.out.println(importorder_no);
