@@ -3,7 +3,6 @@
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
-	console.log(v);
 	if(v == ''){
 		type = null;
 		v = null;
@@ -16,7 +15,6 @@ function surf(v, code){
 function getlist(){
 	if(xhr.readyState==4 && xhr.status==200) {	
 		var data = xhr.response;
-		console.log(data);
 		let procode = document.getElementById("procode");
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");

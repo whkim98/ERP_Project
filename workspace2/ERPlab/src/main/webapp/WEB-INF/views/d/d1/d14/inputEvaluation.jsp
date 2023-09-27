@@ -126,7 +126,7 @@ function getlist(){
 						<input type="hidden" name="comcode_code" value="${comcode_code }">
 						<input type="hidden" name="evaluation_no" id="evaluation_no" value="${inmap.evaluation_no }">
 						<input type="hidden" name="requestproduct_no" id="requestproduct_no" value="${inmap.requestproduct_no }">
-						<input type="hidden" name="product_no" id="product_no" value="${inmap.product_no }">
+						<input type="hidden" name="product_no" id="product_no" value="${inmap.product_no }" onchange="checkProduct(this.value)">
 						<input type="hidden" name="product_lot" id="product_lot" value="${inmap.product_lot }">
 						<input type="hidden" name="employee2_no" id="employee2_no" value="${inmap.employee2_no }">
 						<div class="warning_box">
@@ -137,7 +137,7 @@ function getlist(){
 						
 						<div>
 							<label>생산코드 </label>
-							<input type="text" name="product_code" id="product_code" value="${inmap.product_code }" class="required" onclick="selectProduct('${comcode_code}')" readonly="readonly">
+							<input type="text" name="product_code" id="product_code" value="${inmap.product_code }" class="required" readonly="readonly">
 						</div>
 						
 						<div>
@@ -223,6 +223,7 @@ function getlist(){
 						<div>
 							<label>생산코드 </label>
 							<input type="text" name="product_code" id="product_code" class="required" readonly="readonly" onclick="selectProduct('${comcode_code}')">
+							<h6 id="checkPro" style="color:red;"></h6>
 						</div>
 						
 						<div>
@@ -270,7 +271,7 @@ function getlist(){
 							<input type="text" name="employee2_position" id="employee2_position">
 						</div>	
 						<div>
-							<input type="button" id="register" value="save" onclick="sub(this.form)">
+							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
 							<input type="reset" value="reset">
 							<input type="button" value="불량 정보" onclick="defective('${comcode_code}')">
 						</div>
@@ -302,7 +303,7 @@ function deletei(no, code, rno){
 
 	
 // submit 유효성 검사
-function sub(f, total){
+function sub(f){
 	var pat = /^[0-9]{0,8}$/;		// 정규식 > 1의 자리부터 9자리까지가 숫자인지 판단, 0도 입력 가능
 	if(f.product_no.value == ""){
 		f.product_code.focus();
@@ -319,8 +320,8 @@ function sub(f, total){
 	}
 	
 	if(document.getElementsByName("lotconnev_qty")[0]){
-		for(let c = 0; c < document.getElementsByName("lotconnev_qty").length; c++;){
-			if(document.getElementById("lotconnev_qty").value == ""){
+		for(let c = 0; c < document.getElementsByName("lotconnev_qty").length; c++){
+			if(document.getElementsByName("lotconnev_qty")[c].value == ""){
 				document.getElementsByName("lotconnev_qty")[c].value = 0;
 			}else if(!pat.test(document.getElementsByName("lotconnev_qty")[c].value)){
 				alert("수량은 숫자만 입력 가능합니다.");
@@ -332,8 +333,8 @@ function sub(f, total){
 	}
 	
 	if(document.getElementsByName("defective_number")[0]){
-		for(let c = 0; c < document.getElementsByName("defective_number").length; c++;){
-			if(document.getElementById("defective_number").value == ""){
+		for(let c = 0; c < document.getElementsByName("defective_number").length; c++){
+			if(document.getElementsByName("defective_number")[c].value == ""){
 				document.getElementsByName("defective_number")[c].value = 0;
 			}else if(!pat.test(document.getElementsByName("defective_number")[c].value)){
 				alert("수량은 숫자만 입력 가능합니다.");
@@ -362,29 +363,6 @@ function sub(f, total){
 	}
 }
 
-//코드 UNIQUE 검사 AJAX
-function code(v){
-	var url = "${pageContext.request.contextPath }/c/c2/c22/getBondbillsCode";
-	var param = "bondbills_code="+encodeURIComponent(v);
-	
-	sendRequest(url,param,codecheck,"POST");
-}
-function codecheck(){
-	if(xhr.readyState==4 && xhr.status==200) {
-		var data = xhr.responseText;
-		if(data != ""){	
-			if(data == "사용 가능한 코드입니다."){
-				document.getElementById("billscode").innerText = data;
-				document.getElementById("billscode").style.color = "blue";
-				document.getElementById("register").disabled = false;
-			}else {
-				document.getElementById("billscode").innerText = data;
-				document.getElementById("register").disabled = true;
-				document.getElementById("bondbills_code").focus();	
-			}
-		}
-	}
-}
 
 
 // 리스트에서 글 선택 시 넘어가는 form

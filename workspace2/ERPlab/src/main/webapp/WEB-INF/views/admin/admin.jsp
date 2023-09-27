@@ -100,12 +100,11 @@ function getlist(){
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
 		procode.innerHTML = '';
-		procode.innerHTML += '<tr><td>부서</td><td>팀</td><td>아이디</td><td>비밀번호</td><td>수정</td><td>삭제</td></tr>';
+		procode.innerHTML += '<tr><th>부서</th><th>팀</th><th>아이디</th><th>비밀번호</th><th>수정</th><th>삭제</th></tr>';
 		if(data != ""){
 			var data2 = JSON.parse(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
-				newTr.setAttribute("onclick", "selectForm("+map.product_no+",'"+map.product_code+"')");
 				procode.appendChild(newTr);
 				newTd = document.createElement("td");
 				newTd.innerHTML = map.dept_name;

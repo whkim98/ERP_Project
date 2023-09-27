@@ -9,7 +9,6 @@ function surf(v, code){		// list ajax 함수 > A4Controller, a4.xml(investmentLi
 		type = null;
 		v = null;
 	}
-	console.log(v);
 	var param = "comcode_code="+code+"&word="+v+"&type="+type;		// 넘길 데이터
 	
 	sendRequest(url,param,getlist,"POST");

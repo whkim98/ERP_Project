@@ -167,7 +167,7 @@ function teamname(){
 						
 						<div>
 							<label>생산코드 </label>
-							<input type="text" name="product_code" id="product_code" value="${inmap.product_code }" class="required" onclick="selectProduct('${comcode_code}')" readonly="readonly">
+							<input type="text" name="product_code" id="product_code" value="${inmap.product_code }" class="required" readonly="readonly">
 						</div>
 						
 						<div>

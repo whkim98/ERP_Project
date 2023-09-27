@@ -50,15 +50,15 @@
 								<li><a href="#">일정</a></li>
 								<li><a href="#">주소록</a></li>
 								<li><a href="${pageContext.request.contextPath}/erpchat?comcode_code=${comcode_code}" target="_blank">메신저</a></li>
-								<li><a href="#">이메일</a></li>
+								<li><a href="">이메일</a></li>
 								<li><a href="#">연차</a></li>	
 								<c:if test="${login == 1 }">
-									<li><a href="#">관리자</a></li>	
+									<li><a href="${pageContext.request.contextPath}/admin?comcode_code=${comcode_code}">관리자페이지</a></li>	
 								</c:if>					
 							</ul>
 							<ul>
-								<li><a href="#">재고</a></li>
-								<li><a href="#">물류</a></li>
+								<li><a href="${pageContext.request.contextPath}/stock?comcode_code=${comcode_code }">재고</a></li>
+								<li><a href="${pageContext.request.contextPath}/management?comcode_code=${comcode_code }">물류</a></li>
 								<li><a href="${pageContext.request.contextPath}/d/d3/d31/inputOrder?comcode_code=${comcode_code}">발주</a></li>
 								<li><a href="#">부서별매출</a></li>
 								<li><a href="${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code}">프로젝트</a></li>
@@ -66,16 +66,8 @@
 								<li><a href="${pageContext.request.contextPath}/b11main?comcode_code=${comcode_code}">재무제표</a></li>
 							</ul>
 							
-							
 						</nav>
-						
-						<nav class="loginSessionOutput">
-						    <div class="loginSessionView">
-				        		로그아웃까지 남은 시간: <span id="sessionTime">Calculating...</span>					        				        
-						    </div>
-						</nav>
-						
-						
+					
 						<nav class="main">
 							<ul>
 								<li class="menu">
@@ -84,13 +76,18 @@
 							</ul>
 						</nav>
 					</header>
-					
+
 				<!-- Menu -->
 					<section id="menu">
 
 						<!-- Links -->
 							<section>
 								<ul class="links">
+
+								<c:if test="${login == 1 }">
+									<li><a href="${pageContext.request.contextPath}/admin?comcode_code=${comcode_code}">관리자페이지</a></li>	
+								</c:if>	
+								
 									<li>
 											<h3>경영기획팀</h3>
 										<a href="#">
@@ -129,13 +126,13 @@
 									</li>
 									<li>
 											<h3>재무팀</h3>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/account?comcode_code=${comcode_code}">
 											<p>계좌현황 및 관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/funds?comcode_code=${comcode_code}">
 											<p>자금관리</p>
 										</a>
-										<a href="#">
+										<a href="${pageContext.request.contextPath }/budget?comcode_code=${comcode_code}">
 											<p>예산관리</p>
 										</a>
 										<a href="${pageContext.request.contextPath }/b31main?comcode_code=${comcode_code}">
@@ -156,43 +153,40 @@
 									</li>
 									<li>
 										<h3>인사팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/greeting?comcode_code=${comcode_code }">
 												<p>인사정보</p>
 											</a>
-											<a href="#">
-												<p>조직관리</p>
-											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/greeting/attendance?comcode_code=${comcode_code }">
 												<p>근태관리</p>
 											</a>
-											<a href="#">
-												<p>정산</p>
+											<a href="javascript:void(0);" onclick="openWindow('${comcode_code}')">
+											    <p>정산</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath }/greeting/resignList?comcode_code=${comcode_code }">
 												<p>퇴직</p>
 											</a>
 									</li>
 									<li>
 										<h3>총무팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/tools?comcode_code=${comcode_code }">
 												<p>기자재</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/supplies?comcode_code=${comcode_code }">
 												<p>비품 / 소모품</p>
 											</a>
 									</li>
 									<li>
 										<h3>해외영업팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationalsales/list?comcode_code=${comcode_code }">
 												<p>해외거래처관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationalsales/export?comcode_code=${comcode_code }">
 												<p>수출관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationsales/import?comcode_code=${comcode_code }">
 												<p>수입(매입)</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/internationsales/income?comcode_code=${comcode_code }">
 												<p>수입발주관리</p>
 											</a>
 									</li>
@@ -303,14 +297,11 @@
 									</li>
 									<li>
 										<h3>물류팀</h3>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/stock?comcode_code=${comcode_code }">
 												<p>재고관리</p>
 											</a>
-											<a href="#">
+											<a href="${pageContext.request.contextPath}/management?comcode_code=${comcode_code }">
 												<p>입출고관리</p>
-											</a>
-											<a href="#">
-												<p>폐기 / 물류 감소</p>
 											</a>
 									</li>
 								</ul>
@@ -328,51 +319,6 @@
 </div>
 
 <script type="text/javascript">
-
-let sessionTimeout; // 세션 타임아웃을 저장하는 변수
-const maxSessionDuration = ${pageContext.session.maxInactiveInterval} * 1000; // 세션 최대 지속 시간 (밀리초)
-let sessionStartTime = new Date(${pageContext.session.creationTime}); // 세션 시작 시간 초기화
-
-// 세션 타임아웃 타이머 시작
-function startSessionTimeout() {
-    sessionStartTime = new Date(); // 새로운 세션 시작 시간 설정
-    clearTimeout(sessionTimeout); // 이전 인터벌 제거
-
-    // 새로운 세션 타임아웃 인터벌 설정
-    sessionTimeout = setTimeout(logout, maxSessionDuration);
-}
-
-// 클릭, 입력, 마우스 움직임, 새로고침 등 모든 이벤트에 대한 세션 초기화 리스너 추가
-document.addEventListener('click', startSessionTimeout);
-document.addEventListener('input', startSessionTimeout);
-document.addEventListener('mousemove', startSessionTimeout);
-window.addEventListener('beforeunload', startSessionTimeout); // 새로고침 및 탭 닫힘 이벤트
-
-// 남은 세션 시간을 업데이트하고 세션 타임아웃 타이머를 재설정하는 함수
-function updateSessionTime() {
-    const currentTime = new Date();
-    const elapsedTime = currentTime - sessionStartTime;
-    const remainingTime = maxSessionDuration - elapsedTime;
-
-    if (remainingTime <= 0) {
-        // 세션 타임아웃이 0 이하이면 로그아웃
-        logout();
-    } else {
-        const minutes = Math.floor(remainingTime / 60000); // 밀리초를 분으로 변환
-        const seconds = Math.floor((remainingTime % 60000) / 1000); // 밀리초를 초로 변환
-        let min = minutes < 10 ? '0' : '';
-        let sec = seconds < 10 ? '0' : '';
-        const formattedTime = min + minutes + '분' + sec + seconds + '초';
-
-        document.getElementById('sessionTime').textContent = formattedTime;
-    }
-
-    // 다음 프레임에서 업데이트 요청
-    requestAnimationFrame(updateSessionTime);
-}
-
-// 초기 업데이트 호출
-updateSessionTime();
 
 
 // logout

@@ -137,11 +137,11 @@ public class ChatController {
 		
 		int roomNo = is.checkRoomNo(map);
 		
-		String encoder = null;
+		String encoder = URLEncoder.encode(evo.getEmployee1_name());;
+		String position = URLEncoder.encode(evo.getEmployee2_position());
 		
 		if(roomNo != 0) {
-			encoder = URLEncoder.encode(evo.getEmployee1_name());
-			return "redirect:/intranet/chat/erpchatroom?chatroom_no="+roomNo+"&comcode_code="+comcode_code+"&employee1_name="+encoder;
+			return "redirect:/intranet/chat/erpchatroom?chatroom_no="+roomNo+"&comcode_code="+comcode_code+"&employee1_name="+encoder+"&employee2_position="+position;
 		}else {
 			
 			int comcode_no = login.comNo(comcode_code);
@@ -152,9 +152,7 @@ public class ChatController {
 			
 			vo.setChatroom_no(is.getRoomMaxNo());
 			
-			encoder = URLEncoder.encode(evo.getEmployee1_name());
-			
-			return "redirect:/intranet/chat/erpchatroom?chatroom_no="+vo.getChatroom_no()+"&comcode_code="+comcode_code+"&employee1_name="+encoder;
+			return "redirect:/intranet/chat/erpchatroom?chatroom_no="+vo.getChatroom_no()+"&comcode_code="+comcode_code+"&employee1_name="+encoder+"&employee2_position="+position;
 		}
 	}
 	
@@ -246,6 +244,7 @@ public class ChatController {
 		
 		model.addAttribute("chatlist", chatlist);					
 		model.addAttribute("employee1_name", evo.getEmployee1_name());
+		model.addAttribute("employee2_position", evo.getEmployee2_position());
 		model.addAttribute("selectRoom", selectRoom);
 		
 		return ViewPath.CHAT + "erpChatroom";

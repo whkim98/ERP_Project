@@ -379,6 +379,10 @@ public class D1Service {
 		return edao.getEvalueationNo();
 	}
 	
+	public Map<String, Object> checkProduct(int product_no){
+		return edao.checkProduct(product_no);
+	}
+	
 	
 //	evaluemng 실적 관리
 	public int createEvaluemng(Erp_EvaluemngVO vo) {
@@ -391,6 +395,10 @@ public class D1Service {
 	
 	public int deleteEvaluemng(int evaluemng_no) {
 		return emdao.deleteEvaluemng(evaluemng_no);
+	}
+	
+	public int deleteEvmng(int evaluation_no) {
+		return emdao.deleteEvmng(evaluation_no);
 	}
 	
 	public List<Map<String, Object>> evmngList(Map<String, Object> map){
@@ -457,6 +465,10 @@ public class D1Service {
 	
 	public List<Map<String, Object>> coList(Map<String, Object> map){
 		return pidao.coList(map);
+	}
+	
+	public int getProNo() {
+		return pidao.getProNo();
 	}
 	
 	

@@ -384,7 +384,6 @@ function sub(f){
 		return;
 	}else if(f.return_date.value == ""){
 		document.getElementById("return_date").valueAsDate = new Date();
-		console.log(f.return_date.value);
 		var ch = confirm("날짜가 입력되지 않았습니다. 등록하시겠습니까?");
 		if(ch){
 			f.submit();

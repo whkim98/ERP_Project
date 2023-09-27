@@ -510,9 +510,7 @@ addRowButton.addEventListener('click', function() {
     if (itemTable.rows.length <= 100) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
-        if(document.getElementById("crlist[0].goods_name")){
-       		j += 1;
-        }
+        
         for (let i = 0; i < 15; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
@@ -547,6 +545,9 @@ addRowButton.addEventListener('click', function() {
                 cells[i].innerHTML = '<td><input type="button" onclick="clearRow(this)" value="delete"></td>';
             }
         }
+        if(document.getElementById("crlist[0].goods_name")){
+       		j += 1;
+        }
         
         for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
             itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
@@ -566,12 +567,13 @@ deleteRowButton.addEventListener('click', function() {
     	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-2){
     		return;
     	}else{
-    		if(document.getElementById("crlist1["+(itemTable.rows.length-2)+"].goods_name")){
-    			return;
-    		}else{
-		    	j -= 1;
+    		if(j > 0){
 		        itemTable.deleteRow(itemTable.rows.length-1);
-    		}
+		    	j -= 1;
+	        }else {
+		        itemTable.deleteRow(itemTable.rows.length-1);
+				return;
+	        }
     	}
     } else {
         alert('품목은 1개 이하로 삭제할 수 없습니다.');

@@ -16,12 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="goodsstno" parameterType="com.lab.erp.vo.d.d6.Erp_GoodsstVO" resultType="int">
-		select goodsst_no from erp_goodsst 
-		where goodsst_unit = #{goodsst_unit} 
-		and goodsst_spec = #{goodsst_spec} 
-		and goodsst_size = #{goodsst_size} 
-		and goodsst_package = #{goodsst_package} 
-		and goodsst_ea = #{goodsst_ea}
+		select max(goodsst_no) from erp_goodsst 
 	</select>
 	
 	<select id="goodslotno" parameterType="com.lab.erp.vo.d.d6.Erp_GoodslotVO" resultType="int">

@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>ERP LAB CHAT</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/intranet/chat/empList.css">
 </head>
@@ -44,7 +45,7 @@
                 <th class="erpChat-friendList-name">${map.employee1_name }</th>
                 <th class="erpChat-friendList-position">${map.employee2_position }</th>
                 <th class="">    </th>
-                <th class="erpChat-friendList-chatStart"><a onclick="openChatroom(${empNo},${map.employee2_no },'${map.employee1_name }','${comcode_code }')"><i class="input-icon uil-comments"></i></a>
+                <th class="erpChat-friendList-chatStart"><a onclick="openChatroom(${empNo},${map.employee2_no },'${map.employee1_name }','${comcode_code }','${map.employee2_position }')"><i class="input-icon uil-comments"></i></a>
             </tr>
             </c:forEach>
         </table>
@@ -56,8 +57,8 @@
 
 
 let code = document.getElementById("comcode_code").value;
-function openChatroom(no1, no2, name, code) {
-    window.open('${pageContext.request.contextPath}/intranet/chat/createChatRoom?comcode_code='+code+'&employee1_name='+name+'&employee2_no1='+no1+'&employee2_no2='+no2, 'Chatroom', 'width=380, height=480');
+function openChatroom(no1, no2, name, code, position) {
+    window.open('${pageContext.request.contextPath}/intranet/chat/createChatRoom?comcode_code='+code+'&employee1_name='+name+'&employee2_no1='+no1+'&employee2_no2='+no2+"&employee2_position="+position, 'Chatroom', 'width=380, height=480');
 }
 
 function chatRoomList(no, code){
@@ -81,7 +82,7 @@ function getlist(){
 		var data = xhr.response;
 		let procode = document.getElementById("erpChat-friendList");
 		let newTr = document.createElement("tr");
-		let newTd = document.createElement("td");
+		let newTd = document.createElement("th");
 		let eno = document.getElementById("employee2_no").value;
 		procode.innerHTML = '';
 		if(data != ""){
@@ -89,20 +90,24 @@ function getlist(){
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
 				procode.appendChild(newTr);
-				newTd = document.createElement("td");
+				newTd = document.createElement("th");
+				newTd.setAttribute("class", "erpChat-friendList-team");
 				newTd.innerHTML = map.team_name;
 				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
+				newTd = document.createElement("th");
+				newTd.setAttribute("class", "erpChat-friendList-name");
 				newTd.innerHTML = map.employee1_name;
 				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
+				newTd = document.createElement("th");
+				newTd.setAttribute("class", "erpChat-friendList-position");
 				newTd.innerHTML = map.employee2_position;
 				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
+				newTd = document.createElement("th");
 				newTd.innerHTML = "    ";
 				newTr.appendChild(newTd);
-				newTd = document.createElement("td");
-				newTd.innerHTML = '<a onclick="onclick="openChatroom(${empNo},'+map.employee2_no+',`'+map.employee1_name+'`,`${comcode_code }`)"><i class="input-icon uil-comments"></i>';
+				newTd = document.createElement("th");
+				newTd.setAttribute("class", "erpChat-friendList-chatStart");
+				newTd.innerHTML = '<a onclick="openChatroom(${empNo},'+map.employee2_no+',`'+map.employee1_name+'`,`${comcode_code }`,`'+map.employee2_position+'`)"><i class="input-icon uil-comments"></i>';
 				newTr.appendChild(newTd);
 			});
 		}else {

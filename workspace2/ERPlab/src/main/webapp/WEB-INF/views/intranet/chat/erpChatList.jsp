@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>ERP LAB CHAT</title>
 <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/httpRequest.js"></script>
 <link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/intranet/chat/chatList.css">
 </head>
@@ -40,10 +41,10 @@
         		<c:if test="${empNo == map.e1no }">
 		            <tr>
 		            	<c:if test="${map.chatroom_title == null }">
-			                <th onclick="openChatroom(${map.chatroom_no }, '${map.team_name}', '${map.e2name }','${comcode_code }')">${map.team_name} ${map.e2position } ${map.e2name }</th>
+			                <th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }','${map.e2position }')">${map.team_name2} ${map.e2position } ${map.e2name }</th>
 			            </c:if>
 			            <c:if test="${map.chatroom_title != null }">
-		                	<th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.chatroom_title }</th>
+		                	<th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }','${map.e2position }')">${map.chatroom_title }</th>
 			            </c:if>
 			            <th onclick="deleteRoom(${map.chatroom_no})">x</th>
 		            </tr>
@@ -51,10 +52,10 @@
         		<c:if test="${empNo == map.e2no }">
 		            <tr>
 		            	<c:if test="${map.chatroom_title == null }">
-			                <th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.team_name} ${map.e1position } ${map.e1name }</th>
+			                <th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }','${map.e1position }')">${map.team_name1} ${map.e1position } ${map.e1name }</th>
 			            </c:if>
 			            <c:if test="${map.chatroom_title != null }">
-		                	<th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }')">${map.chatroom_title }</th>
+		                	<th onclick="openChatroom(${map.chatroom_no },'${map.e2name }','${comcode_code }','${map.e1position }')">${map.chatroom_title }</th>
 			            </c:if>
 			            <th onclick="deleteRoom(${map.chatroom_no})">x</th>
 		            </tr>
@@ -72,8 +73,8 @@ function chatRoomList(no, code){
 	location.href="${pageContext.request.contextPath}/intranet/chat/erpchatlist?employee2_no="+no+"&comcode_code="+code;
 }
 
-function openChatroom(no, name, code) {
-    window.open('${pageContext.request.contextPath}/intranet/chat/erpchatroom?comcode_code='+code+'&employee1_name='+name+'&chatroom_no='+no, 'Chatroom', 'width=380, height=480');
+function openChatroom(no, name, code, position) {
+    window.open('${pageContext.request.contextPath}/intranet/chat/erpchatroom?comcode_code='+code+'&employee1_name='+name+'&chatroom_no='+no+"&employee2_position="+position, 'Chatroom', 'width=380, height=480');
 }
 
 function surf(v, no){
@@ -104,12 +105,12 @@ function getlist(){
 					procode.appendChild(newTr);
 					if(map.chatroom_title == null){
 						newTd = document.createElement("th");
-						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e2name+"','"+code+"')");
-						newTd.innerHTML = map.e2position + " " + map.e2name;
+						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e2name+"','"+code+"','"+map.e2position+"')");
+						newTd.innerHTML = map.team_name2 + " " + map.e2position + " " + map.e2name;
 						newTr.appendChild(newTd);
 					}else if(map.chatroom_title != null){
 						newTd = document.createElement("th");
-						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e2name+"','"+code+"')");
+						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e2name+"','"+code+"','"+map.e2position+"')");
 						newTd.innerHTML = map.chatroom_title;
 						newTr.appendChild(newTd);
 					}
@@ -118,12 +119,12 @@ function getlist(){
 					procode.appendChild(newTr);
 					if(map.chatroom_title == null){
 						newTd = document.createElement("th");
-						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e1name+"','"+code+"')");
-						newTd.innerHTML = map.e1position + " " + map.e1name;
+						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e1name+"','"+code+"','"+map.e1position+"')");
+						newTd.innerHTML = map.team_name1 + " " + map.e1position + " " + map.e1name;
 						newTr.appendChild(newTd);
 					}else if(map.chatroom_title != null){
 						newTd = document.createElement("th");
-						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e1name+"','"+code+"')");
+						newTd.setAttribute("onclick", "openChatroom("+map.chatroom_no+",'"+map.e1name+"','"+code+"','"+map.e1position+"')");
 						newTd.innerHTML = map.chatroom_title;
 						newTr.appendChild(newTd);
 					}

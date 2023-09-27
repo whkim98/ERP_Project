@@ -34,15 +34,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="chatRoomList" parameterType="map" resultType="map">
-		select c.*, 
+		select c.*, t1.team_name team_name1, t2.team_name team_name2, 
 		e11.employee1_name e1name, e21.employee2_no e1no, e21.employee2_position e1position, 
 		e12.employee1_name e2name, e22.employee2_no e2no, e22.employee2_position e2position 
-		from erp_chatroom c, erp_employee1 e11, erp_employee2 e21, erp_employee1 e12, erp_employee2 e22 
+		from erp_chatroom c, erp_employee1 e11, erp_employee2 e21, erp_employee1 e12, erp_employee2 e22, erp_team t1, erp_team t2 
 		where (c.employee2_no1 = #{employee2_no} or c.employee2_no2 = #{employee2_no}) 
 		and c.employee2_no1 = e21.employee2_no 
 		and c.employee2_no2 = e22.employee2_no 
 		and e11.employee1_no = e21.employee1_no
 		and e12.employee1_no = e22.employee1_no 
+		and e21.team_no = t1.team_no 
+		and e22.team_no = t2.team_no 
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (

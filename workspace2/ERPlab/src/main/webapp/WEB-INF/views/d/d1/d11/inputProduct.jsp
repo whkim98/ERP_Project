@@ -160,7 +160,7 @@ function requestpr(no,code){
 						
 						<div>
 							<label>의뢰 코드 </label>
-							<input type="text" name="requestproduct_code" id="requestproduct_code" value="${inmap.requestproduct_code }" readonly="readonly" class="required" onclick="requestproduct('${comcode_code}')">
+							<input type="text" name="requestproduct_code" id="requestproduct_code" value="${inmap.requestproduct_code }" readonly="readonly" class="required">
 						</div>
 						
 						<div>
@@ -280,6 +280,7 @@ function requestpr(no,code){
 						<div>
 							<label>의뢰 코드 </label>
 							<input type="text" name="requestproduct_code" id="requestproduct_code" readonly="readonly" class="required" onclick="requestproduct('${comcode_code}')">
+							<h6 id="checkRro" style="color:red;"></h6>
 						</div>
 						
 						<div>
@@ -504,9 +505,13 @@ function codecheck(){
 		var data = xhr.responseText;
 		if(data != ""){	
 			if(data == "사용 가능한 코드입니다."){
+				if(document.getElementById("checkRro").innerText == "이미 해당 의뢰에 대한 생산이 등록되어있습니다."){
+					document.getElementById("register").disabled = true;
+				}else {
+					document.getElementById("register").disabled = false;
+				}
 				document.getElementById("productcode").innerText = data;
 				document.getElementById("productcode").style.color = "blue";
-				document.getElementById("register").disabled = false;
 			}else {
 				document.getElementById("productcode").innerText = data;
 				document.getElementById("productcode").style.color = "red";

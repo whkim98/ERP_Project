@@ -123,14 +123,11 @@ public class C2Controller {
 		
 		Map<String, Object> map = new HashMap<>();
 		
-		System.out.println(type);
-		
 		map.put("type", type);
 		map.put("word", word);
 		map.put("comcode_no", comcode_no);
 		
 		List<Map<String, Object>> list = c2.clientListb4(map);
-		System.out.println(list);
 		
 		return list;
 	}

@@ -31,6 +31,10 @@ private SqlSession sqlSession;
 		return sqlSession.insert("d1.deleteEvaluemng", evaluemng_no);
 	}
 	
+	public int deleteEvmng(int evaluation_no) {
+		return sqlSession.insert("d1.deleteEvmng", evaluation_no);
+	}
+	
 	public List<Map<String, Object>> evmngList(Map<String, Object> map){
 		return sqlSession.selectList("d1.evmngList", map);
 	}

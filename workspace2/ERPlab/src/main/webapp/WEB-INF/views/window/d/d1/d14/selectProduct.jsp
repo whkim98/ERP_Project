@@ -29,7 +29,7 @@
 			<td>담당자</td>
 		</tr>
 		<c:if test="${list == null }">
-			<td colspan="4">정보가 존재하지 않습니다.</td>
+			<td colspan="4">평가할 수 있는 생산목록이 없습니다.</td>
 		</c:if>
 		<c:forEach var="vo" items="${list }">
 				<tr onclick="setParentText(${vo.requestproduct_no }, ${vo.product_no }, '${vo.product_code}', '${vo.product_name}', '${vo.product_lot}')">
@@ -49,8 +49,30 @@
     	opener.document.getElementById("product_code").value = code;
     	opener.document.getElementById("product_name").value = name;
     	opener.document.getElementById("product_lot").value = lot;
-    	window.close();
+    	
+   		var url = "${pageContext.request.contextPath }/d/d1/d14/checkProduct";
+   		var param = "product_no="+encodeURIComponent(no);
+   		
+   		sendRequest(url,param,checkPno,"POST");
+
     }
+	function checkPno(){
+		if(xhr.readyState==4 && xhr.status==200) {
+			var data = xhr.responseText;
+			if(data != ""){	
+				if(data == "평가 가능한 생산입니다."){
+					opener.document.getElementById("checkPro").innerText = data;
+					opener.document.getElementById("checkPro").style.color = "blue";
+					opener.document.getElementById("register").disabled = false;
+				}else {
+					opener.document.getElementById("checkPro").innerText = data;
+					opener.document.getElementById("checkPro").style.color = "red";
+					opener.document.getElementById("register").disabled = true;
+				}
+			}
+	    	window.close();
+		}
+	}
 	
 	function bnajax(v, code){
 		var type = document.getElementsByName("type")[0].value;
@@ -91,7 +113,7 @@
 					newTr.appendChild(newTd);
 				});
 			}else {
-				procode.innerHTML += '<tr><td colspan="4">목록이 없습니다.</td></tr>';
+				procode.innerHTML += '<tr><td colspan="4">평가할 수 있는 생산목록이 없습니다.</td></tr>';
 			}
 		}
 	}

@@ -424,6 +424,10 @@ addRowButton.addEventListener('click', function() {
             }
         }
         
+        if(document.getElementById("crlist[0].goods_name")){
+       		j += 1;
+        }
+        
         for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
             itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
         }
@@ -438,7 +442,6 @@ addRowButton.addEventListener('click', function() {
     } else {
         alert('품목은 최대 100개까지 추가할 수 있습니다.');
     }
-    j += 1;
 });
 
 
@@ -449,12 +452,13 @@ deleteRowButton.addEventListener('click', function() {
     	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-2){
     		return;
     	}else{
-    		if(document.getElementById("crlist1["+(itemTable.rows.length-2)+"].goods_name")){
-    			return;
-    		}else{
-		    	j -= 1;
+    		if(j > 0){
 		        itemTable.deleteRow(itemTable.rows.length-1);
-    		}
+		    	j -= 1;
+	        }else {
+		        itemTable.deleteRow(itemTable.rows.length-1);
+				return;
+	        }
     	}
     } else {
         alert('품목은 1개 이하로 삭제할 수 없습니다.');
@@ -498,7 +502,6 @@ function deleteGoodscheck(){
 			procode.innerHTML = '';
 			procode.innerHTML += '<tr><th>제품조회</th><th>품명</th><th>상품코드</th><th>바코드</th><th>종류</th><th>원가</th><th>단위</th><th>규격</th><th>제조사</th><th>책임판매업자</th><th>현재고</th><th>재고</th><th>실재고</th><th>사용여부</th><th>입고일</th></tr>';
 			var data2 = JSON.parse(data);
-			console.log(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
 				newTr.setAttribute("class", "plist");

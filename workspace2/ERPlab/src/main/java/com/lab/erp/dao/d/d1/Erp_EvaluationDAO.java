@@ -43,6 +43,10 @@ private SqlSession sqlSession;
 		return sqlSession.selectOne("d1.selectEvaluation", evaluation_no);
 	}
 	
+	public Map<String, Object> checkProduct(int product_no){
+		return sqlSession.selectOne("d1.checkProduct", product_no);
+	}
+	
 	public int getEvalueationNo() {
 		return sqlSession.selectOne("d1.getEvalueationNo");
 	}

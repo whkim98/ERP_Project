@@ -46,8 +46,29 @@
 	function setParentText(no, name){
     	opener.document.getElementById("requestproduct_no").value = no;
     	opener.document.getElementById("requestproduct_code").value = name;
-    	window.close();
+    	var url = "${pageContext.request.contextPath }/d/d1/d11/checkRequest";
+   		var param = "requestproduct_no="+encodeURIComponent(no);
+   		
+   		sendRequest(url,param,checkRno,"POST");
+
     }
+	function checkRno(){
+		if(xhr.readyState==4 && xhr.status==200) {
+			var data = xhr.responseText;
+			if(data != ""){	
+				if(data == "생산 가능한 의뢰입니다."){
+					opener.document.getElementById("checkRro").innerText = data;
+					opener.document.getElementById("checkRro").style.color = "blue";
+					opener.document.getElementById("register").disabled = false;
+				}else {
+					opener.document.getElementById("checkRro").innerText = data;
+					opener.document.getElementById("checkRro").style.color = "red";
+					opener.document.getElementById("register").disabled = true;
+				}
+			}
+	    	window.close();
+		}
+	}
 	
 	function bnajax(v, code){
 		var type = document.getElementsByName("type")[0].value;

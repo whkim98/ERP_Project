@@ -45,7 +45,6 @@ public class IntranetLoginController {
 			map.put("comcode_code_intranet", vo.getComcode_code());
 
 			int su = is.checkEmp(map);
-			System.out.println(su);
 
 			if (su != 0) {
 				Map<String, Object> name = is.getEmpName(map);
@@ -63,10 +62,6 @@ public class IntranetLoginController {
 				
 				request.setAttribute("msg", msg);
 				request.setAttribute("url", url);
-				
-				System.out.println(url);
-				
-				System.out.println(request.getSession().getAttribute("Intralogin"));
 				
 				return "result/loginresult";
 			}else {
@@ -119,7 +114,6 @@ public class IntranetLoginController {
 			request.getSession().setAttribute("chatNickName", name.get("team_name") + " " + name.get("employee1_name"));
 			request.getSession().setAttribute("empNo", name.get("employee2_no"));
 			
-			System.out.println(request.getSession().getAttribute("chatNickName"));
 			request.getSession().setAttribute("comcode_code", comcode_code);
 			request.setAttribute("msg", msg);
 			request.setAttribute("url", url);

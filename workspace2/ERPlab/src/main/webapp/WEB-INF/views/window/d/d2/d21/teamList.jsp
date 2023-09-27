@@ -11,23 +11,22 @@
 </head>
 <body>
 <div>
-	<form action="${pageContext.request.contextPath}/a/a4/searcht" method="POST">
-		<select name="type">
-			<option value="team_code">코드</option>
-			<option value="team_name">이름</option>
-		</select>
-		<input type="text" name="word" id="word">
-		<input type="button" onclick="sub(this.form)" value="조회">
-	</form>
+	<select name="type">
+		<option value="dept_name" ${param.type == 'dept_name' ? 'selected' : '' }>부서</option>
+		<option value="team_code" ${param.type == 'team_code' ? 'selected' : '' }>코드</option>
+		<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>이름</option>
+	</select>
+	<input type="text" name="word" id="word" onkeyup="bnajax(this.value, '${comcode_code}')" onblur="bnajax(this.value, '${comcode_code}')">
+	<input type="button" onclick="bnajax('', '${comcode_code}')" value="전체목록">
 	
 	<table>
 		<tr>
-			<td>코드</td>
+			<td>부서</td>
 			<td>팀명</td>
 		</tr>
 		<c:forEach var="vo" items="${list }">
 			<tr onclick="setParentText(${vo.team_no }, '${vo.team_name }')">
-				<td>${vo.team_code}</td>
+				<td>${vo.dept_name}</td>
 				<td>${vo.team_name}</td>
 			</tr>
 		</c:forEach>
@@ -40,6 +39,44 @@
     	opener.document.getElementById("team_name").value = name;
     	window.close();
     }
+	
+	function bnajax(v, code){
+		var type = document.getElementsByName("type")[0].value;
+		if(v == ''){
+			type = null;
+			v = null;
+		}
+		var url = "${pageContext.request.contextPath}/a/a4/searchtAjax";
+		var param = "word="+v+"&type="+type+"&comcode_code="+code;
+		
+		sendRequest(url,param,getlist,"POST");
+	}
+	function getlist(){
+		if(xhr.readyState==4 && xhr.status==200) {	
+			var data = xhr.response;
+			let procode = document.getElementById("procode");
+			let newTr = document.createElement("tr");
+			let newTd = document.createElement("td");
+			procode.innerHTML = '';
+			procode.innerHTML += '<tr><td>부서</td><td>팀명</td><tr>';
+			if(data != ""){
+				var data2 = JSON.parse(data);
+				data2.forEach(function(map){
+					newTr = document.createElement("tr");
+					newTr.setAttribute("onclick", "setParentText("+map.team_no+",'"+map.team_name+"','"+map.dept_name+"')");
+					procode.appendChild(newTr);
+					newTd = document.createElement("td");
+					newTd.innerHTML = map.dept_name;
+					newTr.appendChild(newTd);
+					newTd = document.createElement("td");
+					newTd.innerHTML = map.team_name;
+					newTr.appendChild(newTd);
+				});
+			}else {
+				procode.innerHTML += '<tr><td colspan="2">목록이 없습니다.</td></tr>';
+			}
+		}
+	}
 	
 	function sub(f){
 		if(document.getElementById("word").value == ""){

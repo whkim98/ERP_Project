@@ -277,7 +277,7 @@
 						<input type="hidden" name="crlist1[0].client_no1" id="crlist1[0].client_no1" value="17">
         				<input type="hidden" name="crlist1[0].client_no2" id="crlist1[0].client_no2" value="17">
 					</td>
-					<td><input type="text" name="crlist1[0].connectrequest_qty" id="crlist1[0].connectrequest_qty"></td>
+					<td><input type="text" name="crlist1[0].connectrequest_qty" id="crlist1[0].connectrequest_qty" class="required"></td>
 					<td><input type="button" onclick="clearRow(this)" value="delete"></td>
 				</tr>
             </table>
@@ -339,23 +339,26 @@ function sub(f){
 		}
 	}
 	
-	if(f.requestproduct_name.value == ""){
+	if(f.requestproduct_code.value == ""){
+		f.requestproduct_code.focus();
+		return;
+	}else if(f.requestproduct_name.value == ""){
 		f.requestproduct_name.focus();
 		return;
 	}else if(f.requestproduct_start.value == ""){
 		f.requestproduct_start.focus();
 		return;
 	}else if(f.requestproduct_end.value == ""){
-		f.requestproduct_start.focus();
+		f.requestproduct_end.focus();
 		return;
 	}else if(f.client_name.value == ""){
 		f.client_name.focus();
 		return;
-	}else if(f.employee1_code.value == ""){
+	}else if(f.employee1_no.value == ""){
 		f.employee1_code.focus();
 		return;
 	}else if(f.requestproduct_content.value == ""){
-		var ch = confirm("내용이 입력되지 않은 내용이 있습니다. 등록하시겠습니까?")
+		var ch = confirm("내용이 입력되지 않았습니다. 등록하시겠습니까?")
 		if(ch){
 			f.submit();
 		}else {
@@ -438,9 +441,7 @@ addRowButton.addEventListener('click', function() {
     if (itemTable.rows.length <= 100) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
-        if(document.getElementById("crlist1[0].goods_name")){
-       		j += 1;
-        }
+        
         
         for (let i = 0; i < 16; i++) {
             cells.push(newRow.insertCell(i));
@@ -473,10 +474,14 @@ addRowButton.addEventListener('click', function() {
             } else if (i === 13){
                 cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].goods_description" id="crlist1['+j+'].goods_description" readonly="readonly"></td><input type="hidden" name="crlist1['+j+'].client_no1" id="crlist1['+j+'].client_no1" value="17"><input type="hidden" name="crlist1['+j+'].client_no2" id="crlist1['+j+'].client_no2" value="17"></td>';
             } else if (i === 14){
-                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].connectrequest_qty" id="crlist1['+j+'].connectrequest_qty"></td>';
+                cells[i].innerHTML = '<td><input type="text" name="crlist1['+j+'].connectrequest_qty" id="crlist1['+j+'].connectrequest_qty" class="required"></td>';
             } else {
                 cells[i].innerHTML = '<td name="b32-clearRow"><input type="button" onclick="clearRow(this)" value="delete"></td>';
             }
+        }
+        
+        if(document.getElementById("crlist1[0].goods_name")){
+       		j += 1;
         }
         
         for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
@@ -496,12 +501,13 @@ deleteRowButton.addEventListener('click', function() {
     	if(itemTable.getElementsByClassName("plist").length == itemTable.rows.length-2){
     		return;
     	}else{
-    		if(document.getElementById("crlist["+(itemTable.rows.length-2)+"].goods_name")){
-    			return;
-    		}else{
-		    	j -= 1;
+    		if(j > 0){
 		        itemTable.deleteRow(itemTable.rows.length-1);
-    		}
+		    	j -= 1;
+	        }else {
+		        itemTable.deleteRow(itemTable.rows.length-1);
+				return;
+	        }
     	}
     } else {
         alert('품목은 1개 이하로 삭제할 수 없습니다.');
@@ -738,7 +744,7 @@ function deleteGoodscheck(){
 				newTd.innerHTML = '<td><input type="text" value="'+map.goods_description+'" name="crlist['+t+'].goods_description" id="crlist['+t+'].goods_description" readonly="readonly"></td><input type="hidden" name="crlist['+t+'].client_no1" id="crlist['+t+'].client_no1" value="'+map.client_no1+'"><input type="hidden" name="crlist['+t+'].client_no2" id="crlist['+t+'].client_no2" value="'+map.client_no2+'"><input type="hidden" name="crlist['+t+'].connectrequest_no" id="crlist['+t+'].connectrequest_no" value="'+map.connectrequest_no+'"><input type="hidden" name="crlist['+t+'].requestproduct_no" id="crlist['+t+'].requestproduct_no" value="'+map.requestproduct_no+'">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
-				newTd.innerHTML = '<td><input type="text" value="'+map.connectrequest_qty+'" name="crlist['+t+'].connectrequest_qty" id="crlist['+t+'].connectrequest_qty">';
+				newTd.innerHTML = '<td><input type="text" value="'+map.connectrequest_qty+'" name="crlist['+t+'].connectrequest_qty" id="crlist['+t+'].connectrequest_qty" class="required">';
 				newTr.appendChild(newTd);
 				newTd = document.createElement("td");
 				newTd.innerHTML = '<input type="button" onclick="deleteGoods('+map.requestproduct_no+', '+map.connectrequest_no+')" value="delete">';

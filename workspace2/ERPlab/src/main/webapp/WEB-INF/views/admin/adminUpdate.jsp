@@ -26,7 +26,6 @@ function teamname(){
 		var data = xhr.response;
 		if(data != ""){
 			var data2 = JSON.parse(data);
-			console.log(data2);
 			document.getElementById("dept_name").value = data2.dept_name;
 			document.getElementById("team_name").value = data2.team_name;
 			document.getElementById("team_no").value = data2.team_no;
@@ -69,11 +68,11 @@ function teamname(){
 					아이디
 				</td>
 				<td>
-					<input type="text" name="admin_id" id="admin_id" value="${selectAdmin.admin_id }" onblur="changeId()">
+					<input type="text" name="admin_id" id="admin_id" value="${selectAdmin.admin_id }" onkeyup="changeId()">
 					<h6 id="idcheck" style="color:red;"></h6>
 				</td>
 				<td>
-					<input type="button" onclick="checkId()" value="중복확인" id="checkDistinct" disabled="disabled">
+					<input type="button" onclick="checkId()" value="중복확인">
 				</td>
 			</tr>
 			
@@ -142,6 +141,10 @@ function sub(f){
 
 function checkId(){
 	let v = document.getElementById("admin_id").value;
+	if(v == ""){
+		alert("아이디를 입력해주세요.");
+		return;
+	}
 	var url = '${pageContext.request.contextPath}/checkAdminId';
 	var param = 'admin_id='+encodeURIComponent(v);
 	
@@ -164,7 +167,9 @@ function checkIdResult(){
 }
 
 function changeId(){
-	document.getElementById("checkDistinct").disabled = false;
+	document.getElementById("idcheck").innerText = "";
+	document.getElementById("idcheck").style.color = "";
+	document.getElementById("ifcheck").disabled = true;
 }
 
 

@@ -47,4 +47,8 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("d1.coList", map);
 	}
 	
+	public int getProNo() {
+		return sqlSession.selectOne("d1.getProNo");
+	}
+	
 }

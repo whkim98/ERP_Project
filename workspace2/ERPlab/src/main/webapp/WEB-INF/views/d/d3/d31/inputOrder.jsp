@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
 <script type="text/javascript" charset="UTF-8">
 function surf(v, code){
 	var type = document.getElementsByName("type")[0].value;
-	console.log(v);
 	if(v == ''){
 		type = null;
 		v = null;
@@ -16,7 +16,6 @@ function surf(v, code){
 function getlist(){
 	if(xhr.readyState==4 && xhr.status==200) {	
 		var data = xhr.response;
-		console.log(data);
 		let procode = document.getElementById("procode");
 		let newTr = document.createElement("tr");
 		let newTd = document.createElement("td");
@@ -58,6 +57,12 @@ function getlist(){
 
 </script>
 <%@include file="/WEB-INF/views/dhlayout/header.jsp" %>
+<%-- <c:if test="${login != 1 || login != 17 }">
+	<script type="text/javascript">
+		alert("권한이 없습니다.");
+		location.href="${pageContext.request.contextPath }/index";
+	</script>
+</c:if> --%>
 	<div class="notosanskr">
 		<div class="dh_aligncenter">
 			<h1>발주 관리(완제품)</h1>

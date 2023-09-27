@@ -12,6 +12,7 @@
 <body>
 <div>
 	<select name="type">
+		<option value="dept_name" ${param.type == 'dept_name' ? 'selected' : '' }>부서</option>
 		<option value="team_code" ${param.type == 'team_code' ? 'selected' : '' }>코드</option>
 		<option value="team_name" ${param.type == 'team_name' ? 'selected' : '' }>이름</option>
 	</select>
@@ -20,7 +21,7 @@
 	
 	<table id="procode">
 		<tr>
-			<td>코드</td>
+			<td>부서</td>
 			<td>팀명</td>
 		</tr>
 		<c:if test="${list == null }">
@@ -30,7 +31,7 @@
 		</c:if>
 		<c:forEach var="vo" items="${list }">
 			<tr onclick="setParentText(${vo.team_no }, '${vo.team_name }', '${vo.dept_name }')">
-				<td>${vo.team_code}</td>
+				<td>${vo.dept_name}</td>
 				<td>${vo.team_name}</td>
 			</tr>
 		</c:forEach>
@@ -62,7 +63,7 @@
 			let newTr = document.createElement("tr");
 			let newTd = document.createElement("td");
 			procode.innerHTML = '';
-			procode.innerHTML += '<tr><td>코드</td><td>팀명</td><tr>';
+			procode.innerHTML += '<tr><td>부서</td><td>팀명</td><tr>';
 			if(data != ""){
 				var data2 = JSON.parse(data);
 				data2.forEach(function(map){
@@ -70,7 +71,7 @@
 					newTr.setAttribute("onclick", "setParentText("+map.team_no+",'"+map.team_name+"','"+map.dept_name+"')");
 					procode.appendChild(newTr);
 					newTd = document.createElement("td");
-					newTd.innerHTML = map.team_code;
+					newTd.innerHTML = map.dept_name;
 					newTr.appendChild(newTd);
 					newTd = document.createElement("td");
 					newTd.innerHTML = map.team_name;

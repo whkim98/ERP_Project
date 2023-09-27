@@ -106,10 +106,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 생산의뢰 select된 상품 불러오기 및 CUD -->
 	<select id="selectRequestGoods" parameterType="int" resultType="map">
-		select gs.goodssort_name, gk.goodskind_name, cr.*, 
-		c1.client_name client_name1, c2.client_name client_name2, 
-		gk.goodskind_no 
-		from erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr, erp_client c1, erp_client c2   
+		select gs.*, gk.*, cr.*,
+		c1.client_name client_name1, c2.client_name client_name2
+		from erp_goodssort gs, erp_goodskind gk, erp_connectrequest cr, erp_client c1, erp_client c2 
 		where cr.goodskind_no = gk.goodskind_no 
 		and cr.client_no1 = c1.client_no 
 		and cr.client_no2 = c2.client_no 
@@ -596,6 +595,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select max(evaluation_no) from erp_evaluation
 	</select>
 	
+	<select id="checkProduct" parameterType="int" resultType="map">
+		select p.*, c.*, t.*, e.*, r.*, cl.*, e2.* 
+		from erp_product p, erp_client c, erp_team t, erp_requestproduct r, erp_employee1 e, erp_employee2 e2, erp_closing cl, erp_evaluation ev  
+		where p.employee1_no = e.employee1_no 
+		and e2.team_no = t.team_no 
+		and r.client_no = c.client_no 
+		and p.requestproduct_no = r.requestproduct_no 
+		and e.employee1_no = e2.employee1_no 
+		and p.product_code = cl.closing_code 
+		and ev.requestproduct_no = r.requestproduct_no 
+		and p.product_no = #{product_no}
+	</select>
+	
 	
 	<!-- 실적 관리 -->
 	<insert id="createEvaluemng" parameterType="com.lab.erp.vo.d.d1.Erp_EvaluemngVO">
@@ -613,6 +625,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="deleteEvaluemng" parameterType="int">
 		delete from erp_evaluemng where evaluemng_no = #{evaluemng_no} 
+	</delete>
+	
+	<delete id="deleteEvmng" parameterType="int">
+		delete from erp_evaluemng where evaluation_no = #{evaluation_no}
 	</delete>
 	
 	<select id="evmngList" parameterType="map" resultType="map">
@@ -815,6 +831,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 	</select>
 	
+	<select id="getProNo" resultType="int">
+		select max(proinventory_no) from erp_proinventory
+	</select>
+	
 	
 	
 	<!-- BOM -->
@@ -852,7 +872,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="type != null">
 			<if test="type == 'all'">
 				and (
-					g.goods_code '%${word}%' or g.goods_barcode like '%${word}%'
+					g.goods_code like '%${word}%' or g.goods_barcode like '%${word}%'
 					or g.goods_name like '%${word}%' or c1.client_name like '%${word}%' 
 					or gk.goodskind_name like '%${word}%' or gl.goodslev_grade like '%${word}%'
 				)

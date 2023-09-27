@@ -545,9 +545,7 @@ addRowButton.addEventListener('click', function() {
     if (itemTable.rows.length <= 100) {
         const newRow = itemTable.insertRow(-1);
         const cells = [];
-        if(document.getElementById("crlist[0].goods_name")){
-       		j += 1;
-        }
+        
         for (let i = 0; i < 15; i++) {
             cells.push(newRow.insertCell(i));
             if (i === 0) {
@@ -582,6 +580,9 @@ addRowButton.addEventListener('click', function() {
                 cells[i].innerHTML = '<td><input type="button" onclick="clearRow(this)" value="delete"></td>';
             }
         }
+        if(document.getElementById("crlist[0].goods_name")){
+       		j += 1;
+        }
         
         for(let u = 1; u < itemTable.getElementsByTagName("tr").length; u++){
             itemTable.getElementsByTagName("tr").item(u).setAttribute("class", "plist");
@@ -604,8 +605,13 @@ deleteRowButton.addEventListener('click', function() {
     		if(document.getElementById("crlist1["+(itemTable.rows.length-2)+"].goods_name")){
     			return;
     		}else{
-		    	j -= 1;
-		        itemTable.deleteRow(itemTable.rows.length-1);
+    			if(j > 0){
+    		        itemTable.deleteRow(itemTable.rows.length-1);
+    		    	j -= 1;
+    	        }else {
+    		        itemTable.deleteRow(itemTable.rows.length-1);
+    				return;
+    	        }
     		}
     	}
     } else {
@@ -650,7 +656,6 @@ function deleteGoodscheck(){
 			procode.innerHTML = '';
 			procode.innerHTML += '<tr><th>품명</th><th>상품코드</th><th>바코드</th><th>종류</th><th>단위</th><th>규격</th><th>제조사</th><th>책임판매업자</th><th>발주수량</th><th>단가</th><th>세액</th><th>총액</th></tr>';
 			var data2 = JSON.parse(data);
-			console.log(data);
 			data2.forEach(function(map){
 				newTr = document.createElement("tr");
 				procode.appendChild(newTr);

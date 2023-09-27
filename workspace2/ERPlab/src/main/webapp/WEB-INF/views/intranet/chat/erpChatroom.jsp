@@ -17,11 +17,11 @@
 <body>
 
 <c:if test="${selectRoom.employee2_no1 == empNo || selectRoom.employee2_no2 == empNo}">
-<div class="erpChatroom-container">
+<div class="erpChatroom-container" id="erpChatroom-container">
 
     <div class="erpChatroomHead">
     	<c:if test="${selectRoom.chatroom_title == null }">
-       		<h2><input type="text" name="chatroom_title" value="${selectRoom.employee2_position } ${employee1_name }" onkeypress="chattitle(event, ${selectRoom.chatroom_no}, this.value)" class="dh_outline"></h2>
+       		<h2><input type="text" name="chatroom_title" value="${employee2_position } ${employee1_name }" onkeypress="chattitle(event, ${selectRoom.chatroom_no}, this.value)" class="dh_outline"></h2>
     	</c:if>
     	<c:if test="${selectRoom.chatroom_title != null }">
 	        <h2><input type="text" name="chatroom_title" value="${selectRoom.chatroom_title }" onkeypress="chattitle(event, ${selectRoom.chatroom_no}, this.value)" class="dh_outline"></h2>
@@ -33,7 +33,7 @@
 	  		<input type="text" name="chatSearchWord" id="chatSearchWord" placeholder="채팅 내 검색" autocomplete="off">
 	        <a onclick="searchMsg()"><i class="input-icon uil-search"></i></a>
 	    </div>
-		<a id="erpSearchIcon" ><i class="input-icon uil-comment-search"></i></a>    		       		
+		<a id="erpSearchIcon"><i class="input-icon uil-comment-search"></i></a>    		       		
 	</div>
     
     <div class="erpUpperMenu">
@@ -127,8 +127,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const inputWord = document.getElementById("inputWord");
 
     toggleButton.addEventListener("click", function () {
+		let textarr = document.getElementsByClassName("chat-text");
+		
+		for(var h = 0; h < textarr.length; h++){
+			textarr[h].style.backgroundColor = "";
+			textarr[h].setAttribute("tabindex",h);
+		}
+		let all = document.getElementById("erpChatroom-container").children;
+		let inp = document.getElementsByTagName("input");
+		let area = document.getElementById("msgInput");
+		area.removeAttribute("tabindex");
+		
+		for(var j = 0; j < all.length; j++){
+			console.log(all[j]);
+			all[j].removeAttribute("tabindex");
+		}
+		for(var o = 0; o < inp.length; o++){
+			inp[o].removeAttribute("tabindex");
+		}
         inputWord.classList.toggle("hidden");
     });
+    
 });
 
 
@@ -388,28 +407,12 @@ var idx = 0;
 		}
 	}
 	
-	function searchMsg(no){
-		var url = '${pageContext.request.contextPath}/intranet/chat/searchMsgCheck';
-        var param = 'chatroom_no='+no;
-		
-        sendRequest(url,param,searchMsgCheck,"POST");
-	}
-	function searchMsgCheck(){
-		if(xhr.readyState==4 && xhr.status==200) {
-    		var data = xhr.response;
-    		var sm = document.getElementById("searchNumber");
-    		
-    		if(data != ""){
-    			var data2 = JSON.parse(data);
-    			var leng = data2.length;
-    			console.log(leng);
-    		}
-		}
-	}
 	
 	function searchMsg(){
 		let all = document.getElementById("erpChatroom-container").children;
 		let inp = document.getElementsByTagName("input");
+		let area = document.getElementById("msgInput");
+		area.setAttribute("tabindex", "-1");
 		
 		for(var j = 0; j < all.length; j++){
 			console.log(all[j]);
@@ -419,16 +422,21 @@ var idx = 0;
 			inp[o].setAttribute("tabindex", "-1");
 		}
 		
-		let word = document.getElementById("word").value;
+		let word = document.getElementById("chatSearchWord").value;
 		let textarr = document.getElementsByClassName("chat-text");
 		
 		for(var h = 0; h < textarr.length; h++){
-			if(textarr[h].innerHTML.indexOf(word) != -1){
-				textarr[h].setAttribute("tabindex", h);
-				textarr[h].focus();
-				textarr[h].style.backgroundColor = "yellow";
+			if(word != ""){
+				if(textarr[h].innerHTML.indexOf(word) != -1){
+					textarr[h].setAttribute("tabindex", h);
+					textarr[h].focus();
+					textarr[h].style.backgroundColor = "yellow";
+				}else {
+					textarr[h].style.backgroundColor = "";
+					textarr[h].setAttribute("tabindex", "-1");
+				}
 			}else {
-				textarr[h].setAttribute("tabindex", "-1");
+				textarr[h].style.backgroundColor = "";
 			}
 		}	
 	}
