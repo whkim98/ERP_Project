@@ -113,10 +113,11 @@ function getlist(){
 					</c:otherwise>
 				</c:choose>
 			</div>
-	
+			<c:if test="${login == 1 || login == 2 || login == 5 }">
 			<div class="dh_alignright">
 				<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/inputContract?comcode_code=${comcode_code }'">
 			</div>
+			</c:if>
 	
 		</div>
 		
@@ -191,10 +192,12 @@ function getlist(){
 							<label>계약 내용 </label>
 							<input type="text" name="contract_content" id="contract_content" maxlength="1000" value="${inmap.contract_content }" class="required">
 						</div>
+						<c:if test="${login == 1 || login == 2 || login == 5 }">
 						<div>
 							<input type="button" value="수정" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a32/delete?contract_no=${inmap.contract_no }&comcode_code=${comcode_code }'">
 						</div>
+						</c:if>
 				</form>
 			</div>
 		</c:if>
@@ -259,10 +262,12 @@ function getlist(){
 							<label>계약 내용 </label>
 							<input type="text" name="contract_content" id="contract_content" maxlength="1000" class="required">
 						</div>
+						<c:if test="${login == 1 || login == 2 || login == 5 }">
 						<div>
-							<input type="button" value="등록" onclick="sub(this.form)">
+							<input type="button" value="save" onclick="sub(this.form)">
 							<input type="reset" value="reset">
 						</div>
+						</c:if>
 				</form>
 			</div>
 		</c:if>

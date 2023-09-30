@@ -106,9 +106,12 @@ function getlist(){
 				</c:if>
 				</table>
 			</div>
+			
+			<c:if test="${login == 1 || login == 2 || login == 17 || login == 18}">
 			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d2/d24/inputProductTest?comcode_code=${comcode_code }'" value="ADD">
 			</div>
+			</c:if>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/d/d2/d24/updateForm" id="content" method="post">
@@ -223,10 +226,12 @@ function getlist(){
 							<input type="button" onclick="searcht()" value="조회">
 						</div>
 						
+						<c:if test="${login == 1 || login == 2 || login == 17 || login == 18}">
 						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei(${inmap.producttest_no }, '${comcode_code }')">
 						</div>
+						</c:if>
 					</form>
 				</c:when>
 				<c:otherwise>
@@ -326,10 +331,13 @@ function getlist(){
 							<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
 							<input type="button" onclick="searcht()" value="조회">
 						</div>
+						
+						<c:if test="${login == 1 || login == 2 || login == 17 || login == 18}">
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)">
 							<input type="reset" value="reset">
 						</div>
+						</c:if>
 					</form>
 				</c:otherwise>
 			</c:choose>

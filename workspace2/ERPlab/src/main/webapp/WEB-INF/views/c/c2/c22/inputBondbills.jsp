@@ -138,9 +138,11 @@ function getlist(){
 				</c:if>
 				</table>
 			</div>
+			<c:if test="${login == 1 || login == 2 || login == 13 }">
 			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c22/inputBondbills?comcode_code=${comcode_code }'" value="ADD">
 			</div>
+			</c:if>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/c/c2/c22/updateFormB" id="content" method="post">
@@ -252,8 +254,10 @@ function getlist(){
 						</div>
 						
 						<div>
+							<c:if test="${login == 1 || login == 2 || login == 13 }">
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.bondbills_no }, '${comcode_code }', '${inmap.bondbills_code }')">
+							</c:if>
 							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
 						</div>
 					</form>
@@ -338,8 +342,10 @@ function getlist(){
 							</select>
 						</div>
 						<div>
+							<c:if test="${login == 1 || login == 2 || login == 13 }">
 							<input type="button" id="register" value="save" onclick="sub(this.form, ${rmap.receivable_price})" disabled="disabled">
 							<input type="reset" value="reset">
+							</c:if>
 							<input type="button" value="receive" onclick="location.href='${pageContext.request.contextPath}/c/c2/c22?comcode_code=${comcode_code }'">
 						</div>
 					</form>

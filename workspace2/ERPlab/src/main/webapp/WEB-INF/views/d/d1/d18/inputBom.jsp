@@ -127,9 +127,12 @@ function getlist(){
 				</c:if>
 				</table>
 			</div>
+			
+			<c:if test="${login == 1 || login == 2 || login == 17 || login == 7 || login == 8}">
 			<div class="dh_inputalignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d18/addForm?comcode_code=${comcode_code }'" value="ADD">
 			</div>
+			</c:if>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/d/d1/d18/updateForm" id="content" method="post">

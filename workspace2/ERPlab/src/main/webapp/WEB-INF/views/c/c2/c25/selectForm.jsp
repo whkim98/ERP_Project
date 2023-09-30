@@ -145,8 +145,10 @@
             </table>
         </div>
         <div>
+        	<c:if test="${login == 1 || login == 2 || login == 13 }">
            <input type="button" value="update" onclick="sub(this.form)">
            <input type="button" value="delete" onclick="deleteLocal(${inmap.localsales_no },'${inmap.localsales_cino }',${inmap.localsales_total },'${comcode_code }')">
+			</c:if>
            <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/c/c2/c25/inputLocalSales?comcode_code=${comcode_code }'">
         </div>
         </form>
@@ -272,11 +274,14 @@
             </table>
             
         </div>
-           
-        <div>
-           <input type="button" value="save" id="register" onclick="sub(this.form)" disabled="disabled">
-           <input type="reset" value="reset">
-        </div>
+        
+	        <div>
+	        	<c:if test="${login == 1 || login == 2 || login == 13 }">
+	           <input type="button" value="save" id="register" onclick="sub(this.form)" disabled="disabled">
+	           <input type="reset" value="reset">
+				</c:if>
+				<input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/c/c2/c25/inputLocalSales?comcode_code=${comcode_code }'">
+	        </div>
         </form>
         </c:if>
     </div>

@@ -351,9 +351,12 @@ function selectForm(no, bno1, bno2){
 				</c:if>
 				</table>
 			</div>
+			
+			<c:if test="${login == 1 || login == 2 || login == 5 }">
 			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/a/a4/a42?comcode_code=${comcode_code }'" value="ADD">
 			</div>
+			</c:if>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/a/a4/a42/updateForm" id="content" method="post">
@@ -488,10 +491,12 @@ function selectForm(no, bno1, bno2){
 							<input type="text" name="investment_note" id="investment_note" value="${inmap.investment_note }" maxlength="500" class="required">
 						</div>	
 						
+						<c:if test="${login == 1 || login == 2 || login == 5 }">
 						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${bs3_no1}', '${bs3_no2 }', ${inmap.investment_no }, '${comcode_code }')">
 						</div>
+						</c:if>
 					</form>
 				</c:when>
 				<c:otherwise>
@@ -596,10 +601,13 @@ function selectForm(no, bno1, bno2){
 							<label>비고 </label>
 							<input type="text" name="investment_note" id="investment_note" maxlength="500" class="required">
 						</div>	
+						
+						<c:if test="${login == 1 || login == 2 || login == 5 }">
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
 							<input type="reset" value="reset">
 						</div>
+						</c:if>
 					</form>
 				</c:otherwise>
 			</c:choose>

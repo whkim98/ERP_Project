@@ -132,9 +132,12 @@ function teamname(){
 					<tr><td>목록이 비어있습니다</td></tr>
 				</c:if>
 				</table>
+				
+				<c:if test="${login == 1 || login == 2 || login == 17 }">
 				<div class="dh_alignright">
 					<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d15/add?comcode_code=${comcode_code }'" value="ADD">
 				</div>
+				</c:if>
 			</div>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -248,10 +251,12 @@ function teamname(){
 							<input type="button" onclick="searcht()" value="조회">
 						</div>
 						
-						<div align="right">
+						<c:if test="${login == 1 || login == 2 || login == 17 }">
+						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei(${inmap.evaluemng_no }, '${comcode_code }')">
 						</div>
+						</c:if>
 					</form>
 				</c:when>
 				<c:otherwise>
@@ -342,10 +347,13 @@ function teamname(){
 							<input type="text" name="team_name" id="team_name" onkeyup="team(event, this.value)">
 							<input type="button" onclick="searcht()" value="조회">
 						</div>
+						
+						<c:if test="${login == 1 || login == 2 || login == 17 }">
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)">
 							<input type="reset" value="reset">
 						</div>
+						</c:if>
 					</form>
 				</c:otherwise>
 			</c:choose>

@@ -111,9 +111,11 @@ function clList(code){
 				</c:if>
 				</table>
 			</div>
+			<c:if test="${login == 1 || login == 2 || login == 13 }">
 			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/c/c2/c23/inputReturn?comcode_code=${comcode_code }'" value="ADD">
 			</div>
+			</c:if>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/c/c2/c23/updateForm" id="content" method="post">
@@ -202,10 +204,12 @@ function clList(code){
 							<input type="text" name="return_total" id="return_total" value="${inmap.return_total }" class="required" readonly="readonly">
 						</div>
 						
+						<c:if test="${login == 1 || login == 2 || login == 13 }">
 						<div>
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${inmap.return_code }', ${inmap.return_no }, '${comcode_code }')">
 						</div>
+						</c:if>
 					</form>
 				</c:when>
 				<c:otherwise>
@@ -281,10 +285,13 @@ function clList(code){
 							<label>반품 총액</label>
 							<input type="text" name="return_total" id="return_total" class="required" readonly="readonly">
 						</div>
+						
+						<c:if test="${login == 1 || login == 2 || login == 13 }">
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
 							<input type="reset" value="reset">
 						</div>
+						</c:if>
 					</form>
 				</c:otherwise>
 			</c:choose>

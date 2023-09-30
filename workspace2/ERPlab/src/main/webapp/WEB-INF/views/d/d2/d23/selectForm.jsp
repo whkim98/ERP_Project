@@ -132,8 +132,10 @@
             </table>
         </div>
         <div>
+        	<c:if test="${login == 1 || login == 2 || login == 17 || login == 18}">
            <input type="button" value="update" onclick="sub(this.form)">
            <input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/d/d2/d23/delete?inventory_no=${inmap.inventory_no }&comcode_code=${comcode_code }'">
+			</c:if>
            <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d2/d23/inputInventory?comcode_code=${comcode_code }'">
         </div>
         </form>
@@ -261,8 +263,11 @@
         </div>
            
         <div>
+        	<c:if test="${login == 1 || login == 2 || login == 17 || login == 18}">
            <input type="button" value="save" onclick="sub(this.form)">
            <input type="reset" value="reset">
+			</c:if>
+           <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d2/d23/inputInventory?comcode_code=${comcode_code }'">
         </div>
         </form>
         </c:if>

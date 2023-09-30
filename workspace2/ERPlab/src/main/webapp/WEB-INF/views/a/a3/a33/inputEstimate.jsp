@@ -107,10 +107,11 @@ function getlist(){
 					</c:otherwise>
 				</c:choose>
 			</div>
-	
+			<c:if test="${login == 1 || login == 2 || login == 5 }">
 			<div class="dh_alignright">
 				<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/inputEstimate?comcode_code=${comcode_code }'">
 			</div>
+			</c:if>
 	
 		</div>
 		
@@ -189,9 +190,12 @@ function getlist(){
 						<label>전화번호 </label>
 						<input type="text" name="employee1_phone" id="employee1_phone" value="${inmap.employee1_phone }" readonly="readonly">
 					</div>
-					
-					<input type="button" value="update" onclick="sub(this.form)">
-					<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/delete?estimate_no=${inmap.estimate_no }&comcode_code=${comcode_code }'">
+					<c:if test="${login == 1 || login == 2 || login == 5 }">
+					<div>
+						<input type="button" value="update" onclick="sub(this.form)">
+						<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a33/delete?estimate_no=${inmap.estimate_no }&comcode_code=${comcode_code }'">
+					</div>
+					</c:if>
 				</form>
 			</div>
 		</c:if>
@@ -254,10 +258,12 @@ function getlist(){
 						<label>전화번호 </label>
 						<input type="text" name="employee1_phone" id="employee1_phone" readonly="readonly">
 					</div>
+					<c:if test="${login == 1 || login == 2 || login == 5 }">
 					<div>
 						<input type="button" value="save" onclick="sub(this.form)">
 						<input type="reset" value="reset">
 					</div>
+					</c:if>
 				</form>
 			</div>
 		</c:if>

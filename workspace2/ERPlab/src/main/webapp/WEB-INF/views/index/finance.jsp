@@ -21,7 +21,7 @@
 	<input type="button" value="외화관리" onclick="location.href='${pageContext.request.contextPath }/b33main'">
 
 	<input type="button" value="마감결산" onclick="location.href='${pageContext.request.contextPath }/b/b4/b41?comcode_code=${comcode_code }'">
-	<input type="button" value="원가분석" onclick="#">
+	<input type="button" value="원가분석" onclick="location.href='${pageContext.request.contextPath}/d/d1/d18/inputBom?comcode_code=${comcode_code}'">
 </div>
 </body>
 </html>

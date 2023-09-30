@@ -107,9 +107,12 @@ function requestpr(no,code){
 				</c:if>
 				</table>
 			</div>
+			
+			<c:if test="${login == 1 || login == 2 || login == 17 }">
 			<div class="dh_alignright">
 				<input type="button" onclick="location.href='${pageContext.request.contextPath }/d/d1/d11/inputProduct?comcode_code=${comcode_code }'" value="ADD">
 			</div>
+			</c:if>
 	
 	<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
 			<form action="${pageContext.request.contextPath }/d/d1/d11/updateForm" id="content" method="post">
@@ -241,8 +244,10 @@ function requestpr(no,code){
 						</div>
 						
 						<div>
+						<c:if test="${login == 1 || login == 2 || login == 17 }">
 							<input type="button" value="update" onclick="sub(this.form)">
 							<input type="button" value="delete" onclick="deletei('${cmap.bs3_no1}', '${cmap.bs3_no2 }', ${inmap.product_no }, '${comcode_code }', '${inmap.product_code }')">
+						</c:if>
 							<input type="button" value="의뢰서 정보" onclick="requestpr(${inmap.requestproduct_no }, '${comcode_code }')">
 						</div>
 					</form>
@@ -347,10 +352,13 @@ function requestpr(no,code){
 								</c:forEach>
 							</select>
 						</div>
+						
+						<c:if test="${login == 1 || login == 2 || login == 17 }">
 						<div>
 							<input type="button" id="register" value="save" onclick="sub(this.form)" disabled="disabled">
 							<input type="reset" value="reset">
 						</div>
+						</c:if>
 					</form>
 				</c:otherwise>
 			</c:choose>

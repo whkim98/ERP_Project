@@ -113,7 +113,9 @@
             </table>
         </div>
         <div>
+        	<c:if test="${login == 1 || login == 2 || login == 17 || login == 7 || login == 8}">
            <input type="button" value="update" onclick="sub(this.form)">
+			</c:if>
            <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d1/d18/inputBom?comcode_code=${comcode_code }'">
         </div>
         </form>
@@ -221,8 +223,10 @@
         </div>
            
         <div>
+        	<c:if test="${login == 1 || login == 2 || login == 17 || login == 7 || login == 8}">
            <input type="button" value="save" id="register" onclick="sub(this.form)">
            <input type="reset" value="reset">
+			</c:if>
            <input type="button" value="list" onclick="location.href='${pageContext.request.contextPath}/d/d1/d18/inputBom?comcode_code=${comcode_code }'">
         </div>
         </form>

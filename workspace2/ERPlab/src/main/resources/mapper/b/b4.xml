@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="totalAmount" resultType="com.lab.erp.vo.b.b1.Erp_ClosingVO" parameterType="map">
-		select c.ctgr_no, sum(c.closing_debtor) closing_debtor, sum(c.closing_creditor) closing_creditor 
+		select sum(c.closing_debtor) closing_debtor, sum(c.closing_creditor) closing_creditor 
 			from erp_closing c, erp_ctgr ct 
 			where c.ctgr_no = ct.ctgr_no 
 			and c.comcode_no = #{comcode_no} 
@@ -33,7 +33,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					and ct.ctgr_ctgr like '%${word}%' 
 				</if>
 			</if>
-			group by c.ctgr_no 
 			order by ct.ctgr_name asc
 	</select>
 	

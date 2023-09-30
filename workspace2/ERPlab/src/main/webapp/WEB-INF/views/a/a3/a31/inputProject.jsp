@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
+
 //전체목록조회
 function searchpk(){
 	let openWin = window.open("${pageContext.request.contextPath}/a/a3/a31/searchpk", "_blank", "scrollbars=yes, top=150, left=300, width=300, height=300");
@@ -163,9 +164,11 @@ function getlist(){
 					</c:otherwise>
 				</c:choose>
 			</div>
+			<c:if test="${login == 1 || login == 2 || login == 5 }">
 			<div class="dh_alignright">
 				<input type="button" value="ADD" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/inputProject?comcode_code=${comcode_code }'">
 			</div>
+			</c:if>
 		</div>
 		
 		<!-- 리스트 클릭 시 url 데이터 숨기기 위한 form태그 -->	
@@ -242,10 +245,12 @@ function getlist(){
 							<option value="2" ${inmap.project_status == 2 ? 'selected' : '' }>진행중</option>
 						</select>
 					</div>
+					<c:if test="${login == 1 || login == 2 || login == 5 }">
 					<div>
 						<input type="button" value="update" onclick="sub(this.form)">
 						<input type="button" value="delete" onclick="location.href='${pageContext.request.contextPath}/a/a3/a31/delete?project_no=${inmap.project_no }&comcode_code=${comcode_code }'">
 					</div>
+					</c:if>
 				</form>
 			</div>
 		</c:if>
@@ -313,10 +318,12 @@ function getlist(){
 							<option value="2">진행중</option>
 						</select>
 					</div>
+					<c:if test="${login == 1 || login == 2 || login == 5 }">
 					<div>
 						<input type="button" value="save" onclick="sub(this.form)">
 						<input type="reset" value="reset">
 					</div>
+					</c:if>
 				</form>
 			</div>
 		</c:if>
