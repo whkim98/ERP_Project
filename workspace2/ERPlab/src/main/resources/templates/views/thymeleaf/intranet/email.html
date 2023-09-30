@@ -12,6 +12,8 @@
 </head>
 
 <body>
+ 	<th:block th:insert="~{thymeleaf/common/intranetheader::intranetheader}"></th:block>
+
 	<div class="Email_container">
 		<div class="Email_title">메일 보내기</div>
 		<form method="post" th:action="@{/intranet/email}">
@@ -36,6 +38,7 @@
 			</div>
 		</form>
 	</div>
+	<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
 
 	
 

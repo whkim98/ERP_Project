@@ -12,6 +12,9 @@
 </head>
 
 <body>
+ 	<th:block th:insert="~{thymeleaf/common/intranetheader::intranetheader}"></th:block>
+
+	
     <div class="address_book_container">
 		<div class="address_book_title">직원 주소록</div>
         <table class="address_book">
@@ -50,6 +53,8 @@
             </tr>
         </table>
     </div>
+	<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
 </body>
 <script inline="javascript">
 	let team_list = [[${team_list}]];

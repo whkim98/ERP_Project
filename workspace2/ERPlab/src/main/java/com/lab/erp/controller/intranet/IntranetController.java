@@ -107,7 +107,7 @@ public class IntranetController {
 			if(intranetLoginInfo == employee.getEmployee1_no()) email = employee.getEmployee1_email();
 		}
 		model.addAttribute("email", email);
-//		model.addAttribute("email", "sample@gmail.com"); //testing
+//		model.addAttribute("email", "erplab2023@gmail.com"); //testing
 		
 		return "thymeleaf/intranet/email";
 	}

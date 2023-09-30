@@ -1,0 +1,81 @@
+
+<!DOCTYPE HTML>
+
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<th:block th:fragment="intranetheader">
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+			<!-- Header -->
+				<header id="header">
+					<h1><a href="/intranet/intranetMain">ERPlab</a></h1>
+					<nav class="links">
+					
+					<!-- 인트라넷 헤더 -->
+						<ul>
+							<li><a th:href="@{/intranet/organization}">조직도</a></li>
+							<li><a th:href="@{/intranet/calendar}">일정</a></li>
+							<li><a th:href="@{/intranet/address_book}">주소록</a></li>
+							<li><a href="javascript:void(0);" onclick="msgWindow()">메신저</a></li>
+							<li><a th:href="@{/intranet/email}">이메일</a></li>
+							<li><a th:href="@{/intranet/annual_leave}">연차</a></li>								
+						</ul>
+						<ul>
+							<li><a href="${#httpServletRequest.getContextPath()}/">ERP 페이지로 이동</a></li>
+							<li><a href="${#httpServletRequest.getContextPath()}/intranet/inputPw?comcode_code=${comcode_code}&employee2_no=${empNo}">마이페이지</a></li>
+						</ul>
+						
+					</nav>
+
+					<nav class="intranetLogout">
+						<ul class="actions stacked">
+							<li></li>
+							<li><input type="button" onclick="logout()" value="LOGOUT" /></li>
+						</ul>				
+					</nav>
+				</header>
+
+
+		</div>
+	</th:block>
+<script src="${#httpServletRequest.getContextPath()}/js/httpRequest.js"></script>
+<!-- 로그인 세션 -->
+<!--
+<script type="text/javascript" th:inline="javascript" th:if="${session.login==null}">
+	alert("로그인세션이 만료되었습니다.");
+	location.href="${#httpServletRequest.getContextPath()}/";
+</script>
+ 
+<script type="text/javascript" th:inline="javascript" th:if="${session.comcode_code==null}">
+	alert("comcode세션이 만료되었습니다.");
+	location.href="${#httpServletRequest.getContextPath()}/";
+</script>
+ -->
+<script type="text/javascript" th:inline="javascript">
+
+// logout
+function logout() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "${#httpServletRequest.getContextPath()}/logout", true);
+    
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            alert("로그아웃되었습니다.");
+            location.href = "${#httpServletRequest.getContextPath()}/";
+        }
+    };
+    xhr.send();
+}
+
+// 메신저
+function msgWindow() {
+    var url = "/intranet/chat/erpchat?comcode_code=${comcode_code}&employee2_no=${empNo}";
+    var windowFeatures = 'width=380,height=480';
+
+    window.open(url, '_blank', windowFeatures);
+}
+
+
+</script>
+
+

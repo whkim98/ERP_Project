@@ -12,6 +12,8 @@
 </head>
 
 <body>
+ 	<th:block th:insert="~{thymeleaf/common/intranetheader::intranetheader}"></th:block>
+
     <div class="Calendar_container">
         <table class="Calendar">
             <thead>
@@ -76,6 +78,7 @@
 			</div>
 		</div>
 	</div>
+	<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
 
 </body>
 <script src="/js/intranet/calendar.js"></script>
