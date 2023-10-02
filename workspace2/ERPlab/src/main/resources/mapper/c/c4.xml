@@ -24,7 +24,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 부서별매출 -->
-	
+	<select id="findAll_closing" resultType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+	 	SELECT * FROM erp_closing GROUP BY ctgr_no ORDER BY closing_no DESC
+	</select>
 	
 	<!-- 고객관리 -->
 	<select id="findAll_customer" resultType="com.lab.erp.vo.c.c4.Erp_CustomerVO">

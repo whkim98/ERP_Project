@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.lab.erp.repository.c3.C3Repository;
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
 import com.lab.erp.vo.all.Erp_CtgrVO;
+import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
+import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
@@ -94,4 +96,31 @@ public class C3Service {
 
 	// ---------상품로트번호조회---------
 	public List<Erp_GoodslotVO> findGoodslotAll() {return c3Repository.findGoodslotAll();}
+		
+	public int update_goodslot_plus(int goodslot_qty, int goodslot_no) {return c3Repository.update_goodslot_plus(goodslot_qty, goodslot_no);}
+	
+	public int update_goodslot_minus(int goodslot_qty, int goodslot_no) {return c3Repository.update_goodslot_minus(goodslot_qty, goodslot_no);}
+	
+	public List<Erp_SalesgoodsVO> findSalesgoodsAll(String salesgoods_code) {return c3Repository.findSalesgoodsAll(salesgoods_code);}
+
+	public int save_salesgoods(Erp_SalesgoodsVO erp_SalesgoodsVO) {return c3Repository.save_salesgoods(erp_SalesgoodsVO);}
+	
+	public int delete_salesgoods(int salesgoods_no) {return c3Repository.delete_salesgoods(salesgoods_no);}
+	
+	// ---------일마감---------
+	public int update_bs1_plus (int bs1_amount, int bs1_no) {return c3Repository.update_bs1_plus(bs1_amount, bs1_no);}
+	
+	public int update_bs1_minus (int bs1_amount, int bs1_no) {return c3Repository.update_bs1_minus(bs1_amount, bs1_no);}
+	
+	public int update_bs2_plus (int bs2_amount, int bs2_no) {return c3Repository.update_bs2_plus(bs2_amount, bs2_no);}
+	
+	public int update_bs2_minus (int bs2_amount, int bs2_no) {return c3Repository.update_bs2_minus(bs2_amount, bs2_no);}
+	
+	public int update_bs3_plus (int bs3_amount, int bs3_no) {return c3Repository.update_bs3_plus(bs3_amount, bs3_no);}
+	
+	public int update_bs3_minus (int bs3_amount, int bs3_no) {return c3Repository.update_bs3_minus(bs3_amount, bs3_no);}
+
+	public int save_closing(Erp_ClosingVO erp_ClosingVO) {return c3Repository.save_closing(erp_ClosingVO);}
+	
+	public int delete_closing(int closing_no) {return c3Repository.delete_closing(closing_no);}
 }

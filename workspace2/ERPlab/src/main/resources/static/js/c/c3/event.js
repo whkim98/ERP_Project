@@ -232,14 +232,13 @@ addRow_btn.addEventListener("click", () => {
 	let newTr = document.createElement("tr");
 	newTr.className = "list_result_items order"+order;
 	newTr.innerHTML = '<td><button type="button" class="list_result_btn" id="list_result_search'+order+'">SEARCH</button></td>' +
-	'<td class="hidden"><input type="hidden" name="goodslot_no" id="goodslot_no'+order+'"/></td>' +
-	'<td><input type="text" name="goodslot_lot" id="goodslot_lot'+order+'"/></td>' +
-	'<td><input type="number" name="goodslot_qty" id="goodslot_qty'+order+'"/></td>' + 
-	'<td><input type="text" name="goodslot_production" id="goodslot_production'+order+'"/></td>' +
-	'<td><input type="text" name="goodslot_expiry" id="goodslot_expiry'+order+'"/></td>' +
-	'<td><input type="number" name="goodslot_price" id="goodslot_price'+order+'"/></td>' +
-	'<td class="hidden"><input type="hidden" name="goodslot_tax" id="goodslot_tax'+order+'"/></td>' +
-	'<td class="hidden"><input type="hidden" name="goodslot_total" id="goodslot_total'+order+'"/></td>' +
+	'<td class="hidden"><input type="hidden" name="salesgoods_no" id="salesgoods_no'+order+'"/></td>' +
+	'<td class="hidden"><input type="hidden" name="salesgoods_code" id="salesgoods_code'+order+'"/></td>' +
+	'<td><input type="text" name="goodslot_no" id="goodslot_no'+order+'"/></td>' + 
+	'<td><input type="number" name="goodslot_production" id="goodslot_production'+order+'"/></td>' +
+	'<td><input type="number" name="salesgoods_qty" id="salesgoods_qty'+order+'"/></td>' +
+	'<td><input type="number" name="salesgoods_price" id="salesgoods_price'+order+'"/></td>' +
+	'<td><input type="number" name="salesgoods_total" id="salesgoods_total'+order+'"/></td>' +
 	'<td class="hidden"><input type="hidden" name="goods_no" id="goods_no'+order+'"/></td>' +
 	'<td><button type="button" class="list_result_btn" id="list_result_del'+order+'">품목삭제</button></td>';
 
@@ -253,6 +252,8 @@ addRow_btn.addEventListener("click", () => {
 	
 	//원가변경함수 등록
 	register_price_change();
+	register_tax_change();
+	register_qty_change();
 });
 
 // 행삭제 버튼
@@ -296,22 +297,44 @@ let list_result_del_func = (tag) => {
 
 // 원가변경함수 등록
 let register_price_change = () => {
-	let list_goodslot_price = document.getElementsByName("goodslot_price");
-	for(let i = 0 ; i < list_goodslot_price.length; i++){
-		list_goodslot_price[i].addEventListener("change", (e)=>{price_change_func(e.target)});
+	let list_salesgoods_price = document.getElementsByName("salesgoods_price");
+	for(let i = 0 ; i < list_salesgoods_price.length; i++){
+		list_salesgoods_price[i].addEventListener("change", (e)=>{price_change_func(e.target)});
 	}
 }
 
-//  원가변경함수
+
+// 세금변경함수 등록
+let register_tax_change = () => {
+	let list_salesgoods_tax = document.getElementsByName("salesgoods_price");
+	for(let i = 0 ; i< list_salesgoods_tax.length; i++){
+		list_salesgoods_tax[i].addEventListener("change", (e)=>{price_change_func(e.target)});
+	}
+}
+
+// 수량변경함수 등록
+let register_qty_change = () => {
+	let list_salesgoods_qty = document.getElementsByName("salesgoods_qty");
+	for(let i = 0 ; i< list_salesgoods_qty.length; i++){
+		list_salesgoods_qty[i].addEventListener("change", (e)=>{price_change_func(e.target)});
+	}
+}
+
+//  가격변경함수
 let price_change_func = (tag) => {
 	let order = Number(tag.id.charAt(tag.id.length-1));
-	let tax_value = Number(tag.value) * 0.1;
-	document.getElementById("goodslot_tax"+order).value = tax_value;  
-	document.getElementById("goodslot_total"+order).value = Number(tag.value) + tax_value;	
+	let qty = Number(document.getElementById("salesgoods_qty"+order).value);
+	let price = Number(document.getElementById("salesgoods_price"+order).value);
+	let tax_value = price * 0.1;
+	document.getElementById("salesgoods_tax"+order).value = price + tax_value;  
+	document.getElementById("salesgoods_total"+order).value = (price + tax_value) * qty;	
 }
+
 
 window.onload = () => {
 	register_search_btn();
 	register_del_btn();
 	register_price_change();
+	register_tax_change();
+	register_qty_change();
 }

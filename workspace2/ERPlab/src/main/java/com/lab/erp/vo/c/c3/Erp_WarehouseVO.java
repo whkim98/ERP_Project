@@ -11,7 +11,7 @@ public class Erp_WarehouseVO {
 	private int warehouse_no;
 	private int company_no;
 	private String warehouse_date;
-	private int goods_no;
+	private int goodslot_no;
 	private int warehouse_qty;
 	private String warehouse_release;
 	private int comcode_no;

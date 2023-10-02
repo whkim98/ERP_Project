@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ERP lab 온라인</title>
+        <link rel="stylesheet" href="/css/common.css" />
+        <link rel="stylesheet" href="/webdesign/assets/css/main.css"/>
+        <link rel="stylesheet" href="/css/c/deptsales.css" />
+    </head>
+    <body>
+		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
+
+        <div class="deptsales_container">
+            <h2 class="deptsales_title"><a th:href="@{/c/c4/c42/deptsales}">온라인매출</a></h2>
+            <div class="deptsales_body">
+                <div class="deptsales_regist">
+					<table class="deptsales_search">
+						<tr class="search_tr">
+							<td><div class="search_title">검색</div></td>
+							<td>
+								<select name="search_type" id="search_type">
+									<option value="all" selected}>전체</option>
+									<option value="deptsales_no">코드</option>
+									<option value="ctgr_no">카테고리코드</option>
+									<option value="deptsales_code">온라인매출코드</option>
+									<option value="team_no">팀코드</option>
+									<option value="deptsales_date">매출일자</option>
+									<option value="customer_no">고객정보코드</option>
+									<option value="settletype_no">결제구분코드</option>	
+								</select>
+							</td>
+							<td class="search_btn_list">
+								<input type="text" id="search_word" name="word" placeholder="검색어를 입력하세요" autocomplete="off">
+								<input type="button" value="전체목록" id="list_reset">
+							</td>
+						</tr>
+					</table>
+					<table id="search_result">
+                    <table class="deptsales_list">
+                        <tr class="to_be_replaced"></tr>
+
+                        <tr class="deptsales_top">
+							<th class="sec1">코드</th>
+                            <th class="sec2">카테고리코드</th>
+                            <th class="sec3">고유코드</th>
+                            <th class="sec4">날짜</th>
+                            <th class="sec5">차변코드</th>
+                            <th class="sec6">차변거래금액</th>
+                            <th class="sec7">대변코드</th>
+                            <th class="sec8">대변거래금액</th>
+                        </tr>
+                        <tr class="closing_items" th:each="closing_item : ${closing_list}">
+							<td>[[${closing_item.closing_no}]]</td>
+                            <td>[[${closing_item.ctgr_no}]]</td>
+                            <td>[[${closing_item.closing_code}]]</td>
+                            <td>[[${closing_item.closing_date}]]</td>
+                            <td>[[${closing_item.debtor_no}]]</td>
+                            <td>[[${closing_item.closing_debtor}]]</td>
+                            <td>[[${closing_item.creditor_no}]]</td>
+                            <td>[[${closing_item.closing_creditor}]]</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+		<th:block th:insert="~{thymeleaf/common/footer::footer}"></th:block>
+
+     	<script src="/webdesign/assets/js/jquery.min.js"></script>
+        <script src="/webdesign/assets/js/browser.min.js"></script>
+        <script src="/webdesign/assets/js/breakpoints.min.js"></script>
+        <script src="/webdesign/assets/js/util.js"></script>
+        <script src="/webdesign/assets/js/main.js"></script>
+        <script src="/js/c/c4/deptsales.js"></script>
+        <script th:inline="javascript">
+			// 설비/장비 리스트 검색 필터링 기능
+			let search_filter = (type,word) => {
+				if(word=="" || word==undefined || word==null) return null;
+				let searched_list = [];
+				let list = [[${closing_list}]];
+				
+				for(let i = 0 ; i < list.length; i++){
+					let json_data = JSON.stringify(list[i]);
+					let key_value = json_data.replace("{", "").replace("}", "").replace(/"/gi, "").split(",");
+					
+					for(let j = 0 ; j < key_value.length; j++) {
+						let key = key_value[j].split(":")[0];
+						let value = key_value[j].split(":")[1];	
+						if (type=="all") {
+							if(value==word) searched_list.push(list[i]);
+						}
+						else {
+							if(key==type && value==word) searched_list.push(list[i]);
+						}
+					}
+				}
+				return searched_list;
+			}
+			
+			// 카테고리->부서 분류 함수
+			let ret_dept_name = (ctgr_no)=>{
+				let dept_category = ctgr_no.charAt(0);
+				let ret_value= "";
+				switch(dept_category) {
+					case 'A' : ret_value = "기획본부"; break;
+					case 'B' : ret_value = "관리본부"; break;
+					case 'C' : ret_value = "영업본부"; break;
+					case 'D' : ret_value = "지원본부"; break;
+					defualt : ret_value = "확인 실패"; 
+				}
+				return ret_value;
+			}
+			
+			// 부서별 합계 리턴 함수
+			let ret_dept_sum = () => {
+				let closing_list = [[${closing_list}]];
+				let alist_deptor_sum = 0;
+				let alist_creditor_sum = 0;
+				let blist_debtor_sum = 0;
+				let blist_creditor_sum = 0;
+				let clist_debtor_sum = 0;
+				let clist_creditor_sum = 0;
+				let dlist_debtor_sum = 0;
+				let dlist_creditor_sum = 0;
+				for(let i = 0 ; i < closing_list.length; i++){
+					if(closing_list[i].ctgr_no.charAt(0) == 'A'){
+						alist_debtor_sum = alist_debtor_sum + closing_list[i].closing_debtor;
+						alist_creditor_sum = alist_creditor_sum + closing_list[i].closing_creditor; 
+					}
+					if(closing_list[i].ctgr_no.charAt(0) == 'B'){
+						blist_debtor_sum = blist_debtor_sum + closing_list[i].closing_debtor;
+						blist_creditor_sum = blist_creditor_sum + closing_list[i].closing_creditor;
+					}
+					if(closing_list[i].ctgr_no.charAt(0) == 'C'){
+						clist_debtor_sum = clist_debtor_sum + closing_list[i].closing_debtor;
+						clist_creditor_sum = clist_creditor_sum + closing_list[i].closing_creditor;
+					}
+					if(closing_list[i].ctgr_no.charAt(0) == 'D'){
+						dlist_debtor_sum = dlist_debtor_sum + closing_list[i].closing_debtor;
+						dlist_creditor_sum = dlist_creditor_sum + closing_list[i].closing_creditor;
+					}
+				}
+				let dept_cnt = 4;
+				for(let i = 0 ; i < dept_cnt; i++){
+					console.log("testing..."+ i);
+					console.log(document.getElementsByClassName("dept_sum_result")[i]);
+					document.getElementsByClassName("sum_ctgr_no_ret")[i].innerHTML = (i==0)?'A1-A4': (i==1)?'B1-B7': (i==2)?'C1-C4': (i==3)?'D1-D6': 'UNKNOWN';
+					document.getElementsByClassName("sum_dept_name_ret")[i].innerHTML = (i==0)?'기획본부': (i==1)?'관리본부': (i==2)?'영업본부': (i==3)?'지원본부': 'UNKNOWN';
+					document.getElementsByClassName("sum_debtor_ret")[i].innerHTML = (i==0)?alist_deptor_sum: (i==1)?blist_debtor_sum: (i==2)?clist_debtor_sum: (i==3)?alist_deptor_sum: 'UNKNOWN';
+					document.getElementsByClassName("sum_creditor_ret")[i].innerHTML = (i==0)?alist_creditor_sum: (i==1)?blist_creditor_sum: (i==2)?clist_creditor_sum: (i==3)?dlist_creditor_sum: 'UNKNOWN'; 	
+				}
+			}
+		</script>
+    </body>
+</html>

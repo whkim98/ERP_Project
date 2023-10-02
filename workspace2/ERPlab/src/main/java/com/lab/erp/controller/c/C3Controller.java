@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lab.erp.service.c.C3Service;
+import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
 import com.lab.erp.vo.c.c3.Erp_StoresalesVO;
@@ -50,7 +51,7 @@ public class C3Controller {
 	}
 	
 	@PostMapping("/c31/storesales")
-	public String storesales (HttpSession session, @Valid @ModelAttribute("erp_StoresalesVO") Erp_StoresalesVO erp_StoresalesVO, BindingResult result, RedirectAttributes redirectAttributes) {
+	public String storesales (HttpSession session, @Valid @ModelAttribute("erp_StoresalesVO") Erp_StoresalesVO erp_StoresalesVO, BindingResult result, RedirectAttributes redirectAttributes, Erp_SalesgoodsVO erp_SalesgoodsVO) {
 		// 에러있다면, 적힌 내용들 담고 해당 페이지 redirect 시킴
 		if(result.hasErrors()) {
 			if (!result.getFieldErrors().get(0).getField().equals("storesales_no")) {
@@ -62,6 +63,24 @@ public class C3Controller {
 //				int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
 //				erp_StoresalesVO.setComcode_no(comcode_no);
 				erp_StoresalesVO.setComcode_no(1); //temporary TODO 삭제할것
+				
+				//goodslot 수량변경
+				int price_sum = 0;
+				List<Erp_SalesgoodsVO> sglist = erp_SalesgoodsVO.getSglist();
+				for(Erp_SalesgoodsVO erp_salesgoodsvo : sglist) {
+					c3Service.update_goodslot_minus(erp_salesgoodsvo.getSalesgoods_qty(), erp_salesgoodsvo.getGoodslot_no());
+					price_sum += erp_salesgoodsvo.getSalesgoods_total();
+					
+					c3Service.save_salesgoods(erp_salesgoodsvo);
+
+				}
+				
+				//일마감처리
+				c3Service.update_bs1_plus(price_sum, 1);
+				c3Service.update_bs2_plus(price_sum, 2);
+				c3Service.update_bs3_plus(price_sum, 6);
+				
+				
 				c3Service.save_storesales(erp_StoresalesVO);
 			}
 		} 
@@ -105,6 +124,7 @@ public class C3Controller {
 				erp_WarehouseVO.setComcode_no(comcode_no);
 //				erp_WarehouseVO.setComcode_no(1); //temporary TODO 삭제할것
 				c3Service.save_warehouse(erp_WarehouseVO);
+				c3Service.update_goodslot_minus(erp_WarehouseVO.getWarehouse_qty(), erp_WarehouseVO.getGoodslot_no());
 			}
 		} 
 		return "redirect:/c/c3/c32/warehouse";
@@ -114,13 +134,22 @@ public class C3Controller {
 	@PostMapping("/c32/warehouse_update")
 	public String warehouse_update (HttpSession session, Erp_WarehouseVO erp_WarehouseVO) {
 		int comcode_no = Integer.parseInt((String) session.getAttribute("comcode_no"));
-		erp_WarehouseVO.setComcode_no(comcode_no); 
+		erp_WarehouseVO.setComcode_no(comcode_no);
+		
+		List<Erp_WarehouseVO> list = c3Service.list_warehouse();
+		for(Erp_WarehouseVO erp_warehousevo : list) {
+			if (erp_warehousevo.getWarehouse_no() == erp_WarehouseVO.getWarehouse_no())
+				c3Service.update_goodslot_plus(erp_warehousevo.getWarehouse_qty(), erp_warehousevo.getGoodslot_no());
+		}
 		int res = c3Service.update_warehouse(erp_WarehouseVO);
+		c3Service.update_goodslot_minus(erp_WarehouseVO.getWarehouse_qty(), erp_WarehouseVO.getGoodslot_no());
+
 		return "redirect:/c/c3/c32/warehouse";
 	}
 	
 	@PostMapping("/c32/warehouse_delete")
 	public String event_delete (Erp_WarehouseVO erp_WarehouseVO) {
+		c3Service.update_goodslot_plus(erp_WarehouseVO.getWarehouse_qty(), erp_WarehouseVO.getGoodslot_no());
 		int res = c3Service.delete_warehouse(erp_WarehouseVO.getWarehouse_no());
 		return "redirect:/c/c3/c32/warehouse";
 	}

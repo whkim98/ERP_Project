@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lab.erp.service.c.C4Service;
+import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
@@ -33,6 +34,7 @@ public class C4Controller {
 	public void setC4Service(C4Service c4Service) {
 		this.c4Service = c4Service;
 	}
+	
 	
 	// ---------영업실적관리---------
 	@GetMapping("/c41/salesresult")
@@ -74,7 +76,16 @@ public class C4Controller {
 		int res = c4Service.delete_salesresult(erp_salesresultVO.getSalesresult_no());
 		return "redirect:/c/c4/c41/salesresult";
 	}
-	// ---------부서별 매출---------	
+	
+	
+	// ---------부서별 매출---------
+	@GetMapping("/c42/deptsales")
+	public String deptsales (Model model) {
+		List<Erp_ClosingVO> list_res = c4Service.list_closing();
+		model.addAttribute("closing_list", list_res);
+		return "thymeleaf/c/deptsales";	
+	}
+	
 	
 	// ---------고객관리---------
 	@GetMapping("/c43/customer")

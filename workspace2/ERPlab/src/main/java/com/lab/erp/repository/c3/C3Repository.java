@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
 import com.lab.erp.vo.all.Erp_CtgrVO;
+import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
+import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
 
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
@@ -74,4 +76,33 @@ public interface C3Repository {
 	
 	// ---------상품로트번호조회---------
 	List<Erp_GoodslotVO> findGoodslotAll();
+		
+	int update_goodslot_plus(int goodslot_qty, int goodslot_no);
+	
+	int update_goodslot_minus(int goodslot_qty, int goodslot_no);
+	
+	List<Erp_SalesgoodsVO> findSalesgoodsAll(String salesgoods_code);
+
+	int save_salesgoods(Erp_SalesgoodsVO erp_SalesgoodsVO);
+	
+	int delete_salesgoods(int salesgoods_no);
+
+
+	// ---------일마감처리---------
+	int update_bs1_plus (int bs1_amount, int bs1_no);
+	
+	int update_bs1_minus (int bs1_amount, int bs1_no);
+	
+	int update_bs2_plus (int bs2_amount, int bs2_no);
+	
+	int update_bs2_minus (int bs2_amount, int bs2_no);
+	
+	int update_bs3_plus (int bs3_amount, int bs3_no);
+	
+	int update_bs3_minus (int bs3_amount, int bs3_no);
+	
+	int save_closing(Erp_ClosingVO erp_ClosingVO);
+	
+	int delete_closing(int closing_no);
+	
 }

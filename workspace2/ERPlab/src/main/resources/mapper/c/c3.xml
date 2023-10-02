@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lab.erp.repository.c3.C3Repository">
 	<!-- 매장매출 -->
-		<select id="findAll_storesales" resultType="com.lab.erp.vo.c.c3.Erp_StoresalesVO">
+	<select id="findAll_storesales" resultType="com.lab.erp.vo.c.c3.Erp_StoresalesVO">
 	 	SELECT * FROM erp_storesales ORDER BY storesales_no DESC
 	</select>
 	
@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<update id="update_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
-		UPDATE erp_online SET 
+		UPDATE erp_online SET ctgr_no = #{ctgr_no}, online_code = #{online_code}, team_no = #{team_no}, online_date=#{online_date}, customer_no=#{customer_no} goods_no=#{goods_no}, online_qty=#{online_qty}, online_price=#{online_price}, online_tax=#{online_tax}, online_total=#{online_total}, settletype_no=#{settletype_no}
 		WHERE online_no = #{online_no}
 	</update>
 	
@@ -116,6 +116,61 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	<!-- 멀티상품조회 -->
 	<select id="findGoodslotAll" resultType="com.lab.erp.vo.d.d6.Erp_GoodslotVO">
-		SELECT * FROM erp_goodslot
-	</select>			
+		SELECT * FROM erp_goodslot 
+	</select>	
+	
+	<select id="findSalesgoodsAll" resultType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
+		SELECT * FROM erp_salesgoods where salesgoods_code = #{salesgoods_code}
+	</select>	
+	
+	<update id="update_goodslot_plus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+		UPDATE erp_goodslot SET  goodslot_qty = #{goodslot_qty} + goodslot_qty
+		WHERE goodslot_no = #{goodslot_no}
+	</update>
+	
+	<update id="update_goodslot_minus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+		UPDATE erp_goodslot SET  goodslot_qty = #{goodslot_qty} - goodslot_qty
+		WHERE goodslot_no = #{goodslot_no}
+	</update>
+
+	
+	<!-- 일마감처리 -->
+	<update id="update_bs1_plus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+		UPDATE erp_bs1 SET bs1_amount = #{bs1_amount} + bs1_amount
+		WHERE bs1_no
+	</update>
+	
+	<update id="update_bs1_minus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
+		UPDATE erp_bs1 SET bs1_amount = #{bs1_amount} - bs1_amount
+		WHERE bs1_no
+	</update>
+	
+	<update id="update_bs2_plus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs2VO">
+		UPDATE erp_bs2 SET bs2_amount = #{bs2_amount} + bs2_amount
+		WHERE bs2_no = #{bs2_no}
+	</update>
+	
+	<update id="update_bs2_minus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs2VO">
+		UPDATE erp_bs2 SET bs2_amount = #{bs2_amount} - bs2_amount
+		WHERE bs2_no = #{bs2_no}
+	</update>
+	
+	<update id="update_bs3_plus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		UPDATE erp_bs3 SET bs3_amount = #{bs3_amount} + bs3_amount
+		WHERE bs3_no = #{bs3_no}
+	</update>
+	
+	<update id="update_bs3_minus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs3VO">
+		UPDATE erp_bs3 SET bs3_amount = #{bs3_amount} - bs3_amount
+		WHERE bs3_no = #{bs3_no}
+	</update>
+	
+	<insert id="save_closing" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO" keyProperty="closing_no" useGeneratedKeys="true" keyColumn="closing_no">
+		INSERT INTO erp_closing (ctgr_no, closing_code, closing_date, debtor_no, closing_debtor, creditor_no, closing_creditor, comcode_no) 
+		VALUES (#{ctgr_no}, #{closing_code}, #{closing_date}, #{debtor_no}, #{closing_debtor}, #{creditor_no}, #{closing_creditor}, #{comcode_no})
+	</insert>
+	
+	<delete id="delete_closing" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+		DELETE FROM erp_closing WHERE closing_no = #{closing_no}
+	</delete>
 </mapper>

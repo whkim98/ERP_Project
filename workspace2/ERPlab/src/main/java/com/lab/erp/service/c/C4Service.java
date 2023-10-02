@@ -6,6 +6,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import com.lab.erp.repository.c4.C4Repository;
+import com.lab.erp.vo.b.b1.Erp_Bs1VO;
+import com.lab.erp.vo.b.b1.Erp_Bs2VO;
+import com.lab.erp.vo.b.b1.Erp_Bs3VO;
+import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
@@ -35,6 +39,7 @@ public class C4Service {
 	
 	
 	// ---------부서별매출--------- 
+	public List<Erp_ClosingVO> list_closing() {return c4Repository.findAll_closing();}
 
 	
 	// ---------고객관리---------
@@ -60,4 +65,11 @@ public class C4Service {
 	
 	// ---------고객등급조회---------
 	public List<Erp_CsgradeVO> findCsgradeAll(){return c4Repository.findCsgradeAll();}
+	
+	// ---------일마감처리---------
+	public int update_bs1(Erp_Bs1VO erp_Bs1VO) {return c4Repository.update_bs1(erp_Bs1VO);}
+	public int update_bs2(Erp_Bs2VO erp_Bs2VO) {return c4Repository.update_bs2(erp_Bs2VO);}
+	public int update_bs3(Erp_Bs3VO erp_Bs3VO) {return c4Repository.update_bs3(erp_Bs3VO);}
+	public int save_closing(Erp_ClosingVO erp_ClosingVO) {return c4Repository.save_closing(erp_ClosingVO);}
+	
 }

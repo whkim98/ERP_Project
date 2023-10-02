@@ -3,6 +3,10 @@ package com.lab.erp.repository.c4;
 import java.util.List;
 
 import com.lab.erp.dao.c.c1.Erp_ForsalesDAO;
+import com.lab.erp.vo.b.b1.Erp_Bs1VO;
+import com.lab.erp.vo.b.b1.Erp_Bs2VO;
+import com.lab.erp.vo.b.b1.Erp_Bs3VO;
+import com.lab.erp.vo.b.b1.Erp_ClosingVO;
 import com.lab.erp.vo.c.c1.Erp_ForsalesVO;
 import com.lab.erp.vo.c.c2.Erp_LocalsalesVO;
 import com.lab.erp.vo.c.c3.Erp_OnlineVO;
@@ -24,7 +28,7 @@ public interface C4Repository {
 	
 	
 	// ---------부서별매출--------- 
-
+	List<Erp_ClosingVO> findAll_closing();
 	
 	// ---------고객관리---------
 	List<Erp_CustomerVO> findAll_customer();
@@ -49,6 +53,15 @@ public interface C4Repository {
 	
 	// ---------고객등급조회---------
 	List<Erp_CsgradeVO> findCsgradeAll();
+	
+	// ---------일마감처리---------
+	int update_bs1(Erp_Bs1VO erp_Bs1VO);
+	int update_bs2(Erp_Bs2VO erp_Bs2VO);
+	int update_bs3(Erp_Bs3VO erp_Bs3VO);
+	int save_closing(Erp_ClosingVO erp_ClosingVO);
+
+	
+	
 
 	
 }
