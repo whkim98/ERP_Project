@@ -291,7 +291,7 @@ public class C3Controller {
 	
 	// ---------행사---------
 	@GetMapping("/c33/event")
-	public String event (Model model) {
+	public String event (Model model, @RequestParam(value="code", required=false, defaultValue="") String code,  @RequestParam(value="code", required=false, defaultValue="") String no ) {
 		List<Erp_EventVO> list_res = c3Service.list_event();
 		if(no != "") {
 			for(Erp_EventVO elem : list_res) {
