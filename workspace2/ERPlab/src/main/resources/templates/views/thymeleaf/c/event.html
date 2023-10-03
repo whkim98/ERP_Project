@@ -12,7 +12,7 @@
 		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
 
         <div class="event_container">
-            <h2 class="event_title"><a th:href="@{/c/c33/event}">행사관리</a></h2>
+            <h2 class="event_title"><a th:href="@{/c/c3/c33/event}">행사관리</a></h2>
             <div class="event_body">
                 <div class="event_regist">
 					<table class="event_search">
@@ -98,7 +98,7 @@
 		                            <td><input type="number" name="salesgoods_tax" th:value="${salesgoods_item.salesgoods_tax}" /></td>
 		                            <td><input type="number" name="salesgoods_total" th:value="${salesgoods_item.salesgoods_total}" /></td>
 		                            <td class="hidden"><input type="hidden" name="goods_no" th:value="${salesgoods_item.goods_no}" /></td>
-		                            <td><button type="button" class="list_result_btn" id="list_result_del">품목삭제</button></td>
+		                            <td><button type="button" class="list_result_btn" id="list_result_del_prev" onClick="prev_salesgoods_del()">품목삭제</button></td>
 								</tr>
 							</th:block>
 							<th:block th:if="${salesgoods_list == null}">
@@ -167,68 +167,6 @@
                                 name="event_period"
                                 id="event_period"
                                 th:value="${erp_EventVO?.event_period}"
-                            />
-                        </div>
-
-                        <div class="sec">
-                            <label for="goods_name">상품등록</label>
-                            <div class="goods_regist">
-                                <input
-                                    type="text"
-                                    name="goods_name"
-                                    id="goods_name"
-                                    placeholder=" 우측 조회버튼으로 확인해주세요."
-                                    class="required"
-                                    readonly
-                                    disabled
-                                />
-                               <button type="button" id="goodslist_search">                        
-									<img th:src="@{/image/searchbtn_icon.png}" alt="search icon">
-								</button>
-                            </div>
-                        </div>
-
-						<input type="hidden" name="goods_no" id="goods_no" th:value="${erp_EventVO?.goods_no}">
-
-                        <div class="sec">
-                            <label for="event_price">단가</label>
-                            <input
-                                type="number"
-                                name="event_price"
-                                id="event_price"
-                                class="required"
-                                th:value="${erp_EventVO?.event_price}"
-                            />
-                        </div>
-
-                        <div class="sec">
-                            <label for="event_qty">행사수량</label>
-                            <input
-                                type="number"
-                                name="event_qty"
-                                id="event_qty"
-                                class="required"
-                                th:value="${erp_EventVO?.event_qty}"
-                            />
-                        </div>
-
-                        <div class="sec">
-                            <label for="event_tax">세액</label>
-                            <input
-                                type="number"
-                                name="event_tax"
-                                id="event_tax"
-                                th:value="${erp_EventVO?.event_tax}"
-                            />
-                        </div>
-
-                        <div class="sec">
-                            <label for="event_total">합계</label>
-                            <input
-                                type="number"
-                                name="event_total"
-                                id="event_total"
-                                th:value="${erp_EventVO?.event_total}"
                             />
                         </div>
 

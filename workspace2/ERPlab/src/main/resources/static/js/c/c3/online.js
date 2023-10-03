@@ -305,6 +305,31 @@ let price_change_func = (tag) => {
 	document.getElementById("salesgoods_total"+order).value = (price + tax_value) * qty;	
 }
 
+let prev_salesgoods_del = () => {
+	alert("수정 중 해당상품의 삭제를 원하실 경우 수량을 0으로 변경해주세요");
+}
+
+// 클릭시 salesgoods 호환되는 list 출력 페이지 이동
+let register_list_items = () => {
+	let list_items = document.getElementsByClassName("online_items");
+	for(let i = 0 ; i < list_items.length; i++){
+		list_items[i].addEventListener("click", (e)=>{list_items_clickfunc(e.target)});
+	}
+}
+
+let list_items_clickfunc = (tag) => {
+	let no = tag.children[0].innerHTML;
+	let code = tag.children[1].innerHTML;
+	let qty_list = document.getElementsByName("salesgoods_qty");
+	let goodslotno_list = document.getElementsByName("goodslot_no");
+	let qty_list_toString = "";
+	for(let i = 0 ; i < qty_list.length; i++){
+		qty_list_toString = qty_list_toString + "/" + goodslotno_list[i].value + ":" + qty_list[i].value;
+	}
+	qty_list_toString = qty_list_toString.slice(0,-1);
+	document.cookie = "qty_list="+qty_list_toString;
+	location.href="?code="+code+"&no="+no;
+}
 
 window.onload = () => {
 	register_search_btn();

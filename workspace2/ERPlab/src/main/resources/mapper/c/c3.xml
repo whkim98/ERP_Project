@@ -69,8 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="save_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO" keyProperty="online_no" useGeneratedKeys="true" keyColumn="online_no">
-		INSERT INTO erp_online (ctgr_no, online_code, team_no, online_date, customer_no, goods_no, online_qty, online_price, online_tax, online_total, settletype_no, comcodee_no) 
-		VALUES (#{ctgr_no}, #{online_code}, #{team_no}, #{online_date}, #{customer_no}, #{goods_no}, #{online_qty}, #{online_price}, #{online_tax}, #{online_total}, #{settletype_no}, #{comcode_no})
+		INSERT INTO erp_online (ctgr_no, online_code, team_no, online_date, customer_no, settletype_no, comcodee_no) 
+		VALUES (#{ctgr_no}, #{online_code}, #{team_no}, #{online_date}, #{customer_no}, #{settletype_no}, #{comcode_no})
 	</insert>
 	
 	<update id="update_online" flushCache="true" parameterType="com.lab.erp.vo.c.c3.Erp_OnlineVO">
@@ -119,10 +119,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM erp_goodslot 
 	</select>	
 	
-	<select id="findSalesgoodsAll" resultType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
-		SELECT * FROM erp_salesgoods where salesgoods_code = #{salesgoods_code}
-	</select>	
-	
 	<update id="update_goodslot_plus" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_Bs1VO">
 		UPDATE erp_goodslot SET  goodslot_qty = #{goodslot_qty} + goodslot_qty
 		WHERE goodslot_no = #{goodslot_no}
@@ -132,6 +128,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE erp_goodslot SET  goodslot_qty = #{goodslot_qty} - goodslot_qty
 		WHERE goodslot_no = #{goodslot_no}
 	</update>
+	
+	
+	<select id="findSalesgoodsAll" resultType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
+		SELECT * FROM erp_salesgoods where salesgoods_code = #{salesgoods_code}
+	</select>	
+
+	<insert id="save_salesgoods" flushCache="true" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO" keyProperty="salesgoods_no" useGeneratedKeys="true" keyColumn="salesgoods_no">
+		INSERT INTO erp_salesgoods (salesgoods_code, goodslot_no, salesgoods_qty, salesgoods_price, salesgoods_tax, salesgoods_total) 
+		VALUES (#{salesgoods_code}, #{goodslot_no}, #{salesgoods_qty}, #{salesgoods_price}, #{salesgoods_tax}, #{salesgoods_total})
+	</insert>
+	
+	<delete id="delete_salesgoods" flushCache="true" parameterType="com.lab.erp.vo.c.Erp_SalesgoodsVO">
+		DELETE FROM erp_salesgoods WHERE salesgoods_no = #{salesgoods_no}
+	</delete>
 
 	
 	<!-- 일마감처리 -->
@@ -164,6 +174,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE erp_bs3 SET bs3_amount = #{bs3_amount} - bs3_amount
 		WHERE bs3_no = #{bs3_no}
 	</update>
+
+	
+	<select id="findClosingOne" resultType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
+		SELECT * FROM erp_closing where ctgr_no = #{ctgr_no} and closing_code = #{closing_code} and closing_date = #{closing_date}
+	</select>	
 	
 	<insert id="save_closing" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO" keyProperty="closing_no" useGeneratedKeys="true" keyColumn="closing_no">
 		INSERT INTO erp_closing (ctgr_no, closing_code, closing_date, debtor_no, closing_debtor, creditor_no, closing_creditor, comcode_no) 
@@ -172,5 +187,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<delete id="delete_closing" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_ClosingVO">
 		DELETE FROM erp_closing WHERE closing_no = #{closing_no}
+	</delete>
+	
+	
+	<select id="findLastIdDebtor" resultType="int">
+		SELECT MAX(debtor_no) FROM erp_debtor 
+	</select>	
+	
+	<insert id="save_debtor" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_DebtorVO" keyProperty="closing_no" useGeneratedKeys="true" keyColumn="debtor_no">
+		INSERT INTO erp_debtor (ctgr_no, bs3_no) 
+		VALUES (#{ctgr_no}, #{bs3_no})
+	</insert>
+	
+	<delete id="delete_debtor" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_DebtorVO">
+		DELETE FROM erp_debtor WHERE debtor_no = #{debtor_no}
+	</delete>
+	
+	<select id="findLastIdCreditor" resultType="int">
+		SELECT MAX(creditor_no) FROM erp_creditor 
+	</select>	
+	
+	<insert id="save_creditor" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_CreditorVO" keyProperty="closing_no" useGeneratedKeys="true" keyColumn="creditor_no">
+		INSERT INTO erp_creditor (ctgr_no, bs3_no) 
+		VALUES (#{ctgr_no}, #{bs3_no})
+	</insert>
+	
+	<delete id="delete_creditor" flushCache="true" parameterType="com.lab.erp.vo.b.b1.Erp_CreditorVO">
+		DELETE FROM erp_creditor WHERE creditor_no = #{creditor_no}
 	</delete>
 </mapper>

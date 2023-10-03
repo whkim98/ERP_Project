@@ -12,7 +12,7 @@
 		<th:block th:insert="~{thymeleaf/common/header::header}"></th:block>
 
         <div class="storesales_container">
-            <h2 class="storesales_title"><a th:href="@{/c/c31/storesales}">온라인매출</a></h2>
+            <h2 class="storesales_title"><a th:href="@{/c/c3/c31/storesales}">매장매출</a></h2>
             <div class="storesales_body">
                 <div class="storesales_regist">
 					<table class="storesales_search">
@@ -88,7 +88,7 @@
 		                            <td><input type="number" name="salesgoods_tax" th:value="${salesgoods_item.salesgoods_tax}" /></td>
 		                            <td><input type="number" name="salesgoods_total" th:value="${salesgoods_item.salesgoods_total}" /></td>
 		                            <td class="hidden"><input type="hidden" name="goods_no" th:value="${salesgoods_item.goods_no}" /></td>
-		                            <td><button type="button" class="list_result_btn" id="list_result_del">품목삭제</button></td>
+		                            <td><button type="button" class="list_result_btn" id="list_result_del_prev" onClick="prev_salesgoods_del()">품목삭제</button></td>
 								</tr>
 							</th:block>
 							<th:block th:if="${salesgoods_list == null}">

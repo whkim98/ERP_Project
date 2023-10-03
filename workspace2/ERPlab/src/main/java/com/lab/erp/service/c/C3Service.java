@@ -7,6 +7,8 @@ import com.lab.erp.repository.c3.C3Repository;
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
 import com.lab.erp.vo.all.Erp_CtgrVO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
+import com.lab.erp.vo.b.b1.Erp_CreditorVO;
+import com.lab.erp.vo.b.b1.Erp_DebtorVO;
 import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
@@ -101,7 +103,7 @@ public class C3Service {
 	
 	public int update_goodslot_minus(int goodslot_qty, int goodslot_no) {return c3Repository.update_goodslot_minus(goodslot_qty, goodslot_no);}
 	
-	public List<Erp_SalesgoodsVO> findSalesgoodsAll(String salesgoods_code) {return c3Repository.findSalesgoodsAll(salesgoods_code);}
+	public List<Erp_SalesgoodsVO> findSalesgoodsAll() {return c3Repository.findSalesgoodsAll();}
 
 	public int save_salesgoods(Erp_SalesgoodsVO erp_SalesgoodsVO) {return c3Repository.save_salesgoods(erp_SalesgoodsVO);}
 	
@@ -119,8 +121,22 @@ public class C3Service {
 	public int update_bs3_plus (int bs3_amount, int bs3_no) {return c3Repository.update_bs3_plus(bs3_amount, bs3_no);}
 	
 	public int update_bs3_minus (int bs3_amount, int bs3_no) {return c3Repository.update_bs3_minus(bs3_amount, bs3_no);}
+	
+	public List<Erp_ClosingVO> findClosingOne(int ctgr_no, String closing_code, String closing_date) {return c3Repository.findClosingOne(ctgr_no, closing_code, closing_date);}
 
 	public int save_closing(Erp_ClosingVO erp_ClosingVO) {return c3Repository.save_closing(erp_ClosingVO);}
 	
 	public int delete_closing(int closing_no) {return c3Repository.delete_closing(closing_no);}
+	
+	public int findLastIdDebtor() {return c3Repository.findLastIdDebtor();}
+	
+	public int save_debtor (Erp_DebtorVO erp_DebtorVO) {return c3Repository.save_debtor(erp_DebtorVO);}
+	
+	public int delete_debtor(int debtor_no) {return c3Repository.delete_debtor(debtor_no);}
+	
+	public int findLastIdCreditor() {return c3Repository.findLastIdCreditor();}
+	
+	public int save_creditor (Erp_CreditorVO erp_CreditorVO) {return c3Repository.save_creditor(erp_CreditorVO);}
+	
+	public int delete_creditor(int creditor_no) {return c3Repository.delete_creditor(creditor_no);}
 }

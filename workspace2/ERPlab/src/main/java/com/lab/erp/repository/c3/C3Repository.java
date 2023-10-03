@@ -5,6 +5,8 @@ import java.util.List;
 import com.lab.erp.vo.a.a1.Erp_CompanyVO;
 import com.lab.erp.vo.all.Erp_CtgrVO;
 import com.lab.erp.vo.b.b1.Erp_ClosingVO;
+import com.lab.erp.vo.b.b1.Erp_CreditorVO;
+import com.lab.erp.vo.b.b1.Erp_DebtorVO;
 import com.lab.erp.vo.b.b3.Erp_SettletypeVO;
 import com.lab.erp.vo.c.Erp_SalesgoodsVO;
 import com.lab.erp.vo.c.c3.Erp_EventVO;
@@ -81,7 +83,7 @@ public interface C3Repository {
 	
 	int update_goodslot_minus(int goodslot_qty, int goodslot_no);
 	
-	List<Erp_SalesgoodsVO> findSalesgoodsAll(String salesgoods_code);
+	List<Erp_SalesgoodsVO> findSalesgoodsAll();
 
 	int save_salesgoods(Erp_SalesgoodsVO erp_SalesgoodsVO);
 	
@@ -101,8 +103,22 @@ public interface C3Repository {
 	
 	int update_bs3_minus (int bs3_amount, int bs3_no);
 	
+	List<Erp_ClosingVO> findClosingOne(int ctgr_no, String closing_code, String closing_date);
+	
 	int save_closing(Erp_ClosingVO erp_ClosingVO);
 	
 	int delete_closing(int closing_no);
+	
+	int findLastIdDebtor();
+	
+	int save_debtor (Erp_DebtorVO erp_DebtorVO);
+	
+	int delete_debtor(int debtor_no);
+	
+	int findLastIdCreditor();
+	
+	int save_creditor (Erp_CreditorVO erp_CreditorVO);
+	
+	int delete_creditor(int creditor_no);
 	
 }
