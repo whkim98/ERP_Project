@@ -1,1 +1,1 @@
-# VIEW develop7 branch
+# Please view the branch named develop7
