@@ -3,7 +3,7 @@
 ### Stacks
 ***
   - Front
-  ![test](https://github.com/whkim98/ERPprj/assets/86636344/29567fe3-c089-40e6-a179-3cc25f7535b2)
+  
 <br><br>
   - Back
   
