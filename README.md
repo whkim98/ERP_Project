@@ -3,17 +3,25 @@
 ### Stacks
 ***
   - Front
-  
+  ![HTML, CSS, JS](https://github.com/whkim98/ERP_Project/assets/86636344/9e207ca6-6c1a-410f-b20b-62cacbca23d6)
+
 <br><br>
   - Back
-  
+  ![java](https://github.com/whkim98/ERP_Project/assets/86636344/27304df5-c872-46b2-ba30-c45ccf4a1c5d)
+  <br><br>
+  ![spring](https://github.com/whkim98/ERP_Project/assets/86636344/4c94d81f-6eb5-496c-87e3-e8336164cb6d)
 
-  ![test2](https://github.com/whkim98/ERPprj/assets/86636344/8286322f-2500-4d82-b580-35566420bdfb)
 
 
   - DevOps
  
-  ![pngwing com-2](https://github.com/whkim98/ERPprj/assets/86636344/fda6157c-8d2a-4aa3-a6d6-174ba7a79ebb)
+ ![git](https://github.com/whkim98/ERP_Project/assets/86636344/6ab5d91a-061e-4746-a7cd-c201f75b809e)
+ ![docker](https://github.com/whkim98/ERP_Project/assets/86636344/3b66769a-c89b-4df1-a45c-29ae21de02e2)
+ ![slack](https://github.com/whkim98/ERP_Project/assets/86636344/bf907f03-4e0e-4b21-b2d9-2a81fe6abac2)
+
+  - DBMS
+  ![mysql](https://github.com/whkim98/ERP_Project/assets/86636344/9e3a3485-4aa7-4a94-86b5-927f3a6f2f13)
+
 
 ### Points
 ***
