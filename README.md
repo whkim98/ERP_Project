@@ -22,7 +22,7 @@
 정준홍|기획, 회계, 디자인 서브|[JNjeong](https://github.com/JNjeong)
 <br/>
 
-## Physical ERD
+## 주요 ERD
 <img src="https://github.com/whkim98/ERP_Project/assets/86636344/70098314-61ab-4887-9dc3-951ac0c362fa" width="800">
 <br/>
 
