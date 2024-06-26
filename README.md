@@ -23,7 +23,7 @@
 <br/>
 
 ## Physical ERD
-<img width="800" alt="image" src="https://github.com/bangjunny/together/assets/116734433/83c335af-67ce-4128-8cf8-a24a38d0e7e6">
+<img src="https://github.com/whkim98/ERP_Project/assets/86636344/70098314-61ab-4887-9dc3-951ac0c362fa" width="800">
 <br/>
 
 ## 개발환경
