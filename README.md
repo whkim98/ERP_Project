@@ -1,4 +1,4 @@
-# ![image](https://github.com/whkim98/ERP_Project/assets/86636344/4e1233be-7b50-4619-bc70-f13dd75c71bd)
+# <img src="https://github.com/whkim98/ERP_Project/assets/86636344/4e1233be-7b50-4619-bc70-f13dd75c71bd" width="30"/>
 
 <b>버디버디, 골프를 더 즐겁게!</b> 쉽고 간편하게 골프장을 찾고, 라운딩 인원을 모집하는 편리한 서비스를 제공합니다.<br/>
 다양한 커뮤니티 기능으로 새로운 친구들과 소통하며, 함께 골프 문화를 즐기는 즐거움을 느껴보세요.<br/><br/>
