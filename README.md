@@ -3,19 +3,14 @@
 다양한 기능으로 더욱 효율적으로 업무 능력을 높여줍니다!<br/><br/>
 
 ## 주요기능
-* 실시간 채팅으로 통한 조인 및 양도 활동
-* nShortURL 기능을 이용한 공유
-* SMS 인증을 통한 본인인증
-* 관리자 계정을 이용해 비매너 블랙리스트 관리
-<br/><br/>
-
-## 프로젝트 시연 영상
-[<img src="https://github.com/bangjunny/together/assets/116734433/48783823-b3db-448b-958b-ff5417483755" width="400"/>](https://www.youtube.com/watch?v=6GRKU_7jQ8k)
+* 인사(근태, 정산, 휴가 등) 관리
+* 거래처 물자 및 물류 관리
+* 재무제표 등록, 수정
 <br/><br/>
 
 ## 프로젝트 일정 및 규모
-* 기간 : 2023.07.03 ~ 2023.08.04
-* 인원 : 7명
+* 기간 : 2023.06.27 ~ 2023.09.17
+* 인원 : 4명
 <img width="800" alt="image" src="https://github.com/bangjunny/together/assets/116734433/74dbf69d-8c41-4ecb-91b7-48b090dffc5a">
 <br/>
 
