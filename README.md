@@ -11,7 +11,6 @@
 ## 프로젝트 일정 및 규모
 * 기간 : 2023.06.27 ~ 2023.09.17
 * 인원 : 4명
-<img width="800" alt="image" src="https://github.com/bangjunny/together/assets/116734433/74dbf69d-8c41-4ecb-91b7-48b090dffc5a">
 <br/>
 
 ## 팀원
