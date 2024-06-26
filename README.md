@@ -16,13 +16,10 @@
 ## 팀원
 이름|담당 기능|Github
 ---|---|---
-전병준|디자인 총괄, 양도 페이지|[bangjunny](https://github.com/bangjunny)
-박명수|조인 페이지, 친구 목록 페이지|[BluffingPark](https://github.com/BluffingPark)
-이지현|디자인 총괄, 마이페이지|[jihyunnee](https://github.com/jihyunnee)
-조경현|채팅 리스트, 관리자 페이지|[ChickenMania123](https://github.com/ChickenMania123)
-강동현|로그인, 회원가입|[Unic31](https://github.com/Unic31)
-신동휘|메인페이지, 랭킹 페이지|[Alpac495](https://github.com/Alpac495)
-신승우|후기 페이지, 공지사항 페이지|[tlstmddn683](https://github.com/tlstmddn683)
+김우형|물류, 거래처, 인사|[whkim98](https://github.com/whkim98)
+장소라|재무제표, 디자인 총괄|[SoraJang1](https://github.com/SoraJang1)
+신동현|영업, 생산, 구매|[MichealnotJackson](https://github.com/MichealnotJackson)
+정준홍|기획, 회계, 디자인 서브|[JNjeong](https://github.com/JNjeong)
 <br/>
 
 ## Physical ERD
